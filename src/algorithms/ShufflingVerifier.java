@@ -5,12 +5,11 @@ package algorithms;
  * @author Tagel & Sofi
  */
 
-public class ShufflingVerifier implements Verifier {
+public class ShufflingVerifier {
 
 	/**
 	 * @return true if verification of shuffling was successful and false otherwise.
 	 */
-	@Override
 	public boolean verify() {
 		// TODO Auto-generated method stub
 		return false;

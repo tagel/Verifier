@@ -1,4 +1,9 @@
 package algorithms;
+
+import arithmetic.objects.FieldElement;
+import arithmetic.objects.GroupElement;
+import arithmetic.objects.Node;
+
 /**
  * This class describes an object that contains the parameters for a specific l'th mix-server (0 <= l <= k)
  * @author Tagel & Sofi

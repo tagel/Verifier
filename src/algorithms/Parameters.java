@@ -1,4 +1,7 @@
 package algorithms;
+
+import arithmetic.objects.IGroup;
+
 /**
  * This class describes an object that contains the parameters used by the
  * verifying algorithms

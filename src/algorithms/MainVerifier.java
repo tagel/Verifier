@@ -1,4 +1,9 @@
 package algorithms;
+
+import arithmetic.objects.ByteTree;
+import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.Node;
+
 /**
  * This class describes the required behavior expected from the main verifier.
  * 
@@ -57,8 +62,6 @@ public class MainVerifier {
 		
 		Node Seed = Node(s,w,Ne,Nr,Nv,sGq,sPRG,sH);
 		
-		
-
 		return true;
 	}
 
