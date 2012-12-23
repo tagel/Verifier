@@ -1,5 +1,7 @@
 package algorithms;
 
+import arithmetic.objects.ArrayOfElements;
+import arithmetic.objects.BooleanArrayElement;
 import arithmetic.objects.FieldElement;
 import arithmetic.objects.GroupElement;
 import arithmetic.objects.Node;
@@ -82,7 +84,7 @@ public class MixParams {
 	 * @return the "proof commitment" of the commitment-consistent proof of a shuffle
 	 */
 	public Node getCcPosComminment() {
-		return ccPosComminment;
+		return ccPosCommitment;
 	}
 	
 	/**

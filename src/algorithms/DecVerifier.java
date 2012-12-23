@@ -1,5 +1,8 @@
 package algorithms;
 
+import arithmetic.objects.ArrayOfElements;
+import arithmetic.objects.GroupElement;
+
 /**
  * This class provides the functionality of verifying the decryption.
  * @author Tagel & Sofi
