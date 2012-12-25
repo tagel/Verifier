@@ -28,6 +28,8 @@ public class MainVerifier {
 		if (!params.fillParams())
 			return false;
 
+		
+		//params.getVersion() = version_proof in the document
 		if (!params.getProtVersion().equals(params.getVersion()))
 			return false;
 
@@ -40,15 +42,21 @@ public class MainVerifier {
 		if (!params.getAuxsid().equals(params.getAuxidExp()))
 			return false;
 
-		if (params.getWidth() != params.getW())
+		//The document says that widthExp should be NULL, but here we will only assign 0
+		if ((params.getWidthExp()==0) && (params.getWidth()!=params.getW()))
 			return false;
-
-		// TODO: Width expected = null?
+		
+		if ((params.getWidthExp()!=0) && (params.getWidth()!=params.getWidthExp()))
+			return false;
 
 		params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
 
 		// TODO: Part 3 in the algorithm.
 
+		
+		ByteTree version_proof = btFromString(params.getVersion());
+		
+		//s = sid|"."|auxid
 		String s = params.getSessionID() + "." + params.getAuxsid();
 
 		ByteTree s = btFromString(s);
@@ -56,12 +64,13 @@ public class MainVerifier {
 		ByteTree sPRG = btFromString(params.getsPRG());
 		ByteTree sH = btFromString(params.getSh());
 		
-		ByteTree Ne = btFromInt(params.getNe());
-		ByteTree Nr = btFromInt(params.getNr());
-		ByteTree Nv = btFromInt(params.getNv());
-		ByteTree w = btFromInt(params.getW());
+		ByteTree Ne = btFromInt(params.getNe(),4);
+		ByteTree Nr = btFromInt(params.getNr(),4);
+		ByteTree Nv = btFromInt(params.getNv(),4);
+		ByteTree w = btFromInt(params.getW(),4);
 		
-		Node Seed = Node(s,w,Ne,Nr,Nv,sGq,sPRG,sH);
+		Node Seed = Node(version_proof,s,w,Ne,Nr,Nv,sGq,sPRG,sH);
+		
 		
 		return true;
 	}
