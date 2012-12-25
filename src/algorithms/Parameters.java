@@ -1,5 +1,7 @@
 package algorithms;
 
+import arithmetic.objects.ArrayOfElements;
+import arithmetic.objects.GroupElement;
 import arithmetic.objects.IGroup;
 
 /**
@@ -217,7 +219,7 @@ public class Parameters {
 	// parameters from lists
 	private ArrayOfElements<GroupElement> ciphertexts;
 	private ArrayOfElements<GroupElement> ShuffledCiphertexts;
-	private AuxidExp<GroupElement> plaintexts;
+	private ArrayOfElements<GroupElement> plaintexts;
 
 	/**
 	 * @return the input ciphertexts
