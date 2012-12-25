@@ -8,7 +8,7 @@ import arithmetic.objects.GroupElement;
  * @author Tagel & Sofi
  */
 
-public class DecVerifier {
+public class VerDec {
 
 	
 	/**

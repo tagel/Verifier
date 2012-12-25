@@ -4,7 +4,7 @@ package algorithms;
  * This class provides the functionality of proving the correctness of the decryption algorithm.
  * @author Tagel & Sofi
  */
-public class DecProvr {
+public class ProveDec {
 	
 	/**
 	 * @return true if the decryption was correct and false otherwise.

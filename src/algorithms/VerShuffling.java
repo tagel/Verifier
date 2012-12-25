@@ -5,7 +5,7 @@ package algorithms;
  * @author Tagel & Sofi
  */
 
-public class ShufflingVerifier {
+public class VerShuffling {
 
 	/**
 	 * @return true if verification of shuffling was successful and false otherwise.
