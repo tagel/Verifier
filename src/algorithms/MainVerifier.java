@@ -1,6 +1,7 @@
-package algorithms;
 
 
+
+import cryptographic.primitives.HashFunction;
 import arithmetic.objects.*;
 
 /**
@@ -11,19 +12,28 @@ import arithmetic.objects.*;
 public class MainVerifier {
 
 	private Parameters params;
+	
 
 	/**
 	 * @return true if verification was successful and false otherwise.
 	 */
 	public boolean verify(String protInfo, String directory, String type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec) {
+
+		params = new Parameters(protInfo, directory, type, auxid, w, posc, ccpos, dec);
+		
 		if (!isProtocolInfoValid())
 			return false;
-
+		
 		// fill the relevant parameters:
 		// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
 		// (width);
-		if (!params.fillParams())
+		if (!params.fillFromXML());
+			return false;
+		
+			
+		//fill version_proof(Version) type, auxid, w from proof directory
+		if (!params.fillFromDirectory())
 			return false;
 
 		
@@ -31,20 +41,21 @@ public class MainVerifier {
 		if (!params.getProtVersion().equals(params.getVersion()))
 			return false;
 
-		if (!((params.getType().equals("mixing"))
-				|| (params.getType().equals("shuffling")) || (params.getType()
-				.equals("decryption")))) {
-			return false;
-		}
+		if (!(params.getType().equals(params.getType_expected())))
+				return false;
 
 		if (!params.getAuxsid().equals(params.getAuxidExp()))
 			return false;
 
 		//The document says that widthExp should be NULL, but here we will only assign 0
-		if ((params.getWidthExp()==0) && (params.getWidth()!=params.getW()))
+		//Document:		Code:
+		//w_expected	w_expected
+		//w				w
+		//w_deafult		wDeafult
+		if ((params.getWidthExp()==0) && (params.getW()!=params.getwDeafult()))
 			return false;
 		
-		if ((params.getWidthExp()!=0) && (params.getWidth()!=params.getWidthExp()))
+		if ((params.getWidthExp()!=0) && (params.getW()!=params.getWidthExp()))
 			return false;
 
 		ElementsExtractor elem = new ElementsExtractor();
@@ -52,9 +63,8 @@ public class MainVerifier {
 
 		// TODO: Part 3 in the algorithm. The things with Cw
 		
-		Hashfunction H = new Hashfunction(params.getSh());
-		
-
+		HashFunction H = new Hashfunction(params.getSh());
+		PseudoRandomGenerator PRG = new PseudoRandomGenerator(new Hashfunction(params.getsPRG()));
 		
 		ByteTree version_proof = btFromString(params.getVersion());
 		
@@ -85,8 +95,15 @@ public class MainVerifier {
 		Node node = new Node(input);
 		byte[] Seed = node.toByteArray();
 		
+		params.setPrefixToRO(H.digest((Seed)));
+		
+		
+		
+		
+		
 		return true;
 	}
+	
 
 	/**
 	 * @return true if the XML of the protocol info is valid and false
