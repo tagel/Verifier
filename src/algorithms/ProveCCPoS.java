@@ -4,7 +4,7 @@ package algorithms;
  * This class provides the functionality of proving a shuffle for a given permutation commitment.
  * @author Tagel & Sofi
  */
-public class CCPoSProver {
+public class ProveCCPoS {
 
 	/**
 	 * @return true if the commitment-consistent proof of shuffle was correct and false otherwise.
