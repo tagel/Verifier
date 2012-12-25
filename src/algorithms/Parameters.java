@@ -217,7 +217,7 @@ public class Parameters {
 	// parameters from lists
 	private ArrayOfElements<GroupElement> ciphertexts;
 	private ArrayOfElements<GroupElement> ShuffledCiphertexts;
-	private ArrayOfElements<GroupElement> plaintexts;
+	private AuxidExp<GroupElement> plaintexts;
 
 	/**
 	 * @return the input ciphertexts
