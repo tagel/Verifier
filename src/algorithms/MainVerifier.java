@@ -1,9 +1,7 @@
 package algorithms;
 
 
-import arithmetic.objects.ByteTree;
-import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
+import arithmetic.objects.*;
 
 /**
  * This class describes the required behavior expected from the main verifier.
@@ -49,9 +47,13 @@ public class MainVerifier {
 		if ((params.getWidthExp()!=0) && (params.getWidth()!=params.getWidthExp()))
 			return false;
 
-		params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
+		ElementsExtractor elem = new ElementsExtractor();
+		params.setGq(elem.unmarshal(params.getsGq()));
 
-		// TODO: Part 3 in the algorithm.
+		// TODO: Part 3 in the algorithm. The things with Cw
+		
+		Hashfunction H = new Hashfunction(params.getSh());
+		
 
 		
 		ByteTree version_proof = btFromString(params.getVersion());
@@ -59,7 +61,7 @@ public class MainVerifier {
 		//s = sid|"."|auxid
 		String s = params.getSessionID() + "." + params.getAuxsid();
 
-		ByteTree s = btFromString(s);
+		ByteTree btAuxid = btFromString(s);
 		ByteTree sGq = btFromString(params.getsGq());
 		ByteTree sPRG = btFromString(params.getsPRG());
 		ByteTree sH = btFromString(params.getSh());
@@ -67,10 +69,21 @@ public class MainVerifier {
 		ByteTree Ne = btFromInt(params.getNe(),4);
 		ByteTree Nr = btFromInt(params.getNr(),4);
 		ByteTree Nv = btFromInt(params.getNv(),4);
-		ByteTree w = btFromInt(params.getW(),4);
+		ByteTree btW = btFromInt(params.getW(),4);
 		
-		Node Seed = Node(version_proof,s,w,Ne,Nr,Nv,sGq,sPRG,sH);
+		ByteTree[] input = new ByteTree[9];
+		input[0] = version_proof;
+		input[1] = btAuxid;
+		input[2] = btW;
+		input[3] = Ne;
+		input[4] = Nr;
+		input[5] = Nv;
+		input[6] = sGq;
+		input[7] = sPRG;
+		input[8] = sH; 
 		
+		Node node = new Node(input);
+		byte[] Seed = node.toByteArray();
 		
 		return true;
 	}
