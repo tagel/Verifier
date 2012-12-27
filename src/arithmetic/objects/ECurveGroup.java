@@ -1,6 +1,7 @@
 package arithmetic.objects;
 import java.math.BigInteger;
 
+
 /**
  * This class represents a standard elliptic curve over a prime order field.
  *
@@ -52,65 +53,60 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 		return;
 	}
 	
+	
 	public BigInteger getFieldOrder() {
 		return p;
 	}
 	
 	@Override
 	public ECurveGroupElement mult(ECurveGroupElement a, ECurveGroupElement b) {
-		// TODO Auto-generated method stub
-		return null;
+		BigInteger s = ((a.getElement().getY().getElement().subtract(b.getElement().getY().getElement())).divide(a.getElement().getX().getElement().subtract(b.getElement().getX().getElement()))).mod(p);
+		BigInteger x = (s.pow(2).subtract(a.getElement().getX().getElement()).subtract(b.getElement().getX().getElement())).mod(p);
+		BigInteger y = (BigInteger.ZERO.subtract(a.getElement().getY().getElement()).add(s.multiply(a.getElement().getX().getElement().subtract(b.getElement().getX().getElement())))).mod(p);
+		IntegerFieldElement newY = new IntegerFieldElement(y, null);
+		IntegerFieldElement newX = new IntegerFieldElement(x, null);
+		Point p = new Point(newX, newY);
+		ECurveGroupElement ret = new ECurveGroupElement(p, a.getGroup());
+		return ret;
 	}
 
 	@Override
 	public ECurveGroupElement one() {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement zero = new IntegerFieldElement (BigInteger.ZERO, null);
+		Point p = new Point(zero, zero);
+		ECurveGroupElement ret = new ECurveGroupElement(p, null);
+		return ret;
 	}
 
 	@Override
 	public ECurveGroupElement inverse(ECurveGroupElement a) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement y = new IntegerFieldElement(BigInteger.ZERO.subtract(a.getElement().getY().getElement()).mod(p), null);
+		Point p = new Point(a.getElement().getX(), y);
+		ECurveGroupElement ret = new ECurveGroupElement(p, a.getGroup());
+		return ret;
 	}
 	
 	
 	public ECurveGroupElement power(ECurveGroupElement a, BigInteger b) {
-		// TODO Auto-generated method stub
-		return null;
+		ECurveGroupElement result = a;
+	    for (BigInteger i = BigInteger.ZERO; i.compareTo(b)<0; i = i.add(BigInteger.ONE))
+	    	result = this.mult(result, a);
+	    return result;
 	}
 
 	
 	public boolean equal(ECurveGroupElement a, ECurveGroupElement b) {
-		// TODO Auto-generated method stub
-		return false;
+		if (a.getElement().getX().getElement()==b.getElement().getX().getElement() && a.getElement().getY().getElement()==b.getElement().getY().getElement())
+			return true;
+		else return false;
 	}
 
 
-	public byte[] elementsArrayToByteArray(Point[] arr) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	@Override
 	public byte[] toByteArray() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	/**
-	 * @return the resulting ASCII string from converting the byte tree of the group into a byte array which is encoded onto hexadecimal and prepended with an ASCII comment.
-	 */
-	public String marshal() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-
-	
-
 
 }
 
