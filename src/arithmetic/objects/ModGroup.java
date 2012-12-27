@@ -1,6 +1,4 @@
 package arithmetic.objects;
-import ModGroupElement;
-
 import java.math.BigInteger;
 
 
@@ -60,8 +58,8 @@ public class ModGroup implements IGroup<ModGroupElement> {
 
 	@Override
 	public ModGroupElement inverse(ModGroupElement a) {
-		// TODO Auto-generated method stub
-		return null;
+		ModGroupElement ret = new ModGroupElement (a.getElement().modInverse(q), a.getGroup());
+		return ret;
 	}
 
 

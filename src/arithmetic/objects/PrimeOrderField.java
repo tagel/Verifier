@@ -1,7 +1,4 @@
 package arithmetic.objects;
-import IField;
-import IntegerFieldElement;
-
 import java.math.BigInteger;
 
 
@@ -64,8 +61,8 @@ public class PrimeOrderField implements IField<IntegerFieldElement> {
 	}
 	
 	public IntegerFieldElement inverse(IntegerFieldElement a) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement ret = new IntegerFieldElement (a.getElement().modInverse(q), a.getField());
+		return ret;
 	}
 	
 
