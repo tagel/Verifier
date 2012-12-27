@@ -1,4 +1,7 @@
 package arithmetic.objects;
+import IField;
+import IntegerFieldElement;
+
 import java.math.BigInteger;
 
 
@@ -23,37 +26,41 @@ public class PrimeOrderField implements IField<IntegerFieldElement> {
 	}
 	
 	public IntegerFieldElement neg(IntegerFieldElement a) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement ret = new IntegerFieldElement(q.min(a.getElement().mod(q)), a.getField());
+		return ret;
 	}
 	
 	
 	public IntegerFieldElement add(IntegerFieldElement a, IntegerFieldElement b) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement ret = new IntegerFieldElement ((a.getElement().add(b.getElement())).mod(q), a.getField());
+		return ret;
 	}
 	
 	
 	@Override
 	public IntegerFieldElement mult(IntegerFieldElement a, IntegerFieldElement b) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement ret = new IntegerFieldElement ((a.getElement().multiply(b.getElement())).mod(q), a.getField());
+		return ret;
 	}
 
 	public IntegerFieldElement power(IntegerFieldElement a, BigInteger b) {
-		// TODO Auto-generated method stub
-		return null;
+		BigInteger result = a.getElement();
+	    for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+	    	result = result.multiply(a.getElement());
+	    IntegerFieldElement ret = new IntegerFieldElement (result.mod(q), a.getField());
+	    return ret;
+
 	}
 	
 	public IntegerFieldElement one() {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement ret = new IntegerFieldElement (BigInteger.ONE, null);
+		return ret;
 	}
 
 	
 	public IntegerFieldElement zero() {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerFieldElement ret = new IntegerFieldElement (BigInteger.ZERO, null);
+		return ret;
 	}
 	
 	public IntegerFieldElement inverse(IntegerFieldElement a) {
@@ -63,8 +70,8 @@ public class PrimeOrderField implements IField<IntegerFieldElement> {
 	
 
 	public boolean equal(IntegerFieldElement a, IntegerFieldElement b) {
-		// TODO Auto-generated method stub
-		return false;
+		if (a.getElement().mod(q)==b.getElement().mod(q)) return true;
+		else return false;
 	}
 
 	

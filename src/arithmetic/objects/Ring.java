@@ -26,44 +26,47 @@ public class Ring implements IRing<IntegerRingElement> {
 	
 	
 	public IntegerRingElement neg(IntegerRingElement a) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerRingElement ret = new IntegerRingElement(q.min(a.getElement().mod(q)), a.getRing());
+		return ret;
 	}
 
 	
 	public IntegerRingElement add(IntegerRingElement a, IntegerRingElement b) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerRingElement ret = new IntegerRingElement ((a.getElement().add(b.getElement())).mod(q), a.getRing());
+		return ret;
 	}
 	
 	
 	public IntegerRingElement mult(IntegerRingElement a, IntegerRingElement b) {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerRingElement ret = new IntegerRingElement ((a.getElement().multiply(b.getElement())).mod(q), a.getRing());
+		return ret;
 	}
 	
 	
 	public IntegerRingElement power(IntegerRingElement a, BigInteger b) {
-		// TODO Auto-generated method stub
-		return null;
+		BigInteger result = a.getElement();
+	    for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+	    	result = result.multiply(a.getElement());
+	    IntegerRingElement ret = new IntegerRingElement (result.mod(q), a.getRing());
+	    return ret;
 	}
 
 	
 	public IntegerRingElement zero() {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerRingElement ret = new IntegerRingElement (BigInteger.ZERO, null);
+		return ret;
 	}
 	
 	@Override
 	public IntegerRingElement one() {
-		// TODO Auto-generated method stub
-		return null;
+		IntegerRingElement ret = new IntegerRingElement (BigInteger.ONE, null);
+		return ret;
 	}
 
 
 	public boolean equal(IntegerRingElement a, IntegerRingElement b) {
-		// TODO Auto-generated method stub
-		return false;
+		if (a.getElement().mod(q)==b.getElement().mod(q)) return true;
+		else return false;
 	}
 
 

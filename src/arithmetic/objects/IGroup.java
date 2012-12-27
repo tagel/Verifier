@@ -1,4 +1,6 @@
 package arithmetic.objects;
+import ByteTree;
+
 import java.math.BigInteger;
 
 
@@ -43,11 +45,7 @@ public interface IGroup <E> extends ByteTree {
 	 */
 	public boolean equal(E a, E b);
 	
-	/**
-	 * 
-	 * @return the resulting ASCII string from converting the byte tree of the group into a byte array which is encoded onto hexadecimal and prepended with an ASCII comment.
-	 */
-	public String marshal();
+
 		
 
 

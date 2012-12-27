@@ -1,4 +1,6 @@
 package arithmetic.objects;
+import ModGroupElement;
+
 import java.math.BigInteger;
 
 
@@ -46,14 +48,14 @@ public class ModGroup implements IGroup<ModGroupElement> {
 
 	@Override
 	public ModGroupElement mult(ModGroupElement a, ModGroupElement b) {
-		// TODO Auto-generated method stub
-		return null;
+		ModGroupElement ret = new ModGroupElement ((a.getElement().multiply(b.getElement())).mod(q), a.getGroup());
+		return ret;
 	}
 
 	@Override
 	public ModGroupElement one() {
-		// TODO Auto-generated method stub
-		return null;
+		ModGroupElement ret = new ModGroupElement (BigInteger.ONE, null);
+		return ret;
 	}
 
 	@Override
@@ -65,22 +67,21 @@ public class ModGroup implements IGroup<ModGroupElement> {
 
 	@Override
 	public ModGroupElement power(ModGroupElement a, BigInteger b) {
-		// TODO Auto-generated method stub
-		return null;
+		BigInteger result = a.getElement();
+	    for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+	    	result = result.multiply(a.getElement());
+	    ModGroupElement ret = new ModGroupElement (result.mod(q), a.getGroup());
+	    return ret;
 	}
 
 
 	@Override
 	public boolean equal(ModGroupElement a, ModGroupElement b) {
-		// TODO Auto-generated method stub
-		return false;
+		if (a.getElement().mod(q)==b.getElement().mod(q)) return true;
+		else return false;
 	}
 
 	
-	public byte[] elementsArrayToByteArray(ModGroupElement[] arr) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
 	public byte[] toByteArray() {
@@ -88,13 +89,7 @@ public class ModGroup implements IGroup<ModGroupElement> {
 		return null;
 	}
 	
-	/**
-	 * @return the resulting ASCII string from converting the byte tree of the group into a byte array which is encoded onto hexadecimal and prepended with an ASCII comment.
-	 */
-	public String marshal() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 
 
