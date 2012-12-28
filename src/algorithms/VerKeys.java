@@ -5,7 +5,7 @@ import arithmetic.objects.FieldElement;
 import arithmetic.objects.IGroup;
 
 public class VerKeys {
-
+//TODO : tagel remove me!
 	private MixParams mixParams;
 	
 	public ArrayOfElements verifyKeys(int lambda, IGroup Gq) {
