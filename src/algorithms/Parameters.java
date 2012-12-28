@@ -1,5 +1,7 @@
 package algorithms;
 
+import MixParams;
+
 import java.math.BigInteger;
 
 import arithmetic.objects.ArrayOfElements;
@@ -15,8 +17,9 @@ import arithmetic.objects.ProductElement;
  */
 public class Parameters {
 
-	public Parameters(String protInfo, String directory, String type, java.lang.String auxsid,
-			BigInteger w, boolean posc, boolean ccpos, boolean dec ) {
+	public Parameters(String protInfo, String directory, String type,
+			java.lang.String auxsid, BigInteger w, boolean posc, boolean ccpos,
+			boolean dec) {
 		super();
 		this.auxsid = auxsid;
 		this.protInfo = protInfo;
@@ -26,7 +29,29 @@ public class Parameters {
 		this.posc = posc;
 		this.ccpos = ccpos;
 		this.dec = dec;
-		
+
+		prefixToRO = null;
+		Gq = null;
+		version = null;
+		type = null;
+		auxsid = null;
+		w = 0;
+		fullPublicKey = null;
+		protVersion = null;
+		sessionID = null;
+		numOfParties = 0;
+		threshold = 0;
+		Ne = 0;
+		Nr = 0;
+		Nv = 0;
+		sh = null;
+		sGq = null;
+		sPRG = null;
+		wDeafult = 0;
+		maxciph = 0;
+
+		mix = null;
+
 	}
 
 	private byte[] prefixToRO;
@@ -38,7 +63,7 @@ public class Parameters {
 	private String version;
 	private String type;
 	private String auxsid;
-	private BigInteger width;
+	private BigInteger w;
 	private ProductElement fullPublicKey;
 	private int maxciph;
 
@@ -53,7 +78,6 @@ public class Parameters {
 	private String sh;
 	private String sGq;
 	private String sPRG;
-	private BigInteger w;
 	private BigInteger wDefault;
 
 	// parameters from CMD
@@ -63,6 +87,24 @@ public class Parameters {
 	private boolean dec;
 	private String auxidExp;
 	private BigInteger widthExp;
+	
+	
+	public MixParams[] mix;
+
+	// fill the relevant parameters from the given xml
+	// fill the relevant parameters:
+	// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
+	// (width);
+	public boolean fillFromXML() {
+		mix = new MixParams[threshold];
+		return true;
+	}
+
+	// fill the relevant parameters from the given directory
+	// fill version_proof(Version) type, auxid, w from proof directory
+	public boolean fillFromDirectory() {
+		return true;
+	}
 
 	/**
 	 * @return the Verificatum version
@@ -281,31 +323,6 @@ public class Parameters {
 		return plaintexts;
 	}
 
-	/**
-	 * Fills the parameters (from xml, directory, lists but NOT from the cmd)
-	 */
-	public boolean fillParams() {
-		return (fillFromDirectory() && fillFromXML());
-
-	}
-
-	/**
-	 * Fills the relevant parameters from the given lists
-	 */
-	public boolean readLists() {
-		return true;
-	}
-
-	// fill the relevant parameters from the given xml
-	public boolean fillFromXML() {
-		return true;
-	}
-
-	// fill the relevant parameters from the given directory
-	public boolean fillFromDirectory() {
-		return true;
-	}
-
 	public String getAuxidExp() {
 		return auxidExp;
 	}
@@ -328,6 +345,14 @@ public class Parameters {
 
 	public void setGq(IGroup gq) {
 		Gq = gq;
+	}
+
+	public byte[] getPrefixToRO() {
+		return prefixToRO;
+	}
+
+	public void setPrefixToRO(byte[] prefixToRO) {
+		this.prefixToRO = prefixToRO;
 	}
 
 }
