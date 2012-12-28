@@ -1,7 +1,5 @@
 package algorithms;
 
-import MixParams;
-
 import java.math.BigInteger;
 
 import arithmetic.objects.ArrayOfElements;
@@ -35,19 +33,19 @@ public class Parameters {
 		version = null;
 		type = null;
 		auxsid = null;
-		w = 0;
+		w = null;
 		fullPublicKey = null;
 		protVersion = null;
 		sessionID = null;
 		numOfParties = 0;
 		threshold = 0;
-		Ne = 0;
-		Nr = 0;
-		Nv = 0;
+		Ne = null;
+		Nr = null;
+		Nv = null;
 		sh = null;
 		sGq = null;
 		sPRG = null;
-		wDeafult = 0;
+		wDefault = null;
 		maxciph = 0;
 
 		mix = null;
@@ -127,13 +125,7 @@ public class Parameters {
 		return auxsid;
 	}
 
-	/**
-	 * @return the width w>0 of a ciphertext
-	 */
-	public BigInteger getWidth() {
-		return width;
-	}
-
+	
 	/**
 	 * @return the full public key
 	 */

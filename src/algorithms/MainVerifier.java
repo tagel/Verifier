@@ -43,6 +43,8 @@ public class MainVerifier {
 		if (!params.fillFromXML()) {
 			return false;
 		}
+		
+		
 		// fill version_proof(Version) type, auxid, w from proof directory
 		if (!params.fillFromDirectory()) {
 			return false;
