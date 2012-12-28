@@ -1,7 +1,10 @@
 
 
 
+import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFunction;
+import cryptographic.primitives.PseudoRandomGenerator;
+import cryptographic.primitives.SHA2HashFunction;
 import arithmetic.objects.*;
 
 /**
@@ -63,23 +66,23 @@ public class MainVerifier {
 
 		// TODO: Part 3 in the algorithm. The things with Cw
 		
-		HashFunction H = new Hashfunction(params.getSh());
-		PseudoRandomGenerator PRG = new PseudoRandomGenerator(new Hashfunction(params.getsPRG()));
+		HashFunction H = new SHA2HashFunction(params.getSh());
+		PseudoRandomGenerator PRG = new HashFuncPRG(new SHA2HashFunction(params.getsPRG()));
 		
-		ByteTree version_proof = btFromString(params.getVersion());
+		ByteTree version_proof = new StringLeaf(params.getVersion());
 		
 		//s = sid|"."|auxid
 		String s = params.getSessionID() + "." + params.getAuxsid();
 
-		ByteTree btAuxid = btFromString(s);
-		ByteTree sGq = btFromString(params.getsGq());
-		ByteTree sPRG = btFromString(params.getsPRG());
-		ByteTree sH = btFromString(params.getSh());
+		ByteTree btAuxid = new StringLeaf(s);
+		ByteTree sGq = new StringLeaf(params.getsGq());
+		ByteTree sPRG = new StringLeaf(params.getsPRG());
+		ByteTree sH = new StringLeaf(params.getSh());
 		
-		ByteTree Ne = btFromInt(params.getNe(),4);
-		ByteTree Nr = btFromInt(params.getNr(),4);
-		ByteTree Nv = btFromInt(params.getNv(),4);
-		ByteTree btW = btFromInt(params.getW(),4);
+		ByteTree Ne = BigIntLeaf(params.getNe());
+		ByteTree Nr = btFromInt(params.getNr());
+		ByteTree Nv = btFromInt(params.getNv());
+		ByteTree btW = btFromInt(params.getW());
 		
 		ByteTree[] input = new ByteTree[9];
 		input[0] = version_proof;

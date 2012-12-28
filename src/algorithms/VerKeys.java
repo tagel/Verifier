@@ -10,7 +10,9 @@ import arithmetic.objects.Node;
 import arithmetic.objects.ProductElement;
 
 public class VerKeys {
-//hi remove me
+
+
+//TODO : tagel remove me!
 	private MixParams mixParams;
 	private Parameters params;
 	
