@@ -14,6 +14,7 @@ public class VerKeys {
 		// Joint public key
 		ProductGroupElement pk = params.getFullPublicKey();		
 		if (pk == null) {
+			// TODO : tagel remove me!
 			return null;
 		}
 		
