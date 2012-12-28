@@ -7,6 +7,7 @@ import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.FieldElement;
 import arithmetic.objects.GroupElement;
 import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
@@ -122,22 +123,28 @@ public class MainVerifier {
 		ByteTree[] keys = retVal.getChildrenArray();
 		ProductElement pk = (ProductElement)keys[0];
 		ArrayOfElements<GroupElement> yi = (ArrayOfElements<GroupElement>)keys[1];
-		ArrayOfElements<ProductElement> xi = (ArrayOfElements<ProductElement>)keys[2];
-		
+		ArrayOfElements<FieldElement> xi = (ArrayOfElements<FieldElement>)keys[2];
+		//TODO: check if the arrays are really of length threshold
 		AssignToParams(pk,yi,xi);
 		
+		ReadLists();
 		
+		
+				
 
 		return true;
 	}
 
 	private void AssignToParams(ProductElement pk,
-			ArrayOfElements<GroupElement> yi, ArrayOfElements<ProductElement> xi) {
+			ArrayOfElements<GroupElement> yi, ArrayOfElements<FieldElement> xi) {
 		int lam = params.getThreshold();
 		int i;
+		GroupElement[] yArray = yi.getArray();
+		FieldElement[] xArray = xi.getArray();
 		
 		for (i=0; i<lam; i++) {
-		
+			params.mix[i].setPublicKey(yArray[i]);
+			params.mix[i].setSecretKey(xArray[i]);
 		}
 		
 		
