@@ -20,6 +20,7 @@ public class VerKeys {
 		// read the joint public key
 		ProductElement pk = params.getFullPublicKey();
 		if (pk == null) {
+			// TODO : tagel remove me!
 			return null;
 		}
 		ArrayOfElements<GroupElement> pkList = new pk.toList();
