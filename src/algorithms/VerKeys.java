@@ -25,12 +25,12 @@ public class VerKeys {
 			// TODO : tagel remove me!
 			return null;
 		}
-		ArrayOfElements<GroupElement> pkList = new pk.toList();
-		GroupElement g = pkList.get(0);
-		GroupElement y = pkList.get(1);
+		//ArrayOfElements<GroupElement> pkList = new pk.toList();
+		//GroupElement g = pkList.get(0);
+		//GroupElement y = pkList.get(1);
 		
 		// read the public keys of the mix servers
-		GroupElement yi
+		
 	
 		
 //		MixParams [] mixServers = new MixParams [lambda];		

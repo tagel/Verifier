@@ -15,14 +15,30 @@ import arithmetic.objects.ProductElement;
  */
 public class Parameters {
 
+	public Parameters(String protInfo, String directory, String type, java.lang.String auxsid,
+			BigInteger w, boolean posc, boolean ccpos, boolean dec ) {
+		super();
+		this.auxsid = auxsid;
+		this.protInfo = protInfo;
+		this.directory = directory;
+		this.type = type;
+		this.w = w;
+		this.posc = posc;
+		this.ccpos = ccpos;
+		this.dec = dec;
+		
+	}
+
 	private byte[] prefixToRO;
 	private IGroup Gq;
 
 	// parameters from directory
+	private String protInfo;
+	private String directory;
 	private String version;
 	private String type;
 	private String auxsid;
-	private int width;
+	private BigInteger width;
 	private ProductElement fullPublicKey;
 	private int maxciph;
 
@@ -37,14 +53,16 @@ public class Parameters {
 	private String sh;
 	private String sGq;
 	private String sPRG;
-	private int w;
+	private BigInteger w;
+	private BigInteger wDefault;
 
 	// parameters from CMD
+	private String typeExpected;
 	private boolean posc;
 	private boolean ccpos;
 	private boolean dec;
 	private String auxidExp;
-	private int widthExp;
+	private BigInteger widthExp;
 
 	/**
 	 * @return the Verificatum version
@@ -70,7 +88,7 @@ public class Parameters {
 	/**
 	 * @return the width w>0 of a ciphertext
 	 */
-	public int getWidth() {
+	public BigInteger getWidth() {
 		return width;
 	}
 
@@ -133,6 +151,14 @@ public class Parameters {
 	 */
 	public void setDec(boolean dec) {
 		this.dec = dec;
+	}
+
+	public void setTypeExpected(String typeExpected) {
+		this.typeExpected = typeExpected;
+	}
+
+	public String getTypeExpected() {
+		return typeExpected;
 	}
 
 	// *****FROM XML*******
@@ -215,8 +241,16 @@ public class Parameters {
 	/**
 	 * @return the default width of cipher-texts and plain-texts.
 	 */
-	public int getW() {
+	public BigInteger getW() {
 		return w;
+	}
+
+	public BigInteger getwDefault() {
+		return wDefault;
+	}
+
+	public void setwDefault(BigInteger wDefault) {
+		this.wDefault = wDefault;
 	}
 
 	// parameters from lists
@@ -263,12 +297,12 @@ public class Parameters {
 	}
 
 	// fill the relevant parameters from the given xml
-	private boolean fillFromXML() {
+	public boolean fillFromXML() {
 		return true;
 	}
 
 	// fill the relevant parameters from the given directory
-	private boolean fillFromDirectory() {
+	public boolean fillFromDirectory() {
 		return true;
 	}
 
@@ -280,11 +314,11 @@ public class Parameters {
 		this.auxidExp = auxidExp;
 	}
 
-	public int getWidthExp() {
+	public BigInteger getWidthExp() {
 		return widthExp;
 	}
 
-	public void setWidthExpected(int widthExpected) {
+	public void setWidthExpected(BigInteger widthExpected) {
 		this.widthExp = widthExpected;
 	}
 
