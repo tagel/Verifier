@@ -17,9 +17,8 @@ public class HashFuncPRG implements PseudoRandomGenerator {
 	}
 	
 	@Override
-	public int seedlen() {
-		// TODO - Daniel: complete 
-		return 0;
+	public int seedlen() { 
+		return function.outlen();
 	}
 
 	@Override

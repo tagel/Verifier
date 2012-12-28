@@ -33,8 +33,7 @@ public class SHA2HashFunction implements HashFunction {
 			throw new IllegalArgumentException();
 		}
 	}
-
-	// TODO Daniel - add tests!
+	
 	@Override
 	public byte[] digest(byte[] input) {
 		return md.digest(input);
