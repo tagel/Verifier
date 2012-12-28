@@ -1,4 +1,5 @@
 package arithmetic.objects;
+
 import java.math.BigInteger;
 
 
@@ -18,7 +19,7 @@ public class PrimeOrderField implements IField<IntegerFieldElement> {
 	}
 	
 	
-	public BigInteger getFieldOrder() {
+	public BigInteger getOrder() {
 		return q;
 	}
 	
@@ -69,13 +70,6 @@ public class PrimeOrderField implements IField<IntegerFieldElement> {
 	public boolean equal(IntegerFieldElement a, IntegerFieldElement b) {
 		if (a.getElement().mod(q)==b.getElement().mod(q)) return true;
 		else return false;
-	}
-
-	
-	
-	public byte[] toByteArray() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

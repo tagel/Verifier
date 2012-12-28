@@ -1,10 +1,11 @@
 package arithmetic.objects;
 
 
+
 public abstract class GroupElement<E> implements ByteTree {
 
-	private E element;
-	private IGroup<E> group;
+	protected E element;
+	protected IGroup<E> group;
 	
 	public GroupElement (E element, IGroup<E> group) {
 		this.element = element;

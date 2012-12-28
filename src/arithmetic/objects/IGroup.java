@@ -1,4 +1,5 @@
 package arithmetic.objects;
+
 import java.math.BigInteger;
 
 
@@ -42,6 +43,9 @@ public interface IGroup <E> extends ByteTree {
 	 * @return True if a == b
 	 */
 	public boolean equal(E a, E b);
+
+
+	public BigInteger getFieldOrder();
 	
 
 		

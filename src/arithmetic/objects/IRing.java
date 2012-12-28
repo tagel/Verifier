@@ -1,4 +1,5 @@
 package arithmetic.objects;
+
 import java.math.BigInteger;
 
 
@@ -7,9 +8,10 @@ import java.math.BigInteger;
  *
  * @param <E>
  */
-public interface IRing<E> extends ByteTree {
+public interface IRing<E> {
 
 	
+	public BigInteger getOrder();
 	/**
 	 * @param a ring element
 	 * @return the additive inverse -a of a ring element a.
