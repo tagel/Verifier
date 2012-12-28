@@ -14,9 +14,9 @@ public class VerKeys {
 
 //TODO : tagel remove me!
 	private MixParams mixParams;
-	private Parameters params;
+	private static Parameters params;
 	
-	public Node verifyKeys(int lambda, IGroup Gq) {
+	public static Node verifyKeys(int lambda, IGroup Gq) {
 		
 		
 		// read the joint public key

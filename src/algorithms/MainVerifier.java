@@ -3,10 +3,14 @@ package algorithms;
 
 import java.math.BigInteger;
 
+import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.GroupElement;
+import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
+import arithmetic.objects.ProductElement;
 import arithmetic.objects.StringLeaf;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFunction;
@@ -71,7 +75,7 @@ public class MainVerifier {
 		ElementsExtractor elem = new ElementsExtractor();
 		params.setGq(elem.unmarshal(params.getsGq()));
 
-		// TODO: Part 3 in the algorithm. The things with Cw
+		deriveSetsAndObjects();
 
 		HashFunction H = new SHA2HashFunction(params.getSh());
 		PseudoRandomGenerator PRG = new HashFuncPRG(new SHA2HashFunction(
@@ -107,9 +111,34 @@ public class MainVerifier {
 		Node node = new Node(input);
 		byte[] Seed = node.toByteArray();
 
-		// params.setPrefixToRO(H.digest((Seed)));
+		params.setPrefixToRO(H.digest((Seed)));
+		
+		Node retVal = VerKeys.verifyKeys(params.getThreshold(), params.getGq());
+		
+		//Should this part be generic or what?
+		//An array of 3 children: pk, (y1,...,yl), (x1,...,xl)
+		ByteTree[] keys = retVal.getChildrenArray();
+		ProductElement pk = (ProductElement)keys[0];
+		ArrayOfElements<GroupElement> yi = (ArrayOfElements<GroupElement>)keys[1];
+		ArrayOfElements<ProductElement> xi = (ArrayOfElements<ProductElement>)keys[2];
+		
+		AssignToParams(pk,yi,xi);
+		
+		
 
 		return true;
+	}
+
+	private void AssignToParams(ProductElement pk,
+			ArrayOfElements<GroupElement> yi, ArrayOfElements<ProductElement> xi) {
+		int lam = params.getThreshold();
+		int i;
+		
+		for (i=0; i<lam; i++) {
+		
+		}
+		
+		
 	}
 
 	/**
@@ -134,7 +163,8 @@ public class MainVerifier {
 	 *         and the PRG and false otherwise.
 	 */
 	private boolean deriveSetsAndObjects() {
-		// TODO Auto-generated method stub
+		// TODO: Part 3 in the algorithm.
+		//Derive Cw, Mw, Rw
 		return false;
 	}
 
@@ -145,5 +175,9 @@ public class MainVerifier {
 	private String prefixToRandomOracle() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private boolean ReadLists() {
+		return true;
 	}
 }
