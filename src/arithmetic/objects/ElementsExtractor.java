@@ -63,7 +63,9 @@ public class ElementsExtractor {
 	 * @return the group recovered from s by removing the comment and colons, converting the hexa string to a byte array, converting the byte array into a byte tree, and converting the byte tree into the group.
 	 */
 	public static <E> IGroup<E> unmarshal (String s) {
-		return null;
+		BigInteger p = BigInteger.ONE;
+		IGroup ret = new ModGroup(p,p,p);
+		return ret;
 	}
 
 

@@ -7,9 +7,9 @@ public abstract class FieldElement<E> implements ByteTree {
 	protected E element;
 	protected IField<E> field;
 	
-	public FieldElement (E element, IField<E> field) {
+	public FieldElement (E element, IField<E> f) {
 		this.element = element;
-		this.field = field;
+		this.field = f;
 	}
 	
 	public E getElement() {

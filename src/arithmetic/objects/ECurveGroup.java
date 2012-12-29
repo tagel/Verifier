@@ -11,6 +11,10 @@ import java.math.BigInteger;
 public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	
 	/**
+	 * name = the name of the standard elliptic curve.
+	 */
+	private String name;
+	/**
 	 * p = order of the underlying field.
 	 */
 	private BigInteger p;
@@ -39,7 +43,8 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	 * @param g
 	 * Constructor.
 	 */
-	public ECurveGroup (BigInteger p, BigInteger q, BigInteger a, BigInteger b, Point g) {
+	public ECurveGroup (String name, BigInteger p, BigInteger q, BigInteger a, BigInteger b, Point g) {
+		this.name = name;
 		this.p=p;
 		this.q=q;
 		this.a=a;
@@ -52,7 +57,16 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	 * Constructor.
 	 */
 	public ECurveGroup (String s) {
-		return;
+		ECurveParams params = new ECurveParams(s);
+		name = s;
+		p = params.getP();
+		q = params.getQ();
+		a = params.getA();
+		b = params.getB();
+		IField f = new PrimeOrderField(p); 
+		IntegerFieldElement gx = new IntegerFieldElement(params.getGx(), f);
+		IntegerFieldElement gy = new IntegerFieldElement(params.getGy(), f);
+		g = new Point(gx, gy);
 	}
 	
 	

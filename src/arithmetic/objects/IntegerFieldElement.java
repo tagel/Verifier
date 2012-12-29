@@ -8,9 +8,11 @@ import java.nio.ByteOrder;
 
 public class IntegerFieldElement extends FieldElement<BigInteger> {
 	
-	public IntegerFieldElement(BigInteger element, IField<BigInteger> field) {
-		super(element, field);
+	public IntegerFieldElement(BigInteger element, IField<BigInteger> iField) {
+		super(element, iField);
 	}
+
+
 
 	@Override
 	public byte[] toByteArray() {
