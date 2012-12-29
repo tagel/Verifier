@@ -1,9 +1,10 @@
 package arithmetic.objects;
 
+
 public abstract class RingElement<E> implements ByteTree {
 	
-	private E element;
-	private IRing<E> ring;
+	protected E element;
+	protected IRing<E> ring;
 	
 	public RingElement (E element, IRing<E> ring) {
 		this.element = element;

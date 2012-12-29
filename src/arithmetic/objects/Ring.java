@@ -1,4 +1,5 @@
 package arithmetic.objects;
+
 import java.math.BigInteger;
 
 
@@ -20,7 +21,7 @@ public class Ring implements IRing<IntegerRingElement> {
 	}
 	
 	
-	public BigInteger getRingOrder() {
+	public BigInteger getOrder() {
 		return q;
 	}
 	
@@ -68,14 +69,5 @@ public class Ring implements IRing<IntegerRingElement> {
 		if (a.getElement().mod(q)==b.getElement().mod(q)) return true;
 		else return false;
 	}
-
-
-	@Override
-	public byte[] toByteArray() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 
 }
