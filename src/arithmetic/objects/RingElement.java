@@ -1,6 +1,7 @@
 package arithmetic.objects;
 
 
+
 public abstract class RingElement<E> implements ByteTree {
 	
 	protected E element;

@@ -1,6 +1,7 @@
 package arithmetic.objects;
 
 
+
 /**
  * This interface is used to represent a Field.
  *

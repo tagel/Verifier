@@ -2,6 +2,7 @@ package arithmetic.objects;
 
 
 
+
 public abstract class GroupElement<E> implements ByteTree {
 
 	protected E element;

@@ -1,6 +1,7 @@
 package arithmetic.objects;
 
 
+
 public abstract class FieldElement<E> implements ByteTree {
 
 	protected E element;

@@ -1,5 +1,6 @@
 package arithmetic.objects;
 
+
 import java.math.BigInteger;
 
 
@@ -20,11 +21,11 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	/**
 	 * a = first coefficient of the curve equation
 	 */
-	private int a;
+	private BigInteger a;
 	/**
 	 * b = second coefficient of the curve equation
 	 */
-	private int b;
+	private BigInteger b;
 	/**
 	 * g = standard generator
 	 */
@@ -38,7 +39,7 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	 * @param g
 	 * Constructor.
 	 */
-	public ECurveGroup (BigInteger p, BigInteger q, int a, int b, Point g) {
+	public ECurveGroup (BigInteger p, BigInteger q, BigInteger a, BigInteger b, Point g) {
 		this.p=p;
 		this.q=q;
 		this.a=a;
