@@ -3,8 +3,11 @@ package algorithms;
 import java.math.BigInteger;
 
 import arithmetic.objects.ArrayOfElements;
+import arithmetic.objects.BooleanArrayElement;
+import arithmetic.objects.FieldElement;
 import arithmetic.objects.GroupElement;
 import arithmetic.objects.IGroup;
+import arithmetic.objects.Node;
 import arithmetic.objects.ProductElement;
 
 /**
@@ -47,9 +50,10 @@ public class Parameters {
 		sPRG = null;
 		wDefault = null;
 		maxciph = 0;
+		}
 
-		mix = null;
-
+	public String getDirectory() {
+		return directory;
 	}
 
 	private byte[] prefixToRO;
@@ -86,15 +90,52 @@ public class Parameters {
 	private String auxidExp;
 	private BigInteger widthExp;
 	
+	//MIX -- The parameters of each party
+	private ArrayOfElements<GroupElement> mixPublicKey;
+	private ArrayOfElements<FieldElement> mixSecretKey;
 	
-	public MixParams[] mix;
-
+	private ArrayOfElements<ArrayOfElements<GroupElement>> mixCiphertexts;
+	private ArrayOfElements<ArrayOfElements<GroupElement>> mixPermutationCommitment;
+	private ArrayOfElements<Node> mixPoSCommitment;
+	private ArrayOfElements<Node> mixPoSReply;
+	private ArrayOfElements<Node> mixPoSCCommitment;
+	private ArrayOfElements<Node> mixPoSCReply;
+	private ArrayOfElements<Node> mixCcPosCommitment;
+	private ArrayOfElements<Node> mixCcPosReply;
+	
+	private ArrayOfElements<BooleanArrayElement> mixKeepList;
+	private ArrayOfElements<ArrayOfElements<GroupElement>> mixDecryptionFactors;
+	private ArrayOfElements<Node> mixDecrFactCommitment;
+	private ArrayOfElements<Node> mixDecrFactReply;
+	
+	// parameters from lists
+	private ArrayOfElements<GroupElement> ciphertexts;
+	private ArrayOfElements<GroupElement> ShuffledCiphertexts;
+	private ArrayOfElements<GroupElement> plaintexts;
+	
+	
 	// fill the relevant parameters from the given xml
 	// fill the relevant parameters:
 	// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
 	// (width);
 	public boolean fillFromXML() {
-		mix = new MixParams[threshold];
+		//All of these arrays should be of size threshold
+		//TODO: need to initialize the arrays of size threshold
+		mixPublicKey = null;
+		mixSecretKey = null;
+		mixCiphertexts = null;
+		mixPermutationCommitment = null;
+		mixPoSCommitment = null;
+		mixPoSReply = null;
+		mixPoSCCommitment = null;
+		mixPoSCReply = null;
+		mixCcPosCommitment = null;
+		mixCcPosReply = null;
+		mixKeepList = null;
+		mixDecryptionFactors = null;
+		mixDecrFactCommitment = null;
+		mixDecrFactReply = null;
+
 		return true;
 	}
 
@@ -287,11 +328,11 @@ public class Parameters {
 		this.wDefault = wDefault;
 	}
 
-	// parameters from lists
-	private ArrayOfElements<GroupElement> ciphertexts;
-	private ArrayOfElements<GroupElement> ShuffledCiphertexts;
-	private ArrayOfElements<GroupElement> plaintexts;
+	public void setFullPublicKey(ProductElement fullPublicKey) {
+		this.fullPublicKey = fullPublicKey;
+	}
 
+	
 	/**
 	 * @return the input ciphertexts
 	 */
@@ -345,6 +386,121 @@ public class Parameters {
 
 	public void setPrefixToRO(byte[] prefixToRO) {
 		this.prefixToRO = prefixToRO;
+	}
+	
+	public ArrayOfElements<GroupElement> getMixPublicKey() {
+		return mixPublicKey;
+	}
+
+	public void setMixPublicKey(ArrayOfElements<GroupElement> mixPublicKey) {
+		this.mixPublicKey = mixPublicKey;
+	}
+
+	public ArrayOfElements<FieldElement> getMixSecretKey() {
+		return mixSecretKey;
+	}
+
+	public void setMixSecretKey(ArrayOfElements<FieldElement> mixSecretKey) {
+		this.mixSecretKey = mixSecretKey;
+	}
+
+	public ArrayOfElements<ArrayOfElements<GroupElement>> getMixCiphertexts() {
+		return mixCiphertexts;
+	}
+
+	public void setMixCiphertexts(
+			ArrayOfElements<ArrayOfElements<GroupElement>> mixCiphertexts) {
+		this.mixCiphertexts = mixCiphertexts;
+	}
+
+	public ArrayOfElements<ArrayOfElements<GroupElement>> getMixPermutationCommitment() {
+		return mixPermutationCommitment;
+	}
+
+	public void setMixPermutationCommitment(
+			ArrayOfElements<ArrayOfElements<GroupElement>> mixPermutationCommitment) {
+		this.mixPermutationCommitment = mixPermutationCommitment;
+	}
+
+	public ArrayOfElements<Node> getMixPoSCommitment() {
+		return mixPoSCommitment;
+	}
+
+	public void setMixPoSCommitment(ArrayOfElements<Node> mixPoSCommitment) {
+		this.mixPoSCommitment = mixPoSCommitment;
+	}
+
+	public ArrayOfElements<Node> getMixPoSReply() {
+		return mixPoSReply;
+	}
+
+	public void setMixPoSReply(ArrayOfElements<Node> mixPoSReply) {
+		this.mixPoSReply = mixPoSReply;
+	}
+
+	public ArrayOfElements<Node> getMixPoSCCommitment() {
+		return mixPoSCCommitment;
+	}
+
+	public void setMixPoSCCommitment(ArrayOfElements<Node> mixPoSCCommitment) {
+		this.mixPoSCCommitment = mixPoSCCommitment;
+	}
+
+	public ArrayOfElements<Node> getMixPoSCReply() {
+		return mixPoSCReply;
+	}
+
+	public void setMixPoSCReply(ArrayOfElements<Node> mixPoSCReply) {
+		this.mixPoSCReply = mixPoSCReply;
+	}
+
+	public ArrayOfElements<Node> getMixCcPosCommitment() {
+		return mixCcPosCommitment;
+	}
+
+	public void setMixCcPosCommitment(ArrayOfElements<Node> mixCcPosCommitment) {
+		this.mixCcPosCommitment = mixCcPosCommitment;
+	}
+
+	public ArrayOfElements<Node> getMixCcPosReply() {
+		return mixCcPosReply;
+	}
+
+	public void setMixCcPosReply(ArrayOfElements<Node> mixCcPosReply) {
+		this.mixCcPosReply = mixCcPosReply;
+	}
+
+	public ArrayOfElements<BooleanArrayElement> getMixKeepList() {
+		return mixKeepList;
+	}
+
+	public void setMixKeepList(ArrayOfElements<BooleanArrayElement> mixKeepList) {
+		this.mixKeepList = mixKeepList;
+	}
+
+	public ArrayOfElements<ArrayOfElements<GroupElement>> getMixDecryptionFactors() {
+		return mixDecryptionFactors;
+	}
+
+	public void setMixDecryptionFactors(
+			ArrayOfElements<ArrayOfElements<GroupElement>> mixDecryptionFactors) {
+		this.mixDecryptionFactors = mixDecryptionFactors;
+	}
+
+	public ArrayOfElements<Node> getMixDecrFactCommitment() {
+		return mixDecrFactCommitment;
+	}
+
+	public void setMixDecrFactCommitment(ArrayOfElements<Node> mixDecrFactCommitment) {
+		this.mixDecrFactCommitment = mixDecrFactCommitment;
+	}
+
+	public ArrayOfElements<Node> getMixDecrFactReply() {
+		return mixDecrFactReply;
+	}
+
+	public void setMixDecrFactReply(ArrayOfElements<Node> mixDecrFactReply) {
+		this.mixDecrFactReply = mixDecrFactReply;
 	}
 
 }

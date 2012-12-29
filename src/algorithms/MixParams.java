@@ -14,13 +14,6 @@ import arithmetic.objects.Node;
 public class MixParams {
 	
 	private GroupElement publicKey;
-	public void setPublicKey(GroupElement publicKey) {
-		this.publicKey = publicKey;
-	}
-
-	public void setSecretKey(FieldElement secretKey) {
-		this.secretKey = secretKey;
-	}
 	private FieldElement secretKey;
 	
 	private ArrayOfElements<GroupElement> ciphertexts;
@@ -38,6 +31,16 @@ public class MixParams {
 	private Node decrFactReply;
 
 	// getters
+	public void setPublicKey(GroupElement publicKey) {
+		this.publicKey = publicKey;
+	}
+
+	public void setSecretKey(FieldElement secretKey) {
+		this.secretKey = secretKey;
+	}
+	
+	
+	
 	/**
 	 * @return the public key
 	 */
