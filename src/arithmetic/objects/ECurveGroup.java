@@ -73,9 +73,9 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 
 	@Override
 	public ECurveGroupElement one() {
-		IntegerFieldElement zero = new IntegerFieldElement (BigInteger.ZERO, null);
-		Point p = new Point(zero, zero);
-		ECurveGroupElement ret = new ECurveGroupElement(p, null);
+		IntegerFieldElement minusOne = new IntegerFieldElement (BigInteger.valueOf(-1), null);
+		Point infinity = new Point(minusOne, minusOne);
+		ECurveGroupElement ret = new ECurveGroupElement(infinity, null);
 		return ret;
 	}
 

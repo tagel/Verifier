@@ -27,7 +27,6 @@ public class ElementsExtractor {
 	}
 
 
-
 	/**
 	 * @param byte array arr that represents a leaf of a string.
 	 * @return the string that arr represents.
@@ -47,14 +46,6 @@ public class ElementsExtractor {
 		return b;
 	}
 
-
-	/**
-	 * @param byte array arr that represents a point.
-	 * @return the point that arr represents
-	 */
-	public static Point nodeToPoint (byte[] arr) {
-		return null;
-	}
 
 	/**
 	 * @param byte array arr that represent a product element.
