@@ -2,6 +2,8 @@ package algorithms;
 
 import java.util.List;
 
+import algorithms.params.MixParams;
+import algorithms.params.Parameters;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.GroupElement;

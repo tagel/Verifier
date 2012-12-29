@@ -1,5 +1,8 @@
 package algorithms;
 
+import algorithms.params.Parameters;
+
+
 /**
  * This class provides the functionality of proving the correctness of the decryption algorithm.
  * @author Tagel & Sofi

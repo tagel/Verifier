@@ -1,4 +1,4 @@
-package algorithms;
+package algorithms.params;
 
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;

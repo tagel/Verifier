@@ -1,5 +1,8 @@
 package algorithms;
 
+import algorithms.params.Parameters;
+
+
 /**
  * This class provides the functionality of proving a shuffle for a given permutation commitment.
  * @author Tagel & Sofi
