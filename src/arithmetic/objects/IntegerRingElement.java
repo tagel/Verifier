@@ -6,16 +6,60 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class IntegerRingElement extends RingElement<BigInteger> {
+public class IntegerRingElement implements ByteTree{
 
 	
-	public IntegerRingElement(BigInteger element, IRing<BigInteger> ring) {
-		super(element, ring);
+	protected BigInteger element;
+	protected IRing<IntegerRingElement> ring;
+	
+	public IntegerRingElement (BigInteger element, IRing<IntegerRingElement> ring) {
+		this.element = element;
+		this.ring = ring;
+	}
+	
+	public BigInteger getElement() {
+		return element;
+	}
+	
+	public IRing<IntegerRingElement> getRing() {
+		return ring;
+	}
+
+
+	
+	public IntegerRingElement neg() {
+		IntegerRingElement ret = new IntegerRingElement(this.getRing().getOrder().min(this.getElement().mod(this.getRing().getOrder())), this.getRing());
+		return ret;
+	}
+
+	
+	public IntegerRingElement add(IntegerRingElement b) {
+		IntegerRingElement ret = new IntegerRingElement ((this.getElement().add(b.getElement())).mod(this.getRing().getOrder()), this.getRing());
+		return ret;
+	}
+
+	
+	public IntegerRingElement mult(IntegerRingElement b) {
+		IntegerRingElement ret = new IntegerRingElement ((this.getElement().multiply(b.getElement())).mod(this.getRing().getOrder()), this.getRing());
+		return ret;
+	}
+	
+	public IntegerRingElement power (BigInteger b) {
+		IntegerRingElement result = this;
+		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+	    	result = result.mult(this);
+		return result;
+	}
+
+	
+	public boolean equal(IntegerRingElement b) {
+		if (this.getElement().mod(this.getRing().getOrder())==b.getElement().mod(this.getRing().getOrder())) return true;
+		else return false;
 	}
 
 	@Override
 	public byte[] toByteArray() {
-		int numOfOrderBytes = ring.getOrder().toByteArray().length;
+		int numOfOrderBytes = this.ring.getOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
 		byte[] b = ByteBuffer.allocate(numOfOrderBytes).order(ByteOrder.BIG_ENDIAN).putInt(element.intValue()).array();
 		byte[] c= new byte[a.length+b.length];
@@ -26,5 +70,4 @@ public class IntegerRingElement extends RingElement<BigInteger> {
 		ret[0] = 1;
 		return ret;
 	}
-
 }

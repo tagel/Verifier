@@ -6,11 +6,59 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class IntegerFieldElement extends FieldElement<BigInteger> {
+public class IntegerFieldElement implements ByteTree {
 	
-	public IntegerFieldElement(BigInteger element, IField<BigInteger> iField) {
-		super(element, iField);
+	protected BigInteger element;
+	protected IField<IntegerFieldElement> field;
+	
+	public IntegerFieldElement (BigInteger element, IField<IntegerFieldElement> f) {
+		this.element = element;
+		this.field = f;
 	}
+	
+	public BigInteger getElement() {
+		return element;
+	}
+	
+	public IField<IntegerFieldElement> getField() {
+		return field;
+	}
+	
+	public IntegerFieldElement neg() {
+		IntegerFieldElement ret = new IntegerFieldElement(this.getField().getOrder().min(this.getElement().mod(this.getField().getOrder())), this.getField());
+		return ret;
+	}
+
+	
+	public IntegerFieldElement add(IntegerFieldElement b) {
+		IntegerFieldElement ret = new IntegerFieldElement ((this.getElement().add(b.getElement())).mod(this.getField().getOrder()), this.getField());
+		return ret;
+	}
+
+	
+	public IntegerFieldElement mult(IntegerFieldElement b) {
+		IntegerFieldElement ret = new IntegerFieldElement ((this.getElement().multiply(b.getElement())).mod(this.getField().getOrder()), this.getField());
+		return ret;
+	}
+	
+	public IntegerFieldElement power (BigInteger b) {
+		IntegerFieldElement result = this;
+		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+	    	result = result.mult(this);
+		return result;
+	}
+	
+	public IntegerFieldElement inverse() {
+		IntegerFieldElement ret = new IntegerFieldElement (this.getElement().modInverse(this.getField().getOrder()), this.getField());
+		return ret;
+	}
+
+	
+	public boolean equal(IntegerFieldElement b) {
+		if (this.getElement().mod(this.getField().getOrder())==b.getElement().mod(this.getField().getOrder())) return true;
+		else return false;
+	}
+
 
 
 

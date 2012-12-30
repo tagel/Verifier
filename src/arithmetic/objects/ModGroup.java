@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
  * This class represents a multiplicative modulo prime Group.
  *
  */
-public class ModGroup implements IGroup<ModGroupElement> {
+public class ModGroup implements IGroup<GroupElement<BigInteger>> {
 
 	/**
 	 * p = the order of the underlying field Z*p
@@ -77,42 +77,16 @@ public class ModGroup implements IGroup<ModGroupElement> {
 		return p;
 	}
 
-
-	@Override
-	public ModGroupElement mult(ModGroupElement a, ModGroupElement b) {
-		ModGroupElement ret = new ModGroupElement ((a.getElement().multiply(b.getElement())).mod(q), a.getGroup());
-		return ret;
+	public BigInteger getOrder() {
+		return q;
 	}
+	
 
 	@Override
 	public ModGroupElement one() {
-		ModGroupElement ret = new ModGroupElement (BigInteger.ONE, null);
+		ModGroupElement ret = new ModGroupElement(BigInteger.ONE, this);
 		return ret;
 	}
-
-	@Override
-	public ModGroupElement inverse(ModGroupElement a) {
-		ModGroupElement ret = new ModGroupElement (a.getElement().modInverse(q), a.getGroup());
-		return ret;
-	}
-
-
-	@Override
-	public ModGroupElement power(ModGroupElement a, BigInteger b) {
-		BigInteger result = a.getElement();
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
-			result = result.multiply(a.getElement());
-		ModGroupElement ret = new ModGroupElement (result.mod(q), a.getGroup());
-		return ret;
-	}
-
-
-	@Override
-	public boolean equal(ModGroupElement a, ModGroupElement b) {
-		if (a.getElement().mod(q)==b.getElement().mod(q)) return true;
-		else return false;
-	}
-
 
 
 	@Override
