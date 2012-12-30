@@ -1,9 +1,12 @@
 package arithmetic.objects;
 
+
+
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 
-public class ArrayOfElements<E> implements ByteTree{
+public abstract class ArrayOfElements<E> implements ByteTree{
 	
 	private E[] arr;
 	
@@ -13,6 +16,11 @@ public class ArrayOfElements<E> implements ByteTree{
 	
 	public E[] getArray() {
 		return arr;
+	}
+	
+	public void addElement(E element) {
+	    arr = Arrays.copyOf(arr, arr.length+1);
+	    arr[arr.length] = element;
 	}
 
 	@Override

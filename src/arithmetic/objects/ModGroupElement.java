@@ -1,5 +1,7 @@
 package arithmetic.objects;
 
+
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -7,8 +9,37 @@ import java.nio.ByteOrder;
 
 public class ModGroupElement extends GroupElement<BigInteger> {
 
-	public ModGroupElement(BigInteger element, IGroup<BigInteger> group) {
+	public ModGroupElement(BigInteger element, IGroup<GroupElement<BigInteger>> group) {
 		super(element, group);
+	}
+	
+	@Override
+	public ModGroupElement mult(GroupElement<BigInteger> b) {
+		  ModGroupElement ret = new ModGroupElement((this.getElement().multiply(b.getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
+		  return ret;
+	}
+
+	@Override
+	public ModGroupElement inverse() {
+		ModGroupElement ret = new ModGroupElement (getElement().modInverse(getGroup().getFieldOrder()), getGroup());
+		return ret;
+	}
+
+
+	@Override
+	public ModGroupElement power(BigInteger b) {
+		BigInteger result = getElement();
+		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+			result = result.multiply(getElement());
+		ModGroupElement ret = new ModGroupElement (result.mod(getGroup().getFieldOrder()), getGroup());
+		return ret;
+	}
+
+
+	@Override
+	public boolean equal(GroupElement<BigInteger> b) {
+		if (getElement().mod(getGroup().getFieldOrder())==b.getElement().mod(b.getGroup().getFieldOrder())) return true;
+		else return false;
 	}
 
 	@Override

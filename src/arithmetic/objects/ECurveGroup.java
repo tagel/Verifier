@@ -1,5 +1,8 @@
 package arithmetic.objects;
 
+
+
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 
@@ -7,8 +10,12 @@ import java.math.BigInteger;
  * This class represents a standard elliptic curve over a prime order field.
  *
  */
-public class ECurveGroup implements IGroup<ECurveGroupElement>{
+public class ECurveGroup implements IGroup<GroupElement<Point>>{
 	
+	/**
+	 * name = the name of the standard elliptic curve.
+	 */
+	private String name;
 	/**
 	 * p = order of the underlying field.
 	 */
@@ -20,11 +27,11 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	/**
 	 * a = first coefficient of the curve equation
 	 */
-	private int a;
+	private BigInteger a;
 	/**
 	 * b = second coefficient of the curve equation
 	 */
-	private int b;
+	private BigInteger b;
 	/**
 	 * g = standard generator
 	 */
@@ -38,7 +45,8 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	 * @param g
 	 * Constructor.
 	 */
-	public ECurveGroup (BigInteger p, BigInteger q, int a, int b, Point g) {
+	public ECurveGroup (String name, BigInteger p, BigInteger q, BigInteger a, BigInteger b, Point g) {
+		this.name = name;
 		this.p=p;
 		this.q=q;
 		this.a=a;
@@ -51,7 +59,16 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 	 * Constructor.
 	 */
 	public ECurveGroup (String s) {
-		return;
+		ECurveParams params = new ECurveParams(s);
+		name = s;
+		p = params.getP();
+		q = params.getQ();
+		a = params.getA();
+		b = params.getB();
+		IField<IntegerFieldElement> f = new PrimeOrderField(p); 
+		IntegerFieldElement gx = new IntegerFieldElement(params.getGx(), f);
+		IntegerFieldElement gy = new IntegerFieldElement(params.getGy(), f);
+		g = new Point(gx, gy);
 	}
 	
 	
@@ -59,55 +76,29 @@ public class ECurveGroup implements IGroup<ECurveGroupElement>{
 		return p;
 	}
 	
+
 	@Override
-	public ECurveGroupElement mult(ECurveGroupElement a, ECurveGroupElement b) {
-		BigInteger s = ((a.getElement().getY().getElement().subtract(b.getElement().getY().getElement())).divide(a.getElement().getX().getElement().subtract(b.getElement().getX().getElement()))).mod(p);
-		BigInteger x = (s.pow(2).subtract(a.getElement().getX().getElement()).subtract(b.getElement().getX().getElement())).mod(p);
-		BigInteger y = (BigInteger.ZERO.subtract(a.getElement().getY().getElement()).add(s.multiply(a.getElement().getX().getElement().subtract(b.getElement().getX().getElement())))).mod(p);
-		IntegerFieldElement newY = new IntegerFieldElement(y, null);
-		IntegerFieldElement newX = new IntegerFieldElement(x, null);
-		Point p = new Point(newX, newY);
-		ECurveGroupElement ret = new ECurveGroupElement(p, a.getGroup());
-		return ret;
+	public BigInteger getOrder() {
+		return q;
 	}
 
 	@Override
 	public ECurveGroupElement one() {
-		IntegerFieldElement minusOne = new IntegerFieldElement (BigInteger.valueOf(-1), null);
+		IField<IntegerFieldElement> f = new PrimeOrderField(p);
+		IntegerFieldElement minusOne = new IntegerFieldElement (BigInteger.valueOf(-1), f);
 		Point infinity = new Point(minusOne, minusOne);
-		ECurveGroupElement ret = new ECurveGroupElement(infinity, null);
+		ECurveGroupElement ret = new ECurveGroupElement(infinity, this);
 		return ret;
 	}
 
-	@Override
-	public ECurveGroupElement inverse(ECurveGroupElement a) {
-		IntegerFieldElement y = new IntegerFieldElement(BigInteger.ZERO.subtract(a.getElement().getY().getElement()).mod(p), null);
-		Point p = new Point(a.getElement().getX(), y);
-		ECurveGroupElement ret = new ECurveGroupElement(p, a.getGroup());
-		return ret;
-	}
-	
-	
-	public ECurveGroupElement power(ECurveGroupElement a, BigInteger b) {
-		ECurveGroupElement result = a;
-	    for (BigInteger i = BigInteger.ZERO; i.compareTo(b)<0; i = i.add(BigInteger.ONE))
-	    	result = this.mult(result, a);
-	    return result;
-	}
 
-	
-	public boolean equal(ECurveGroupElement a, ECurveGroupElement b) {
-		if (a.getElement().getX().getElement()==b.getElement().getX().getElement() && a.getElement().getY().getElement()==b.getElement().getY().getElement())
-			return true;
-		else return false;
-	}
 
 
 	@Override
-	public byte[] toByteArray() {
-		// TODO Auto-generated method stub
-		return null;
+	public byte[] toByteArray() throws UnsupportedEncodingException {
+		return new StringLeaf(name).toByteArray();
 	}
+
 
 }
 

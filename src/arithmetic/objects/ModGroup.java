@@ -1,13 +1,17 @@
 package arithmetic.objects;
 
+
+
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 
 /**
  * This class represents a multiplicative modulo prime Group.
  *
  */
-public class ModGroup implements IGroup<ModGroupElement> {
+public class ModGroup implements IGroup<GroupElement<BigInteger>> {
 
 	/**
 	 * p = the order of the underlying field Z*p
@@ -22,7 +26,7 @@ public class ModGroup implements IGroup<ModGroupElement> {
 	 */
 	private BigInteger g;
 
-	
+
 	/**
 	 * @param p
 	 * @param q
@@ -34,60 +38,68 @@ public class ModGroup implements IGroup<ModGroupElement> {
 		this.q = q;
 		this.g = g;
 	}
-	
+
 	public ModGroup (byte[] arr) {
-		return;
+		byte[] a = new byte[4];
+		a[0] = arr[6];
+		a[1] = arr[7];
+		a[2] = arr[8];
+		a[3] = arr[9];
+		int x = ByteBuffer.wrap(a).getInt();
+		a = new byte[x];
+		for (int i=0; i<x; i++)
+			a[i] = arr[10+i];
+		this.p = new BigInteger(a);
+		a = new byte[4];
+		a[0] = arr[9+x+2];
+		a[1] = arr[9+x+3];
+		a[2] = arr[9+x+4];
+		a[3] = arr[9+x+5];
+		int y = ByteBuffer.wrap(a).getInt();
+		a = new byte[y];
+		for (int i=0; i<y; i++)
+			a[i] = arr[9+x+6+i];
+		this.q = new BigInteger(a);
+		a = new byte[4];
+		a[0] = arr[9+x+5+y+2];
+		a[1] = arr[9+x+5+y+3];
+		a[2] = arr[9+x+5+y+4];
+		a[3] = arr[9+x+5+y+5];
+		int z = ByteBuffer.wrap(a).getInt();
+		a = new byte[z];
+		for (int i=0; i<z; i++)
+			a[i] = arr[9+x+6+y+6+i];
+		this.g = new BigInteger(a);
 	}
-	
-	
+
+
+
 	public BigInteger getFieldOrder() {
 		return p;
 	}
-	
 
-	@Override
-	public ModGroupElement mult(ModGroupElement a, ModGroupElement b) {
-		ModGroupElement ret = new ModGroupElement ((a.getElement().multiply(b.getElement())).mod(q), a.getGroup());
-		return ret;
+	public BigInteger getOrder() {
+		return q;
 	}
+	
 
 	@Override
 	public ModGroupElement one() {
-		ModGroupElement ret = new ModGroupElement (BigInteger.ONE, null);
-		return ret;
-	}
-
-	@Override
-	public ModGroupElement inverse(ModGroupElement a) {
-		ModGroupElement ret = new ModGroupElement (a.getElement().modInverse(q), a.getGroup());
+		ModGroupElement ret = new ModGroupElement(BigInteger.ONE, this);
 		return ret;
 	}
 
 
 	@Override
-	public ModGroupElement power(ModGroupElement a, BigInteger b) {
-		BigInteger result = a.getElement();
-	    for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
-	    	result = result.multiply(a.getElement());
-	    ModGroupElement ret = new ModGroupElement (result.mod(q), a.getGroup());
-	    return ret;
+	public byte[] toByteArray() throws UnsupportedEncodingException {
+		BigIntLeaf P = new BigIntLeaf(p);
+		BigIntLeaf Q = new BigIntLeaf(q);
+		BigIntLeaf G = new BigIntLeaf(g);
+		ByteTree[] arr = {P, Q, G};
+		Node groupNode = new Node(arr);
+		return groupNode.toByteArray();
 	}
 
-
-	@Override
-	public boolean equal(ModGroupElement a, ModGroupElement b) {
-		if (a.getElement().mod(q)==b.getElement().mod(q)) return true;
-		else return false;
-	}
-
-	
-	
-	@Override
-	public byte[] toByteArray() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 
 
 

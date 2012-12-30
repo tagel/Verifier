@@ -1,5 +1,7 @@
 package arithmetic.objects;
 
+
+
 import java.math.BigInteger;
 
 
@@ -8,45 +10,20 @@ import java.math.BigInteger;
  *
  * @param <E>
  */
-public interface IGroup <E> extends ByteTree {
+public interface IGroup<E> extends ByteTree {
 	
 	
-	/**
-	 * @param a
-	 * @return the multiplicative inverse a^-1 of a group element a.
-	 */
-	public E inverse (E a); 
+
+	public BigInteger getFieldOrder();
 	
-	
-	/**
-	 * @param a 
-	 * @param b
-	 * @return The multiplication a*b of two Group elements a and b.
-	 */
-	public E mult (E a, E b); 
-	
-	/**
-	 * @param a group element
-	 * @param b integer
-	 * @return  a^b
-	 */
-	public E power (E a, BigInteger b);
+	public BigInteger getOrder();
+
+
 
 	/**
 	 * @return the 1 of the Group.
 	 */
 	public E one();
-	
-	/**
-	 * @param a group element	
-	 * @param b group element
-	 * @return True if a == b
-	 */
-	public boolean equal(E a, E b);
-
-
-	public BigInteger getFieldOrder();
-	
 
 		
 
