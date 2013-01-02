@@ -30,17 +30,17 @@ public interface ProtocolInfo {
 	 * @return the number of bits in each component of random vectors used for 
 	 * batching in proofs of shuffles and proofs of correct decryption.
 	 */
-	public int getvbitlenro(); 
+	public int getNe(); 
 
 	/**
 	 * @return the acceptable statistical error when sampling random values. 
 	 */
-	public int getStatDist(); 
+	public int getNr(); 
 	
 	/** 
 	 * @return the number of bits used in the challenge of the verifier in zero-knowledge proofs.
 	 */
-	public int getcbitlenro(); 
+	public int getNv(); 
 	 
 	/**
 	 * 
@@ -56,7 +56,7 @@ public interface ProtocolInfo {
 	/**
 	 * @return the String representation of the group Gp. 
 	 */
-	public String getPGroup();
+	public String getGq();
 	
 	/**
 	 * @return the default width of cipher-texts and plain-texts.

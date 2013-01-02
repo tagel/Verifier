@@ -36,6 +36,10 @@ public class ECurveGroup implements IGroup{
 	 * g = standard generator
 	 */
 	private Point g;
+	/**
+	 * group type: either modular or elliptic curve. (in this case, elliptic curve).
+	 */
+	private String groupType = "Elliptic Curve";
 
 	/**
 	 * @param p
@@ -55,7 +59,7 @@ public class ECurveGroup implements IGroup{
 	}
 	
 	/**
-	 * @param s
+	 * @param s = a name of a standard elliptic curve.
 	 * Constructor.
 	 */
 	public ECurveGroup (String s) {
@@ -88,6 +92,11 @@ public class ECurveGroup implements IGroup{
 	}
 
 	@Override
+	public String getGroupType() {
+		return groupType;
+	}
+	
+	@Override
 	public ECurveGroupElement one() {
 		IField<IntegerFieldElement> f = new PrimeOrderField(p);
 		IntegerFieldElement minusOne = new IntegerFieldElement (BigInteger.valueOf(-1), f);
@@ -103,7 +112,6 @@ public class ECurveGroup implements IGroup{
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		return new StringLeaf(name).toByteArray();
 	}
-
 
 
 

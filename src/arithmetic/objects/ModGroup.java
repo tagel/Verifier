@@ -25,7 +25,10 @@ public class ModGroup implements IGroup {
 	 *  g = generator
 	 */
 	private BigInteger g;
-
+	/**
+	 * group type: either modular or elliptic curve. (in this case, modular).
+	 */
+	private String groupType = "Modular";
 
 	/**
 	 * @param p
@@ -81,12 +84,15 @@ public class ModGroup implements IGroup {
 	public BigInteger getOrder() {
 		return q;
 	}
-	
+
 	@Override
 	public ModGroupElement getGenerator() {
 		return new ModGroupElement(g, this);
 	}
-	
+
+	public String getGroupType() {
+		return groupType;
+	}
 
 	@Override
 	public ModGroupElement one() {

@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public interface IGroupElement extends ByteTree {
 	
-	public <E> E getElement();
+	
 	
 	public IGroupElement mult(IGroupElement b);
 	
