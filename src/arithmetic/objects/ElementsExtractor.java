@@ -47,20 +47,22 @@ public class ElementsExtractor {
 		stream.close();
 		return b;
 	}
-	
+
 	public static IGroupElement createGroupElement (ByteTree b) {
-		if (b instanceof ModGroupElement) 
-			b = (ModGroupElement) b;
-		return b;
-		
-	}
-	
-	public static byte[] concatArrays(byte[] A, byte[] B) {
-		   byte[] C= new byte[A.length+B.length];
-		   System.arraycopy(A, 0, C, 0, A.length);
-		   System.arraycopy(B, 0, C, A.length, B.length);
-		   return C;
+		if (b instanceof IGroupElement)
+			return (IGroupElement) b;
+		else {
+			System.out.println("ERROR: instance is not a group element");
+			return null;
 		}
+	}
+
+	public static byte[] concatArrays(byte[] A, byte[] B) {
+		byte[] C= new byte[A.length+B.length];
+		System.arraycopy(A, 0, C, 0, A.length);
+		System.arraycopy(B, 0, C, A.length, B.length);
+		return C;
+	}
 
 
 	/**
