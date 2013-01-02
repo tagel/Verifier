@@ -7,17 +7,31 @@ import java.math.BigInteger;
 
 
 
-public class ECurveGroupElement extends GroupElement<Point> {
+public class ECurveGroupElement implements IGroupElement {
 
-	public ECurveGroupElement(Point element, IGroup<GroupElement<Point>> group) {
-		super(element, group);
+	private Point element;
+	private ECurveGroup group;
+	
+	public ECurveGroupElement(Point element, ECurveGroup group) {
+		this.element = element;
+		this.group = group;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Point getElement() {
+		return element;
+	}
+	
+	public ECurveGroup getGroup() {
+		return group;
 	}
 	
 	@Override
-	public ECurveGroupElement mult(GroupElement<Point> b) {
-		BigInteger s = ((getElement().getY().getElement().subtract(b.getElement().getY().getElement())).divide(getElement().getX().getElement().subtract(b.getElement().getX().getElement()))).mod(getGroup().getFieldOrder());
-		BigInteger x = (s.pow(2).subtract(getElement().getX().getElement()).subtract(b.getElement().getX().getElement())).mod(getGroup().getFieldOrder());
-		BigInteger y = (BigInteger.ZERO.subtract(getElement().getY().getElement()).add(s.multiply(getElement().getX().getElement().subtract(b.getElement().getX().getElement())))).mod(getGroup().getFieldOrder());
+	public ECurveGroupElement mult(IGroupElement b) {
+		BigInteger s = ((((Point) getElement()).getY().getElement().subtract(((Point) b.getElement()).getY().getElement())).divide(((Point) getElement()).getX().getElement().subtract(((Point) b.getElement()).getX().getElement()))).mod(getGroup().getFieldOrder());
+		BigInteger x = (s.pow(2).subtract(((Point) getElement()).getX().getElement()).subtract(((Point) b.getElement()).getX().getElement())).mod(getGroup().getFieldOrder());
+		BigInteger y = (BigInteger.ZERO.subtract(((Point) getElement()).getY().getElement()).add(s.multiply(((Point) getElement()).getX().getElement().subtract(((Point) b.getElement()).getX().getElement())))).mod(getGroup().getFieldOrder());
 		IntegerFieldElement newY = new IntegerFieldElement(y, null);
 		IntegerFieldElement newX = new IntegerFieldElement(x, null);
 		Point p = new Point(newX, newY);
@@ -25,10 +39,11 @@ public class ECurveGroupElement extends GroupElement<Point> {
 		return ret;
 	}
 	
+
 	@Override
 	public ECurveGroupElement inverse() {
-		IntegerFieldElement y = new IntegerFieldElement(BigInteger.ZERO.subtract(getElement().getY().getElement()).mod(getGroup().getFieldOrder()), null);
-		Point p = new Point(getElement().getX(), y);
+		IntegerFieldElement y = new IntegerFieldElement(BigInteger.ZERO.subtract(((Point) getElement()).getY().getElement()).mod(getGroup().getFieldOrder()), null);
+		Point p = new Point(((Point) getElement()).getX(), y);
 		ECurveGroupElement ret = new ECurveGroupElement(p, getGroup());
 		return ret;
 	}
@@ -41,9 +56,9 @@ public class ECurveGroupElement extends GroupElement<Point> {
 	}
 	
 
-	
-	public boolean equal(GroupElement<Point> b) {
-		if (getElement().getX().getElement()==b.getElement().getX().getElement() && getElement().getY().getElement()==b.getElement().getY().getElement())
+	@Override
+	public boolean equal(IGroupElement b) {
+		if (getElement().getX().getElement()==((Point) b.getElement()).getX().getElement() && ((Point) getElement()).getY().getElement()==((Point) b.getElement()).getY().getElement())
 			return true;
 		else return false;
 	}
