@@ -18,7 +18,6 @@ public class ModGroupElement implements IGroupElement {
 		this.group = group;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public BigInteger getElement() {
 		return element;
 	}

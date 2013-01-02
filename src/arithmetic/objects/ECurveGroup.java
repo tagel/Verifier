@@ -59,7 +59,7 @@ public class ECurveGroup implements IGroup{
 	}
 	
 	/**
-	 * @param s
+	 * @param s = a name of a standard elliptic curve.
 	 * Constructor.
 	 */
 	public ECurveGroup (String s) {
