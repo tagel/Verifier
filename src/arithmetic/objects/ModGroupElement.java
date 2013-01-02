@@ -7,15 +7,29 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class ModGroupElement extends GroupElement<BigInteger> {
+public class ModGroupElement implements IGroupElement {
 
-	public ModGroupElement(BigInteger element, IGroup<GroupElement<BigInteger>> group) {
-		super(element, group);
+	
+	private BigInteger element;
+	private ModGroup group;
+	
+	public ModGroupElement (BigInteger element, ModGroup group) {
+		this.element = element;
+		this.group = group;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public BigInteger getElement() {
+		return element;
+	}
+	
+	public ModGroup getGroup() {
+		return group;
 	}
 	
 	@Override
-	public ModGroupElement mult(GroupElement<BigInteger> b) {
-		  ModGroupElement ret = new ModGroupElement((this.getElement().multiply(b.getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
+	public ModGroupElement mult(IGroupElement b) {
+		  ModGroupElement ret = new ModGroupElement((this.getElement().multiply((BigInteger) b.getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
 		  return ret;
 	}
 
@@ -37,8 +51,8 @@ public class ModGroupElement extends GroupElement<BigInteger> {
 
 
 	@Override
-	public boolean equal(GroupElement<BigInteger> b) {
-		if (getElement().mod(getGroup().getFieldOrder())==b.getElement().mod(b.getGroup().getFieldOrder())) return true;
+	public boolean equal(IGroupElement b) {
+		if (getElement().mod(getGroup().getFieldOrder())==((BigInteger) b.getElement()).mod(((ModGroupElement) b).getGroup().getFieldOrder())) return true;
 		else return false;
 	}
 

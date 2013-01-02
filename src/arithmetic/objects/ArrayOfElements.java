@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 
-public abstract class ArrayOfElements<E> implements ByteTree{
+public class ArrayOfElements<E> implements ByteTree{
 	
 	private E[] arr;
 	

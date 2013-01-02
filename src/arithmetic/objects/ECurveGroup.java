@@ -10,7 +10,7 @@ import java.math.BigInteger;
  * This class represents a standard elliptic curve over a prime order field.
  *
  */
-public class ECurveGroup implements IGroup<GroupElement<Point>>{
+public class ECurveGroup implements IGroup{
 	
 	/**
 	 * name = the name of the standard elliptic curve.
