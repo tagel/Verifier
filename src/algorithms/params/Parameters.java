@@ -4,11 +4,11 @@ import java.math.BigInteger;
 
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;
-import arithmetic.objects.FieldElement;
+import arithmetic.objects.IntegerFieldElement;
 import arithmetic.objects.GroupElement;
 import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
-import arithmetic.objects.ProductElement;
+import arithmetic.objects.ProductGroupElement;
 
 /**
  * This class describes an object that contains the parameters used by the
@@ -66,7 +66,7 @@ public class Parameters {
 	private String type;
 	private String auxsid;
 	private BigInteger w;
-	private ProductElement fullPublicKey;
+	private ProductGroupElement fullPublicKey;
 	private int maxciph;
 
 	// parameters from the XML
@@ -92,7 +92,7 @@ public class Parameters {
 	
 	//MIX -- The parameters of each party
 	private ArrayOfElements<GroupElement> mixPublicKey;
-	private ArrayOfElements<FieldElement> mixSecretKey;
+	private ArrayOfElements<IntegerFieldElement> mixSecretKey;
 	
 	private ArrayOfElements<ArrayOfElements<GroupElement>> mixCiphertexts;
 	private ArrayOfElements<ArrayOfElements<GroupElement>> mixPermutationCommitment;
@@ -170,7 +170,7 @@ public class Parameters {
 	/**
 	 * @return the full public key
 	 */
-	public ProductElement getFullPublicKey() {
+	public ProductGroupElement getFullPublicKey() {
 		return fullPublicKey;
 	}
 
@@ -328,7 +328,7 @@ public class Parameters {
 		this.wDefault = wDefault;
 	}
 
-	public void setFullPublicKey(ProductElement fullPublicKey) {
+	public void setFullPublicKey(ProductGroupElement fullPublicKey) {
 		this.fullPublicKey = fullPublicKey;
 	}
 
@@ -396,11 +396,11 @@ public class Parameters {
 		this.mixPublicKey = mixPublicKey;
 	}
 
-	public ArrayOfElements<FieldElement> getMixSecretKey() {
+	public ArrayOfElements<IntegerFieldElement> getMixSecretKey() {
 		return mixSecretKey;
 	}
 
-	public void setMixSecretKey(ArrayOfElements<FieldElement> mixSecretKey) {
+	public void setMixSecretKey(ArrayOfElements<IntegerFieldElement> mixSecretKey) {
 		this.mixSecretKey = mixSecretKey;
 	}
 
