@@ -81,6 +81,11 @@ public class ECurveGroup implements IGroup{
 	public BigInteger getOrder() {
 		return q;
 	}
+	
+	@Override
+	public ECurveGroupElement getGenerator() {
+		return new ECurveGroupElement(g, this);
+	}
 
 	@Override
 	public ECurveGroupElement one() {
@@ -98,6 +103,8 @@ public class ECurveGroup implements IGroup{
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		return new StringLeaf(name).toByteArray();
 	}
+
+
 
 
 }

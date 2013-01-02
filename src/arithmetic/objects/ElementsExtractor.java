@@ -47,6 +47,20 @@ public class ElementsExtractor {
 		stream.close();
 		return b;
 	}
+	
+	public static IGroupElement createGroupElement (ByteTree b) {
+		if (b instanceof ModGroupElement) 
+			b = (ModGroupElement) b;
+		return b;
+		
+	}
+	
+	public static byte[] concatArrays(byte[] A, byte[] B) {
+		   byte[] C= new byte[A.length+B.length];
+		   System.arraycopy(A, 0, C, 0, A.length);
+		   System.arraycopy(B, 0, C, A.length, B.length);
+		   return C;
+		}
 
 
 	/**
@@ -54,7 +68,7 @@ public class ElementsExtractor {
 	 * @param a string s, representing a certain group.
 	 * @return the group recovered from s by removing the comment and colons, converting the hexa string to a byte array, converting the byte array into a byte tree, and converting the byte tree into the group.
 	 */
-	public static <E> IGroup<E> unmarshal (String s) {
+	public static  IGroup unmarshal (String s) {
 		BigInteger p = BigInteger.ONE;
 		IGroup ret = new ModGroup(p,p,p);
 		return ret;

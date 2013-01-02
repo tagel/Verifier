@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
  * This class represents a multiplicative modulo prime Group.
  *
  */
-public class ModGroup implements IGroup<ModGroupElement> {
+public class ModGroup implements IGroup {
 
 	/**
 	 * p = the order of the underlying field Z*p
@@ -82,6 +82,11 @@ public class ModGroup implements IGroup<ModGroupElement> {
 		return q;
 	}
 	
+	@Override
+	public ModGroupElement getGenerator() {
+		return new ModGroupElement(g, this);
+	}
+	
 
 	@Override
 	public ModGroupElement one() {
@@ -99,11 +104,6 @@ public class ModGroup implements IGroup<ModGroupElement> {
 		Node groupNode = new Node(arr);
 		return groupNode.toByteArray();
 	}
-
-
-
-
-
 
 
 }
