@@ -49,8 +49,10 @@ public class ElementsExtractor {
 	}
 
 	public static IGroupElement createGroupElement (ByteTree b) {
-		if (b instanceof IGroupElement)
-			return (IGroupElement) b;
+		if (b instanceof ModGroupElement)
+			return (ModGroupElement) b;
+		if (b instanceof ECurveGroupElement)
+			return (ECurveGroupElement) b;
 		else {
 			System.out.println("ERROR: instance is not a group element");
 			return null;
@@ -65,15 +67,34 @@ public class ElementsExtractor {
 	}
 
 
+	public static byte[] hexStringToByteArray(String s) {
+		int len = s.length();
+		byte[] data = new byte[len / 2];
+		for (int i = 0; i < len; i += 2) {
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+					+ Character.digit(s.charAt(i+1), 16));
+		}
+		return data;
+	}
 	/**
 	 * @param <E>
 	 * @param a string s, representing a certain group.
 	 * @return the group recovered from s by removing the comment and colons, converting the hexa string to a byte array, converting the byte array into a byte tree, and converting the byte tree into the group.
+	 * @throws UnsupportedEncodingException 
 	 */
-	public static  IGroup unmarshal (String s) {
-		BigInteger p = BigInteger.ONE;
-		IGroup ret = new ModGroup(p,p,p);
-		return ret;
+	public static IGroup unmarshal (String s) throws UnsupportedEncodingException {
+		int i = s.indexOf(":");
+		String type = s.substring(0, i-1);
+		s = s.substring(i+2, s.length()-1);
+		byte[] b = hexStringToByteArray(s);
+		if (type.equals("verificatum.arithm.ModPGroup"))
+			return new ModGroup(b);
+		if (type.equals("verificatum.arithm.ECqPGroup"))
+			return new ECurveGroup(leafToString(b));
+		else { 
+			System.out.println("ERROR: name of java class is unrecognized by the system");
+			return null;
+		}
 	}
 
 

@@ -29,7 +29,7 @@ public class ModGroupElement implements IGroupElement {
 	
 	@Override
 	public ModGroupElement mult(IGroupElement b) {
-		  ModGroupElement ret = new ModGroupElement((this.getElement().multiply((BigInteger) b.getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
+		  ModGroupElement ret = new ModGroupElement((this.getElement().multiply((BigInteger) ((ModGroupElement) b).getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
 		  return ret;
 	}
 
@@ -52,7 +52,7 @@ public class ModGroupElement implements IGroupElement {
 
 	@Override
 	public boolean equal(IGroupElement b) {
-		if (getElement().mod(getGroup().getFieldOrder())==((BigInteger) b.getElement()).mod(((ModGroupElement) b).getGroup().getFieldOrder())) return true;
+		if (getElement().mod(getGroup().getFieldOrder())==((BigInteger) ((ModGroupElement) b).getElement()).mod(((ModGroupElement) b).getGroup().getFieldOrder())) return true;
 		else return false;
 	}
 
