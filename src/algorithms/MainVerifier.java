@@ -9,7 +9,7 @@ import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.IntegerFieldElement;
-import arithmetic.objects.GroupElement;
+import arithmetic.objects.IGroupElement;
 import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
 import arithmetic.objects.ProductGroupElement;
@@ -130,16 +130,16 @@ public class MainVerifier {
 		ByteTree btPk = btFromFile(params.getDirectory().concat(
 				"FullPublicKey.bt"));
 		ProductGroupElement pk = new ProductGroupElement(btPk, params.getGq());
-		GroupElement y = pk.getArr()[1];
-		GroupElement g = pk.getArr()[0];
+		IGroupElement y = pk.getArr()[1];
+		IGroupElement g = pk.getArr()[0];
 
 		params.setFullPublicKey(pk);
-		GroupElement yi;
+		IGroupElement yi;
 		IntegerFieldElement xi;
 		int i;
 
 		// Here we get the Identity element and multiply all of the yi's
-		GroupElement res = (GroupElement) params.getGq().one();
+		IGroupElement res = (IGroupElement) params.getGq().one();
 
 		// TODO: Fix the path - now if we have more than 10 it will write 010.
 		for (i = 0; i < params.getThreshold(); i++) {
