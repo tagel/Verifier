@@ -3,7 +3,9 @@ package algorithms;
 import java.math.BigInteger;
 
 import arithmetic.objects.ArrayOfElements;
+import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
+import arithmetic.objects.Element;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.IGroupElement;
 import arithmetic.objects.IField;
@@ -53,7 +55,7 @@ public class ProveShuffling {
 			/** 
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
-			ByteTree[] PosCommitmentArr = PoSCommitment.getChildrenArray();
+			Element[] PosCommitmentArr = PoSCommitment.getChildrenArray();
 
 			// creating B,A',B',C',D',F'
 
@@ -61,15 +63,15 @@ public class ProveShuffling {
 			ArrayOfElements<IGroupElement> B = ElementsExtractor.createArrayOfElements(PosCommitmentArr[0]);
 			ArrayOfElements<IGroupElement> Btag = ElementsExtractor.createArrayOfElements(PosCommitmentArr[2]);
 			
-			IGroupElement Atag = ElementsExtractor.createGroupElement(PosCommitmentArr[1],Gq);
-			IGroupElement Ctag = ElementsExtractor.createGroupElement(PosCommitmentArr[3],Gq);
-			IGroupElement Dtag = ElementsExtractor.createGroupElement(PosCommitmentArr[4],Gq);
-			IGroupElement Ftag = ElementsExtractor.createGroupElement(PosCommitmentArr[5],Gq);
+			IGroupElement Atag = ElementsExtractor.createGroupElement(PosCommitmentArr[1].toByteTree,Gq);
+			IGroupElement Ctag = ElementsExtractor.createGroupElement(PosCommitmentArr[3].toByteTree,Gq);
+			IGroupElement Dtag = ElementsExtractor.createGroupElement(PosCommitmentArr[4].toByteTree,Gq);
+			IGroupElement Ftag = ElementsExtractor.createGroupElement(PosCommitmentArr[5].toByteTree,Gq);
 
 			/** 
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 			 */
-			ByteTree[] PosReplyArr = PoSReply.getChildrenArray();
+			Element[] PosReplyArr = PoSReply.getChildrenArray();
 			BigInteger q = Gq.getFieldOrder();
 			IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
 			IntegerFieldElement Ka = new IntegerFieldElement (ElementsExtractor.leafToInt(PosReplyArr[0].toByteArray()),Zq);
@@ -85,9 +87,9 @@ public class ProveShuffling {
 			 */
 			IGroupElement g = Gq.getGenerator();
 			// TODO: ask Tomer what are h,u
-			Node node = new Node(g, h, u, pk, wInput, wOutput);      
+			Node nodeForSeed = new Node(g, h, u, pk, wInput, wOutput);      
 			//Computation of the seed:
-			byte[] seed = ROSeed.getRandomOracleOutput(ElementsExtractor.concatArrays(ro, node.toByteArray()));
+			byte[] seed = ROSeed.getRandomOracleOutput(ElementsExtractor.concatArrays(ro, nodeForSeed.toByteArray()));
 
 			/** 
 			 * 3 - Computation of A and F
@@ -105,8 +107,14 @@ public class ProveShuffling {
 			/** 
 			 * 4 - Computation of the challenge
 			 */
-            ByteTree leaf = new StringLeaf("generators");
-            byte [] e = ROSeed.getRandomOracleOutput(ElementsExtractor.concatArrays(ro, leaf.toByteArray()));
+			// TODO: where does s comes from?
+			BigInteger s = ElementsExtractor.leafToInt(seed);
+			ByteTree leaf = new BigIntLeaf(s);
+			ByteTree nodeForChallenge = ElementsExtractor.createNode();
+            
+			
+            
+            byte [] e = ROChallenge.getRandomOracleOutput(ElementsExtractor.concatArrays(ro, leaf.toByteArray()));
             //IGroupElement v = computeChallenge(ro, seed, tau, nv);
             
 			return true;
