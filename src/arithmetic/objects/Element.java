@@ -15,6 +15,6 @@ public interface Element {
 	 * @return the byte array representation of the byte tree.
 	 * @throws UnsupportedEncodingException 
 	 */
-	public byte[] toByteArray() throws UnsupportedEncodingException;
+	public ByteTree toByteTree() throws UnsupportedEncodingException;
 
 }

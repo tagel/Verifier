@@ -50,7 +50,7 @@ public class ElementsExtractor {
 
 	public static IGroupElement createGroupElement (ByteTree b, IGroup Gq ) {
 		if (Gq instanceof ModGroup)
-			return new ModGroupElement b;
+			return new (ModGroupElement) b;
 		if (b instanceof ECurveGroupElement)
 			return (ECurveGroupElement) b;
 		else {

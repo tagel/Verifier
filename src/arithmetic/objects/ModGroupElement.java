@@ -56,7 +56,7 @@ public class ModGroupElement implements IGroupElement {
 	}
 
 	@Override
-	public byte[] toByteArray() {
+	public ByteTree toByteTree() {
 		int numOfOrderBytes = group.getFieldOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
 		byte[] b = ByteBuffer.allocate(numOfOrderBytes).order(ByteOrder.BIG_ENDIAN).putInt(element.intValue()).array();
@@ -66,7 +66,7 @@ public class ModGroupElement implements IGroupElement {
 		byte[] ret = new byte[c.length+1];
 		System.arraycopy(c, 0, ret, 1, c.length);
 		ret[0] = 1;
-		return ret;
+		return new ByteTree(Hex.ret;
 	}
 
 

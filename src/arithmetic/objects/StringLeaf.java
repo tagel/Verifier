@@ -3,7 +3,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class StringLeaf implements Element {
+public class StringLeaf {
 
 
 	private String str;
@@ -15,7 +15,7 @@ public class StringLeaf implements Element {
 	public String getString() {
 		return str;
 	}
-	@Override
+	
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		byte[] b = str.getBytes("ASCII");
 		int numOfBytes = b.length;

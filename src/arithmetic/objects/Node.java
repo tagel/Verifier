@@ -9,20 +9,20 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 
-public class Node implements Element {
+public class Node {
 
-	private Element[] children; 
+	private ByteTree[] children; 
 	
 	 
-	public Node (Element[] children) {
+	public Node (ByteTree[] children) {
 		this.children = children;
 	}
 	
-	public Element[] getChildrenArray() {
+	public ByteTree[] getChildrenArray() {
 		return children;
 	}
 	
-	@Override
+	
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(children.length).array();
 		byte[] b = new byte[a.length+1];
