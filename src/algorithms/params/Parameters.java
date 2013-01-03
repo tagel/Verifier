@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;
 import arithmetic.objects.IntegerFieldElement;
-import arithmetic.objects.GroupElement;
+import arithmetic.objects.IGroupElement;
 import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
 import arithmetic.objects.ProductGroupElement;
@@ -91,11 +91,11 @@ public class Parameters {
 	private BigInteger widthExp;
 	
 	//MIX -- The parameters of each party
-	private ArrayOfElements<GroupElement> mixPublicKey;
+	private ArrayOfElements<IGroupElement> mixPublicKey;
 	private ArrayOfElements<IntegerFieldElement> mixSecretKey;
 	
-	private ArrayOfElements<ArrayOfElements<GroupElement>> mixCiphertexts;
-	private ArrayOfElements<ArrayOfElements<GroupElement>> mixPermutationCommitment;
+	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixCiphertexts;
+	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
 	private ArrayOfElements<Node> mixPoSCommitment;
 	private ArrayOfElements<Node> mixPoSReply;
 	private ArrayOfElements<Node> mixPoSCCommitment;
@@ -104,14 +104,14 @@ public class Parameters {
 	private ArrayOfElements<Node> mixCcPosReply;
 	
 	private ArrayOfElements<BooleanArrayElement> mixKeepList;
-	private ArrayOfElements<ArrayOfElements<GroupElement>> mixDecryptionFactors;
+	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixDecryptionFactors;
 	private ArrayOfElements<Node> mixDecrFactCommitment;
 	private ArrayOfElements<Node> mixDecrFactReply;
 	
 	// parameters from lists
-	private ArrayOfElements<GroupElement> ciphertexts;
-	private ArrayOfElements<GroupElement> ShuffledCiphertexts;
-	private ArrayOfElements<GroupElement> plaintexts;
+	private ArrayOfElements<IGroupElement> ciphertexts;
+	private ArrayOfElements<IGroupElement> ShuffledCiphertexts;
+	private ArrayOfElements<IGroupElement> plaintexts;
 	
 	
 	// fill the relevant parameters from the given xml
@@ -336,7 +336,7 @@ public class Parameters {
 	/**
 	 * @return the input ciphertexts
 	 */
-	public ArrayOfElements<GroupElement> getCiphertexts() {
+	public ArrayOfElements<IGroupElement> getCiphertexts() {
 		return ciphertexts;
 	}
 
@@ -344,7 +344,7 @@ public class Parameters {
 	 * @return the re-randomized and permuted ciphertexts (for the shuffling
 	 *         session)
 	 */
-	public ArrayOfElements<GroupElement> getShuffledCiphertexts() {
+	public ArrayOfElements<IGroupElement> getShuffledCiphertexts() {
 		return ShuffledCiphertexts;
 	}
 
@@ -352,7 +352,7 @@ public class Parameters {
 	 * @return the output plaintext elements that has not been decoded in any
 	 *         way
 	 */
-	public ArrayOfElements<GroupElement> getPlaintexts() {
+	public ArrayOfElements<IGroupElement> getPlaintexts() {
 		return plaintexts;
 	}
 
@@ -388,11 +388,11 @@ public class Parameters {
 		this.prefixToRO = prefixToRO;
 	}
 	
-	public ArrayOfElements<GroupElement> getMixPublicKey() {
+	public ArrayOfElements<IGroupElement> getMixPublicKey() {
 		return mixPublicKey;
 	}
 
-	public void setMixPublicKey(ArrayOfElements<GroupElement> mixPublicKey) {
+	public void setMixPublicKey(ArrayOfElements<IGroupElement> mixPublicKey) {
 		this.mixPublicKey = mixPublicKey;
 	}
 
@@ -404,21 +404,21 @@ public class Parameters {
 		this.mixSecretKey = mixSecretKey;
 	}
 
-	public ArrayOfElements<ArrayOfElements<GroupElement>> getMixCiphertexts() {
+	public ArrayOfElements<ArrayOfElements<IGroupElement>> getMixCiphertexts() {
 		return mixCiphertexts;
 	}
 
 	public void setMixCiphertexts(
-			ArrayOfElements<ArrayOfElements<GroupElement>> mixCiphertexts) {
+			ArrayOfElements<ArrayOfElements<IGroupElement>> mixCiphertexts) {
 		this.mixCiphertexts = mixCiphertexts;
 	}
 
-	public ArrayOfElements<ArrayOfElements<GroupElement>> getMixPermutationCommitment() {
+	public ArrayOfElements<ArrayOfElements<IGroupElement>> getMixPermutationCommitment() {
 		return mixPermutationCommitment;
 	}
 
 	public void setMixPermutationCommitment(
-			ArrayOfElements<ArrayOfElements<GroupElement>> mixPermutationCommitment) {
+			ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment) {
 		this.mixPermutationCommitment = mixPermutationCommitment;
 	}
 
@@ -478,12 +478,12 @@ public class Parameters {
 		this.mixKeepList = mixKeepList;
 	}
 
-	public ArrayOfElements<ArrayOfElements<GroupElement>> getMixDecryptionFactors() {
+	public ArrayOfElements<ArrayOfElements<IGroupElement>> getMixDecryptionFactors() {
 		return mixDecryptionFactors;
 	}
 
 	public void setMixDecryptionFactors(
-			ArrayOfElements<ArrayOfElements<GroupElement>> mixDecryptionFactors) {
+			ArrayOfElements<ArrayOfElements<IGroupElement>> mixDecryptionFactors) {
 		this.mixDecryptionFactors = mixDecryptionFactors;
 	}
 

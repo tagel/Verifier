@@ -9,7 +9,7 @@ import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.Element;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.IntegerFieldElement;
-import arithmetic.objects.GroupElement;
+import arithmetic.objects.IGroupElement;
 import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
 import arithmetic.objects.ProductGroupElement;
@@ -130,22 +130,22 @@ public class MainVerifier {
 		Element btPk = btFromFile(params.getDirectory().concat(
 				"FullPublicKey.bt"));
 		ProductGroupElement pk = new ProductGroupElement(btPk, params.getGq());
-		GroupElement y = pk.getArr()[1];
-		GroupElement g = pk.getArr()[0];
+		IGroupElement y = pk.getArr()[1];
+		IGroupElement g = pk.getArr()[0];
 
 		params.setFullPublicKey(pk);
-		GroupElement yi;
+		IGroupElement yi;
 		IntegerFieldElement xi;
 		int i;
 
 		// Here we get the Identity element and multiply all of the yi's
-		GroupElement res = (GroupElement) params.getGq().one();
+		IGroupElement res = (IGroupElement) params.getGq().one();
 
-		// TODO: Fix the path - now if we have more than 10 it will write 010.
 		for (i = 0; i < params.getThreshold(); i++) {
 			// Here we assume that the file exists
 			yi = GroupElement(btFromFile(params.getDirectory() + "/proofs/"
-					+ "PublicKey0" + (i + 1)), params.getGq());
+					+ "PublicKey" + (i < 10 ? "0" : "") + (i + 1)),
+					params.getGq());
 			if (yi == null)
 				return false;
 			params.getMixPublicKey().addElement(yi);
@@ -158,8 +158,10 @@ public class MainVerifier {
 		// Here we check the secret keys - xi:
 		// Here the file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
-			xi = IntegerFieldElement(btFromFile(params.getDirectory()
-					+ "/proofs/" + "SecretKey0" + (i + 1)), params.getGq());
+			xi = IntegerFieldElement(
+					btFromFile(params.getDirectory() + "/proofs/"
+							+ "SecretKey0" + (i < 10 ? "0" : "") + (i + 1)),
+					params.getGq());
 			params.getMixSecretKey().addElement(xi);
 		}
 
