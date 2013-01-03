@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class IntegerRingElement implements ByteTree{
+public class IntegerRingElement implements Element{
 
 	
 	protected BigInteger element;

@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class IntegerFieldElement implements ByteTree {
+public class IntegerFieldElement implements Element {
 	
 	protected BigInteger element;
 	protected IField<IntegerFieldElement> field;

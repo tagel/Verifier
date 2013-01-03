@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 
-public class ArrayOfElements<E> implements ByteTree{
+public class ArrayOfElements<E> implements Element{
 	
 	private E[] arr;
 	
@@ -25,7 +25,7 @@ public class ArrayOfElements<E> implements ByteTree{
 
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
-		Node arrNode = new Node((ByteTree[]) arr);
+		Node arrNode = new Node((Element[]) arr);
 		return arrNode.toByteArray();
 	}
 

@@ -5,7 +5,7 @@ import java.util.List;
 import algorithms.params.MixParams;
 import algorithms.params.Parameters;
 import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.ByteTree;
+import arithmetic.objects.Element;
 import arithmetic.objects.GroupElement;
 import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
@@ -67,7 +67,7 @@ public class VerKeys {
 //			}
 //		}
 //	
-		ByteTree [] a = new ByteTree [3];  
+		Element [] a = new Element [3];  
 		Node retVal = new Node(a);
 		return retVal;
 	}
