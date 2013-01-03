@@ -3,7 +3,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class StringLeaf implements ByteTree {
+public class StringLeaf implements Element {
 
 
 	private String str;

@@ -9,16 +9,16 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 
-public class Node implements ByteTree {
+public class Node implements Element {
 
-	private ByteTree[] children; 
+	private Element[] children; 
 	
 	 
-	public Node (ByteTree[] children) {
+	public Node (Element[] children) {
 		this.children = children;
 	}
 	
-	public ByteTree[] getChildrenArray() {
+	public Element[] getChildrenArray() {
 		return children;
 	}
 	
