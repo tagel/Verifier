@@ -56,8 +56,6 @@ public class ProveShuffling {
 			ByteTree[] PosCommitmentArr = PoSCommitment.getChildrenArray();
 
 			// creating B,A',B',C',D',F'
-//			IGroupElement[] BRaw = new IGroupElement[N];
-//			IGroupElement[] BTagRaw = new IGroupElement[N];
 
 			// TODO: check how to interpret B,B'
 			ArrayOfElements<IGroupElement> B = ElementsExtractor.createArrayOfElements(PosCommitmentArr[0]);
