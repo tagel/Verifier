@@ -63,7 +63,7 @@ public class ECurveGroupElement implements IGroupElement {
 	}
 
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public ByteTree toByteTree() throws UnsupportedEncodingException {
 		IntegerFieldElement[] arr ={element.getX(), element.getY()};
 		Node pointNode = new Node(arr);
 		return pointNode.toByteArray();

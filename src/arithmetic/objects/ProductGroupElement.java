@@ -94,7 +94,7 @@ public class ProductGroupElement implements Element {
 	}
 	
 	@Override
-	public byte[] toByteArray() {
+	public ByteTree toByteTree() {
 		// TODO Auto-generated method stub
 		return null;
 	}

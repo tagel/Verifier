@@ -64,7 +64,7 @@ public class IntegerFieldElement implements Element {
 
 
 	@Override
-	public byte[] toByteArray() {
+	public ByteTree toByteTree() {
 		int numOfOrderBytes = field.getOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
 		byte[] b = ByteBuffer.allocate(numOfOrderBytes).order(ByteOrder.BIG_ENDIAN).putInt(element.intValue()).array();

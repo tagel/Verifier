@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class BigIntLeaf implements Element{
+public class BigIntLeaf {
 	
 	private BigInteger num;
 	
@@ -18,7 +18,7 @@ public class BigIntLeaf implements Element{
 	public BigInteger getNum() {
 		return num;
 	}
-	@Override
+	
 	public byte[] toByteArray() {
 		byte[] b = num.toByteArray();
 		int numOfBytes = b.length;
