@@ -13,7 +13,8 @@ public class Node implements ByteTree {
 
 	private ByteTree[] children; 
 	
-	 
+	
+
 	public Node (ByteTree[] children) {
 		this.children = children;
 	}
