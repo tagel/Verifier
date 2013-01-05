@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import algorithms.params.Parameters;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BigIntLeaf;
+import arithmetic.objects.ByteTree;
 import arithmetic.objects.Element;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.IntegerFieldElement;
@@ -86,23 +87,23 @@ public class MainVerifier {
 		PseudoRandomGenerator PRG = new HashFuncPRG(new SHA2HashFunction(
 				params.getsPRG()));
 
-		Element version_proof = new StringLeaf(params.getVersion());
+		ByteTree version_proof = new StringLeaf(params.getVersion());
 
 		// s = sid|"."|auxid
 		String s = params.getSessionID() + "." + params.getAuxsid();
 
-		Element btAuxid = new StringLeaf(s);
-		Element sGq = new StringLeaf(params.getsGq());
-		Element sPRG = new StringLeaf(params.getsPRG());
-		Element sH = new StringLeaf(params.getSh());
+		ByteTree btAuxid = new StringLeaf(s);
+		ByteTree sGq = new StringLeaf(params.getsGq());
+		ByteTree sPRG = new StringLeaf(params.getsPRG());
+		ByteTree sH = new StringLeaf(params.getSh());
 
-		Element Ne = new BigIntLeaf(params.getNe());
-		Element Nr = new BigIntLeaf(params.getNr());
+		ByteTree Ne = new BigIntLeaf(params.getNe());
+		ByteTree Nr = new BigIntLeaf(params.getNr());
 
-		Element Nv = new BigIntLeaf(params.getNv());
-		Element btW = new BigIntLeaf(params.getW());
+		ByteTree Nv = new BigIntLeaf(params.getNv());
+		ByteTree btW = new BigIntLeaf(params.getW());
 
-		Element[] input = new Element[9];
+		ByteTree[] input = new ByteTree[9];
 		input[0] = version_proof;
 		input[1] = btAuxid;
 		input[2] = btW;
