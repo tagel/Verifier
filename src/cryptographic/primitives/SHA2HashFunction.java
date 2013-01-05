@@ -8,6 +8,8 @@ import java.util.List;
 /**
  * This class provides the functionality of a message digest algorithm from the
  * "SHA-2" family, using the java.security.MessageDigest class.
+ * 
+ * @author Daniel 
  */
 public class SHA2HashFunction implements HashFunction {
 

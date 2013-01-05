@@ -4,6 +4,8 @@ package cryptographic.primitives;
  * An interface for Hash Function, which is an algorithm or subroutine that maps 
  * large data sets of variable length, called keys, to smaller data sets of a fixed 
  * length.
+ * 
+ * @author Daniel 
  */
 public interface HashFunction {
 	
