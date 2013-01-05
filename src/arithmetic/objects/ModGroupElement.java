@@ -9,27 +9,30 @@ import java.nio.ByteOrder;
 
 public class ModGroupElement implements IGroupElement {
 
-	
+
 	private BigInteger element;
 	private ModGroup group;
 	
+
 	public ModGroupElement (BigInteger element, ModGroup group) {
 		this.element = element;
 		this.group = group;
 	}
-	
+
+
+
 	public BigInteger getElement() {
 		return element;
 	}
-	
+
 	public ModGroup getGroup() {
 		return group;
 	}
-	
+
 	@Override
 	public ModGroupElement mult(IGroupElement b) {
-		  ModGroupElement ret = new ModGroupElement((this.getElement().multiply((BigInteger) ((ModGroupElement) b).getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
-		  return ret;
+		ModGroupElement ret = new ModGroupElement((this.getElement().multiply((BigInteger) ((ModGroupElement) b).getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
+		return ret;
 	}
 
 	@Override
@@ -38,6 +41,10 @@ public class ModGroupElement implements IGroupElement {
 		return ret;
 	}
 
+	@Override
+	public ModGroupElement divide(IGroupElement b) {
+		return mult(b.inverse());
+	}
 
 	@Override
 	public ModGroupElement power(BigInteger b) {
@@ -56,7 +63,7 @@ public class ModGroupElement implements IGroupElement {
 	}
 
 	@Override
-	public ByteTree toByteTree() {
+	public byte[] toByteArray() {
 		int numOfOrderBytes = group.getFieldOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
 		byte[] b = ByteBuffer.allocate(numOfOrderBytes).order(ByteOrder.BIG_ENDIAN).putInt(element.intValue()).array();
@@ -66,8 +73,10 @@ public class ModGroupElement implements IGroupElement {
 		byte[] ret = new byte[c.length+1];
 		System.arraycopy(c, 0, ret, 1, c.length);
 		ret[0] = 1;
-		return new ByteTree(Hex.ret;
+		return ret;
 	}
+
+
 
 
 }

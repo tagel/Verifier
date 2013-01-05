@@ -9,13 +9,17 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 
-public class Node {
+public class Node implements ByteTree {
 
 	private ByteTree[] children; 
 	
 	 
 	public Node (ByteTree[] children) {
 		this.children = children;
+	}
+	
+	public Node (String path) {
+		//TODO: implement
 	}
 	
 	public ByteTree[] getChildrenArray() {

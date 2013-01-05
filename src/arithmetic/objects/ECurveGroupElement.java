@@ -47,6 +47,11 @@ public class ECurveGroupElement implements IGroupElement {
 		return ret;
 	}
 	
+	@Override
+	public ECurveGroupElement divide(IGroupElement b) {
+		return mult(b.inverse());
+	}
+	
 	public ECurveGroupElement power(BigInteger b) {
 		ECurveGroupElement result = this;
 	    for (BigInteger i = BigInteger.ZERO; i.compareTo(b)<0; i = i.add(BigInteger.ONE))
@@ -63,10 +68,11 @@ public class ECurveGroupElement implements IGroupElement {
 	}
 
 	@Override
-	public ByteTree toByteTree() throws UnsupportedEncodingException {
+	public byte[] toByteArray() throws UnsupportedEncodingException {
 		IntegerFieldElement[] arr ={element.getX(), element.getY()};
 		Node pointNode = new Node(arr);
 		return pointNode.toByteArray();
 	}
+
 
 }

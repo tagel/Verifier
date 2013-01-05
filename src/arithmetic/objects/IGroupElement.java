@@ -2,15 +2,19 @@ package arithmetic.objects;
 
 import java.math.BigInteger;
 
-public interface IGroupElement extends Element {
+public interface IGroupElement extends ByteTree {
 	
 	
 	
-	public IGroupElement mult(IGroupElement b);
+
+
+	public abstract IGroupElement mult(IGroupElement b);
 	
-	public IGroupElement inverse();
+	public abstract IGroupElement inverse();
 	
-	public IGroupElement power(BigInteger b);
+	public abstract IGroupElement divide (IGroupElement b);
 	
-	public boolean equal(IGroupElement b);
+	public abstract IGroupElement power(BigInteger b);
+	
+	public abstract boolean equal(IGroupElement b);
 }

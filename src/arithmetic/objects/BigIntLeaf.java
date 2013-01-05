@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class BigIntLeaf {
+public class BigIntLeaf implements ByteTree {
 	
 	private BigInteger num;
 	

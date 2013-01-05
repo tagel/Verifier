@@ -8,6 +8,8 @@ package cryptographic.primitives;
  * In the construction a HashFuncPRGR (PRG) is created based on the HashFunction given. 
  * The PRG will later be used in the getRandomOracleOutput function, to expand the 
  * given data to the wanted length of the output.
+ * 
+ * @author Daniel 
  */
 public class HashFuncPRGRandomOracle implements RandomOracle {
 	

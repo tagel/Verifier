@@ -109,7 +109,7 @@ public class ECurveGroup implements IGroup{
 
 
 	@Override
-	public ByteTree toByteTree() throws UnsupportedEncodingException {
+	public byte[] toByteArray() throws UnsupportedEncodingException {
 		return new StringLeaf(name).toByteArray();
 	}
 

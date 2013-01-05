@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class IntegerRingElement implements Element{
+public class IntegerRingElement implements ByteTree {
 
 	
 	protected BigInteger element;
@@ -59,7 +59,7 @@ public class IntegerRingElement implements Element{
 	}
 
 	@Override
-	public ByteTree toByteTree() {
+	public byte[] toByteArray() {
 		int numOfOrderBytes = this.ring.getOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
 		byte[] b = ByteBuffer.allocate(numOfOrderBytes).order(ByteOrder.BIG_ENDIAN).putInt(element.intValue()).array();

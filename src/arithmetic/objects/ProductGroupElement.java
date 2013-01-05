@@ -4,7 +4,7 @@ package arithmetic.objects;
 import java.math.BigInteger;
 
 
-public class ProductGroupElement implements Element {
+public class ProductGroupElement implements ByteTree {
 
 	/**
 	 * arr contains the internal elements of the Product Ring Element. left and right are null if this is a simple product element. if it is complex, then arr is null.
@@ -94,7 +94,7 @@ public class ProductGroupElement implements Element {
 	}
 	
 	@Override
-	public ByteTree toByteTree() {
+	public byte[] toByteArray() {
 		// TODO Auto-generated method stub
 		return null;
 	}

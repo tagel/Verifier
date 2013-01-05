@@ -1,9 +1,14 @@
 package algorithms.params;
 
+import java.io.FileNotFoundException;
 import java.math.BigInteger;
+
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
 
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;
+import arithmetic.objects.IField;
 import arithmetic.objects.IntegerFieldElement;
 import arithmetic.objects.IGroupElement;
 import arithmetic.objects.IGroup;
@@ -50,14 +55,13 @@ public class Parameters {
 		sPRG = null;
 		wDefault = null;
 		maxciph = 0;
-		}
+		initializeMix();
 
-	public String getDirectory() {
-		return directory;
 	}
 
 	private byte[] prefixToRO;
 	private IGroup Gq;
+	IField<IntegerFieldElement> Zq;
 
 	// parameters from directory
 	private String protInfo;
@@ -65,7 +69,7 @@ public class Parameters {
 	private String version;
 	private String type;
 	private String auxsid;
-	private BigInteger w;
+	private int w;
 	private ProductGroupElement fullPublicKey;
 	private int maxciph;
 
@@ -74,13 +78,13 @@ public class Parameters {
 	private String sessionID;
 	private int numOfParties;
 	private int threshold;
-	private BigInteger Ne;
-	private BigInteger Nr;
-	private BigInteger Nv;
+	private int Ne;
+	private int Nr;
+	private int Nv;
 	private String sh;
 	private String sGq;
 	private String sPRG;
-	private BigInteger wDefault;
+	private int wDefault;
 
 	// parameters from CMD
 	private String typeExpected;
@@ -88,12 +92,17 @@ public class Parameters {
 	private boolean ccpos;
 	private boolean dec;
 	private String auxidExp;
-	private BigInteger widthExp;
-	
-	//MIX -- The parameters of each party
+	private int widthExp;
+
+	// parameters from lists
+	private ArrayOfElements<IGroupElement> ciphertexts;
+	private ArrayOfElements<IGroupElement> ShuffledCiphertexts;
+	private ArrayOfElements<IGroupElement> plaintexts;
+
+	// MIX -- The parameters of each party
 	private ArrayOfElements<IGroupElement> mixPublicKey;
 	private ArrayOfElements<IntegerFieldElement> mixSecretKey;
-	
+
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixCiphertexts;
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
 	private ArrayOfElements<Node> mixPoSCommitment;
@@ -102,39 +111,59 @@ public class Parameters {
 	private ArrayOfElements<Node> mixPoSCReply;
 	private ArrayOfElements<Node> mixCcPosCommitment;
 	private ArrayOfElements<Node> mixCcPosReply;
-	
+
 	private ArrayOfElements<BooleanArrayElement> mixKeepList;
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixDecryptionFactors;
 	private ArrayOfElements<Node> mixDecrFactCommitment;
 	private ArrayOfElements<Node> mixDecrFactReply;
-	
-	// parameters from lists
-	private ArrayOfElements<IGroupElement> ciphertexts;
-	private ArrayOfElements<IGroupElement> ShuffledCiphertexts;
-	private ArrayOfElements<IGroupElement> plaintexts;
-	
-	
+
+	private void initializeMix() {
+		mixPublicKey = new ArrayOfElements<IGroupElement>();
+		mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
+		mixCiphertexts = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		mixPermutationCommitment = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		mixPoSCommitment = new ArrayOfElements<Node>();
+		mixPoSReply = new ArrayOfElements<Node>();
+		mixPoSCCommitment = new ArrayOfElements<Node>();
+		mixPoSCReply = new ArrayOfElements<Node>();
+		mixCcPosCommitment = new ArrayOfElements<Node>();
+		mixCcPosReply = new ArrayOfElements<Node>();
+		mixKeepList = new ArrayOfElements<BooleanArrayElement>();
+		mixDecryptionFactors = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		mixDecrFactCommitment = new ArrayOfElements<Node>();
+		mixDecrFactReply = new ArrayOfElements<Node>();
+	}
+
 	// fill the relevant parameters from the given xml
 	// fill the relevant parameters:
 	// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
 	// (width);
 	public boolean fillFromXML() {
-		//All of these arrays should be of size threshold
-		//TODO: need to initialize the arrays of size threshold
-		mixPublicKey = null;
-		mixSecretKey = null;
-		mixCiphertexts = null;
-		mixPermutationCommitment = null;
-		mixPoSCommitment = null;
-		mixPoSReply = null;
-		mixPoSCCommitment = null;
-		mixPoSCReply = null;
-		mixCcPosCommitment = null;
-		mixCcPosReply = null;
-		mixKeepList = null;
-		mixDecryptionFactors = null;
-		mixDecrFactCommitment = null;
-		mixDecrFactReply = null;
+		XMLProtocolInfo protXML;
+		try {
+			protXML = new XMLProtocolInfo(directory);
+		} catch (FileNotFoundException e) {
+			System.out.println("XML ProtInfo not found");
+			return false;
+		} catch (XMLStreamException e) {
+			System.out.println("Error reading XML");
+			return false;
+		} catch (FactoryConfigurationError e) {
+			System.out.println("Error reading XML");
+			return false;
+		}
+
+		protVersion = protXML.getVersion();
+		sessionID = protXML.getSessionId();
+		numOfParties = protXML.getNumOfParties();
+		threshold = protXML.getThreshold();
+		Ne = protXML.getNe();
+		Nr = protXML.getNr();
+		Nv = protXML.getNv();
+		sh = protXML.getHashFunction();
+		sGq = protXML.getGq();
+		sPRG = protXML.getPrg();
+		wDefault = protXML.getWidth();
 
 		return true;
 	}
@@ -143,6 +172,14 @@ public class Parameters {
 	// fill version_proof(Version) type, auxid, w from proof directory
 	public boolean fillFromDirectory() {
 		return true;
+	}
+
+	/**
+	 * 
+	 * @return the directory path
+	 */
+	public String getDirectory() {
+		return directory;
 	}
 
 	/**
@@ -166,7 +203,6 @@ public class Parameters {
 		return auxsid;
 	}
 
-	
 	/**
 	 * @return the full public key
 	 */
@@ -272,14 +308,14 @@ public class Parameters {
 	 * @return the number of bits in each component of random vectors used for
 	 *         batching in proofs of shuffles and proofs of correct decryption.
 	 */
-	public BigInteger getNe() {
+	public int getNe() {
 		return Ne;
 	}
 
 	/**
 	 * @return the acceptable statistical error when sampling random values.
 	 */
-	public BigInteger getNr() {
+	public int getNr() {
 		return Nr;
 	}
 
@@ -287,7 +323,7 @@ public class Parameters {
 	 * @return the number of bits used in the challenge of the verifier in
 	 *         zero-knowledge proofs.
 	 */
-	public BigInteger getNv() {
+	public int getNv() {
 		return Nv;
 	}
 
@@ -320,11 +356,11 @@ public class Parameters {
 		return w;
 	}
 
-	public BigInteger getwDefault() {
+	public int getwDefault() {
 		return wDefault;
 	}
 
-	public void setwDefault(BigInteger wDefault) {
+	public void setwDefault(int wDefault) {
 		this.wDefault = wDefault;
 	}
 
@@ -332,7 +368,6 @@ public class Parameters {
 		this.fullPublicKey = fullPublicKey;
 	}
 
-	
 	/**
 	 * @return the input ciphertexts
 	 */
@@ -380,6 +415,14 @@ public class Parameters {
 		Gq = gq;
 	}
 
+	public IField<IntegerFieldElement> getZq() {
+		return Zq;
+	}
+
+	public void setZq(IField<IntegerFieldElement> zq) {
+		Zq = zq;
+	}
+
 	public byte[] getPrefixToRO() {
 		return prefixToRO;
 	}
@@ -387,7 +430,7 @@ public class Parameters {
 	public void setPrefixToRO(byte[] prefixToRO) {
 		this.prefixToRO = prefixToRO;
 	}
-	
+
 	public ArrayOfElements<IGroupElement> getMixPublicKey() {
 		return mixPublicKey;
 	}
@@ -400,7 +443,8 @@ public class Parameters {
 		return mixSecretKey;
 	}
 
-	public void setMixSecretKey(ArrayOfElements<IntegerFieldElement> mixSecretKey) {
+	public void setMixSecretKey(
+			ArrayOfElements<IntegerFieldElement> mixSecretKey) {
 		this.mixSecretKey = mixSecretKey;
 	}
 
@@ -491,7 +535,8 @@ public class Parameters {
 		return mixDecrFactCommitment;
 	}
 
-	public void setMixDecrFactCommitment(ArrayOfElements<Node> mixDecrFactCommitment) {
+	public void setMixDecrFactCommitment(
+			ArrayOfElements<Node> mixDecrFactCommitment) {
 		this.mixDecrFactCommitment = mixDecrFactCommitment;
 	}
 
