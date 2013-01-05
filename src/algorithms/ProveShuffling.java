@@ -57,8 +57,6 @@ public class ProveShuffling {
 			 */
 
 			// creating B,A',B',C',D',F'
-
-			// TODO: check how to interpret B,B'
 			ArrayOfElements<IGroupElement> B = new ArrayOfElements<IGroupElement>(
 					PoSCommitment.getAt(0));
 			ArrayOfElements<IGroupElement> Btag = new ArrayOfElements<IGroupElement>(
@@ -79,16 +77,19 @@ public class ProveShuffling {
 			BigInteger q = Gq.getFieldOrder();
 			IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
 			IntegerFieldElement Ka = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PoSReply.getAt(0).toByteArray()),
+					ElementsExtractor
+							.leafToInt(PoSReply.getAt(0).toByteArray()),
 					Zq);
 			IntegerFieldElement Kc = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PoSReply.getAt(2).toByteArray()),
+					ElementsExtractor
+							.leafToInt(PoSReply.getAt(2).toByteArray()),
 					Zq);
 			IntegerFieldElement Kd = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PoSReply.getAt(3).toByteArray()),
+					ElementsExtractor
+							.leafToInt(PoSReply.getAt(3).toByteArray()),
 					Zq);
-			IGroupElement Kf = ElementsExtractor.createGroupElement(
-					PoSReply.getAt(5).toByteArray(), Gq);
+			IGroupElement Kf = ElementsExtractor.createGroupElement(PoSReply
+					.getAt(5).toByteArray(), Gq);
 
 			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
 					PoSReply.getAt(1));
@@ -110,17 +111,25 @@ public class ProveShuffling {
 			 * 3 - Computation of A and F
 			 */
 
-			// int length = (int) Math.ceil((double)(Ne/8));
-			// IGroupElement pow = BigInteger.valueOf(8 * length);
-			//
-			// IGroupElement [] e = computeRandomArray(seed, Ne, prg, N, pow,
-			// BigInteger.valueOf(-1), BigInteger.valueOf(Ne));
-			//
-			// //Computation of A:
-			// IGroupElement A = u.getElementForIndex(0).power(e[0]);
-			// for (int i = 1; i < N; i++)
-			// A = A.multiply(u.getElementForIndex(i).power(e[i]));
+			// Computation of e:
+			int length = (int) Math.ceil((double) (Ne / 8));
+			IntegerFieldElement pow = new IntegerFieldElement(
+					BigInteger.valueOf(8 * length), f);
+			ArrayOfElements<IntegerFieldElement> e = computeE(seed, Ne, prg, N,
+					pow, BigInteger.valueOf(-1), BigInteger.valueOf(Ne));
 
+			// Computation of A:
+			IGroupElement A = u.getAt(0).power(e.getAt(0).getElement());
+			for (int i = 1; i < N; i++) {
+				A = A.mult(u.getAt(i).power(e.getAt(i).getElement()));
+			}
+
+			// Computation of F:
+			IGroupElement F = wInput.getAt(0).power(e.getAt(0).getElement());
+			for (int i = 1; i < N; i++) {
+				F = F.mult(wInput.getAt(i).power(e.getAt(i).getElement()));
+			}
+			
 			/**
 			 * 4 - Computation of the challenge
 			 */
@@ -145,16 +154,16 @@ public class ProveShuffling {
 			 */
 			// Computation of C and D
 			IGroupElement CNumerator = u.getAt(0);
-			IGroupElement CDenominator = h.getElementAt(0);
-			BigInteger DExponent = e[0];
+			IGroupElement CDenominator = h.getAt(0);
+			BigInteger DExponent = e.getAt(0).getElement();
 			for (int i = 1; i < N; i++) {
 				CNumerator = CNumerator.mult(u.getAt(i));
-				CDenominator = CDenominator.mult(h.getElementAt(i));
-				DExponent = DExponent.multiply(e[i]);
+				CDenominator = CDenominator.mult(h.getAt(i));
+				DExponent = DExponent.multiply(e.getAt(i).getElement());
 			}
 			IGroupElement C = CNumerator.divide(CDenominator);
 			IGroupElement D = B.getAt(N - 1).divide(
-					h.getElementAt(0).power(DExponent));
+					h.getAt(0).power(DExponent));
 
 			/*
 			 * Equation 1: A^v*A' = (g^ka)*Pi(h[i]^ke[i])
