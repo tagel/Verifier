@@ -3,30 +3,34 @@ package arithmetic.objects;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 
-public class ArrayOfElements<E> implements Element{
+public class ArrayOfElements<E> implements ByteTree{
 	
-	private E[] arr;
+	private ArrayList<E> elements;
 	
-	public ArrayOfElements (E[] arr) {
-		this.arr = arr;
+	public ArrayOfElements () {
 	}
 	
-	public E[] getArray() {
-		return arr;
+	public ArrayOfElements (ByteTree node){
+		//TODO: implement
 	}
 	
-	public void addElement(E element) {
-	    arr = Arrays.copyOf(arr, arr.length+1);
-	    arr[arr.length] = element;
+	public E getAt (int index) {
+		return elements.get(index);
+	}
+	
+	public void add(E element) {
+	    elements.add(element);
 	}
 
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
-		Node arrNode = new Node((Element[]) arr);
-		return arrNode.toByteArray();
+		//TODO: implement
+		return null;
 	}
+
+
 
 }

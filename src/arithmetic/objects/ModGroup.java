@@ -102,12 +102,14 @@ public class ModGroup implements IGroup {
 
 
 	@Override
-	public ByteTree toByteTree() throws UnsupportedEncodingException {
+	public byte[] toByteArray() throws UnsupportedEncodingException {
 		BigIntLeaf P = new BigIntLeaf(p);
 		BigIntLeaf Q = new BigIntLeaf(q);
 		BigIntLeaf G = new BigIntLeaf(g);
-		Element[] arr = {P, Q, G};
-		Node groupNode = new Node(arr);
+		Node groupNode = new Node();
+		groupNode.add(P);
+		groupNode.add(Q);
+		groupNode.add(G);
 		return groupNode.toByteArray();
 	}
 
