@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-public class BooleanArrayElement implements Element {
+public class BooleanArrayElement implements ByteTree {
 	
 	private boolean[] arr;
 	

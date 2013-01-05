@@ -38,6 +38,15 @@ public class ElementsExtractor {
 		byte[] a = Arrays.copyOfRange(arr, 5, arr.length-1);
 		return new String(a, "ASCII");
 	}
+	
+	/**
+	 * 
+	 * @param arr = a byte array that represents a point.
+	 * @return the point that arr represents.
+	 */
+	public static Point nodeToPoint (byte[] arr) {
+		return null;
+	}
 
 	public static byte[] byteArrFromFile (String path) throws IOException {
 		File file = new File(path);
@@ -50,9 +59,9 @@ public class ElementsExtractor {
 
 	public static IGroupElement createGroupElement (ByteTree b, IGroup Gq ) {
 		if (Gq instanceof ModGroup)
-			return new (ModGroupElement) b;
-		if (b instanceof ECurveGroupElement)
-			return (ECurveGroupElement) b;
+			return new ModGroupElement(leafToInt(b.toByteArray()),(ModGroup) Gq);
+		if (Gq instanceof ECurveGroup)
+			return new ECurveGroupElement(nodeToPoint(b.toByteArray()), (ECurveGroup) Gq);
 		else {
 			System.out.println("ERROR: instance is not a group element");
 			return null;
@@ -66,8 +75,14 @@ public class ElementsExtractor {
 		return C;
 	}
 
+	public static String hex (byte[] a) {
+		   StringBuilder sb = new StringBuilder();
+		   for(byte b: a)
+		      sb.append(String.format("%02x", b&0xff));
+		   return sb.toString();
+		}
 
-	public static byte[] hexStringToByteArray(String s) {
+	public static byte[] unhex (String s) {
 		int len = s.length();
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
@@ -86,7 +101,7 @@ public class ElementsExtractor {
 		int i = s.indexOf(":");
 		String type = s.substring(0, i-1);
 		s = s.substring(i+2, s.length()-1);
-		byte[] b = hexStringToByteArray(s);
+		byte[] b = unhex(s);
 		if (type.equals("verificatum.arithm.ModPGroup"))
 			return new ModGroup(b);
 		if (type.equals("verificatum.arithm.ECqPGroup"))
