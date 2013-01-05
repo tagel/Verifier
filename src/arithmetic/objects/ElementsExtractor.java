@@ -48,7 +48,7 @@ public class ElementsExtractor {
 		return null;
 	}
 
-	public static byte[] byteArrFromFile (String path) throws IOException {
+	public static byte[] btFromFile (String path) throws IOException {
 		File file = new File(path);
 		InputStream stream = new FileInputStream(file);
 		byte[] b = new byte[(int) (file.length())];
@@ -57,11 +57,11 @@ public class ElementsExtractor {
 		return b;
 	}
 
-	public static IGroupElement createGroupElement (ByteTree b, IGroup Gq ) {
+	public static IGroupElement createGroupElement (byte[] b, IGroup Gq ) {
 		if (Gq instanceof ModGroup)
-			return new ModGroupElement(leafToInt(b.toByteArray()),(ModGroup) Gq);
+			return new ModGroupElement(leafToInt(b),(ModGroup) Gq);
 		if (Gq instanceof ECurveGroup)
-			return new ECurveGroupElement(nodeToPoint(b.toByteArray()), (ECurveGroup) Gq);
+			return new ECurveGroupElement(nodeToPoint(b), (ECurveGroup) Gq);
 		else {
 			System.out.println("ERROR: instance is not a group element");
 			return null;
