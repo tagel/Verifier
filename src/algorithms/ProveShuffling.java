@@ -49,7 +49,8 @@ public class ProveShuffling {
 			 * Pedersen commitments in Gq
 			 */
 			// TODO: what does u contains?
-			ArrayOfElements<IGroupElement> u = new ArrayOfElements<IGroupElement>(permutationCommitment);
+			ArrayOfElements<IGroupElement> u = new ArrayOfElements<IGroupElement>(
+					permutationCommitment);
 
 			/**
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
@@ -59,17 +60,19 @@ public class ProveShuffling {
 			// creating B,A',B',C',D',F'
 
 			// TODO: check how to interpret B,B'
-			ArrayOfElements<IGroupElement> B = new ArrayOfElements<IGroupElement>(PosCommitmentArr[0]);
-			ArrayOfElements<IGroupElement> Btag = new ArrayOfElements<IGroupElement>(PosCommitmentArr[2]);
+			ArrayOfElements<IGroupElement> B = new ArrayOfElements<IGroupElement>(
+					PosCommitmentArr[0]);
+			ArrayOfElements<IGroupElement> Btag = new ArrayOfElements<IGroupElement>(
+					PosCommitmentArr[2]);
 
 			IGroupElement Atag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[1], Gq);
+					PosCommitmentArr[1].toByteArray(), Gq);
 			IGroupElement Ctag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[3], Gq);
+					PosCommitmentArr[3].toByteArray(), Gq);
 			IGroupElement Dtag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[4], Gq);
+					PosCommitmentArr[4].toByteArray(), Gq);
 			IGroupElement Ftag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[5], Gq);
+					PosCommitmentArr[5].toByteArray(), Gq);
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
@@ -78,17 +81,22 @@ public class ProveShuffling {
 			BigInteger q = Gq.getFieldOrder();
 			IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
 			IntegerFieldElement Ka = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PosReplyArr[0].toByteArray()), Zq);
+					ElementsExtractor.leafToInt(PosReplyArr[0].toByteArray()),
+					Zq);
 			IntegerFieldElement Kc = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PosReplyArr[2].toByteArray()), Zq);
+					ElementsExtractor.leafToInt(PosReplyArr[2].toByteArray()),
+					Zq);
 			IntegerFieldElement Kd = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PosReplyArr[3].toByteArray()), Zq);
+					ElementsExtractor.leafToInt(PosReplyArr[3].toByteArray()),
+					Zq);
 			IGroupElement Kf = ElementsExtractor.createGroupElement(
-					PosReplyArr[5], Gq);
+					PosReplyArr[5].toByteArray(), Gq);
 
-			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(PosReplyArr[1]);
+			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
+					PosReplyArr[1]);
 
-			ArrayOfElements<IntegerFieldElement> Ke = new ArrayOfElements<IntegerFieldElement>(PosReplyArr[4]);
+			ArrayOfElements<IntegerFieldElement> Ke = new ArrayOfElements<IntegerFieldElement>(
+					PosReplyArr[4]);
 
 			/**
 			 * 2 - computing the seed
@@ -103,7 +111,7 @@ public class ProveShuffling {
 			/**
 			 * 3 - Computation of A and F
 			 */
-			
+
 			// int length = (int) Math.ceil((double)(Ne/8));
 			// IGroupElement pow = BigInteger.valueOf(8 * length);
 			//
@@ -150,49 +158,56 @@ public class ProveShuffling {
 			IGroupElement D = B.getAt(N - 1).divide(
 					h.getElementAt(0).power(DExponent));
 
-			// Equality 1:
-			// A^v*A' = (g^ka)*Pi(h[i]^ke[i]):
+			/*
+			 * Equation 1: A^v*A' = (g^ka)*Pi(h[i]^ke[i])
+			 */
 			IGroupElement left = (A.power(v)).mult(Atag);
 			IGroupElement hPi = h.getElementAt(0).power(Ke.getAt(0));
 			for (int i = 1; i < N; i++) {
 				hPi = hPi.mult(h.getElementAt(i).power(Ke.getAt(i)));
 			}
 			IGroupElement right = g.power(Ka.getElement()).mult(hPi);
-			if (left.compareTo(right) != 0) {
-				return false;
-			}
+			// if (left.compareTo(right) != 0) {
+			// return false;
+			// }
 
-			// Equality 2:
-			// (B[i]^v)*Btag[i] = (g^Kb[i])*(B[i-1]^Ke[i]), where B[-1] = h[0]:
+			/*
+			 * Equation 2: (B[i]^v)*Btag[i] = (g^Kb[i])*(B[i-1]^Ke[i]), where *
+			 * B[-1] = h[0]
+			 */
 			left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
-			right = g.power(Kb.getAt(0)).mult(
+			right = g.power(Kb.getAt(0).getElement()).mult(
 					h.getElementAt(0).power(Ke.getAt(0)));
-			if (left.compareTo(right) != 0) {
-				return false;
-			}
+			// if (left.compareTo(right) != 0) {
+			// return false;
+			// }
+
 			for (int i = 1; i < N; i++) {
 				left = (B.getAt(i)).power(v).mult(Btag.getAt(i));
-				right = g.power(Kb.getAt(i)).mult(
-						B.getAt(i - 1).power(Ke.getAt(i)));
+				right = g.power(Kb.getAt(i).getElement()).mult(
+						B.getAt(i - 1).power(Ke.getAt(i).getElement()));
 			}
-			if (left.compareTo(right) != 0) {
-				return false;
-			}
+			// if (left.compareTo(right) != 0) {
+			// return false;
+			// }
 
-			// Equality 3:
-			// (C^v)*Ctag = g^Kc:
+			/*
+			 * Equation 3: (C^v)*Ctag = g^Kc
+			 */
 			left = (C.power(v)).mult(Ctag);
-			right = g.power(Kc);
-			if (left.compareTo(right) != 0) {
-				return false;
-			}
+			right = g.power(Kc.getElement());
+			// if (left.compareTo(right) != 0) {
+			// return false;
+			// }
 
-			// Equality 4: 
-			// (D^v)*Dtag = g^Kd:
+			/*
+			 * Equation 4: (D^v)*Dtag = g^Kd
+			 */
 			left = (D.power(v)).mult(Dtag);
-			right = g.power(Kd);
-			if (left.compareTo(right) != 0)
-				return false;
+			right = g.power(Kd.getElement());
+			// if (left.compareTo(right) != 0) {
+			// return false;
+			// }
 
 			/* All equalities exist. */
 			return true;
