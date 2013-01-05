@@ -35,9 +35,10 @@ public class XMLProtocolInfo implements ProtocolInfo {
 	 * @throws FactoryConfigurationError
 	 * @throws XMLStreamException
 	 * @throws FileNotFoundException
+	 * @throws IllegalXmlFormatException 
 	 */
 	public XMLProtocolInfo(String xmlPath) throws FileNotFoundException,
-			XMLStreamException, FactoryConfigurationError {
+			XMLStreamException, FactoryConfigurationError, IllegalXmlFormatException {
 		XMLStreamReader xmlReader = XMLInputFactory.newInstance()
 				.createXMLStreamReader(new FileInputStream(xmlPath));
 		getValues(xmlReader);
@@ -45,7 +46,7 @@ public class XMLProtocolInfo implements ProtocolInfo {
 		xmlReader.close();
 	}
 
-	private void validate() {
+	private void validate() throws IllegalXmlFormatException {
 		if (isNull(version) || isNull(sessionId) || isNull(numOfParties)
 				|| isNull(threshold) || isNull(ne) || isNull(nv) || isNull(nr)
 				|| isNull(hashFunction) || isNull(prg) || isNull(gq)
