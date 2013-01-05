@@ -106,8 +106,10 @@ public class ModGroup implements IGroup {
 		BigIntLeaf P = new BigIntLeaf(p);
 		BigIntLeaf Q = new BigIntLeaf(q);
 		BigIntLeaf G = new BigIntLeaf(g);
-		ByteTree[] arr = {P, Q, G};
-		Node groupNode = new Node(arr);
+		Node groupNode = new Node();
+		groupNode.add(P);
+		groupNode.add(Q);
+		groupNode.add(G);
 		return groupNode.toByteArray();
 	}
 
