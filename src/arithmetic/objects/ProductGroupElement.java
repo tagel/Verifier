@@ -29,6 +29,10 @@ public class ProductGroupElement implements ByteTree {
 		this.right = right;
 	}
 	
+	public ProductGroupElement(ByteTree bt) {
+		//TODO: IMPLEMENT
+	}
+	
 	
 	public IGroupElement[] getArr() {
 		return arr;
