@@ -2,6 +2,8 @@ package algorithms.params;
 
 /**
  * Data structure that contains the protocol info.
+ * 
+ * @author Daniel 
  */
 public interface ProtocolInfo {
 	

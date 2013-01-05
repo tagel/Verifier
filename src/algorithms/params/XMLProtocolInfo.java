@@ -12,6 +12,8 @@ import javax.xml.stream.XMLStreamReader;
 /**
  * This class implements a Protocol Info data structure from a given XML file.
  * It extract the protocol info data from the XML file.
+ * 
+ * @author Daniel 
  */
 public class XMLProtocolInfo implements ProtocolInfo {
 

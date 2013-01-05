@@ -3,6 +3,8 @@ package cryptographic.primitives;
 /**
  * Interface for Random Oracle. Random Oracle is a mathematical function 
  * mapping every possible query to a random response from its output domain.
+ * 
+ * @author Daniel 
  */
 public interface RandomOracle {
 	
