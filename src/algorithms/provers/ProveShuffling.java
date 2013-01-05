@@ -1,4 +1,4 @@
-package algorithms;
+package algorithms.provers;
 
 import java.math.BigInteger;
 
@@ -22,7 +22,7 @@ import cryptographic.primitives.RandomOracle;
  * 
  * @author Tagel
  */
-public class ProveShuffling {
+public class ProveShuffling extends Prover {
 
 	public boolean prove(
 			RandomOracle ROSeed,
@@ -34,6 +34,7 @@ public class ProveShuffling {
 			int Nv,
 			PseudoRandomGenerator prg,
 			IGroup Gq,
+			//TODO: what is the type of Rw,Cw??
 			IGroup Rw,
 			IGroup Cw,
 			ProductGroupElement pk,
