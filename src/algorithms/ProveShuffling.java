@@ -55,48 +55,46 @@ public class ProveShuffling {
 			/**
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
-			ByteTree[] PosCommitmentArr = PoSCommitment.getChildrenArray();
 
 			// creating B,A',B',C',D',F'
 
 			// TODO: check how to interpret B,B'
 			ArrayOfElements<IGroupElement> B = new ArrayOfElements<IGroupElement>(
-					PosCommitmentArr[0]);
+					PoSCommitment.getAt(0));
 			ArrayOfElements<IGroupElement> Btag = new ArrayOfElements<IGroupElement>(
-					PosCommitmentArr[2]);
+					PoSCommitment.getAt(2));
 
 			IGroupElement Atag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[1].toByteArray(), Gq);
+					PoSCommitment.getAt(1).toByteArray(), Gq);
 			IGroupElement Ctag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[3].toByteArray(), Gq);
+					PoSCommitment.getAt(3).toByteArray(), Gq);
 			IGroupElement Dtag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[4].toByteArray(), Gq);
+					PoSCommitment.getAt(4).toByteArray(), Gq);
 			IGroupElement Ftag = ElementsExtractor.createGroupElement(
-					PosCommitmentArr[5].toByteArray(), Gq);
+					PoSCommitment.getAt(5).toByteArray(), Gq);
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 			 */
-			ByteTree[] PosReplyArr = PoSReply.getChildrenArray();
 			BigInteger q = Gq.getFieldOrder();
 			IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
 			IntegerFieldElement Ka = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PosReplyArr[0].toByteArray()),
+					ElementsExtractor.leafToInt(PoSReply.getAt(0).toByteArray()),
 					Zq);
 			IntegerFieldElement Kc = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PosReplyArr[2].toByteArray()),
+					ElementsExtractor.leafToInt(PoSReply.getAt(2).toByteArray()),
 					Zq);
 			IntegerFieldElement Kd = new IntegerFieldElement(
-					ElementsExtractor.leafToInt(PosReplyArr[3].toByteArray()),
+					ElementsExtractor.leafToInt(PoSReply.getAt(3).toByteArray()),
 					Zq);
 			IGroupElement Kf = ElementsExtractor.createGroupElement(
-					PosReplyArr[5].toByteArray(), Gq);
+					PoSReply.getAt(5).toByteArray(), Gq);
 
 			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
-					PosReplyArr[1]);
+					PoSReply.getAt(1));
 
 			ArrayOfElements<IntegerFieldElement> Ke = new ArrayOfElements<IntegerFieldElement>(
-					PosReplyArr[4]);
+					PoSReply.getAt(4));
 
 			/**
 			 * 2 - computing the seed
@@ -129,13 +127,13 @@ public class ProveShuffling {
 			// TODO: where does s comes from?
 			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
 
-			ByteTree nodeForChallenge = new Node(null);
+			Node nodeForChallenge = new Node(null);
 			nodeForChallenge.add(leaf);
 			nodeForChallenge.add(PoSCommitment);
 
 			byte[] challenge = ROChallenge
 					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
-							leaf.toByteArray()));
+							nodeForChallenge.toByteArray()));
 
 			/* Computation of v: */
 			BigInteger v = new BigInteger(challenge);
