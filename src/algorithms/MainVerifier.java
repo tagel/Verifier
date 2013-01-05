@@ -37,7 +37,7 @@ public class MainVerifier {
 	 * @throws UnsupportedEncodingException
 	 */
 	public boolean verify(String protInfo, String directory, String type,
-			String auxid, BigInteger w, boolean posc, boolean ccpos, boolean dec)
+			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
 			throws UnsupportedEncodingException {
 
 		//*****Section 1 in the algorithm***** 
@@ -79,11 +79,11 @@ public class MainVerifier {
 		// w_expected 	w_expected
 		// w 			w
 		// w_deafult 	wDeafult
-		if ((params.getWidthExp().intValue() == 0)
+		if ((params.getWidthExp() == 0)
 				&& (params.getW() != params.getwDefault()))
 			return false;
 
-		if ((params.getWidthExp().intValue() != 0)
+		if ((params.getWidthExp() != 0)
 				&& (params.getW() != params.getWidthExp()))
 			return false;
 
