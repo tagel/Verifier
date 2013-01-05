@@ -50,6 +50,8 @@ public class Parameters {
 		sPRG = null;
 		wDefault = null;
 		maxciph = 0;
+		initializeMix();
+		
 		}
 
 	public String getDirectory() {
@@ -107,6 +109,23 @@ public class Parameters {
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixDecryptionFactors;
 	private ArrayOfElements<Node> mixDecrFactCommitment;
 	private ArrayOfElements<Node> mixDecrFactReply;
+	
+	private void initializeMix() {
+		mixPublicKey = new ArrayOfElements<IGroupElement>();
+		mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
+		mixCiphertexts = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		mixPermutationCommitment = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		mixPoSCommitment = new ArrayOfElements<Node>();
+		mixPoSReply = new ArrayOfElements<Node>();
+		mixPoSCCommitment = new ArrayOfElements<Node>();
+		mixPoSCReply = new ArrayOfElements<Node>();
+		mixCcPosCommitment = new ArrayOfElements<Node>();
+		mixCcPosReply = new ArrayOfElements<Node>();
+		mixKeepList = new ArrayOfElements<BooleanArrayElement>();
+		mixDecryptionFactors = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		mixDecrFactCommitment = new ArrayOfElements<Node>();
+		mixDecrFactReply = new ArrayOfElements<Node>();
+	}
 	
 	// parameters from lists
 	private ArrayOfElements<IGroupElement> ciphertexts;
