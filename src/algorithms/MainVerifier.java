@@ -4,15 +4,18 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import algorithms.params.Parameters;
+import algorithms.params.XMLProtocolInfo;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.Element;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.IField;
 import arithmetic.objects.IntegerFieldElement;
 import arithmetic.objects.IGroupElement;
 import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
+import arithmetic.objects.PrimeOrderField;
 import arithmetic.objects.ProductGroupElement;
 import arithmetic.objects.StringLeaf;
 import cryptographic.primitives.HashFuncPRG;
@@ -37,24 +40,29 @@ public class MainVerifier {
 			String auxid, BigInteger w, boolean posc, boolean ccpos, boolean dec)
 			throws UnsupportedEncodingException {
 
+		//*****Section 1 in the algorithm***** 
+		//First create the Parameters object using the 
+		//command line parameters
 		params = new Parameters(protInfo, directory, type, auxid, w, posc,
 				ccpos, dec);
-
-		if (!isProtocolInfoValid())
-			return false;
-
+		
+		//create the Xml protInfo file and check it
 		// fill the relevant parameters:
 		// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
-		// (width);
+		//fillFromXML checks if the file is valid, rejects if not
 		if (!params.fillFromXML()) {
 			return false;
 		}
 
+		
+		//*****Section 2 in the algorithm***** 
 		// fill version_proof(Version) type, auxid, w from proof directory
+		//if this fails, return false.
 		if (!params.fillFromDirectory()) {
 			return false;
 		}
 
+		
 		// params.getVersion() = version_proof in the document
 		if (!params.getProtVersion().equals(params.getVersion()))
 			return false;
@@ -67,10 +75,10 @@ public class MainVerifier {
 
 		// The document says that widthExp should be NULL, but here we will only
 		// assign 0
-		// Document: Code:
-		// w_expected w_expected
-		// w w
-		// w_deafult wDeafult
+		// Document: 	Code:
+		// w_expected 	w_expected
+		// w 			w
+		// w_deafult 	wDeafult
 		if ((params.getWidthExp().intValue() == 0)
 				&& (params.getW() != params.getwDefault()))
 			return false;
@@ -79,7 +87,11 @@ public class MainVerifier {
 				&& (params.getW() != params.getWidthExp()))
 			return false;
 
+		//Sets Gq and Zq
 		params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
+		BigInteger q = params.getGq().getFieldOrder();
+		IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
+		params.setZq(Zq);
 
 		deriveSetsAndObjects();
 
@@ -130,7 +142,7 @@ public class MainVerifier {
 	private boolean ReadKeys() {
 		Element btPk = btFromFile(params.getDirectory().concat(
 				"FullPublicKey.bt"));
-		ProductGroupElement pk = new ProductGroupElement(btPk, params.getGq());
+		ProductGroupElement pk = newProductGroupElement(btPk, params.getGq());
 		IGroupElement y = pk.getArr()[1];
 		IGroupElement g = pk.getArr()[0];
 
@@ -144,7 +156,7 @@ public class MainVerifier {
 
 		for (i = 0; i < params.getThreshold(); i++) {
 			// Here we assume that the file exists
-			yi = GroupElement(btFromFile(params.getDirectory() + "/proofs/"
+			yi = createGroupElement(btFromFile(params.getDirectory() + "/proofs/"
 					+ "PublicKey" + (i < 10 ? "0" : "") + (i + 1)),
 					params.getGq());
 			if (yi == null)
@@ -170,15 +182,7 @@ public class MainVerifier {
 
 	}
 
-	/**
-	 * @return true if the XML of the protocol info is valid and false
-	 *         otherwise.
-	 */
-	private boolean isProtocolInfoValid() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	/**
 	 * @return true if the proof params are valid and false otherwise.
 	 */
@@ -195,15 +199,6 @@ public class MainVerifier {
 		// TODO: Part 3 in the algorithm.
 		// Derive Cw, Mw, Rw, Zp
 		return false;
-	}
-
-	/**
-	 * @return the digest "ro" of selected protocol params for the calls of the
-	 *         random oracles.
-	 */
-	private String prefixToRandomOracle() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	private boolean ReadLists() {
