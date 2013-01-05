@@ -1,7 +1,10 @@
 package algorithms.params;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -24,9 +27,9 @@ import arithmetic.objects.ProductGroupElement;
 public class Parameters {
 
 	public Parameters(String protInfo, String directory, String type,
-			java.lang.String auxsid, BigInteger w, boolean posc, boolean ccpos,
+			java.lang.String auxsid, int w, boolean posc, boolean ccpos,
 			boolean dec) {
-		super();
+
 		this.auxsid = auxsid;
 		this.protInfo = protInfo;
 		this.directory = directory;
@@ -41,19 +44,19 @@ public class Parameters {
 		version = null;
 		type = null;
 		auxsid = null;
-		w = null;
+		w = 0;
 		fullPublicKey = null;
 		protVersion = null;
 		sessionID = null;
 		numOfParties = 0;
 		threshold = 0;
-		Ne = null;
-		Nr = null;
-		Nv = null;
+		Ne = 0;
+		Nr = 0;
+		Nv = 0;
 		sh = null;
 		sGq = null;
 		sPRG = null;
-		wDefault = null;
+		wDefault = 0;
 		maxciph = 0;
 		initializeMix();
 
@@ -118,20 +121,23 @@ public class Parameters {
 	private ArrayOfElements<Node> mixDecrFactReply;
 
 	private void initializeMix() {
-		mixPublicKey = new ArrayOfElements<IGroupElement>();
-		mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
-		mixCiphertexts = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		mixPermutationCommitment = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		mixPoSCommitment = new ArrayOfElements<Node>();
-		mixPoSReply = new ArrayOfElements<Node>();
-		mixPoSCCommitment = new ArrayOfElements<Node>();
-		mixPoSCReply = new ArrayOfElements<Node>();
-		mixCcPosCommitment = new ArrayOfElements<Node>();
-		mixCcPosReply = new ArrayOfElements<Node>();
-		mixKeepList = new ArrayOfElements<BooleanArrayElement>();
-		mixDecryptionFactors = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		mixDecrFactCommitment = new ArrayOfElements<Node>();
-		mixDecrFactReply = new ArrayOfElements<Node>();
+		// mixPublicKey = new ArrayOfElements<IGroupElement>();
+		// mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
+		// mixCiphertexts = new
+		// ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		// mixPermutationCommitment = new
+		// ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		// mixPoSCommitment = new ArrayOfElements<Node>();
+		// mixPoSReply = new ArrayOfElements<Node>();
+		// mixPoSCCommitment = new ArrayOfElements<Node>();
+		// mixPoSCReply = new ArrayOfElements<Node>();
+		// mixCcPosCommitment = new ArrayOfElements<Node>();
+		// mixCcPosReply = new ArrayOfElements<Node>();
+		// mixKeepList = new ArrayOfElements<BooleanArrayElement>();
+		// mixDecryptionFactors = new
+		// ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		// mixDecrFactCommitment = new ArrayOfElements<Node>();
+		// mixDecrFactReply = new ArrayOfElements<Node>();
 	}
 
 	// fill the relevant parameters from the given xml
@@ -141,7 +147,7 @@ public class Parameters {
 	public boolean fillFromXML() {
 		XMLProtocolInfo protXML;
 		try {
-			protXML = new XMLProtocolInfo(directory);
+			protXML = new XMLProtocolInfo(protInfo);
 		} catch (FileNotFoundException e) {
 			System.out.println("XML ProtInfo not found");
 			return false;
@@ -149,6 +155,9 @@ public class Parameters {
 			System.out.println("Error reading XML");
 			return false;
 		} catch (FactoryConfigurationError e) {
+			System.out.println("Error reading XML");
+			return false;
+		} catch (IllegalXmlFormatException e) {
 			System.out.println("Error reading XML");
 			return false;
 		}
@@ -171,6 +180,47 @@ public class Parameters {
 	// fill the relevant parameters from the given directory
 	// fill version_proof(Version) type, auxid, w from proof directory
 	public boolean fillFromDirectory() {
+		Scanner text = null;
+		try {
+			text = new Scanner(new File(directory, "auxsid"));
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: Cannot find file " + "auxsid");
+			return false;
+		}
+
+		auxsid = text.next().trim();
+
+		try {
+			text = new Scanner(new File(directory, "version"));
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: Cannot find file " + "version");
+			return false;
+		}
+
+		if (text.hasNext())
+			version = text.next().trim();
+		else
+			version = "";
+
+		try {
+			text = new Scanner(new File(directory, "type"));
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: Cannot find file " + "type");
+			return false;
+		}
+
+		type = text.next().trim();
+	
+		try {
+			text = new Scanner(new File(directory, "width"));
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: Cannot find file " + "auxsid");
+			return false;
+		}
+
+		w = text.nextInt();
+		System.out.println(w);
+		
 		return true;
 	}
 
@@ -352,7 +402,7 @@ public class Parameters {
 	/**
 	 * @return the default width of cipher-texts and plain-texts.
 	 */
-	public BigInteger getW() {
+	public int getW() {
 		return w;
 	}
 
@@ -399,11 +449,11 @@ public class Parameters {
 		this.auxidExp = auxidExp;
 	}
 
-	public BigInteger getWidthExp() {
+	public int getWidthExp() {
 		return widthExp;
 	}
 
-	public void setWidthExpected(BigInteger widthExpected) {
+	public void setWidthExpected(int widthExpected) {
 		this.widthExp = widthExpected;
 	}
 
