@@ -1,4 +1,4 @@
-package algorithms;
+package algorithms.provers;
 
 import java.math.BigInteger;
 
@@ -22,7 +22,7 @@ import cryptographic.primitives.RandomOracle;
  * 
  * @author Tagel
  */
-public class ProveShuffling {
+public class ProveShuffling extends Prover {
 
 	public boolean prove(
 			RandomOracle ROSeed,
@@ -34,6 +34,7 @@ public class ProveShuffling {
 			int Nv,
 			PseudoRandomGenerator prg,
 			IGroup Gq,
+			//TODO: what is the type of Rw,Cw??
 			IGroup Rw,
 			IGroup Cw,
 			ProductGroupElement pk,
@@ -68,8 +69,7 @@ public class ProveShuffling {
 					PoSCommitment.getAt(3).toByteArray(), Gq);
 			IGroupElement Dtag = ElementsExtractor.createGroupElement(
 					PoSCommitment.getAt(4).toByteArray(), Gq);
-			IGroupElement Ftag = ElementsExtractor.createGroupElement(
-					PoSCommitment.getAt(5).toByteArray(), Gq);
+			ProductGroupElement Ftag = new ProductGroupElement(PoSCommitment.getAt(5)); 
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
@@ -88,8 +88,7 @@ public class ProveShuffling {
 					ElementsExtractor
 							.leafToInt(PoSReply.getAt(3).toByteArray()),
 					Zq);
-			IGroupElement Kf = ElementsExtractor.createGroupElement(PoSReply
-					.getAt(5).toByteArray(), Gq);
+			ProductFieldElement Kf = new ProductFieldElement(PoSReply.getAt(5));
 
 			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
 					PoSReply.getAt(1));
@@ -129,7 +128,7 @@ public class ProveShuffling {
 			for (int i = 1; i < N; i++) {
 				F = F.mult(wInput.getAt(i).power(e.getAt(i).getElement()));
 			}
-			
+
 			/**
 			 * 4 - Computation of the challenge
 			 */
@@ -162,11 +161,11 @@ public class ProveShuffling {
 				DExponent = DExponent.multiply(e.getAt(i).getElement());
 			}
 			IGroupElement C = CNumerator.divide(CDenominator);
-			IGroupElement D = B.getAt(N - 1).divide(
-					h.getAt(0).power(DExponent));
+			IGroupElement D = B.getAt(N - 1)
+					.divide(h.getAt(0).power(DExponent));
 
 			/*
-			 * Equation 1: A^v*A' = (g^ka)*Pi(h[i]^ke[i])
+			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 			 */
 			IGroupElement left = (A.power(v)).mult(Atag);
 			IGroupElement hPi = h.getElementAt(0).power(Ke.getAt(0));
@@ -179,8 +178,8 @@ public class ProveShuffling {
 			// }
 
 			/*
-			 * Equation 2: (B[i]^v)*Btag[i] = (g^Kb[i])*(B[i-1]^Ke[i]), where *
-			 * B[-1] = h[0]
+			 * Equation 2: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]),
+			 * where B[-1] = h[0]
 			 */
 			left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
 			right = g.power(Kb.getAt(0).getElement()).mult(
@@ -199,7 +198,11 @@ public class ProveShuffling {
 			// }
 
 			/*
-			 * Equation 3: (C^v)*Ctag = g^Kc
+			 * Equation 3: F^v*Ftag = Enc(1-Kf) * PI(wOutput[i]^Ke[i])
+			 */
+
+			/*
+			 * Equation 4: (C^v)*Ctag = g^Kc
 			 */
 			left = (C.power(v)).mult(Ctag);
 			right = g.power(Kc.getElement());
@@ -208,7 +211,7 @@ public class ProveShuffling {
 			// }
 
 			/*
-			 * Equation 4: (D^v)*Dtag = g^Kd
+			 * Equation 5: (D^v)*Dtag = g^Kd
 			 */
 			left = (D.power(v)).mult(Dtag);
 			right = g.power(Kd.getElement());
