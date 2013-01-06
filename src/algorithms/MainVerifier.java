@@ -8,7 +8,6 @@ import algorithms.params.XMLProtocolInfo;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.Element;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.IField;
 import arithmetic.objects.IntegerFieldElement;
@@ -40,29 +39,27 @@ public class MainVerifier {
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
 			throws UnsupportedEncodingException {
 
-		//*****Section 1 in the algorithm***** 
-		//First create the Parameters object using the 
-		//command line parameters
+		// *****Section 1 in the algorithm*****
+		// First create the Parameters object using the
+		// command line parameters
 		params = new Parameters(protInfo, directory, type, auxid, w, posc,
 				ccpos, dec);
-		
-		//create the Xml protInfo file and check it
+
+		// create the Xml protInfo file and check it
 		// fill the relevant parameters:
 		// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
-		//fillFromXML checks if the file is valid, rejects if not
+		// fillFromXML checks if the file is valid, rejects if not
 		if (!params.fillFromXML()) {
 			return false;
 		}
 
-		
-		//*****Section 2 in the algorithm***** 
+		// *****Section 2 in the algorithm*****
 		// fill version_proof(Version) type, auxid, w from proof directory
-		//if this fails, return false.
+		// if this fails, return false.
 		if (!params.fillFromDirectory()) {
 			return false;
 		}
 
-		
 		// params.getVersion() = version_proof in the document
 		if (!params.getProtVersion().equals(params.getVersion()))
 			return false;
@@ -75,10 +72,10 @@ public class MainVerifier {
 
 		// The document says that widthExp should be NULL, but here we will only
 		// assign 0
-		// Document: 	Code:
-		// w_expected 	w_expected
-		// w 			w
-		// w_deafult 	wDeafult
+		// Document: Code:
+		// w_expected w_expected
+		// w w
+		// w_deafult wDeafult
 		if ((params.getWidthExp() == 0)
 				&& (params.getW() != params.getwDefault()))
 			return false;
@@ -87,33 +84,62 @@ public class MainVerifier {
 				&& (params.getW() != params.getWidthExp()))
 			return false;
 
-		//Sets Gq and Zq
-		params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
+		// *******Section 3 in the Algorithm*********
+		if (!deriveSetsAndObjects())
+			return false;
+
+		// *******Section 4 in the Algorithm*********
+		createPrefixToRo();
+		
+		// *******Section 5 in the Algorithm*********
+		if (!ReadKeys())// Attempt to read was unsuccessful
+			return false;
+
+		// *******Section 6 in the Algorithm*********
+		if (!ReadLists())
+			return false;
+
+		return true;
+	}
+
+	/**
+	 * @return true if successfully derived Gq, Zq, Mw, Cw, Rw, the hash function H
+	 *         and the PRG and false otherwise.
+	 */
+	private boolean deriveSetsAndObjects() {
+		//Unmarshall Gq
+		try {
+			params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("Error unmarshalling Gq");
+			return false;
+		}
+		
+		//Derive the Zq prime order Field
 		BigInteger q = params.getGq().getFieldOrder();
 		IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
 		params.setZq(Zq);
 
-		deriveSetsAndObjects();
-
-		HashFunction H = new SHA2HashFunction(params.getSh());
-		PseudoRandomGenerator PRG = new HashFuncPRG(new SHA2HashFunction(
-				params.getsPRG()));
-
-		ByteTree version_proof = new StringLeaf(params.getVersion());
-
-		// s = sid|"."|auxid
+		//Set the Hashfunction and the pseudo random generator
+		params.setH(new SHA2HashFunction(params.getSh()));
+		params.setPrg(new HashFuncPRG(new SHA2HashFunction(params.getsPRG())));
+		
+		return true;
+	}
+	
+	
+	private void createPrefixToRo() {
 		String s = params.getSessionID() + "." + params.getAuxsid();
-
 		ByteTree btAuxid = new StringLeaf(s);
+		ByteTree version_proof = new StringLeaf(params.getVersion());
 		ByteTree sGq = new StringLeaf(params.getsGq());
 		ByteTree sPRG = new StringLeaf(params.getsPRG());
 		ByteTree sH = new StringLeaf(params.getSh());
 
-		ByteTree Ne = new BigIntLeaf(params.getNe());
-		ByteTree Nr = new BigIntLeaf(params.getNr());
-
-		ByteTree Nv = new BigIntLeaf(params.getNv());
-		ByteTree btW = new BigIntLeaf(params.getW());
+		ByteTree Ne = new BigIntLeaf(BigInteger.valueOf(params.getNe()));
+		ByteTree Nr = new BigIntLeaf(BigInteger.valueOf(params.getNr()));
+		ByteTree Nv = new BigIntLeaf(BigInteger.valueOf(params.getNv()));
+		ByteTree btW = new BigIntLeaf(BigInteger.valueOf(params.getW()));
 
 		ByteTree[] input = new ByteTree[9];
 		input[0] = version_proof;
@@ -130,19 +156,15 @@ public class MainVerifier {
 		byte[] Seed = node.toByteArray();
 
 		params.setPrefixToRO(H.digest((Seed)));
-
-		if (!ReadKeys())// Attempt to read was unsuccessful
-			return false;
-
-		ReadLists();
-
-		return true;
-	}
-
+		}
+	
+	
 	private boolean ReadKeys() {
-		Element btPk = btFromFile(params.getDirectory().concat(
-				"FullPublicKey.bt"));
-		ProductGroupElement pk = newProductGroupElement(btPk, params.getGq());
+		//TODO: Change the file names and the paths so it will be generic 
+		//TODO: and will fit to the new constructor.
+		ProductGroupElement pk = newProductGroupElement(
+				ElementsExtractor.btFromFile(params.getDirectory().concat(
+						"FullPublicKey.bt")), params.getGq());
 		IGroupElement y = pk.getArr()[1];
 		IGroupElement g = pk.getArr()[0];
 
@@ -152,16 +174,17 @@ public class MainVerifier {
 		int i;
 
 		// Here we get the Identity element and multiply all of the yi's
-		IGroupElement res = (IGroupElement) params.getGq().one();
+		IGroupElement res = params.getGq().one();
 
 		for (i = 0; i < params.getThreshold(); i++) {
 			// Here we assume that the file exists
-			yi = createGroupElement(btFromFile(params.getDirectory() + "/proofs/"
-					+ "PublicKey" + (i < 10 ? "0" : "") + (i + 1)),
-					params.getGq());
+			yi = ElementsExtractor.createGroupElement(
+					ElementsExtractor.btFromFile(params.getDirectory()
+							+ "/proofs/" + "PublicKey" + (i < 10 ? "0" : "")
+							+ (i + 1)), params.getGq());
 			if (yi == null)
 				return false;
-			params.getMixPublicKey().addElement(yi);
+			params.getMixPublicKey().add(yi);
 			res = res.mult(yi);
 		}
 
@@ -171,18 +194,30 @@ public class MainVerifier {
 		// Here we check the secret keys - xi:
 		// Here the file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
-			xi = IntegerFieldElement(
-					btFromFile(params.getDirectory() + "/proofs/"
-							+ "SecretKey0" + (i < 10 ? "0" : "") + (i + 1)),
-					params.getGq());
-			params.getMixSecretKey().addElement(xi);
+			xi = new IntegerFieldElement(
+					ElementsExtractor.leafToInt(ElementsExtractor
+							.btFromFile(params.getDirectory() + "/proofs/"
+									+ "SecretKey0" + (i < 10 ? "0" : "")
+									+ (i + 1))), params.getZq());
+			params.getMixSecretKey().add(xi);
+			//xi = null if the file doesn't exist
+		}
+		
+		
+		//Check the 3.b part of keys verifier
+		for (i = 0; i < params.getThreshold(); i++) {
+			xi = params.getMixSecretKey().getAt(i);
+			yi = params.getMixPublicKey().getAt(i);
+			
+			if ((xi != null) &&
+					!(yi.equal(g.power(xi.getElement()))))
+				return false;
 		}
 
 		return true;
 
 	}
 
-	
 	/**
 	 * @return true if the proof params are valid and false otherwise.
 	 */
@@ -191,15 +226,7 @@ public class MainVerifier {
 		return false;
 	}
 
-	/**
-	 * @return true if successfully derived Gq, Mw, Cw, Rw, the hash function H
-	 *         and the PRG and false otherwise.
-	 */
-	private boolean deriveSetsAndObjects() {
-		// TODO: Part 3 in the algorithm.
-		// Derive Cw, Mw, Rw, Zp
-		return false;
-	}
+	
 
 	private boolean ReadLists() {
 		return true;
