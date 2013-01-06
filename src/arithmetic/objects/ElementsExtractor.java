@@ -4,6 +4,7 @@ package arithmetic.objects;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -38,7 +39,7 @@ public class ElementsExtractor {
 		byte[] a = Arrays.copyOfRange(arr, 5, arr.length-1);
 		return new String(a, "ASCII");
 	}
-	
+
 	/**
 	 * 
 	 * @param arr = a byte array that represents a point.
@@ -48,13 +49,18 @@ public class ElementsExtractor {
 		return null;
 	}
 
-	public static byte[] btFromFile (String path) throws IOException {
-		File file = new File(path);
-		InputStream stream = new FileInputStream(file);
-		byte[] b = new byte[(int) (file.length())];
-		stream.read(b, 0, b.length);
-		stream.close();
-		return b;
+	// if file is not found, returns null.
+	public static byte[] btFromFile (String path, String filename) throws IOException {
+		try {
+			File file = new File(path, filename);
+			InputStream stream = new FileInputStream(file);
+			byte[] b = new byte[(int) (file.length())];
+			stream.read(b, 0, b.length);
+			stream.close();
+			return b;
+		}
+		catch (FileNotFoundException e) { return null;}
+
 	}
 
 	public static IGroupElement createGroupElement (byte[] b, IGroup Gq ) {
@@ -76,11 +82,11 @@ public class ElementsExtractor {
 	}
 
 	public static String hex (byte[] a) {
-		   StringBuilder sb = new StringBuilder();
-		   for(byte b: a)
-		      sb.append(String.format("%02x", b&0xff));
-		   return sb.toString();
-		}
+		StringBuilder sb = new StringBuilder();
+		for(byte b: a)
+			sb.append(String.format("%02x", b&0xff));
+		return sb.toString();
+	}
 
 	public static byte[] unhex (String s) {
 		int len = s.length();
@@ -97,7 +103,7 @@ public class ElementsExtractor {
 	 * @return the group recovered from s by removing the comment and colons, converting the hexa string to a byte array, converting the byte array into a byte tree, and converting the byte tree into the group.
 	 * @throws UnsupportedEncodingException 
 	 */
-	public static IGroup unmarshal (String s) throws UnsupportedEncodingException {
+	public static IGroup unmarshal (String s) throws UnsupportedEncodingException  {
 		int i = s.indexOf(":");
 		String type = s.substring(0, i-1);
 		s = s.substring(i+2, s.length()-1);
