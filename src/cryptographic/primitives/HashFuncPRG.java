@@ -91,7 +91,7 @@ public class HashFuncPRG implements PseudoRandomGenerator {
 	private void calcNextData() {
 
 		// create hash function input
-		byte[] counterBytes = intToByteArray(counter);
+		byte[] counterBytes = CryptoUtils.intToByteArray(counter);
 		byte[] input = new byte[seed.length + 4];
 
 		for (int i = 0; i < seed.length; i++) {
@@ -128,11 +128,6 @@ public class HashFuncPRG implements PseudoRandomGenerator {
 		retIndex += count;
 		return bytesLeft - count;
 
-	}
-
-	public static final byte[] intToByteArray(int value) {
-		return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16),
-				(byte) (value >>> 8), (byte) value };
 	}
 
 	// return the num of bytes that are left to use from the last calculation
