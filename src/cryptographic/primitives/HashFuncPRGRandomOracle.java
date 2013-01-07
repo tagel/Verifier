@@ -13,16 +13,16 @@ package cryptographic.primitives;
  */
 public class HashFuncPRGRandomOracle implements RandomOracle {
 	
-	private final PseudoRandomGenerator prg;
-	private final int numOut;
+//	private final PseudoRandomGenerator prg;
+//	private final int numOut;
 	
 	/**
 	 * @param algorithm hash function to use in the construction of the random oracle.
 	 * @param numOut the length of the getRandomOracleOutput output. 
 	 */
 	public HashFuncPRGRandomOracle(HashFunction function, int numOut) { 
-		this.prg = new HashFuncPRG(function);
-		this.numOut = numOut;
+//		this.prg = new HashFuncPRG(function);
+//		this.numOut = numOut;
 	}
 	
 	@Override

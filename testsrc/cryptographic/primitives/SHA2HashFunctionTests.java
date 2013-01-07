@@ -55,7 +55,7 @@ public class SHA2HashFunctionTests {
 		
 	}
 	
-	private static String byteToHexString(byte[] bytes) {		
+	public static String byteToHexString(byte[] bytes) {		
 		StringBuffer result = new StringBuffer();
 		for (byte b : bytes) {
 		    result.append(String.format("%02X", b));
