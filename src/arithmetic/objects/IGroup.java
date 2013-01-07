@@ -10,7 +10,7 @@ import java.math.BigInteger;
  *
  * @param <E>
  */
-public interface IGroup extends Element {
+public interface IGroup extends ByteTree {
 	
 	
 

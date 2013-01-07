@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class IntegerFieldElement implements Element {
+public class IntegerFieldElement implements ByteTree {
 	
 	protected BigInteger element;
 	protected IField<IntegerFieldElement> field;
@@ -64,7 +64,7 @@ public class IntegerFieldElement implements Element {
 
 
 	@Override
-	public ByteTree toByteTree() {
+	public byte[] toByteArray() {
 		int numOfOrderBytes = field.getOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
 		byte[] b = ByteBuffer.allocate(numOfOrderBytes).order(ByteOrder.BIG_ENDIAN).putInt(element.intValue()).array();
