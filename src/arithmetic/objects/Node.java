@@ -20,6 +20,7 @@ public class Node implements ByteTree {
 		//TODO: implement
 	}
 	
+	
 	public Node() {
 		
 	}

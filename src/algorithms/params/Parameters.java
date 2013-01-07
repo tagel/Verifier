@@ -2,12 +2,13 @@ package algorithms.params;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
+
+import cryptographic.primitives.HashFunction;
+import cryptographic.primitives.PseudoRandomGenerator;
 
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;
@@ -26,6 +27,10 @@ import arithmetic.objects.ProductGroupElement;
  */
 public class Parameters {
 
+	/**
+	 * 
+	 * @params - All the parameters we get from the cmd line 
+	 */
 	public Parameters(String protInfo, String directory, String type,
 			java.lang.String auxsid, int w, boolean posc, boolean ccpos,
 			boolean dec) {
@@ -41,6 +46,9 @@ public class Parameters {
 
 		prefixToRO = null;
 		Gq = null;
+		Zq = null;
+		H = null;
+		prg = null;
 		version = null;
 		type = null;
 		auxsid = null;
@@ -62,9 +70,12 @@ public class Parameters {
 
 	}
 
+	//Derived Objects
 	private byte[] prefixToRO;
 	private IGroup Gq;
 	IField<IntegerFieldElement> Zq;
+	HashFunction H;
+	PseudoRandomGenerator prg;
 
 	// parameters from directory
 	private String protInfo;
@@ -121,23 +132,23 @@ public class Parameters {
 	private ArrayOfElements<Node> mixDecrFactReply;
 
 	private void initializeMix() {
-		// mixPublicKey = new ArrayOfElements<IGroupElement>();
-		// mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
-		// mixCiphertexts = new
-		// ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		// mixPermutationCommitment = new
-		// ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		// mixPoSCommitment = new ArrayOfElements<Node>();
-		// mixPoSReply = new ArrayOfElements<Node>();
-		// mixPoSCCommitment = new ArrayOfElements<Node>();
-		// mixPoSCReply = new ArrayOfElements<Node>();
-		// mixCcPosCommitment = new ArrayOfElements<Node>();
-		// mixCcPosReply = new ArrayOfElements<Node>();
-		// mixKeepList = new ArrayOfElements<BooleanArrayElement>();
-		// mixDecryptionFactors = new
-		// ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		// mixDecrFactCommitment = new ArrayOfElements<Node>();
-		// mixDecrFactReply = new ArrayOfElements<Node>();
+		 mixPublicKey = new ArrayOfElements<IGroupElement>();
+		 mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
+		 mixCiphertexts = new
+		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		 mixPermutationCommitment = new
+		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		 mixPoSCommitment = new ArrayOfElements<Node>();
+		 mixPoSReply = new ArrayOfElements<Node>();
+		 mixPoSCCommitment = new ArrayOfElements<Node>();
+		 mixPoSCReply = new ArrayOfElements<Node>();
+		 mixCcPosCommitment = new ArrayOfElements<Node>();
+		 mixCcPosReply = new ArrayOfElements<Node>();
+		 mixKeepList = new ArrayOfElements<BooleanArrayElement>();
+		 mixDecryptionFactors = new
+		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		 mixDecrFactCommitment = new ArrayOfElements<Node>();
+		 mixDecrFactReply = new ArrayOfElements<Node>();
 	}
 
 	// fill the relevant parameters from the given xml
@@ -224,6 +235,10 @@ public class Parameters {
 		return true;
 	}
 
+	
+	//*****************************************
+	//**********Getters And Setters************
+	//*****************************************
 	/**
 	 * 
 	 * @return the directory path
@@ -322,8 +337,7 @@ public class Parameters {
 		return typeExpected;
 	}
 
-	// *****FROM XML*******
-
+	
 	/**
 	 * @return the version id of the verificatum.
 	 */
@@ -479,6 +493,22 @@ public class Parameters {
 
 	public void setPrefixToRO(byte[] prefixToRO) {
 		this.prefixToRO = prefixToRO;
+	}
+	
+	public HashFunction getH() {
+		return H;
+	}
+
+	public void setH(HashFunction h) {
+		H = h;
+	}
+
+	public PseudoRandomGenerator getPrg() {
+		return prg;
+	}
+
+	public void setPrg(PseudoRandomGenerator prg) {
+		this.prg = prg;
 	}
 
 	public ArrayOfElements<IGroupElement> getMixPublicKey() {
