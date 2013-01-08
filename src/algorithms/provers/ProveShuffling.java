@@ -12,6 +12,7 @@ import arithmetic.objects.IGroupElement;
 import arithmetic.objects.IntegerFieldElement;
 import arithmetic.objects.Node;
 import arithmetic.objects.PrimeOrderField;
+import arithmetic.objects.ProductFieldElement;
 import arithmetic.objects.ProductGroupElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
@@ -34,14 +35,16 @@ public class ProveShuffling extends Prover {
 			int Nv,
 			PseudoRandomGenerator prg,
 			IGroup Gq,
-			//TODO: what is the type of Rw,Cw??
+			// TODO: what is the type of Rw,Cw??
 			IGroup Rw,
 			IGroup Cw,
 			ProductGroupElement pk,
 			ArrayOfElements<IGroupElement> wInput,
 			ArrayOfElements<IGroupElement> wOutput,
 			ArrayOfElements<ArrayOfElements<IGroupElement>> permutationCommitment,
-			Node PoSCommitment, Node PoSReply) {
+			Node PoSCommitment, Node PoSReply,
+			// TODO: what is h?
+			ArrayOfElements<IGroupElement> h) {
 
 		try {
 
@@ -69,7 +72,8 @@ public class ProveShuffling extends Prover {
 					PoSCommitment.getAt(3).toByteArray(), Gq);
 			IGroupElement Dtag = ElementsExtractor.createGroupElement(
 					PoSCommitment.getAt(4).toByteArray(), Gq);
-			ProductGroupElement Ftag = new ProductGroupElement(PoSCommitment.getAt(5)); 
+			ProductGroupElement Ftag = new ProductGroupElement(
+					PoSCommitment.getAt(5));
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
@@ -99,12 +103,17 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 2 - computing the seed
 			 */
-			IGroupElement g = Gq.getGenerator();
+
 			// TODO: ask Tomer what are h,u
-			Node nodeForSeed = new Node(g, h, u, pk, wInput, wOutput);
-			// Computation of the seed:
-			byte[] seed = ROSeed.getRandomOracleOutput(ElementsExtractor
-					.concatArrays(ro, nodeForSeed.toByteArray()));
+			IGroupElement g = Gq.getGenerator();
+			Node nodeForSeed = new Node();
+			nodeForSeed.add(g);
+			nodeForSeed.add(h);
+			nodeForSeed.add(u);
+			nodeForSeed.add(pk);
+			nodeForSeed.add(wInput);
+			nodeForSeed.add(wOutput);
+			byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
 			/**
 			 * 3 - Computation of A and F
@@ -113,7 +122,7 @@ public class ProveShuffling extends Prover {
 			// Computation of e:
 			int length = (int) Math.ceil((double) (Ne / 8));
 			IntegerFieldElement pow = new IntegerFieldElement(
-					BigInteger.valueOf(8 * length), f);
+					BigInteger.valueOf(8 * length), Zq);
 			ArrayOfElements<IntegerFieldElement> e = computeE(seed, Ne, prg, N,
 					pow, BigInteger.valueOf(-1), BigInteger.valueOf(Ne));
 
@@ -151,39 +160,22 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 5 - Compute C,D and verify equalities
 			 */
-			// Computation of C and D
-			IGroupElement CNumerator = u.getAt(0);
-			IGroupElement CDenominator = h.getAt(0);
-			BigInteger DExponent = e.getAt(0).getElement();
-			for (int i = 1; i < N; i++) {
-				CNumerator = CNumerator.mult(u.getAt(i));
-				CDenominator = CDenominator.mult(h.getAt(i));
-				DExponent = DExponent.multiply(e.getAt(i).getElement());
-			}
-			IGroupElement C = CNumerator.divide(CDenominator);
-			IGroupElement D = B.getAt(N - 1)
-					.divide(h.getAt(0).power(DExponent));
+			IGroupElement C = computeC(u, h, N);
+			IGroupElement D = computeD(e, B, h, N);
 
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 			 */
-			IGroupElement left = (A.power(v)).mult(Atag);
-			IGroupElement hPi = h.getElementAt(0).power(Ke.getAt(0));
-			for (int i = 1; i < N; i++) {
-				hPi = hPi.mult(h.getElementAt(i).power(Ke.getAt(i)));
-			}
-			IGroupElement right = g.power(Ka.getElement()).mult(hPi);
-			// if (left.compareTo(right) != 0) {
-			// return false;
-			// }
+			// TODO: need a way to compare 2 IGroupElements
+			verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka);
 
 			/*
 			 * Equation 2: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]),
 			 * where B[-1] = h[0]
 			 */
-			left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
-			right = g.power(Kb.getAt(0).getElement()).mult(
-					h.getElementAt(0).power(Ke.getAt(0)));
+			IGroupElement left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
+			IGroupElement right = g.power(Kb.getAt(0).getElement()).mult(
+					h.getAt(0).power(Ke.getAt(0).getElement()));
 			// if (left.compareTo(right) != 0) {
 			// return false;
 			// }
