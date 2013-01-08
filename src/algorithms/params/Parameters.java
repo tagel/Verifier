@@ -45,7 +45,6 @@ public class Parameters {
 
 		prefixToRO = null;
 		Gq = null;
-		Zq = null;
 		prg = null;
 		version = null;
 		type = null;
@@ -71,7 +70,7 @@ public class Parameters {
 	//Derived Objects
 	private byte[] prefixToRO;
 	private IGroup Gq;
-	IField<IntegerFieldElement> Zq;
+	private IField<IntegerFieldElement> Zq;
 	PseudoRandomGenerator prg;
 
 	// parameters from directory
@@ -106,15 +105,16 @@ public class Parameters {
 	private int widthExp;
 
 	// parameters from lists
-	private ArrayOfElements<ProductGroupElement> ciphertexts;
-	private ArrayOfElements<IGroupElement> ShuffledCiphertexts;
-	private ArrayOfElements<IGroupElement> plaintexts;
+	private ArrayOfElements<ProductGroupElement> ciphertexts;//V
+	private ArrayOfElements<ProductGroupElement> ShuffledCiphertexts; //V
+	private ArrayOfElements<ProductGroupElement> plaintexts;//V
+	private int N; //size of the arrays
 
 	// MIX -- The parameters of each party
-	private ArrayOfElements<IGroupElement> mixPublicKey;
-	private ArrayOfElements<IntegerFieldElement> mixSecretKey;
+	private ArrayOfElements<IGroupElement> mixPublicKey;//V
+	private ArrayOfElements<IntegerFieldElement> mixSecretKey;//V
 
-	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixCiphertexts;
+	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts;
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
 	private ArrayOfElements<Node> mixPoSCommitment;
 	private ArrayOfElements<Node> mixPoSReply;
@@ -131,8 +131,7 @@ public class Parameters {
 	private void initializeMix() {
 		 mixPublicKey = new ArrayOfElements<IGroupElement>();
 		 mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
-		 mixCiphertexts = new
-		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		 mixCiphertexts = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
 		 mixPermutationCommitment = new
 		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
 		 mixPoSCommitment = new ArrayOfElements<Node>();
@@ -236,6 +235,23 @@ public class Parameters {
 	//*****************************************
 	//**********Getters And Setters************
 	//*****************************************
+	public IField<IntegerFieldElement> getZq() {
+		return Zq;
+	}
+
+	public void setZq(IField<IntegerFieldElement> zq) {
+		Zq = zq;
+	}
+
+	public int getN() {
+		return N;
+	}
+
+	public void setN(int n) {
+		N = n;
+	}
+	
+	
 	/**
 	 * 
 	 * @return the directory path
@@ -285,7 +301,7 @@ public class Parameters {
 	/**
 	 * @return true, if it is a proof of shuffle commitment and false otherwise
 	 */
-	public boolean getPosc() {
+	public boolean isPosc() {
 		return posc;
 	}
 
@@ -300,7 +316,7 @@ public class Parameters {
 	 * @return true if it is commitment-consistent proof of a shuffle and false
 	 *         otherwise
 	 */
-	public boolean getCcpos() {
+	public boolean isCcpos() {
 		return ccpos;
 	}
 
@@ -315,7 +331,7 @@ public class Parameters {
 	/**
 	 * @return true if it is proof of correct decryption and false otherwise
 	 */
-	public boolean getDec() {
+	public boolean isDec() {
 		return dec;
 	}
 
@@ -429,6 +445,19 @@ public class Parameters {
 		this.fullPublicKey = fullPublicKey;
 	}
 
+	
+	public void setCiphertexts(ArrayOfElements<ProductGroupElement> ciphertexts) {
+		this.ciphertexts = ciphertexts;
+	}
+
+	public void setShuffledCiphertexts(
+			ArrayOfElements<ProductGroupElement> shuffledCiphertexts) {
+		ShuffledCiphertexts = shuffledCiphertexts;
+	}
+
+	public void setPlaintexts(ArrayOfElements<ProductGroupElement> plaintexts) {
+		this.plaintexts = plaintexts;
+	}
 	/**
 	 * @return the input ciphertexts
 	 */
@@ -440,7 +469,7 @@ public class Parameters {
 	 * @return the re-randomized and permuted ciphertexts (for the shuffling
 	 *         session)
 	 */
-	public ArrayOfElements<IGroupElement> getShuffledCiphertexts() {
+	public ArrayOfElements<ProductGroupElement> getShuffledCiphertexts() {
 		return ShuffledCiphertexts;
 	}
 
@@ -448,7 +477,7 @@ public class Parameters {
 	 * @return the output plaintext elements that has not been decoded in any
 	 *         way
 	 */
-	public ArrayOfElements<IGroupElement> getPlaintexts() {
+	public ArrayOfElements<ProductGroupElement> getPlaintexts() {
 		return plaintexts;
 	}
 
@@ -474,14 +503,6 @@ public class Parameters {
 
 	public void setGq(IGroup gq) {
 		Gq = gq;
-	}
-
-	public IField<IntegerFieldElement> getZq() {
-		return Zq;
-	}
-
-	public void setZq(IField<IntegerFieldElement> zq) {
-		Zq = zq;
 	}
 
 	public byte[] getPrefixToRO() {
@@ -518,12 +539,12 @@ public class Parameters {
 		this.mixSecretKey = mixSecretKey;
 	}
 
-	public ArrayOfElements<ArrayOfElements<IGroupElement>> getMixCiphertexts() {
+	public ArrayOfElements<ArrayOfElements<ProductGroupElement>> getMixCiphertexts() {
 		return mixCiphertexts;
 	}
 
 	public void setMixCiphertexts(
-			ArrayOfElements<ArrayOfElements<IGroupElement>> mixCiphertexts) {
+			ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts) {
 		this.mixCiphertexts = mixCiphertexts;
 	}
 
