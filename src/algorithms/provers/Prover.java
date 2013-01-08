@@ -5,9 +5,9 @@ import java.math.BigInteger;
 
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.IGroupElement;
-import arithmetic.objects.IntegerFieldElement;
 import arithmetic.objects.Node;
+import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.Groups.IGroupElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 

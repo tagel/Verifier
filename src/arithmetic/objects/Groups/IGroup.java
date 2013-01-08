@@ -1,8 +1,12 @@
-package arithmetic.objects;
+package arithmetic.objects.Groups;
 
 
 
 import java.math.BigInteger;
+
+import arithmetic.objects.ByteTree;
+
+import cryptographic.primitives.PseudoRandomGenerator;
 
 
 /**
@@ -26,6 +30,8 @@ public interface IGroup extends ByteTree {
 	 * @return the 1 of the Group.
 	 */
 	public IGroupElement one();
+	
+	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg, byte[] seed, int nr);
 
 		
 

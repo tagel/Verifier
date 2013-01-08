@@ -1,10 +1,15 @@
-package arithmetic.objects;
+package arithmetic.objects.Groups;
 
 
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+
+import arithmetic.objects.BigIntLeaf;
+import arithmetic.objects.Node;
+
+import cryptographic.primitives.PseudoRandomGenerator;
 
 
 /**
@@ -111,6 +116,13 @@ public class ModGroup implements IGroup {
 		groupNode.add(Q);
 		groupNode.add(G);
 		return groupNode.toByteArray();
+	}
+
+	@Override
+	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg,
+			byte[] seed, int nr) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

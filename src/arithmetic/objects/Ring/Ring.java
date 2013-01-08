@@ -1,8 +1,9 @@
-package arithmetic.objects;
+package arithmetic.objects.Ring;
 
 
 
 import java.math.BigInteger;
+
 
 
 

@@ -1,4 +1,4 @@
-package arithmetic.objects;
+package arithmetic.objects.Ring;
 
 
 
