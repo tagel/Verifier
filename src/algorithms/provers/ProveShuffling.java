@@ -38,8 +38,6 @@ public class ProveShuffling extends Prover {
 			int Nv,
 			PseudoRandomGenerator prg,
 			IGroup Gq,
-			ProductRingElement Rw,
-			ProductGroupElement Cw,
 			ProductGroupElement pk,
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput,
@@ -187,9 +185,10 @@ public class ProveShuffling extends Prover {
 			for (int i = 1; i < N; i++) {
 				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
 			}
-			// TODO: implement the encrypt function
-			IGroupElement one = new ModGroupElement(BigInteger.ONE, (ModGroup) Gq);
-			if (!left.equal(right)) {
+
+			ProductGroupElement one = new ProductGroupElement(BigInteger.ONE, w);
+			ProductGroupElement rigthF = encrypt(one,Kf,pk,Gq);
+			if (!leftF.equal(rigthF)) {
 				return false;
 			}
 
