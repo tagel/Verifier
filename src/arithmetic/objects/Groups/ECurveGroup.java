@@ -5,6 +5,7 @@ package arithmetic.objects.Groups;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
+import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.StringLeaf;
 import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
@@ -121,7 +122,7 @@ public class ECurveGroup implements IGroup{
 	}
 
 	@Override
-	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg,
+	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr) {
 		// TODO Auto-generated method stub
 		return null;

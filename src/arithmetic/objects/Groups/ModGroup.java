@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
+import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.Node;
 
@@ -119,7 +120,7 @@ public class ModGroup implements IGroup {
 	}
 
 	@Override
-	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg,
+	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr) {
 		// TODO Auto-generated method stub
 		return null;
