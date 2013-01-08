@@ -155,7 +155,7 @@ public class MainVerifier {
 		Node node = new Node(input);
 		byte[] Seed = node.toByteArray();
 
-		params.setPrefixToRO(H.digest((Seed)));
+		params.setPrefixToRO(params.getH().digest((Seed)));
 		}
 	
 	
@@ -218,6 +218,15 @@ public class MainVerifier {
 
 	}
 
+	private boolean ReadLists() {
+		String filename = "name";
+		
+		
+		return true;
+	}
+	
+	
+	
 	/**
 	 * @return true if the proof params are valid and false otherwise.
 	 */
@@ -228,7 +237,5 @@ public class MainVerifier {
 
 	
 
-	private boolean ReadLists() {
-		return true;
-	}
+	
 }

@@ -109,7 +109,7 @@ public class Parameters {
 	private int widthExp;
 
 	// parameters from lists
-	private ArrayOfElements<IGroupElement> ciphertexts;
+	private ArrayOfElements<ProductGroupElement> ciphertexts;
 	private ArrayOfElements<IGroupElement> ShuffledCiphertexts;
 	private ArrayOfElements<IGroupElement> plaintexts;
 
@@ -435,7 +435,7 @@ public class Parameters {
 	/**
 	 * @return the input ciphertexts
 	 */
-	public ArrayOfElements<IGroupElement> getCiphertexts() {
+	public ArrayOfElements<ProductGroupElement> getCiphertexts() {
 		return ciphertexts;
 	}
 
