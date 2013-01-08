@@ -7,7 +7,6 @@ import java.util.Scanner;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import cryptographic.primitives.HashFunction;
 import cryptographic.primitives.PseudoRandomGenerator;
 
 import arithmetic.objects.ArrayOfElements;
@@ -47,7 +46,6 @@ public class Parameters {
 		prefixToRO = null;
 		Gq = null;
 		Zq = null;
-		H = null;
 		prg = null;
 		version = null;
 		type = null;
@@ -74,7 +72,6 @@ public class Parameters {
 	private byte[] prefixToRO;
 	private IGroup Gq;
 	IField<IntegerFieldElement> Zq;
-	HashFunction H;
 	PseudoRandomGenerator prg;
 
 	// parameters from directory
@@ -495,14 +492,7 @@ public class Parameters {
 		this.prefixToRO = prefixToRO;
 	}
 	
-	public HashFunction getH() {
-		return H;
-	}
-
-	public void setH(HashFunction h) {
-		H = h;
-	}
-
+	
 	public PseudoRandomGenerator getPrg() {
 		return prg;
 	}

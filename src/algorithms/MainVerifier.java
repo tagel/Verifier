@@ -30,6 +30,7 @@ import cryptographic.primitives.SHA2HashFunction;
 public class MainVerifier {
 
 	private Parameters params;
+	private HashFunction H;
 
 	/**
 	 * @return true if verification was successful and false otherwise.
@@ -121,7 +122,7 @@ public class MainVerifier {
 		params.setZq(Zq);
 
 		//Set the Hashfunction and the pseudo random generator
-		params.setH(new SHA2HashFunction(params.getSh()));
+		H = new SHA2HashFunction(params.getSh());
 		params.setPrg(new HashFuncPRG(new SHA2HashFunction(params.getsPRG())));
 		
 		return true;
@@ -155,7 +156,7 @@ public class MainVerifier {
 		Node node = new Node(input);
 		byte[] Seed = node.toByteArray();
 
-		params.setPrefixToRO(params.getH().digest((Seed)));
+		params.setPrefixToRO(H.digest((Seed)));
 		}
 	
 	
@@ -180,8 +181,8 @@ public class MainVerifier {
 			// Here we assume that the file exists
 			yi = ElementsExtractor.createGroupElement(
 					ElementsExtractor.btFromFile(params.getDirectory(),
-							"/proofs/" + "PublicKey" + (i < 10 ? "0" : "")
-							+ (i + 1)), params.getGq());
+							"proofs","PublicKey" + (i < 10 ? "0" : "")
+							+ (i + 1))+".bt", params.getGq());
 			if (yi == null)
 				return false;
 			params.getMixPublicKey().add(yi);
