@@ -1,10 +1,12 @@
-package arithmetic.objects;
+package arithmetic.objects.Field;
 
 
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import arithmetic.objects.ByteTree;
 
 
 public class IntegerFieldElement implements ByteTree {

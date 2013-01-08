@@ -1,10 +1,12 @@
-package arithmetic.objects;
+package arithmetic.objects.Ring;
 
 
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import arithmetic.objects.ByteTree;
 
 
 public class IntegerRingElement implements ByteTree {

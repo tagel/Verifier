@@ -11,6 +11,17 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import cryptographic.primitives.CryptoUtils;
+
+import arithmetic.objects.Groups.ECurveGroup;
+import arithmetic.objects.Groups.ECurveGroupElement;
+import arithmetic.objects.Groups.IGroup;
+import arithmetic.objects.Groups.IGroupElement;
+import arithmetic.objects.Groups.ModGroup;
+import arithmetic.objects.Groups.ModGroupElement;
+import arithmetic.objects.Groups.Point;
+import arithmetic.objects.Groups.ProductGroupElement;
+
 
 
 
@@ -62,6 +73,22 @@ public class ElementsExtractor {
 		catch (FileNotFoundException e) { return null;}
 
 	}
+	
+	public static byte[] btFromFile (String path, String subpath, String filename) throws IOException {
+		try {
+			File f1 = new File(path, subpath);
+			File file = new File(f1, filename);
+			InputStream stream = new FileInputStream(file);
+			byte[] b = new byte[(int) (file.length())];
+			stream.read(b, 0, b.length);
+			stream.close();
+			return b;
+		}
+		catch (FileNotFoundException e) { return null;}
+
+	}
+	
+	
 
 	public static IGroupElement createGroupElement (byte[] b, IGroup Gq ) {
 		if (Gq instanceof ModGroup)
@@ -81,20 +108,20 @@ public class ElementsExtractor {
 		return C;
 	}
 
-	public static String hex (byte[] a) {
-		StringBuilder sb = new StringBuilder();
-		for(byte b: a)
-			sb.append(String.format("%02x", b&0xff));
-		return sb.toString();
-	}
-
-	public static byte[] unhex (String s) {
-		int len = s.length();
-		byte[] data = new byte[len / 2];
-		for (int i = 0; i < len; i += 2) 
-			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
-		return data;
-	}
+//	public static String hex (byte[] a) {
+//		StringBuilder sb = new StringBuilder();
+//		for(byte b: a)
+//			sb.append(String.format("%02x", b&0xff));
+//		return sb.toString();
+//	}
+//
+//	public static byte[] unhex (String s) {
+//		int len = s.length();
+//		byte[] data = new byte[len / 2];
+//		for (int i = 0; i < len; i += 2) 
+//			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
+//		return data;
+//	}
 	/**
 	 * @param <E>
 	 * @param a string s, representing a certain group.
@@ -105,7 +132,7 @@ public class ElementsExtractor {
 		int i = s.indexOf(":");
 		String type = s.substring(0, i-1);
 		s = s.substring(i+2, s.length()-1);
-		byte[] b = unhex(s);
+		byte[] b = CryptoUtils.hexStringToBytes(s);
 		if (type.equals("verificatum.arithm.ModPGroup"))
 			return new ModGroup(b);
 		if (type.equals("verificatum.arithm.ECqPGroup"))

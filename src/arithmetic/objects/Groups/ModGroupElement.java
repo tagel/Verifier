@@ -1,10 +1,11 @@
-package arithmetic.objects;
+package arithmetic.objects.Groups;
 
 
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
 
 
 public class ModGroupElement implements IGroupElement {

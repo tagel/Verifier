@@ -1,9 +1,14 @@
-package arithmetic.objects;
+package arithmetic.objects.Groups;
 
 
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+
+import arithmetic.objects.StringLeaf;
+import arithmetic.objects.Field.IField;
+import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.Field.PrimeOrderField;
 
 import cryptographic.primitives.PseudoRandomGenerator;
 

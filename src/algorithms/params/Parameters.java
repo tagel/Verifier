@@ -12,12 +12,12 @@ import cryptographic.primitives.PseudoRandomGenerator;
 
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;
-import arithmetic.objects.IField;
-import arithmetic.objects.IntegerFieldElement;
-import arithmetic.objects.IGroupElement;
-import arithmetic.objects.IGroup;
 import arithmetic.objects.Node;
-import arithmetic.objects.ProductGroupElement;
+import arithmetic.objects.Field.IField;
+import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.Groups.IGroup;
+import arithmetic.objects.Groups.IGroupElement;
+import arithmetic.objects.Groups.ProductGroupElement;
 
 /**
  * This class describes an object that contains the parameters used by the
