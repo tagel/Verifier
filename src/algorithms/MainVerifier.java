@@ -163,8 +163,8 @@ public class MainVerifier {
 		//TODO: Change the file names and the paths so it will be generic 
 		//TODO: and will fit to the new constructor.
 		ProductGroupElement pk = newProductGroupElement(
-				ElementsExtractor.btFromFile(params.getDirectory().concat(
-						"FullPublicKey.bt")), params.getGq());
+				ElementsExtractor.btFromFile(params.getDirectory(),
+						"FullPublicKey.bt"), params.getGq());
 		IGroupElement y = pk.getArr()[1];
 		IGroupElement g = pk.getArr()[0];
 
@@ -179,8 +179,8 @@ public class MainVerifier {
 		for (i = 0; i < params.getThreshold(); i++) {
 			// Here we assume that the file exists
 			yi = ElementsExtractor.createGroupElement(
-					ElementsExtractor.btFromFile(params.getDirectory()
-							+ "/proofs/" + "PublicKey" + (i < 10 ? "0" : "")
+					ElementsExtractor.btFromFile(params.getDirectory(),
+							"/proofs/" + "PublicKey" + (i < 10 ? "0" : "")
 							+ (i + 1)), params.getGq());
 			if (yi == null)
 				return false;
@@ -191,12 +191,13 @@ public class MainVerifier {
 		if (!res.equal(y))
 			return false;
 
+		//TODO: concat the file name correctly
 		// Here we check the secret keys - xi:
 		// Here the file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
 			xi = new IntegerFieldElement(
 					ElementsExtractor.leafToInt(ElementsExtractor
-							.btFromFile(params.getDirectory() + "/proofs/"
+							.btFromFile(params.getDirectory(),"/proofs/"
 									+ "SecretKey0" + (i < 10 ? "0" : "")
 									+ (i + 1))), params.getZq());
 			params.getMixSecretKey().add(xi);
