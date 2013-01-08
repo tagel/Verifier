@@ -118,7 +118,7 @@ public class MainVerifier {
 		//7b
 		if ((params.getType().equals("mixing") || params.getType().equals(
 				"decryption")) && params.isDec())
-	
+		{}
 		//TODO:finish here!
 
 		return true;
