@@ -11,7 +11,7 @@ import org.junit.Test;
 public class XMLProtocolInfoTests {
 		
 	@Test
-	public void parseXML_allArgsTest() throws FileNotFoundException, XMLStreamException, FactoryConfigurationError {
+	public void parseXML_allArgsTest() throws FileNotFoundException, XMLStreamException, FactoryConfigurationError, IllegalXmlFormatException {
 		Assert.assertNotNull("res is not in the classpath - ask Daniel", getClass().getClassLoader().getResource("protInfo.xml"));
 		ProtocolInfo protInfo = new XMLProtocolInfo(getClass().getClassLoader().getResource("protInfo.xml").getFile());
 		Assert.assertEquals("", protInfo.getVersion());
@@ -28,7 +28,7 @@ public class XMLProtocolInfoTests {
 	}
 	
 	@Test (expected = IllegalXmlFormatException.class)
-	public void parseXML_withMissingArgTest() throws FileNotFoundException, XMLStreamException, FactoryConfigurationError {
+	public void parseXML_withMissingArgTest() throws FileNotFoundException, XMLStreamException, FactoryConfigurationError, IllegalXmlFormatException {
 		Assert.assertNotNull("res is not in the classpath - ask Daniel", getClass().getClassLoader().getResource("protInfoMissingArg.xml"));
 		new XMLProtocolInfo(getClass().getClassLoader().getResource("protInfoMissingArg.xml").getFile());
 	}

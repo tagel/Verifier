@@ -13,6 +13,8 @@ public class ArrayOfElements<E> implements ByteTree{
 	public ArrayOfElements () {
 	}
 	
+	
+	
 	public ArrayOfElements (ByteTree node){
 		//TODO: implement
 	}

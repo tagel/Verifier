@@ -14,24 +14,24 @@ public interface PseudoRandomGenerator {
 	public int seedlen();
 
 	/**
-	 * Initialize the PRG with the seed.
+	 * Initialize the seed.
 	 * 
 	 * @param seed
 	 *            a byte[] which is used to initialize the pseudo-random
-	 *            generator.
+	 *            generator. seed.length must be equal to seedlen().
 	 */
 	public void setSeed(byte[] seed);
 
 	/**
 	 * @param numOfBytes
 	 *            the number of bytes should be in the output.
-	 * @return the next numOfBytes bytes of the output of the prg running on the
+	 * @return the next numOfBits bits of the output of the prg running on the
 	 *         seed given. Before running this method seed must be initialized
 	 *         with setSeet() otherwise throws IllegalStateException.
 	 * 
 	 * @throws IllegalStateException
 	 *             if the methods is called before seed was set using setSeet().
 	 */
-	public byte[] getNextPRGOutput(int numOfBytes) throws IllegalStateException;
+	public byte[] getNextPRGOutput(int numOfBits) throws IllegalStateException;
 
 }
