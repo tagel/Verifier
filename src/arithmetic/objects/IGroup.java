@@ -4,6 +4,8 @@ package arithmetic.objects;
 
 import java.math.BigInteger;
 
+import cryptographic.primitives.PseudoRandomGenerator;
+
 
 /**
  * This interface is used to represent a Group.
@@ -26,6 +28,8 @@ public interface IGroup extends ByteTree {
 	 * @return the 1 of the Group.
 	 */
 	public IGroupElement one();
+	
+	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg, byte[] seed, int nr);
 
 		
 

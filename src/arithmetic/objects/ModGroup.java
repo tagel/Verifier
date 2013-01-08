@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
+import cryptographic.primitives.PseudoRandomGenerator;
+
 
 /**
  * This class represents a multiplicative modulo prime Group.
@@ -111,6 +113,13 @@ public class ModGroup implements IGroup {
 		groupNode.add(Q);
 		groupNode.add(G);
 		return groupNode.toByteArray();
+	}
+
+	@Override
+	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg,
+			byte[] seed, int nr) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

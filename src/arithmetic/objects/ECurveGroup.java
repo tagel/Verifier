@@ -5,6 +5,8 @@ package arithmetic.objects;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
+import cryptographic.primitives.PseudoRandomGenerator;
+
 
 /**
  * This class represents a standard elliptic curve over a prime order field.
@@ -111,6 +113,13 @@ public class ECurveGroup implements IGroup{
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		return new StringLeaf(name).toByteArray();
+	}
+
+	@Override
+	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg,
+			byte[] seed, int nr) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
