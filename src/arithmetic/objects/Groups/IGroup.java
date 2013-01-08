@@ -4,6 +4,7 @@ package arithmetic.objects.Groups;
 
 import java.math.BigInteger;
 
+import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ByteTree;
 
 import cryptographic.primitives.PseudoRandomGenerator;
@@ -31,7 +32,7 @@ public interface IGroup extends ByteTree {
 	 */
 	public IGroupElement one();
 	
-	public IGroupElement[] createRandomArray(int N, PseudoRandomGenerator prg, byte[] seed, int nr);
+	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg, byte[] seed, int nr);
 
 		
 

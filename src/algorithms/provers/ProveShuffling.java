@@ -7,13 +7,16 @@ import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.Node;
-import arithmetic.objects.ProductFieldElement;
+import arithmetic.objects.StringLeaf;
 import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
+import arithmetic.objects.Groups.ModGroup;
+import arithmetic.objects.Groups.ModGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -35,16 +38,13 @@ public class ProveShuffling extends Prover {
 			int Nv,
 			PseudoRandomGenerator prg,
 			IGroup Gq,
-			// TODO: what is the type of Rw,Cw??
-			IGroup Rw,
-			IGroup Cw,
+			ProductRingElement Rw,
+			ProductGroupElement Cw,
 			ProductGroupElement pk,
-			ArrayOfElements<IGroupElement> wInput,
-			ArrayOfElements<IGroupElement> wOutput,
+			ArrayOfElements<ProductGroupElement> wInput,
+			ArrayOfElements<ProductGroupElement> wOutput,
 			ArrayOfElements<ArrayOfElements<IGroupElement>> permutationCommitment,
-			Node PoSCommitment, Node PoSReply,
-			// TODO: what is h?
-			ArrayOfElements<IGroupElement> h) {
+			Node PoSCommitment, Node PoSReply) {
 
 		try {
 
@@ -52,7 +52,6 @@ public class ProveShuffling extends Prover {
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
 			 * Pedersen commitments in Gq
 			 */
-			// TODO: what does u contains?
 			ArrayOfElements<IGroupElement> u = new ArrayOfElements<IGroupElement>(
 					permutationCommitment);
 
@@ -92,7 +91,7 @@ public class ProveShuffling extends Prover {
 					ElementsExtractor
 							.leafToInt(PoSReply.getAt(3).toByteArray()),
 					Zq);
-			ProductFieldElement Kf = new ProductFieldElement(PoSReply.getAt(5));
+			ProductRingElement Kf = new ProductRingElement(PoSReply.getAt(5));
 
 			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
 					PoSReply.getAt(1));
@@ -104,7 +103,13 @@ public class ProveShuffling extends Prover {
 			 * 2 - computing the seed
 			 */
 
-			// TODO: ask Tomer what are h,u
+			StringLeaf stringLeaf = new StringLeaf("generators");
+			byte[] independentSeed = ROSeed
+					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
+							stringLeaf.toByteArray()));
+			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
+					independentSeed, Nr);
+
 			IGroupElement g = Gq.getGenerator();
 			Node nodeForSeed = new Node();
 			nodeForSeed.add(g);
@@ -119,29 +124,12 @@ public class ProveShuffling extends Prover {
 			 * 3 - Computation of A and F
 			 */
 
-			// Computation of e:
-			int length = (int) Math.ceil((double) (Ne / 8));
-			IntegerFieldElement pow = new IntegerFieldElement(
-					BigInteger.valueOf(8 * length), Zq);
-			ArrayOfElements<IntegerFieldElement> e = computeE(seed, Ne, prg, N,
-					pow, BigInteger.valueOf(-1), BigInteger.valueOf(Ne));
-
-			// Computation of A:
-			IGroupElement A = u.getAt(0).power(e.getAt(0).getElement());
-			for (int i = 1; i < N; i++) {
-				A = A.mult(u.getAt(i).power(e.getAt(i).getElement()));
-			}
-
-			// Computation of F:
-			IGroupElement F = wInput.getAt(0).power(e.getAt(0).getElement());
-			for (int i = 1; i < N; i++) {
-				F = F.mult(wInput.getAt(i).power(e.getAt(i).getElement()));
-			}
+			IGroupElement A = computeA(N, Ne, seed, prg, u);
+			ProductGroupElement F = computeF(N, Ne, seed, prg, wInput);
 
 			/**
 			 * 4 - Computation of the challenge
 			 */
-			// TODO: where does s comes from?
 			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
 
 			Node nodeForChallenge = new Node(null);
@@ -160,13 +148,13 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 5 - Compute C,D and verify equalities
 			 */
+			BigInteger E = computeE(N, Ne, seed, prg);
 			IGroupElement C = computeC(u, h, N);
-			IGroupElement D = computeD(e, B, h, N);
+			IGroupElement D = computeD(E, B, h, N);
 
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 			 */
-			// TODO: need a way to compare 2 IGroupElements
 			verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka);
 
 			/*
@@ -176,40 +164,52 @@ public class ProveShuffling extends Prover {
 			IGroupElement left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
 			IGroupElement right = g.power(Kb.getAt(0).getElement()).mult(
 					h.getAt(0).power(Ke.getAt(0).getElement()));
-			// if (left.compareTo(right) != 0) {
-			// return false;
-			// }
+			if (!left.equal(right)) {
+				return false;
+			}
 
 			for (int i = 1; i < N; i++) {
 				left = (B.getAt(i)).power(v).mult(Btag.getAt(i));
 				right = g.power(Kb.getAt(i).getElement()).mult(
 						B.getAt(i - 1).power(Ke.getAt(i).getElement()));
 			}
-			// if (left.compareTo(right) != 0) {
-			// return false;
-			// }
+			if (!left.equal(right)) {
+				return false;
+			}
 
 			/*
-			 * Equation 3: F^v*Ftag = Enc(1-Kf) * PI(wOutput[i]^Ke[i])
+			 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 			 */
+			
+			ProductGroupElement leftF = F.power(v).mult(Ftag);
+
+			ProductGroupElement W = wOutput.getAt(0).power(Ke.getAt(0).getElement());
+			for (int i = 1; i < N; i++) {
+				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
+			}
+			// TODO: implement the encrypt function
+			IGroupElement one = new ModGroupElement(BigInteger.ONE, (ModGroup) Gq);
+			if (!left.equal(right)) {
+				return false;
+			}
 
 			/*
 			 * Equation 4: (C^v)*Ctag = g^Kc
 			 */
 			left = (C.power(v)).mult(Ctag);
 			right = g.power(Kc.getElement());
-			// if (left.compareTo(right) != 0) {
-			// return false;
-			// }
+			if (!left.equal(right)) {
+				return false;
+			}
 
 			/*
 			 * Equation 5: (D^v)*Dtag = g^Kd
 			 */
 			left = (D.power(v)).mult(Dtag);
 			right = g.power(Kd.getElement());
-			// if (left.compareTo(right) != 0) {
-			// return false;
-			// }
+			if (!left.equal(right)) {
+				return false;
+			}
 
 			/* All equalities exist. */
 			return true;
