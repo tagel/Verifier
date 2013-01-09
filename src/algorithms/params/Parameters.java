@@ -8,6 +8,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import cryptographic.primitives.PseudoRandomGenerator;
+import cryptographic.primitives.RandomOracle;
 
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;
@@ -63,10 +64,19 @@ public class Parameters {
 		sPRG = null;
 		wDefault = 0;
 		maxciph = 0;
+		
+		ROseed = null;
+		ROchallenge = null;
+		
 		initializeMix();
 
 	}
 
+	//Random Oracles
+	RandomOracle ROseed;
+	RandomOracle ROchallenge;
+	
+	
 	//Derived Objects
 	private byte[] prefixToRO;
 	private IGroup Gq;
@@ -181,6 +191,8 @@ public class Parameters {
 		sGq = protXML.getGq();
 		sPRG = protXML.getPrg();
 		wDefault = protXML.getWidth();
+		
+		
 
 		return true;
 	}
@@ -232,9 +244,26 @@ public class Parameters {
 	}
 
 	
-	//*****************************************
-	//**********Getters And Setters************
-	//*****************************************
+	//********************************************************************************
+	//******************************Getters And Setters*******************************
+	//********************************************************************************
+	
+	public RandomOracle getROseed() {
+		return ROseed;
+	}
+
+	public void setROseed(RandomOracle rOseed) {
+		ROseed = rOseed;
+	}
+
+	public RandomOracle getROchallenge() {
+		return ROchallenge;
+	}
+
+	public void setROchallenge(RandomOracle rOchallenge) {
+		ROchallenge = rOchallenge;
+	}
+	
 	public IRing<IntegerRingElement> getZq() {
 		return Zq;
 	}
