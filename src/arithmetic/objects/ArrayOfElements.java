@@ -4,18 +4,18 @@ package arithmetic.objects;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ArrayOfElements<E> implements ByteTree{
 	
-	private ArrayList<E> elements;
+	private List<E> elements = new ArrayList<E>();
 	
 	public ArrayOfElements () {
 	}
 	
 	
-	
-	public ArrayOfElements (ByteTree node){
+	public ArrayOfElements (E[] arr) {
 		//TODO: implement
 	}
 	
@@ -23,8 +23,16 @@ public class ArrayOfElements<E> implements ByteTree{
 		return elements.get(index);
 	}
 	
+	public void setAt (int index, E newValue) {
+		elements.set(index, newValue);
+	}
+	
 	public void add(E element) {
 	    elements.add(element);
+	}
+	
+	public int getSize() {
+		return elements.size();
 	}
 
 	@Override

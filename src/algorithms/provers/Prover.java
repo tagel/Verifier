@@ -10,6 +10,8 @@ import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IntegerRingElement;
+import arithmetic.objects.Ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -24,17 +26,20 @@ public abstract class Prover {
 	 * @return
 	 * @throws Exception
 	 */
-    public ProductGroupElement encrypt(IGroupElement m, IntegerFieldElement s, ProductGroupElement pk, IGroup Gq){
+    public ProductGroupElement encrypt(ProductGroupElement m, ProductRingElement s, ProductGroupElement pk, IGroup Gq){
    
-    	
-    	IGroupElement y = pk.getArr()[1];
-		IGroupElement g = pk.getArr()[0];
-    	g = g.power(s.getElement());
-    	y = y.power(s.getElement()).mult(m);
-    	IGroupElement[] arr = new IGroupElement[2];
-    	arr[0] = g;
-    	arr[1] = y;
-    	ProductGroupElement encryptedMsg = new ProductGroupElement(arr);
+    	IGroupElement g = pk.getArr()[0];
+    	IGroupElement y = pk.getArr()[1];   	
+		ArrayOfElements<IntegerRingElement> powers = s.getArr();
+		ArrayOfElements<IGroupElement> ms = m.getArr();
+		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
+		ArrayOfElements<IGroupElement> right = new ArrayOfElements<IGroupElement>();
+		for (int i = 0; i < powers.getSize() ; i++) {
+			left.add(g.power(powers.getAt(i).getElement()));
+			right.add((y.power(powers.getAt(i).getElement()).mult(ms.getAt(i))));
+		}
+		
+    	ProductGroupElement encryptedMsg = createCiphertext(left,right);
     	return encryptedMsg; 
     }
 	
