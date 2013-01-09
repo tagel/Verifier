@@ -13,6 +13,9 @@ import java.util.Arrays;
 
 import cryptographic.primitives.CryptoUtils;
 
+import arithmetic.objects.Field.IField;
+import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.ECurveGroup;
 import arithmetic.objects.Groups.ECurveGroupElement;
 import arithmetic.objects.Groups.IGroup;
@@ -36,7 +39,7 @@ public class ElementsExtractor {
 	 * @return the integer that the byte array represents.
 	 */
 	public static BigInteger leafToInt (byte[] arr) { 
-		byte[] a = Arrays.copyOfRange(arr, 5, arr.length-1);
+		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
 		return new BigInteger(a);
 	}
 
@@ -47,7 +50,7 @@ public class ElementsExtractor {
 	 * @throws UnsupportedEncodingException 
 	 */
 	public static String leafToString (byte[] arr) throws UnsupportedEncodingException {
-		byte[] a = Arrays.copyOfRange(arr, 5, arr.length-1);
+		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
 		return new String(a, "ASCII");
 	}
 
@@ -56,8 +59,14 @@ public class ElementsExtractor {
 	 * @param arr = a byte array that represents a point.
 	 * @return the point that arr represents.
 	 */
-	public static Point nodeToPoint (byte[] arr) {
-		return null;
+	public static Point nodeToPoint (byte[] arr, IGroup group) {
+		byte[] arrX = Arrays.copyOfRange(arr, 5, 9+group.getFieldOrder().toByteArray().length);
+		byte[] arrY = Arrays.copyOfRange(arr, 10+group.getFieldOrder().toByteArray().length, arr.length);
+		IField<IntegerFieldElement> field = new PrimeOrderField(group.getFieldOrder());
+		IntegerFieldElement x = new IntegerFieldElement(leafToInt(arrX), field);
+		IntegerFieldElement y = new IntegerFieldElement(leafToInt(arrY), field);
+		return new Point(x,y);
+		
 	}
 
 	// if file is not found, returns null.
@@ -94,7 +103,7 @@ public class ElementsExtractor {
 		if (Gq instanceof ModGroup)
 			return new ModGroupElement(leafToInt(b),(ModGroup) Gq);
 		if (Gq instanceof ECurveGroup)
-			return new ECurveGroupElement(nodeToPoint(b), (ECurveGroup) Gq);
+			return new ECurveGroupElement(nodeToPoint(b, Gq), (ECurveGroup) Gq);
 		else {
 			System.out.println("ERROR: instance is not a group element");
 			return null;
@@ -182,6 +191,9 @@ public class ElementsExtractor {
 		return null;
 	}
 	
-	
+	public static ModGroupElement readModGroupElement (byte[] b) {
+		
+		return null;
+	}
 
 }
