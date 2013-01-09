@@ -5,22 +5,18 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import algorithms.params.Parameters;
-import algorithms.params.XMLProtocolInfo;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.Node;
 import arithmetic.objects.StringLeaf;
-import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
-import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFunction;
-import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.SHA2HashFunction;
 
 /**
@@ -253,7 +249,7 @@ public class MainVerifier {
 	}
 
 	// Part 6 of the algorithm
-	private boolean ReadLists() {
+	private boolean ReadLists() throws IOException {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				"Ciphertexts.bt");

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
+import algorithms.provers.ProveShuffling;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.Node;
@@ -21,6 +22,7 @@ import cryptographic.primitives.PseudoRandomGenerator;
 
 public class VerShuffling {
 
+	private static ArrayOfElements<ProductGroupElement> Liminus1;
 	private static ArrayOfElements<ProductGroupElement> Li;
 	private static Node PoSCommitment;
 	private static Node PoSReply;
@@ -42,7 +44,7 @@ public class VerShuffling {
 	 * @param ccpos
 	 * @return true if verification of shuffling was successful and false
 	 *         otherwise.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	static public boolean verify(String directory, byte[] prefixToRO,
 			int lambda, int N, int ne, int nr, int nv,
@@ -61,11 +63,42 @@ public class VerShuffling {
 			 * permutation commitments and send them to the shuffling prover.
 			 */
 
+			// First we set Li-1 = L0:
+			Liminus1 = L0;
+
+			// We read lists of ciphertexts until i=lambda.
+			boolean retValue = true; // We check it later
+			
 			for (int i = 1; i <= lambda; i++) {
-				if (!readFiles(i, directory, Gq))
-					return false;
-				
+				if (i==lambda) {
+					// Here we send the Llambda to the prover.
+					retValue = retValue
+							&& ProveShuffling.prove(prefixToRO, N, ne, nr, nv, prg, Gq,
+									pk, Li, Llambda, PermutationCommitment,
+									PoSCommitment, PoSReply);
+				} else {
+					if (!readFiles(i, directory, Gq))
+						retValue = false;
+					retValue = retValue
+							&& ProveShuffling.prove(prefixToRO, N, ne, nr, nv, prg,
+									Gq, pk, Liminus1, Li, PermutationCommitment,
+									PoSCommitment, PoSReply);
+				}
+				/* If retValue is false, it means that reading of elements failed
+				 * or the prover rejected */
+				//TODO check how we need to implement the equals
+				if (!retValue) //we need to check if Liminus1 == Li
+					if (i==lambda)
+						if (!Li.equalsShuffle(Llambda))
+							return false;
+					else 
+						if (!Li.equalsShuffle(Liminus1))
+							return false;
+				retValue = true;
 			}
+			
+			return true;
+			
 
 		} else {
 
@@ -80,7 +113,7 @@ public class VerShuffling {
 	 * 
 	 * @param i
 	 *            the relevant mix-server
-	 * @param gq 
+	 * @param gq
 	 * @return true if the reading succeded
 	 * @throws IOException
 	 */
@@ -117,11 +150,18 @@ public class VerShuffling {
 		 * The following steps create the objects from the byte[] and set the
 		 * global fields, that will be sent to the provers.
 		 */
-		PermutationCommitment = ElementsExtractor.createArrayOfGroupElements(bPermutationCommitment,Gq);
+		PermutationCommitment = ElementsExtractor.createArrayOfGroupElements(
+				bPermutationCommitment, Gq);
+
+		// If i==1 it means that Liminus1 = L0, as we did in the main loop
+		if (i != 1)
+			Liminus1 = Li;
 		Li = ElementsExtractor.createArrayOfCiphertexts(bLi, Gq);
+
+		// TODO each NODE needs to know which type are his children
 		PoSCommitment = new Node(bPoSCommitment);
 		PoSReply = new Node(bPoSReply);
-		
+
 		return true;
 	}
 
