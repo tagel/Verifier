@@ -28,8 +28,8 @@ public abstract class Prover {
 	 */
     public ProductGroupElement encrypt(ProductGroupElement m, ProductRingElement s, ProductGroupElement pk, IGroup Gq){
    
-    	IGroupElement g = pk.getArr()[0];
-    	IGroupElement y = pk.getArr()[1];   	
+    	IGroupElement g = pk.getArr().getAt(0);
+    	IGroupElement y = pk.getArr().getAt(1);   	
 		ArrayOfElements<IntegerRingElement> powers = s.getArr();
 		ArrayOfElements<IGroupElement> ms = m.getArr();
 		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
@@ -39,7 +39,7 @@ public abstract class Prover {
 			right.add((y.power(powers.getAt(i).getElement()).mult(ms.getAt(i))));
 		}
 		
-    	ProductGroupElement encryptedMsg = createCiphertext(left,right);
+    	ProductGroupElement encryptedMsg = ElementsExtractor.createCipherText(left, right);
     	return encryptedMsg; 
     }
 	

@@ -28,7 +28,7 @@ public class VerDec {
 	 * @param bs 
 	 * @return true if verification of decryption was successful and false otherwise.
 	 */
-	static public boolean verify(byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2) {
+	static public boolean verify(String directory, byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2) {
 		// TODO Auto-generated method stub
 		return false;
 	}
