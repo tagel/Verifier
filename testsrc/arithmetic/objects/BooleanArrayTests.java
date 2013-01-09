@@ -26,4 +26,18 @@ public class BooleanArrayTests {
 		Assert.assertEquals(true, boolArr[1]);
 		Assert.assertEquals(false, boolArr[2]);
 	}
+	
+	@Test
+	public void BooleanArrayTest() {
+
+		boolean[] arrOfBooleans = {true,true,false};
+		BooleanArrayElement bae = new BooleanArrayElement(arrOfBooleans);
+		
+		byte[] byteArr = bae.toByteArray();
+		BooleanArrayElement bob = new BooleanArrayElement(byteArr);
+		boolean[] boolArr = bob.getBooleanArray();
+		Assert.assertEquals(true, boolArr[0]);
+		Assert.assertEquals(true, boolArr[1]);
+		Assert.assertEquals(false, boolArr[2]);
+	}
 }
