@@ -26,7 +26,7 @@ import cryptographic.primitives.RandomOracle;
  */
 public class ProveShuffling extends Prover {
 
-	public boolean prove(
+	public static boolean prove(
 			RandomOracle ROSeed,
 			RandomOracle ROChallenge,
 			byte[] ro,

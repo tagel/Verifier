@@ -26,7 +26,7 @@ public abstract class Prover {
 	 * @return
 	 * @throws Exception
 	 */
-    public ProductGroupElement encrypt(ProductGroupElement m, ProductRingElement s, ProductGroupElement pk, IGroup Gq){
+    public static ProductGroupElement encrypt(ProductGroupElement m, ProductRingElement s, ProductGroupElement pk, IGroup Gq){
    
     	IGroupElement g = pk.getArr().getAt(0);
     	IGroupElement y = pk.getArr().getAt(1);   	
@@ -51,7 +51,7 @@ public abstract class Prover {
      * @return a seed represented as a byte[]
      * @throws UnsupportedEncodingException
      */
-    protected byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed, byte[] ro)
+    protected static byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed, byte[] ro)
 			throws UnsupportedEncodingException {
 		byte[] seed = ROSeed.getRandomOracleOutput(ElementsExtractor
 				.concatArrays(ro, nodeForSeed.toByteArray()));
@@ -67,7 +67,7 @@ public abstract class Prover {
 	 * @param u - the array of Pedersen Commitments
 	 * @return A - a multiplication of Ui^Ei N times
 	 */
-	 protected IGroupElement computeA(int N, int Ne, byte[] seed,
+	 protected static IGroupElement computeA(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u) {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
@@ -93,7 +93,7 @@ public abstract class Prover {
 	 * @param prg - Pseudo-random generator used to derive random vectors for batching
 	 * @return E, the multiplication of Ei N times
 	 */
-	protected BigInteger computeE(int N, int Ne, byte[] seed, PseudoRandomGenerator prg) {
+	protected static BigInteger computeE(int N, int Ne, byte[] seed, PseudoRandomGenerator prg) {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
 		byte[] ByteArrToBigInt = prg.getNextPRGOutput(length);
@@ -117,7 +117,7 @@ public abstract class Prover {
 	 * @param wInput - array of input ciphertexts
 	 * @return F, the multiplication of Wi^Ei N times
 	 */
-	protected ProductGroupElement computeF(int N, int Ne, byte[] seed,
+	protected static ProductGroupElement computeF(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg, ArrayOfElements<ProductGroupElement> wInput) {
 		
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
@@ -143,7 +143,7 @@ public abstract class Prover {
 	 * @param N - size of the arrays
 	 * @return C, the multiplication of Ui N times
 	 */
-	protected IGroupElement computeC(ArrayOfElements<IGroupElement> u,
+	protected static IGroupElement computeC(ArrayOfElements<IGroupElement> u,
 			ArrayOfElements<IGroupElement> h, int N) {
 		IGroupElement CNumerator = u.getAt(0);
 		IGroupElement CDenominator = h.getAt(0);
@@ -163,7 +163,7 @@ public abstract class Prover {
 	 * @param N - size of the arrays
 	 * @return D, the multiplication of Ui N times
 	 */
-	protected IGroupElement computeD(BigInteger E, ArrayOfElements<IGroupElement> B,
+	protected static IGroupElement computeD(BigInteger E, ArrayOfElements<IGroupElement> B,
 			ArrayOfElements<IGroupElement> h, int N) {
 		IGroupElement D = B.getAt(N - 1).divide(h.getAt(0).power(E));
 		return D;
@@ -181,7 +181,7 @@ public abstract class Prover {
 	 * @param Ka - an element in Zq
 	 * @return true if the equation is correct and false otherwise.
 	 */
-	protected boolean verifyAvAtag(IGroupElement A, IGroupElement Atag, BigInteger v,
+	protected static boolean verifyAvAtag(IGroupElement A, IGroupElement Atag, BigInteger v,
 			ArrayOfElements<IntegerFieldElement> Ke, IGroupElement g, int N,
 			ArrayOfElements<IGroupElement> h, IntegerFieldElement Ka) {
 
