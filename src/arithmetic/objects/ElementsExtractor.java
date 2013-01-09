@@ -24,6 +24,8 @@ import arithmetic.objects.Groups.ModGroup;
 import arithmetic.objects.Groups.ModGroupElement;
 import arithmetic.objects.Groups.Point;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
 
 
 
@@ -179,6 +181,14 @@ public class ElementsExtractor {
 		Node node = new Node(b);
 		for (int i=0; i<node.getChildrenSize(); i++)
 			ret.add(createGroupElement(node.getAt(i).toByteArray(), group));
+		return ret;
+	}
+	
+	public static ArrayOfElements<IntegerRingElement> createRingElementArray (byte[] b, IRing<IntegerRingElement> ring) throws UnsupportedEncodingException {
+		ArrayOfElements<IntegerRingElement> ret = new ArrayOfElements<IntegerRingElement>();
+		Node node = new Node(b);
+		for (int i=0; i<node.getChildrenSize(); i++) 
+			ret.add(new IntegerRingElement(leafToInt(node.getAt(i).toByteArray()), ring));
 		return ret;
 	}
 }
