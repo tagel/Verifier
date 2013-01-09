@@ -40,8 +40,9 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput,
 			int width,
-			ArrayOfElements<ArrayOfElements<IGroupElement>> permutationCommitment,
+			ArrayOfElements<IGroupElement> permutationCommitment,
 			Node PoSCommitment, Node PoSReply) {
+		
 
 		try {
 
@@ -49,17 +50,15 @@ public class ProveShuffling extends Prover {
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
 			 * Pedersen commitments in Gq
 			 */
-			ArrayOfElements<IGroupElement> u = new ArrayOfElements<IGroupElement>(
-					permutationCommitment);
+			ArrayOfElements<IGroupElement> u = permutationCommitment;
 
 			/**
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
-
 			// creating B,A',B',C',D',F'
-			ArrayOfElements<IGroupElement> B = new ArrayOfElements<IGroupElement>(
+			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>)(
 					PoSCommitment.getAt(0));
-			ArrayOfElements<IGroupElement> Btag = new ArrayOfElements<IGroupElement>(
+			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>)(
 					PoSCommitment.getAt(2));
 
 			IGroupElement Atag = ElementsExtractor.createGroupElement(
@@ -90,16 +89,15 @@ public class ProveShuffling extends Prover {
 					Zq);
 			ProductRingElement Kf = new ProductRingElement(PoSReply.getAt(5));
 
-			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
+			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>)(
 					PoSReply.getAt(1));
 
-			ArrayOfElements<IntegerFieldElement> Ke = new ArrayOfElements<IntegerFieldElement>(
+			ArrayOfElements<IntegerFieldElement> Ke = (ArrayOfElements<IntegerFieldElement>)(
 					PoSReply.getAt(4));
 
 			/**
 			 * 2 - computing the seed
 			 */
-
 			StringLeaf stringLeaf = new StringLeaf("generators");
 			byte[] independentSeed = ROSeed
 					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
@@ -120,7 +118,6 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 3 - Computation of A and F
 			 */
-
 			IGroupElement A = computeA(N, Ne, seed, prg, u);
 			ProductGroupElement F = computeF(N, Ne, seed, prg, wInput);
 
@@ -129,7 +126,7 @@ public class ProveShuffling extends Prover {
 			 */
 			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
 
-			Node nodeForChallenge = new Node(null);
+			Node nodeForChallenge = new Node();
 			nodeForChallenge.add(leaf);
 			nodeForChallenge.add(PoSCommitment);
 
@@ -177,7 +174,6 @@ public class ProveShuffling extends Prover {
 			/*
 			 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 			 */
-			
 			ProductGroupElement leftF = F.power(v).mult(Ftag);
 
 			ProductGroupElement W = wOutput.getAt(0).power(Ke.getAt(0).getElement());
