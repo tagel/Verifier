@@ -33,7 +33,7 @@ public class BooleanArrayElement implements ByteTree {
 		for (int i=0; i<4; i++)
 			b[i+1] = a[i];
 		for (int i=0; i<arr.length; i++)
-			if (arr[i] = true) b[i+5] = 1;
+			if (arr[i] == true) b[i+5] = 1;
 			else b[i+5] = 0;
 		return b;
 		
