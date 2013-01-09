@@ -2,11 +2,11 @@ package arithmetic.objects;
 
 import java.io.UnsupportedEncodingException;
 
-public class rawElement implements ByteTree {
+public class RawElement implements ByteTree {
 	
 	private byte[] byteArr;
 	
-	public rawElement (byte[] byteArr) {
+	public RawElement (byte[] byteArr) {
 		this.byteArr = byteArr;
 	}
 
