@@ -12,6 +12,9 @@ import arithmetic.objects.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
+import arithmetic.objects.Ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 
 /**
@@ -42,6 +45,7 @@ public class VerShuffling {
 	 * @param Llambda
 	 * @param posc
 	 * @param ccpos
+	 * @param Zq 
 	 * @return true if verification of shuffling was successful and false
 	 *         otherwise.
 	 * @throws IOException
@@ -51,7 +55,7 @@ public class VerShuffling {
 			PseudoRandomGenerator prg, IGroup Gq, ProductGroupElement pk,
 			ArrayOfElements<ProductGroupElement> L0,
 			ArrayOfElements<ProductGroupElement> Llambda, boolean posc,
-			boolean ccpos) throws IOException {
+			boolean ccpos, IRing<IntegerRingElement> Zq) throws IOException {
 
 		int maxciph = readMaxciph(directory);
 
@@ -77,7 +81,7 @@ public class VerShuffling {
 									pk, Li, Llambda, PermutationCommitment,
 									PoSCommitment, PoSReply);
 				} else {
-					if (!readFiles(i, directory, Gq))
+					if (!readFiles(i, directory, Gq, Zq))
 						retValue = false;
 					retValue = retValue
 							&& ProveShuffling.prove(prefixToRO, N, ne, nr, nv, prg,
@@ -117,7 +121,7 @@ public class VerShuffling {
 	 * @return true if the reading succeded
 	 * @throws IOException
 	 */
-	private static boolean readFiles(int i, String directory, IGroup Gq)
+	private static boolean readFiles(int i, String directory, IGroup Gq, IRing<IntegerRingElement> Zq)
 			throws IOException {
 		/*
 		 * The following steps read the files as byte[]. These byte[] objects
@@ -150,7 +154,7 @@ public class VerShuffling {
 		 * The following steps create the objects from the byte[] and set the
 		 * global fields, that will be sent to the provers.
 		 */
-		PermutationCommitment = ElementsExtractor.createArrayOfGroupElements(
+		PermutationCommitment = ElementsExtractor.createGroupElementArray(
 				bPermutationCommitment, Gq);
 
 		// If i==1 it means that Liminus1 = L0, as we did in the main loop
@@ -158,12 +162,57 @@ public class VerShuffling {
 			Liminus1 = Li;
 		Li = ElementsExtractor.createArrayOfCiphertexts(bLi, Gq);
 
-		// TODO each NODE needs to know which type are his children
+		
+		//TODO reject if the interpretation fails
+		/*each NODE needs to know which type are his children - 
+		 * First we create the nodes like a generic one, and then we create
+		 * the appropriate types from the byte[] data, according to prover Algorithm
+		 */
 		PoSCommitment = new Node(bPoSCommitment);
-		IGroupElement one = ElementsExtractor.createGroupElement(PoSCommitment.getAt(1).toByteArray(), Gq);
-		PoSCommitment
+		
+		//Read the A', C', D' GroupElements
+		IGroupElement temp = ElementsExtractor.createGroupElement(PoSCommitment.getAt(1).toByteArray(), Gq);
+		PoSCommitment.setAt(1, temp);
+		temp = ElementsExtractor.createGroupElement(PoSCommitment.getAt(3).toByteArray(), Gq);
+		PoSCommitment.setAt(3, temp);
+		temp = ElementsExtractor.createGroupElement(PoSCommitment.getAt(4).toByteArray(), Gq);
+		PoSCommitment.setAt(4, temp);
+		
+		//Read F' Ciphertext
+		ProductGroupElement tempF = ElementsExtractor.createCipherText(PoSCommitment.getAt(5).toByteArray(), Gq);
+		PoSCommitment.setAt(5, tempF);
+		
+		//Read B and B' arrays of N elements in Gq
+		ArrayOfElements<IGroupElement> tempB = ElementsExtractor.createGroupElementArray(
+				PoSCommitment.getAt(0).toByteArray(), Gq);
+		PoSCommitment.setAt(0, tempF);
+		tempB = ElementsExtractor.createGroupElementArray(
+				PoSCommitment.getAt(2).toByteArray(), Gq);
+		PoSCommitment.setAt(2, tempF);
+		
 		
 		PoSReply = new Node(bPoSReply);
+		
+		//Read Ka, Kc, Kd as RingElements
+		IntegerRingElement tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply.getAt(0).toByteArray()), Zq);
+		PoSReply.setAt(0, temp);
+		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply.getAt(2).toByteArray()), Zq);
+		PoSReply.setAt(2, temp);
+		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply.getAt(3).toByteArray()), Zq);
+		PoSReply.setAt(3, temp);
+		
+		//Read Kf as productRingElement
+		ProductRingElement tempp = new ProductRingElement(PoSReply.getAt(5).toByteArray(),Zq);
+		PoSReply.setAt(5, tempp);
+				
+		//Read Kb and Ke as arrays of Ring Elements
+		ArrayOfElements<IntegerRingElement> tempK = ElementsExtractor.createRingElementArray(
+				PoSReply.getAt(1).toByteArray(), Gq);
+		PoSCommitment.setAt(1, tempK);
+		tempK = ElementsExtractor.createGroupElementArray(
+				PoSReply.getAt(4).toByteArray(), Gq);
+		PoSCommitment.setAt(4, tempK);
+		
 
 		return true;
 	}

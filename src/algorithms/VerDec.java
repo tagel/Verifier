@@ -3,6 +3,8 @@ package algorithms;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 
 
@@ -26,9 +28,10 @@ public class VerDec {
 	 * @param j 
 	 * @param i 
 	 * @param bs 
+	 * @param iRing 
 	 * @return true if verification of decryption was successful and false otherwise.
 	 */
-	static public boolean verify(String directory, byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2) {
+	static public boolean verify(String directory, byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2, IRing<IntegerRingElement> iRing) {
 		// TODO Auto-generated method stub
 		return false;
 	}
