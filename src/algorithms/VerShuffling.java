@@ -89,7 +89,7 @@ public class VerShuffling {
 				//TODO check how we need to implement the equals
 				if (!retValue) //we need to check if Liminus1 == Li
 					if (i==lambda)
-						if (!Li.equalsShuffle(Llambda))
+						if (!Llambda.equalsShuffle(Li))
 							return false;
 					else 
 						if (!Li.equalsShuffle(Liminus1))
@@ -160,6 +160,9 @@ public class VerShuffling {
 
 		// TODO each NODE needs to know which type are his children
 		PoSCommitment = new Node(bPoSCommitment);
+		IGroupElement one = ElementsExtractor.createGroupElement(PoSCommitment.getAt(1).toByteArray(), Gq);
+		PoSCommitment
+		
 		PoSReply = new Node(bPoSReply);
 
 		return true;
@@ -167,7 +170,7 @@ public class VerShuffling {
 
 	/**
 	 * This method tries to read maxciph - if the file doesn't exist it catches
-	 * the exception and returns "0". If the file exists, etuns the relevent
+	 * the exception and returns "0". If the file exists, returns the relevant
 	 * integer.
 	 * 
 	 * @param directory
