@@ -13,8 +13,6 @@ import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
-import arithmetic.objects.Groups.ModGroup;
-import arithmetic.objects.Groups.ModGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
 import arithmetic.objects.Ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
@@ -41,6 +39,7 @@ public class ProveShuffling extends Prover {
 			ProductGroupElement pk,
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput,
+			int width,
 			ArrayOfElements<ArrayOfElements<IGroupElement>> permutationCommitment,
 			Node PoSCommitment, Node PoSReply) {
 
@@ -186,8 +185,14 @@ public class ProveShuffling extends Prover {
 				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
 			}
 
-			ProductGroupElement one = new ProductGroupElement(BigInteger.ONE, w);
-			ProductGroupElement rigthF = encrypt(one,Kf,pk,Gq);
+			// create ProductGroupElement of 1s
+			ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
+			for (int i = 0; i < width; i++) {
+				arrOfOnes.add(Gq.one());
+			}
+			
+			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
+			ProductGroupElement rigthF = encrypt(ones,Kf,pk,Gq);
 			if (!leftF.equal(rigthF)) {
 				return false;
 			}
