@@ -24,6 +24,8 @@ import arithmetic.objects.Groups.ModGroup;
 import arithmetic.objects.Groups.ModGroupElement;
 import arithmetic.objects.Groups.Point;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
 
 
 
@@ -168,32 +170,25 @@ public class ElementsExtractor {
 		return null;
 	}
 	
-	public static ProductGroupElement createCipherText (ArrayOfElements<IGroupElement> left, ArrayOfElements<IGroupElement> right) {
+	public static ProductGroupElement createCiphertext (ArrayOfElements<IGroupElement> left, ArrayOfElements<IGroupElement> right) {
 		return null;
 		//TODO: IMPLEMENT
 	}
 
-	/**
-	 * @param p = the order of the underlying field Zp.
-	 * @param seed used by the PRG to produce a random string.
-	 * @return an array of modular group elements derived from a random string.
-	 */
-	public static int[] deriveModGroupElements (int p, int seed) {
-		return null;
-	}
-
-	/**
-	 * @param q = the order of the underlying field Zq.
-	 * @param seed used by the PRG to produce a random string.
-	 * @return an array of elliptic curve points derived from a random string
-	 */
-	public static Point[] deriveECurveGroupElements (int q, int seed) {
-		return null;
+	
+	public static ArrayOfElements<IGroupElement> createGroupElementArray (byte[] b, IGroup group) throws UnsupportedEncodingException {
+		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
+		Node node = new Node(b);
+		for (int i=0; i<node.getChildrenSize(); i++)
+			ret.add(createGroupElement(node.getAt(i).toByteArray(), group));
+		return ret;
 	}
 	
-	public static ModGroupElement readModGroupElement (byte[] b) {
-		
-		return null;
+	public static ArrayOfElements<IntegerRingElement> createRingElementArray (byte[] b, IRing<IntegerRingElement> ring) throws UnsupportedEncodingException {
+		ArrayOfElements<IntegerRingElement> ret = new ArrayOfElements<IntegerRingElement>();
+		Node node = new Node(b);
+		for (int i=0; i<node.getChildrenSize(); i++) 
+			ret.add(new IntegerRingElement(leafToInt(node.getAt(i).toByteArray()), ring));
+		return ret;
 	}
-
 }

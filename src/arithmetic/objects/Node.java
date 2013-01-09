@@ -8,16 +8,34 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class Node implements ByteTree {
 
-	private ArrayList<byte[]> children;
+	private List<ByteTree> children = new ArrayList<ByteTree>();
 	private int numOfChildren;
+	byte[] data;
 
 
 	public Node (byte[] bt) {
-		//TODO: implement
+		if (bt[0]==0) { //it is a node with children
+			numOfChildren = intFromByteArray(Arrays.copyOfRange(bt, 1, 5));
+			data = null;
+			bt = Arrays.copyOfRange(bt, 5, bt.length);
+			for (int i = 0; i < this.numOfChildren; i++) {
+				int endChildIndex = getEndIndex(bt, 0);
+				ByteTree child = new RawElement (Arrays.copyOfRange(bt, 0, endChildIndex));
+				children.add(child);
+				bt = Arrays.copyOfRange(bt, endChildIndex, bt.length);
+			}
+		}
+		else { // it is a leaf
+			children = null;
+			numOfChildren = 0;
+			data = bt;
+		}
+
 	}
 
 	public Node(ByteTree[] arr) {
@@ -28,47 +46,54 @@ public class Node implements ByteTree {
 
 	}
 
-	private int getEndObjectIndex(byte[] b, int i) {
+	private int getEndIndex(byte[] b, int i) {
 		if (b[i] == 1) {
-			int size = intFromByteArray(Arrays.copyOfRange(b, i+1, 4));
-			return i + 4 + size + 1;
+			int size = intFromByteArray(Arrays.copyOfRange(b, i+1, i+5));
+			return (i+4+size+1);
 		}
-		if (b[i] == 0) {
-			int numOfChildren = calcSize(object, i+1, 4);
+		else {
+			int numOfChildren = intFromByteArray(Arrays.copyOfRange(b, i+1, i+5));
 			i=i+5;
 			for (int j = 0; j < numOfChildren; j++) {
-				i = getEndObjectIndex(object, i);
+				i = getEndIndex(b, i);
 			}
 			return i;
 		}
 	}
+
+
+	public int intFromByteArray (byte[] a) {
+		ByteBuffer b = ByteBuffer.wrap(a);
+		return b.getInt();
+	}
+
+	public ByteTree getAt (int index) {
+		return children.get(index);
+	}
 	
-	
-		public int intFromByteArray (byte[] a) {
-			ByteBuffer b = ByteBuffer.wrap(a);
-		    return b.getInt();
-		}
-		
-		public ByteTree getAt (int index) {
-			return children.get(index);
-		}
+	public void setAt (int index, ByteTree newValue) {
+		children.set(index, newValue);
+	}
 
-		public void add(ByteTree element) {
-			children.add(element);
-		}
+	public void add(ByteTree element) {
+		children.add(element);
+	}
 
-		public byte[] toByteArray() throws UnsupportedEncodingException {
-			byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(children.size()).array();
-			byte[] b = new byte[a.length+1];
-			System.arraycopy(a, 0, b, 1, a.length);
-			b[0] = 0;
-			for (int i=0; i<children.size(); i++) {
-				byte[] c = children.get(i).toByteArray();
-				b = Arrays.copyOf(b, b.length+c.length);
-				for (int j=b.length; j<b.length+c.length; j++)
-					b[j]=c[j-b.length];
-			}
-			return b;
+	public int getChildrenSize() {
+		return children.size();
+	}
+	public byte[] toByteArray() throws UnsupportedEncodingException {
+		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(children.size()).array();
+		byte[] b = new byte[a.length+1];
+		System.arraycopy(a, 0, b, 1, a.length);
+		b[0] = 0;
+		for (int i=0; i<children.size(); i++) {
+			byte[] c = children.get(i).toByteArray();
+			b = Arrays.copyOf(b, b.length+c.length);
+			for (int j=b.length; j<b.length+c.length; j++)
+				b[j]=c[j-b.length];
 		}
+		return b;
+	}
 
-			}
+}
