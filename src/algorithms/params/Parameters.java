@@ -12,11 +12,11 @@ import cryptographic.primitives.PseudoRandomGenerator;
 import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.BooleanArrayElement;
 import arithmetic.objects.Node;
-import arithmetic.objects.Field.IField;
-import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
 
 /**
  * This class describes an object that contains the parameters used by the
@@ -70,7 +70,7 @@ public class Parameters {
 	//Derived Objects
 	private byte[] prefixToRO;
 	private IGroup Gq;
-	private IField<IntegerFieldElement> Zq;
+	private IRing<IntegerRingElement> Zq;
 	PseudoRandomGenerator prg;
 
 	// parameters from directory
@@ -112,7 +112,7 @@ public class Parameters {
 
 	// MIX -- The parameters of each party
 	private ArrayOfElements<IGroupElement> mixPublicKey;//Used in Keys Verifier
-	private ArrayOfElements<IntegerFieldElement> mixSecretKey;//Used in Keys Verifier
+	private ArrayOfElements<IntegerRingElement> mixSecretKey;//Used in Keys Verifier
 
 	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts;
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
@@ -131,7 +131,7 @@ public class Parameters {
 	//TODO: Should we really need all of these mix-params?
 	private void initializeMix() {
 		 mixPublicKey = new ArrayOfElements<IGroupElement>();
-		 mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
+		 mixSecretKey = new ArrayOfElements<IntegerRingElement>();
 		 mixCiphertexts = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
 		 mixPermutationCommitment = new
 		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
@@ -235,12 +235,12 @@ public class Parameters {
 	//*****************************************
 	//**********Getters And Setters************
 	//*****************************************
-	public IField<IntegerFieldElement> getZq() {
+	public IRing<IntegerRingElement> getZq() {
 		return Zq;
 	}
 
-	public void setZq(IField<IntegerFieldElement> zq) {
-		Zq = zq;
+	public void setZq(IRing<IntegerRingElement> ring) {
+		Zq = ring;
 	}
 
 	public int getN() {
@@ -530,12 +530,12 @@ public class Parameters {
 		this.mixPublicKey = mixPublicKey;
 	}
 
-	public ArrayOfElements<IntegerFieldElement> getMixSecretKey() {
+	public ArrayOfElements<IntegerRingElement> getMixSecretKey() {
 		return mixSecretKey;
 	}
 
 	public void setMixSecretKey(
-			ArrayOfElements<IntegerFieldElement> mixSecretKey) {
+			ArrayOfElements<IntegerRingElement> mixSecretKey) {
 		this.mixSecretKey = mixSecretKey;
 	}
 

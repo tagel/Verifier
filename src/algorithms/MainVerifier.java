@@ -11,10 +11,11 @@ import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.Node;
 import arithmetic.objects.StringLeaf;
-import arithmetic.objects.Field.IntegerFieldElement;
-import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
+import arithmetic.objects.Ring.Ring;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFunction;
 import cryptographic.primitives.SHA2HashFunction;
@@ -110,7 +111,7 @@ public class MainVerifier {
 					params.getNe(), params.getPrg(), params.getGq(),
 					params.getFullPublicKey(), params.getCiphertexts(),
 					params.getShuffledCiphertexts(), params.isPosc(),
-					params.isCcpos()))
+					params.isCcpos(),params.getZq()))
 				return false;
 
 		// 7b - Verify Decryption
@@ -122,7 +123,7 @@ public class MainVerifier {
 								params.getNv(), params.getPrg(),
 								params.getGq(), params.getFullPublicKey(),
 								params.getShuffledCiphertexts(),
-								params.getPlaintexts()))
+								params.getPlaintexts(),params.getZq()))
 					return false;
 
 			if (params.getType().equals("decryption"))
@@ -130,7 +131,7 @@ public class MainVerifier {
 						params.getPrefixToRO(), params.getN(), params.getNe(),
 						params.getNr(), params.getNv(), params.getPrg(),
 						params.getGq(), params.getFullPublicKey(),
-						params.getCiphertexts(), params.getPlaintexts()))
+						params.getCiphertexts(), params.getPlaintexts(),params.getZq()))
 					return false;
 
 		}
@@ -151,8 +152,9 @@ public class MainVerifier {
 			return false;
 		}
 
-		// create the field
-		params.setZq(new PrimeOrderField(params.getGq().getFieldOrder()));
+		// create the Ring
+		IRing<IntegerRingElement> temp = new Ring(params.getGq().getFieldOrder());
+		params.setZq(temp);
 
 		// Set the Hashfunction and the pseudo random generator
 		H = new SHA2HashFunction(params.getSh());
@@ -200,7 +202,7 @@ public class MainVerifier {
 
 		params.setFullPublicKey(pk);
 		IGroupElement yi;
-		IntegerFieldElement xi;
+		IntegerRingElement xi;
 		int i;
 
 		// Here we get the Identity element and multiply all of the yi's
@@ -225,7 +227,7 @@ public class MainVerifier {
 		// Here we check the secret keys - xi:
 		// Here the file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
-			xi = new IntegerFieldElement(
+			xi = new IntegerRingElement(
 					ElementsExtractor.leafToInt(ElementsExtractor.btFromFile(
 							params.getDirectory(), "proofs", "SecretKey"
 									+ (i < 10 ? "0" : "") + (i + 1) + ".bt")),
