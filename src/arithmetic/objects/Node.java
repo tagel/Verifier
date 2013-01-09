@@ -8,11 +8,12 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class Node implements ByteTree {
 
-	private ArrayList<ByteTree> children;
+	private List<ByteTree> children = new ArrayList<ByteTree>();
 	private int numOfChildren;
 	byte[] data;
 
@@ -68,6 +69,10 @@ public class Node implements ByteTree {
 
 	public ByteTree getAt (int index) {
 		return children.get(index);
+	}
+	
+	public void setAt (int index, ByteTree newValue) {
+		children.set(index, newValue);
 	}
 
 	public void add(ByteTree element) {
