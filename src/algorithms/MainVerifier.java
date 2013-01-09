@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
@@ -34,11 +35,11 @@ public class MainVerifier {
 
 	/**
 	 * @return true if verification was successful and false otherwise.
-	 * @throws UnsupportedEncodingException
+	 * @throws IOException
 	 */
 	public boolean verify(String protInfo, String directory, String type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
-			throws UnsupportedEncodingException {
+			throws IOException {
 
 		// *****Section 1 in the algorithm*****
 		// First create the Parameters object using the
@@ -102,48 +103,40 @@ public class MainVerifier {
 
 		// *******Section 7 in the Algorithm*********
 		// Here we call the subroutines of the verifier
-		//7a
+		// 7a -- Verify Shuffling
 		if ((params.getType().equals("mixing") || params.getType().equals(
 				"decryption"))
 				&& (params.isPosc() || params.isCcpos()))
 
-			if (!VerShuffling.verify(params.getPrefixToRO(),
-					params.getThreshold(),params.getN(), params.getNe(), params.getNr(),
+			if (!VerShuffling.verify(params.getDirectory(),
+					params.getPrefixToRO(), params.getThreshold(),
+					params.getN(), params.getNe(), params.getNr(),
 					params.getNe(), params.getPrg(), params.getGq(),
 					params.getFullPublicKey(), params.getCiphertexts(),
 					params.getShuffledCiphertexts(), params.isPosc(),
 					params.isCcpos()))
 				return false;
-		
-		//7b - Verify Decryption
-		if (params.isDec()){
-			if (params.getType().equals("mixing")) 
-				if(!VerDec.verify(params.getPrefixToRO(),
-								params.getN(),
-								params.getNe(),
-								params.getNr(),
-								params.getNv(),
-								params.getPrg(),
-								params.getGq(),
-								params.getFullPublicKey(),
+
+		// 7b - Verify Decryption
+		if (params.isDec()) {//isDec==true means we need to check the decryption.
+			if (params.getType().equals("mixing"))
+				if (!VerDec
+						.verify(params.getDirectory(), params.getPrefixToRO(),
+								params.getN(), params.getNe(), params.getNr(),
+								params.getNv(), params.getPrg(),
+								params.getGq(), params.getFullPublicKey(),
 								params.getShuffledCiphertexts(),
 								params.getPlaintexts()))
 					return false;
-			
+
 			if (params.getType().equals("decryption"))
-				if(!VerDec.verify(params.getPrefixToRO(),
-						params.getN(),
-						params.getNe(),
-						params.getNr(),
-						params.getNv(),
-						params.getPrg(),
-						params.getGq(),
-						params.getFullPublicKey(),
-						params.getCiphertexts(),
-						params.getPlaintexts()))
-			return false;
-				
-			
+				if (!VerDec.verify(params.getDirectory(),
+						params.getPrefixToRO(), params.getN(), params.getNe(),
+						params.getNr(), params.getNv(), params.getPrg(),
+						params.getGq(), params.getFullPublicKey(),
+						params.getCiphertexts(), params.getPlaintexts()))
+					return false;
+
 		}
 
 		return true;
@@ -172,7 +165,7 @@ public class MainVerifier {
 		return true;
 	}
 
-	private void createPrefixToRo() {
+	private void createPrefixToRo() throws UnsupportedEncodingException {
 		String s = params.getSessionID() + "." + params.getAuxsid();
 		ByteTree btAuxid = new StringLeaf(s);
 		ByteTree version_proof = new StringLeaf(params.getVersion());
@@ -202,14 +195,12 @@ public class MainVerifier {
 		params.setPrefixToRO(H.digest((Seed)));
 	}
 
-	private boolean ReadKeys() {
-		// TODO: Change the file names and the paths so it will be generic
-		// TODO: and will fit to the new constructor.
+	private boolean ReadKeys() throws IOException {
 		ProductGroupElement pk = ElementsExtractor.createSimplePGE(
 				ElementsExtractor.btFromFile(params.getDirectory(),
 						"FullPublicKey.bt"), params.getGq());
-		IGroupElement y = pk.getArr()[1];
-		IGroupElement g = pk.getArr()[0];
+		IGroupElement y = pk.getArr().getAt(1);
+		IGroupElement g = pk.getArr().getAt(0);
 
 		params.setFullPublicKey(pk);
 		IGroupElement yi;
@@ -252,6 +243,7 @@ public class MainVerifier {
 			xi = params.getMixSecretKey().getAt(i);
 			yi = params.getMixPublicKey().getAt(i);
 
+			//TODO: check this step
 			if ((xi != null) && !(yi.equal(g.power(xi.getElement()))))
 				return false;
 		}
@@ -305,19 +297,11 @@ public class MainVerifier {
 				return false;
 
 			ArrayOfElements<ProductGroupElement> plaintexts = ElementsExtractor
-					.createArrayOfCiphertexts(file, params.getGq());
+					.createArrayOfPlaintexts(file, params.getGq());
 			params.setPlaintexts(plaintexts);
 		}
 
 		return true;
-	}
-
-	/**
-	 * @return true if the proof params are valid and false otherwise.
-	 */
-	private boolean isProofParamsValid() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

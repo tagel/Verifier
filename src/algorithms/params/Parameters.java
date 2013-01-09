@@ -111,8 +111,8 @@ public class Parameters {
 	private int N; //size of the arrays
 
 	// MIX -- The parameters of each party
-	private ArrayOfElements<IGroupElement> mixPublicKey;//V
-	private ArrayOfElements<IntegerFieldElement> mixSecretKey;//V
+	private ArrayOfElements<IGroupElement> mixPublicKey;//Used in Keys Verifier
+	private ArrayOfElements<IntegerFieldElement> mixSecretKey;//Used in Keys Verifier
 
 	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts;
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
@@ -128,6 +128,7 @@ public class Parameters {
 	private ArrayOfElements<Node> mixDecrFactCommitment;
 	private ArrayOfElements<Node> mixDecrFactReply;
 
+	//TODO: Should we really need all of these mix-params?
 	private void initializeMix() {
 		 mixPublicKey = new ArrayOfElements<IGroupElement>();
 		 mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
@@ -226,8 +227,7 @@ public class Parameters {
 		}
 
 		w = text.nextInt();
-		System.out.println(w);
-		
+				
 		return true;
 	}
 
