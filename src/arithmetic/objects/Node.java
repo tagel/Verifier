@@ -20,6 +20,9 @@ public class Node implements ByteTree {
 		//TODO: implement
 	}
 	
+	public Node(ByteTree[] arr) {
+		//TODO: IMPLEMENT
+	}
 	
 	public Node() {
 		

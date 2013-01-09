@@ -143,10 +143,23 @@ public class ElementsExtractor {
 		}
 	}
 	
-	public static ArrayOfElements<ProductGroupElement> createArrayOfCipherTexts (byte[] data) {
+	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data) {
 		return null;
 	}
-
+	
+	
+	public static ArrayOfElements<ProductGroupElement> createArrayOfPlaintexts (byte[] data) {
+		return null;
+	}
+	
+	public static ProductGroupElement createSimplePGE (byte[] bt, IGroup group) {
+		return null;
+	}
+	
+	public static ProductGroupElement createCipherText (ArrayOfElements<IGroupElement> left, ArrayOfElements<IGroupElement> right) {
+		return null;
+		//TODO: IMPLEMENT
+	}
 
 	/**
 	 * @param p = the order of the underlying field Zp.
