@@ -173,23 +173,6 @@ public class ElementsExtractor {
 		//TODO: IMPLEMENT
 	}
 
-	/**
-	 * @param p = the order of the underlying field Zp.
-	 * @param seed used by the PRG to produce a random string.
-	 * @return an array of modular group elements derived from a random string.
-	 */
-	public static int[] deriveModGroupElements (int p, int seed) {
-		return null;
-	}
-
-	/**
-	 * @param q = the order of the underlying field Zq.
-	 * @param seed used by the PRG to produce a random string.
-	 * @return an array of elliptic curve points derived from a random string
-	 */
-	public static Point[] deriveECurveGroupElements (int q, int seed) {
-		return null;
-	}
 	
 	public static ModGroupElement readModGroupElement (byte[] b) {
 		
