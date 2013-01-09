@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ArrayOfElements<E> implements ByteTree{
+public class ArrayOfElements<E> implements ByteTree {
 	
 	private List<E> elements = new ArrayList<E>();
 	
