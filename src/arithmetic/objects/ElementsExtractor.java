@@ -143,16 +143,19 @@ public class ElementsExtractor {
 		}
 	}
 	
-	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data) {
+	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data, IGroup group) {
 		return null;
 	}
 	
 	
-	public static ArrayOfElements<ProductGroupElement> createArrayOfPlaintexts (byte[] data) {
+	public static ArrayOfElements<ProductGroupElement> createArrayOfPlaintexts (byte[] data, IGroup group) {
 		return null;
 	}
 	
 	public static ProductGroupElement createSimplePGE (byte[] bt, IGroup group) {
+		ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
+		
+		
 		return null;
 	}
 	
@@ -178,5 +181,7 @@ public class ElementsExtractor {
 	public static Point[] deriveECurveGroupElements (int q, int seed) {
 		return null;
 	}
+	
+	
 
 }

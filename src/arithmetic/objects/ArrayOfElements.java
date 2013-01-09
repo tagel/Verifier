@@ -19,6 +19,7 @@ public class ArrayOfElements<E> implements ByteTree{
 		//TODO: implement
 	}
 	
+	
 	public E getAt (int index) {
 		return elements.get(index);
 	}
