@@ -108,18 +108,43 @@ public class MainVerifier {
 				&& (params.isPosc() || params.isCcpos()))
 
 			if (!VerShuffling.verify(params.getPrefixToRO(),
-					params.getThreshold(), params.getNe(), params.getNr(),
+					params.getThreshold(),params.getN(), params.getNe(), params.getNr(),
 					params.getNe(), params.getPrg(), params.getGq(),
 					params.getFullPublicKey(), params.getCiphertexts(),
 					params.getShuffledCiphertexts(), params.isPosc(),
 					params.isCcpos()))
 				return false;
 		
-		//7b
-		if ((params.getType().equals("mixing") || params.getType().equals(
-				"decryption")) && params.isDec())
-		{}
-		//TODO:finish here!
+		//7b - Verify Decryption
+		if (params.isDec()){
+			if (params.getType().equals("mixing")) 
+				if(!VerDec.verify(params.getPrefixToRO(),
+								params.getN(),
+								params.getNe(),
+								params.getNr(),
+								params.getNv(),
+								params.getPrg(),
+								params.getGq(),
+								params.getFullPublicKey(),
+								params.getShuffledCiphertexts(),
+								params.getPlaintexts()))
+					return false;
+			
+			if (params.getType().equals("decryption"))
+				if(!VerDec.verify(params.getPrefixToRO(),
+						params.getN(),
+						params.getNe(),
+						params.getNr(),
+						params.getNv(),
+						params.getPrg(),
+						params.getGq(),
+						params.getFullPublicKey(),
+						params.getCiphertexts(),
+						params.getPlaintexts()))
+			return false;
+				
+			
+		}
 
 		return true;
 	}
