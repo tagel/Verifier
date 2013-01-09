@@ -25,7 +25,7 @@ public class Node implements ByteTree {
 			bt = Arrays.copyOfRange(bt, 5, bt.length);
 			for (int i = 0; i < this.numOfChildren; i++) {
 				int endChildIndex = getEndIndex(bt, 0);
-				ByteTree child = new rawElement (Arrays.copyOfRange(bt, 0, endChildIndex));
+				ByteTree child = new RawElement (Arrays.copyOfRange(bt, 0, endChildIndex));
 				children.add(child);
 				bt = Arrays.copyOfRange(bt, endChildIndex, bt.length);
 			}
