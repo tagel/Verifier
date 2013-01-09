@@ -5,6 +5,7 @@ import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.ProductGroupElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 
+
 /**
  * This class provides the functionality of verifying the shuffling.
  * @author Tagel & Sofi
@@ -20,6 +21,7 @@ public class VerShuffling {
 	 * @param productGroupElement 
 	 * @param iGroup 
 	 * @param pseudoRandomGenerator 
+	 * @param m 
 	 * @param l 
 	 * @param k 
 	 * @param j 
@@ -27,7 +29,7 @@ public class VerShuffling {
 	 * @param bs 
 	 * @return true if verification of shuffling was successful and false otherwise.
 	 */
-	static public boolean verify(byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2, boolean b, boolean c) {
+	static public boolean verify(byte[] bs, int i, int j, int k, int l, int m, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2, boolean b, boolean c){
 		// TODO Auto-generated method stub
 		return false;
 	}
