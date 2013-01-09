@@ -64,7 +64,13 @@ public class IntegerRingElement implements ByteTree {
 	public byte[] toByteArray() {
 		int numOfOrderBytes = this.ring.getOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
-		byte[] b = ByteBuffer.allocate(numOfOrderBytes).order(ByteOrder.BIG_ENDIAN).putInt(element.intValue()).array();
+		byte[] b = element.toByteArray();
+		while (b.length<numOfOrderBytes) {
+			byte[] d = new byte[b.length+1];
+			System.arraycopy(b, 0, d, 1, b.length);
+			d[0] = 0;
+			b = d;
+		}
 		byte[] c= new byte[a.length+b.length];
 		System.arraycopy(a, 0, c, 0, a.length);
 		System.arraycopy(b, 0, c, a.length, b.length);
