@@ -19,7 +19,8 @@ public class Node implements ByteTree {
 	private List<ByteTree> children = new ArrayList<ByteTree>();
 	private int numOfChildren;
 	byte[] data;
-
+	
+	
 
 	public Node (byte[] bt) {
 		if (bt[0]==0) { //it is a node with children
@@ -43,6 +44,10 @@ public class Node implements ByteTree {
 
 	public Node() {
 
+	}
+	
+	public Node(ByteTree[] arr) {
+		
 	}
 
 	private int getEndIndex(byte[] b, int i) {
