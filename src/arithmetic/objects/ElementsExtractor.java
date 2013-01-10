@@ -127,6 +127,9 @@ public class ElementsExtractor {
 		return new ProductGroupElement(left, right);
 	}
 
+	public static ProductGroupElement createCiphertext (ArrayOfElements<IGroupElement> left, ArrayOfElements<IGroupElement> right) {
+		return new ProductGroupElement(new ProductGroupElement(left), new ProductGroupElement(right));
+	}
 
 
 	/**
