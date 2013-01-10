@@ -57,8 +57,10 @@ public class ProveShuffling extends Prover {
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
 			// creating B,A',B',C',D',F'
-			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>)(
-					PoSCommitment.getAt(0));
+			if (PoSCommitment.getAt(0) instanceof ArrayOfElements<?>){
+				ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>)(
+						PoSCommitment.getAt(0));
+			}
 			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>)(
 					PoSCommitment.getAt(2));
 
@@ -90,6 +92,7 @@ public class ProveShuffling extends Prover {
 					Zq);
 			
 			ProductRingElement Kf = new ProductRingElement(PoSReply.getAt(5));
+			
 
 			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>)(
 					PoSReply.getAt(1));

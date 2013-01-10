@@ -9,6 +9,7 @@ import algorithms.provers.ProveShuffling;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.Arrays.ArrayGenerators;
 import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BooleanArrayElement;
 import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
@@ -34,6 +35,7 @@ public class VerShuffling {
 	private static ArrayOfElements<IGroupElement> PermutationCommitment;
 	private static Node PoSCCommitment;
 	private static Node PoSCReply;
+	private static BooleanArrayElement keepList;
 
 	/**
 	 * @param prefixToRO
@@ -141,10 +143,17 @@ public class VerShuffling {
 											// fill the array to be N truths and
 											// the rest falses.
 					boolean[] tempArr = new boolean[maxciph];
-					for (int j=0; i<=maxciph; j++)
-						tempArr[i] = 
-
+					for (int j=0; i<maxciph; j++)
+						if (j<N)
+							tempArr[j] = true;
+						else
+							tempArr[j] = false;
+					keepList = new BooleanArrayElement(tempArr);
+				
+				} else { //The file does exist, we read it.
+					keepList = new BooleanArrayElement(keepListFile);
 				}
+				// Secondly, 
 
 			}
 

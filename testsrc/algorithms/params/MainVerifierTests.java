@@ -18,13 +18,11 @@ public class MainVerifierTests {
 		params.fillFromDirectory();
 		MainVerifier mainVer = new MainVerifier(params);
 		Assert.assertTrue(mainVer.deriveSetsAndObjects());
+	}
+	
+	public void createPrefixToRoTest() {
 		
 	}
-//		new params
-//		fill from xml
-//		fill from directory
-//		
-//		derive sets and object
-//		create prefix ro
-//		read keys
+
+//		TODO: read keysTest
 }
