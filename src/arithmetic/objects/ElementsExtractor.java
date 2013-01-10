@@ -148,13 +148,14 @@ public class ElementsExtractor {
 	 */
 	public static IGroup unmarshal (String s) throws UnsupportedEncodingException  {
 		int i = s.indexOf(":");
-		String type = s.substring(0, i);
 		s = s.substring(i+2, s.length());
 		byte[] b = CryptoUtils.hexStringToBytes(s);
+		Node node = new Node(b);
+		String type = leafToString(node.getAt(0).toByteArray());
 		if (type.equals("verificatum.arithm.ModPGroup"))
-			return new ModGroup(b);
+			return new ModGroup(node.getAt(1).toByteArray());
 		if (type.equals("verificatum.arithm.ECqPGroup"))
-			return new ECurveGroup(leafToString(b));
+			return new ECurveGroup(leafToString(node.getAt(1).toByteArray()));
 		else { 
 			System.out.println("ERROR: name of java class is unrecognized by the system");
 			return null;
