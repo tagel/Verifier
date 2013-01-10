@@ -30,14 +30,17 @@ import cryptographic.primitives.SHA2HashFunction;
  */
 public class MainVerifier {
 
-	static private Parameters params;
-	static private HashFunction H;
+	private Parameters params;
+	private HashFunction H;
 
+	public MainVerifier(Parameters params){
+		this.params = params;
+	}
 	/**
 	 * @return true if verification was successful and false otherwise.
 	 * @throws IOException
 	 */
-	static public boolean verify(String protInfo, String directory, String type,
+	public boolean verify(String protInfo, String directory, String type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
 			throws IOException {
 
@@ -154,7 +157,7 @@ public class MainVerifier {
 	 * @return true if successfully derived Gq, Zq, Mw, Cw, Rw, the hash
 	 *         function H and the PRG and false otherwise.
 	 */
-	static public boolean deriveSetsAndObjects() {
+	public boolean deriveSetsAndObjects() {
 		// Unmarshall Gq
 		try {
 			params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
@@ -175,7 +178,7 @@ public class MainVerifier {
 		return true;
 	}
 
-	static public void createPrefixToRo() throws UnsupportedEncodingException {
+	public void createPrefixToRo() throws UnsupportedEncodingException {
 		String s = params.getSessionID() + "." + params.getAuxsid();
 		ByteTree btAuxid = new StringLeaf(s);
 		ByteTree version_proof = new StringLeaf(params.getVersion());
@@ -215,7 +218,7 @@ public class MainVerifier {
 
 	}
 
-	static public boolean ReadKeys() throws IOException {
+	public boolean ReadKeys() throws IOException {
 		ProductGroupElement pk = ElementsExtractor.createSimplePGE(
 				ElementsExtractor.btFromFile(params.getDirectory(),
 						"FullPublicKey.bt"), params.getGq());
@@ -273,7 +276,7 @@ public class MainVerifier {
 	}
 
 	// Part 6 of the algorithm
-	static public boolean ReadLists() throws IOException {
+	public boolean ReadLists() throws IOException {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				"Ciphertexts.bt");
