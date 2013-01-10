@@ -33,8 +33,9 @@ public class MainVerifier {
 	private Parameters params;
 	private HashFunction H;
 
-	public MainVerifier(Parameters params){
+	public MainVerifier(Parameters params, HashFunction H){
 		this.params = params;
+		this.H = H;
 	}
 	/**
 	 * @return true if verification was successful and false otherwise.

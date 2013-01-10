@@ -9,9 +9,7 @@ import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.BasicElements.BigIntLeaf;
 import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.BasicElements.StringLeaf;
-import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
-import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
@@ -57,39 +55,25 @@ public class ProveShuffling extends Prover {
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
 			// creating B,A',B',C',D',F'
-			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>)(
-					PoSCommitment.getAt(0));
+				ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>)(
+						PoSCommitment.getAt(0));
 			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>)(
 					PoSCommitment.getAt(2));
 
-			IGroupElement Atag = ElementsExtractor.createGroupElement(
-					PoSCommitment.getAt(1).toByteArray(), Gq);
-			IGroupElement Ctag = ElementsExtractor.createGroupElement(
-					PoSCommitment.getAt(3).toByteArray(), Gq);
-			IGroupElement Dtag = ElementsExtractor.createGroupElement(
-					PoSCommitment.getAt(4).toByteArray(), Gq);
-			ProductGroupElement Ftag = new ProductGroupElement(
-					PoSCommitment.getAt(5));
+			IGroupElement Atag = (IGroupElement)PoSCommitment.getAt(1);
+					
+			IGroupElement Ctag = (IGroupElement)PoSCommitment.getAt(3);
+			IGroupElement Dtag = (IGroupElement)PoSCommitment.getAt(4);
+			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 			 */
-			BigInteger q = Gq.getFieldOrder();
-			IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
-			IntegerFieldElement Ka = new IntegerFieldElement(
-					ElementsExtractor
-							.leafToInt(PoSReply.getAt(0).toByteArray()),
-					Zq);
-			IntegerFieldElement Kc = new IntegerFieldElement(
-					ElementsExtractor
-							.leafToInt(PoSReply.getAt(2).toByteArray()),
-					Zq);
-			IntegerFieldElement Kd = new IntegerFieldElement(
-					ElementsExtractor
-							.leafToInt(PoSReply.getAt(3).toByteArray()),
-					Zq);
+			IntegerFieldElement Ka = (IntegerFieldElement) PoSReply.getAt(0);
+			IntegerFieldElement Kc = (IntegerFieldElement) PoSReply.getAt(2);
+			IntegerFieldElement Kd = (IntegerFieldElement)PoSReply.getAt(3);
+			ProductRingElement Kf = (ProductRingElement)PoSReply.getAt(5);
 			
-			ProductRingElement Kf = new ProductRingElement(PoSReply.getAt(5));
 
 			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>)(
 					PoSReply.getAt(1));
