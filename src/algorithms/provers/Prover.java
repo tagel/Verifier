@@ -42,7 +42,7 @@ public abstract class Prover {
 		ProductGroupElement pgLeft = new ProductGroupElement(right);
 		ProductGroupElement pgRight = new ProductGroupElement(right);
 		
-    	ProductGroupElement encryptedMsg = ArrayGenerators.createCiphertext(pgLeft, pgRight);
+    	ProductGroupElement encryptedMsg = ElementsExtractor.createCiphertext(pgLeft, pgRight);
     	return encryptedMsg; 
     }
 	
