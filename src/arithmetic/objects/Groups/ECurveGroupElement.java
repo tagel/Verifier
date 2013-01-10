@@ -65,7 +65,7 @@ public class ECurveGroupElement implements IGroupElement {
 
 	@Override
 	public boolean equal(IGroupElement b) {
-		if (getElement().getX().getElement()==(((ECurveGroupElement) b).getElement()).getX().getElement() && (getElement()).getY().getElement()==(((ECurveGroupElement) b).getElement()).getY().getElement())
+		if (getElement().getX().equal((((ECurveGroupElement) b).getElement()).getX()) && (getElement()).getY().equal((((ECurveGroupElement) b).getElement()).getY()))
 			return true;
 		else return false;
 	}

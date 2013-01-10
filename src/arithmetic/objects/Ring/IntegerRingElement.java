@@ -56,7 +56,7 @@ public class IntegerRingElement implements ByteTree {
 
 	
 	public boolean equal(IntegerRingElement b) {
-		if (this.getElement().mod(this.getRing().getOrder())==b.getElement().mod(this.getRing().getOrder())) return true;
+		if (this.getElement().mod(this.getRing().getOrder()).equals(b.getElement().mod(this.getRing().getOrder()))) return true;
 		else return false;
 	}
 
