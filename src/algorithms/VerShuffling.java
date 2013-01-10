@@ -207,10 +207,10 @@ public class VerShuffling {
 				
 		//Read Kb and Ke as arrays of Ring Elements
 		ArrayOfElements<IntegerRingElement> tempK = ElementsExtractor.createRingElementArray(
-				PoSReply.getAt(1).toByteArray(), Gq);
+				PoSReply.getAt(1).toByteArray(), Zq);
 		PoSCommitment.setAt(1, tempK);
-		tempK = ElementsExtractor.createGroupElementArray(
-				PoSReply.getAt(4).toByteArray(), Gq);
+		tempK = ElementsExtractor.createRingElementArray(
+				PoSReply.getAt(4).toByteArray(), Zq);
 		PoSCommitment.setAt(4, tempK);
 		
 
