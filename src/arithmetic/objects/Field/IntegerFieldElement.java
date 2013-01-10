@@ -58,7 +58,7 @@ public class IntegerFieldElement implements ByteTree {
 
 	
 	public boolean equal(IntegerFieldElement b) {
-		if (this.getElement().mod(this.getField().getOrder())==b.getElement().mod(this.getField().getOrder())) return true;
+		if (this.getElement().mod(this.getField().getOrder()).equals(b.getElement().mod(this.getField().getOrder()))) return true;
 		else return false;
 	}
 

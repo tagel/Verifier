@@ -59,7 +59,7 @@ public class ModGroupElement implements IGroupElement {
 
 	@Override
 	public boolean equal(IGroupElement b) {
-		if (getElement().mod(getGroup().getFieldOrder())==((BigInteger) ((ModGroupElement) b).getElement()).mod(((ModGroupElement) b).getGroup().getFieldOrder())) return true;
+		if (getElement().mod(getGroup().getFieldOrder()).equals(((BigInteger) ((ModGroupElement) b).getElement()).mod(((ModGroupElement) b).getGroup().getFieldOrder()))) return true;
 		else return false;
 	}
 
