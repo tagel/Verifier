@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import algorithms.params.Parameters;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.Arrays.ArrayGenerators;
 import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.BasicElements.BigIntLeaf;
 import arithmetic.objects.BasicElements.Node;
@@ -258,7 +259,7 @@ public class MainVerifier {
 		if (file == null)
 			return false;
 
-		ArrayOfElements<ProductGroupElement> ciphertexts = ElementsExtractor
+		ArrayOfElements<ProductGroupElement> ciphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq());
 
 		params.setN(ciphertexts.getSize());
@@ -282,7 +283,7 @@ public class MainVerifier {
 				return false;
 		}
 
-		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ElementsExtractor
+		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq());
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
@@ -294,7 +295,7 @@ public class MainVerifier {
 			if (file == null)
 				return false;
 
-			ArrayOfElements<ProductGroupElement> plaintexts = ElementsExtractor
+			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
 					.createArrayOfPlaintexts(file, params.getGq());
 			params.setPlaintexts(plaintexts);
 		}
