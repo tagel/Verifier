@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.Arrays.ArrayGenerators;
 import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Field.IntegerFieldElement;
@@ -38,8 +39,10 @@ public abstract class Prover {
 			left.add(g.power(powers.getAt(i).getElement()));
 			right.add((y.power(powers.getAt(i).getElement()).mult(ms.getAt(i))));
 		}
+		ProductGroupElement pgLeft = new ProductGroupElement(right);
+		ProductGroupElement pgRight = new ProductGroupElement(right);
 		
-    	ProductGroupElement encryptedMsg = ElementsExtractor.createCipherText(left, right);
+    	ProductGroupElement encryptedMsg = ArrayGenerators.createCiphertext(pgLeft, pgRight);
     	return encryptedMsg; 
     }
 	
@@ -53,7 +56,7 @@ public abstract class Prover {
      */
     protected static byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed, byte[] ro)
 			throws UnsupportedEncodingException {
-		byte[] seed = ROSeed.getRandomOracleOutput(ElementsExtractor
+		byte[] seed = ROSeed.getRandomOracleOutput(ArrayGenerators
 				.concatArrays(ro, nodeForSeed.toByteArray()));
 		return seed;
 	}
