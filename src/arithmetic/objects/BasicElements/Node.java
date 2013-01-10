@@ -47,7 +47,7 @@ public class Node implements ByteTree {
 	}
 	
 	public Node(ByteTree[] arr) {
-		
+		children = Arrays.asList(arr);
 	}
 
 	private int getEndIndex(byte[] b, int i) {

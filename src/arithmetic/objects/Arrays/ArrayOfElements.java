@@ -35,6 +35,14 @@ public class ArrayOfElements<E> implements ByteTree {
 	public int getSize() {
 		return elements.size();
 	}
+	
+	public boolean equals (ArrayOfElements<E> b) {
+		if (elements.size() != b.getSize()) return false;
+		for (int i=0; i<elements.size(); i++) 
+			if (!(elements.get(i).equals(b.getAt(i)))) return false;
+		return true;
+	}
+	
 
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
