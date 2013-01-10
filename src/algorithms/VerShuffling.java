@@ -167,8 +167,8 @@ public class VerShuffling {
 				}
 				ArrayOfElements<IGroupElement> tempArray = new ArrayOfElements<IGroupElement>();
 				for (int j = 0; i < maxciph; j++) {
-					if (keepList.getAt(i))
-						tempArray.add(PermutationCommitment.getAt(i));
+					if (keepList.getAt(j))
+						tempArray.add(PermutationCommitment.getAt(j));
 				}
 				PermutationCommitment = tempArray;
 
