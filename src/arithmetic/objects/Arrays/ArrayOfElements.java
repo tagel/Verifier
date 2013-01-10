@@ -37,7 +37,10 @@ public class ArrayOfElements<E> implements ByteTree {
 	}
 	
 	public boolean equals (ArrayOfElements<E> b) {
-		return false;
+		if (elements.size() != b.getSize()) return false;
+		for (int i=0; i<elements.size(); i++) 
+			if (!(elements.get(i).equals(b.getAt(i)))) return false;
+		return true;
 	}
 	
 
