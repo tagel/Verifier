@@ -122,24 +122,31 @@ public class VerShuffling {
 			 * shrink the permutation commitments and verify commitment-
 			 * consistent proof of a shuffle.
 			 */
-			if (N>maxciph)
+			if (N > maxciph)
 				return false;
-			
+
 			for (int i = 1; i <= lambda; i++) {
-				//Step 1 in the algorithm
+				// Step 1 in the algorithm
 				verifyPOSC(i, directory, Gq, Zq);
-				
-				//Step 2: potential early abort
+
+				// Step 2: potential early abort
 				if (!ccpos)
 					return true;
-				
-				//Step 3: Shrink permutation commitment.
-				//First, try to read the KeepList Array:
-				byte[] keepListFile = 
-				
-				
+
+				// Step 3: Shrink permutation commitment.
+				// First, try to read the KeepList Array:
+				byte[] keepListFile = ElementsExtractor.btFromFile(directory,
+						"proofs", "KeepList" + (i < 10 ? "0" : "") + i + ".bt");
+				if (keepListFile == null) {// if the file doesn't exist - we
+											// fill the array to be N truths and
+											// the rest falses.
+					boolean[] tempArr = new boolean[maxciph];
+					for (int j=0; i<=maxciph; j++)
+						tempArr[i] = 
+
+				}
+
 			}
-			
 
 		}
 
@@ -149,7 +156,7 @@ public class VerShuffling {
 	private static void verifyPOSC(int i, String directory, IGroup gq,
 			IRing<IntegerRingElement> zq) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
