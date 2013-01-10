@@ -28,6 +28,10 @@ public class BooleanArrayElement implements ByteTree {
 	public boolean[] getBooleanArray() {
 		return arr;
 	}
+	
+	public boolean getAt(int i) {
+		return arr[i];
+	}
 
 	@Override
 	public byte[] toByteArray() {
