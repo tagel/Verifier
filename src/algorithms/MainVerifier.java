@@ -5,12 +5,12 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import algorithms.params.Parameters;
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
-import arithmetic.objects.StringLeaf;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.BasicElements.Node;
+import arithmetic.objects.BasicElements.StringLeaf;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
 import arithmetic.objects.Ring.IRing;

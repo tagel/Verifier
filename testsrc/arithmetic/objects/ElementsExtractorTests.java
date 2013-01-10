@@ -9,6 +9,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.BasicElements.StringLeaf;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ModGroup;

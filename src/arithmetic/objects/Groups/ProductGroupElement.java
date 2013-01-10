@@ -3,8 +3,8 @@ package arithmetic.objects.Groups;
 
 import java.math.BigInteger;
 
-import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ByteTree;
+import arithmetic.objects.Arrays.ArrayOfElements;
 
 
 public class ProductGroupElement implements ByteTree {

@@ -6,9 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BigIntLeaf;
-import arithmetic.objects.Node;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.BasicElements.Node;
 
 import cryptographic.primitives.PseudoRandomGenerator;
 

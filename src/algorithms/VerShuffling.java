@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import algorithms.provers.ProveShuffling;
-import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;

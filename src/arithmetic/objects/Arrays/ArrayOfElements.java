@@ -1,10 +1,15 @@
-package arithmetic.objects;
+package arithmetic.objects.Arrays;
 
 
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import arithmetic.objects.ByteTree;
 
 
 public class ArrayOfElements<E> implements ByteTree {
@@ -14,12 +19,7 @@ public class ArrayOfElements<E> implements ByteTree {
 	public ArrayOfElements () {
 	}
 	
-	
-	public ArrayOfElements (E[] arr) {
-		//TODO: implement
-	}
-	
-	
+
 	public E getAt (int index) {
 		return elements.get(index);
 	}
@@ -38,8 +38,15 @@ public class ArrayOfElements<E> implements ByteTree {
 
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
-		//TODO: implement
-		return null;
+		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(elements.size()).array();
+		byte[] b = new byte[a.length+1];
+		System.arraycopy(a, 0, b, 1, a.length);
+		b[0] = 0;
+		for (int i=0; i<elements.size(); i++) {
+			byte[] c = ((ByteTree) elements.get(i)).toByteArray();
+			b = ArrayGenerators.concatArrays(b, c);
+		}
+		return b;
 	}
 
 

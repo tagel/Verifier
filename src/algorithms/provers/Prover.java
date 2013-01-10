@@ -3,9 +3,9 @@ package algorithms.provers;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
-import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;

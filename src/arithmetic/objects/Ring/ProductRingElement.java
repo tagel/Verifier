@@ -5,9 +5,10 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import arithmetic.objects.ArrayOfElements;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.Arrays.ArrayGenerators;
+import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
 
@@ -17,10 +18,10 @@ public class ProductRingElement implements ByteTree {
 
 	
 	private ArrayOfElements<IntegerRingElement> arr;
-	private byte[] raw;
+	
 	
 	public ProductRingElement(byte[] bt, IRing<IntegerRingElement> ring) throws UnsupportedEncodingException {
-		arr = ElementsExtractor.createRingElementArray(bt, ring);
+		arr = ArrayGenerators.createRingElementArray(bt, ring);
 	}
 	
 	public ProductRingElement(ArrayOfElements<IntegerRingElement> arr) {
@@ -65,6 +66,10 @@ public class ProductRingElement implements ByteTree {
 			return new ProductRingElement(a);
 	}
 	
+	/**
+	 * 
+	 * @return the negative of this product ring element.
+	 */
 	public ProductRingElement neg() {
 			ArrayOfElements<IntegerRingElement> a = arr;
 			for (int i=0; i<arr.getSize(); i++)
@@ -82,7 +87,7 @@ public class ProductRingElement implements ByteTree {
 
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
-		return raw;
+		return arr.toByteArray();
 	}
 	
 	

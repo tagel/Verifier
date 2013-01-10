@@ -9,9 +9,9 @@ import javax.xml.stream.XMLStreamException;
 
 import cryptographic.primitives.PseudoRandomGenerator;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BooleanArrayElement;
-import arithmetic.objects.Node;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BooleanArrayElement;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;

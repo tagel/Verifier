@@ -13,6 +13,8 @@ import java.util.Arrays;
 
 import cryptographic.primitives.CryptoUtils;
 
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
@@ -62,7 +64,7 @@ public class ElementsExtractor {
 	 * @return the point that arr represents.
 	 */
 	public static Point nodeToPoint (byte[] arr, IGroup group) {
-		byte[] arrX = Arrays.copyOfRange(arr, 5, 9+group.getFieldOrder().toByteArray().length);
+		byte[] arrX = Arrays.copyOfRange(arr, 5, 10+group.getFieldOrder().toByteArray().length);
 		byte[] arrY = Arrays.copyOfRange(arr, 10+group.getFieldOrder().toByteArray().length, arr.length);
 		IField<IntegerFieldElement> field = new PrimeOrderField(group.getFieldOrder());
 		IntegerFieldElement x = new IntegerFieldElement(leafToInt(arrX), field);
@@ -112,12 +114,7 @@ public class ElementsExtractor {
 		}
 	}
 
-	public static byte[] concatArrays(byte[] A, byte[] B) {
-		byte[] C= new byte[A.length+B.length];
-		System.arraycopy(A, 0, C, 0, A.length);
-		System.arraycopy(B, 0, C, A.length, B.length);
-		return C;
-	}
+
 
 //	public static String hex (byte[] a) {
 //		StringBuilder sb = new StringBuilder();
@@ -142,7 +139,7 @@ public class ElementsExtractor {
 	public static IGroup unmarshal (String s) throws UnsupportedEncodingException  {
 		int i = s.indexOf(":");
 		String type = s.substring(0, i-1);
-		s = s.substring(i+2, s.length()-1);
+		s = s.substring(i+2, s.length());
 		byte[] b = CryptoUtils.hexStringToBytes(s);
 		if (type.equals("verificatum.arithm.ModPGroup"))
 			return new ModGroup(b);
@@ -154,41 +151,5 @@ public class ElementsExtractor {
 		}
 	}
 	
-	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data, IGroup group) {
-		return null;
-	}
 	
-	
-	public static ArrayOfElements<ProductGroupElement> createArrayOfPlaintexts (byte[] data, IGroup group) {
-		return null;
-	}
-	
-	public static ProductGroupElement createSimplePGE (byte[] bt, IGroup group) {
-		ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
-		
-		
-		return null;
-	}
-	
-	public static ProductGroupElement createCiphertext (ArrayOfElements<IGroupElement> left, ArrayOfElements<IGroupElement> right) {
-		return null;
-		//TODO: IMPLEMENT
-	}
-
-	
-	public static ArrayOfElements<IGroupElement> createGroupElementArray (byte[] b, IGroup group) throws UnsupportedEncodingException {
-		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
-		Node node = new Node(b);
-		for (int i=0; i<node.getChildrenSize(); i++)
-			ret.add(createGroupElement(node.getAt(i).toByteArray(), group));
-		return ret;
-	}
-	
-	public static ArrayOfElements<IntegerRingElement> createRingElementArray (byte[] b, IRing<IntegerRingElement> ring) throws UnsupportedEncodingException {
-		ArrayOfElements<IntegerRingElement> ret = new ArrayOfElements<IntegerRingElement>();
-		Node node = new Node(b);
-		for (int i=0; i<node.getChildrenSize(); i++) 
-			ret.add(new IntegerRingElement(leafToInt(node.getAt(i).toByteArray()), ring));
-		return ret;
-	}
 }

@@ -1,4 +1,4 @@
-package arithmetic.objects;
+package arithmetic.objects.BasicElements;
 
 
 
@@ -9,6 +9,9 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import arithmetic.objects.ByteTree;
+import arithmetic.objects.Arrays.ArrayGenerators;
 
 
 public class Node implements ByteTree {
@@ -36,10 +39,6 @@ public class Node implements ByteTree {
 			data = bt;
 		}
 
-	}
-
-	public Node(ByteTree[] arr) {
-		//TODO: IMPLEMENT
 	}
 
 	public Node() {
@@ -89,9 +88,7 @@ public class Node implements ByteTree {
 		b[0] = 0;
 		for (int i=0; i<children.size(); i++) {
 			byte[] c = children.get(i).toByteArray();
-			b = Arrays.copyOf(b, b.length+c.length);
-			for (int j=b.length; j<b.length+c.length; j++)
-				b[j]=c[j-b.length];
+			b = ArrayGenerators.concatArrays(b, c);
 		}
 		return b;
 	}

@@ -1,23 +1,28 @@
-package arithmetic.objects;
-import java.io.UnsupportedEncodingException;
+package arithmetic.objects.BasicElements;
+
+
+
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class StringLeaf  implements ByteTree{
+import arithmetic.objects.ByteTree;
 
 
-	private String str;
-
-	public StringLeaf (String str) {
-		this.str = str;
-	}
-
-	public String getString() {
-		return str;
+public class BigIntLeaf implements ByteTree {
+	
+	private BigInteger num;
+	
+	public BigIntLeaf (BigInteger num) {
+		this.num = num;
 	}
 	
-	public byte[] toByteArray() throws UnsupportedEncodingException {
-		byte[] b = str.getBytes("ASCII");
+	public BigInteger getNum() {
+		return num;
+	}
+	
+	public byte[] toByteArray() {
+		byte[] b = num.toByteArray();
 		int numOfBytes = b.length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfBytes).array();
 		byte[] c= new byte[a.length+b.length];
@@ -30,5 +35,3 @@ public class StringLeaf  implements ByteTree{
 	}
 
 }
-
-

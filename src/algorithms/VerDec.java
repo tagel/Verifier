@@ -1,6 +1,6 @@
 package algorithms;
 
-import arithmetic.objects.ArrayOfElements;
+import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.ProductGroupElement;
 import arithmetic.objects.Ring.IRing;

@@ -1,8 +1,10 @@
-package arithmetic.objects;
+package arithmetic.objects.BasicElements;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+
+import arithmetic.objects.ByteTree;
 
 public class BooleanArrayElement implements ByteTree {
 

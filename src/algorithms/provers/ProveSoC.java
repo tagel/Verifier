@@ -2,11 +2,11 @@ package algorithms.provers;
 
 import java.math.BigInteger;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
