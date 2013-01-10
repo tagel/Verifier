@@ -32,6 +32,8 @@ public class VerShuffling {
 	private static Node PoSCommitment;
 	private static Node PoSReply;
 	private static ArrayOfElements<IGroupElement> PermutationCommitment;
+	private static Node PoSCCommitment;
+	private static Node PoSCReply;
 
 	/**
 	 * @param prefixToRO
@@ -60,6 +62,11 @@ public class VerShuffling {
 			boolean ccpos, IRing<IntegerRingElement> Zq, int width)
 			throws IOException {
 
+		/*
+		 * This step sets the N0 size that indicates if there was a
+		 * pre-computation step or not. If N0==0, we use the whole permutation
+		 * commitment array. Else, we shrink it to use only the relevant ones.
+		 */
 		int maxciph = readMaxciph(directory);
 
 		if (maxciph == 0) {
@@ -110,12 +117,46 @@ public class VerShuffling {
 
 		} else {
 			/*
-			 * 
+			 * Here maxciph exists, so we have the N0 - size of pre-computed
+			 * arrays. In this case we use the proof of shuffle of commitments,
+			 * shrink the permutation commitments and verify commitment-
+			 * consistent proof of a shuffle.
 			 */
+			if (N > maxciph)
+				return false;
+
+			for (int i = 1; i <= lambda; i++) {
+				// Step 1 in the algorithm
+				verifyPOSC(i, directory, Gq, Zq);
+
+				// Step 2: potential early abort
+				if (!ccpos)
+					return true;
+
+				// Step 3: Shrink permutation commitment.
+				// First, try to read the KeepList Array:
+				byte[] keepListFile = ElementsExtractor.btFromFile(directory,
+						"proofs", "KeepList" + (i < 10 ? "0" : "") + i + ".bt");
+				if (keepListFile == null) {// if the file doesn't exist - we
+											// fill the array to be N truths and
+											// the rest falses.
+					boolean[] tempArr = new boolean[maxciph];
+					for (int j=0; i<=maxciph; j++)
+						tempArr[i] = 
+
+				}
+
+			}
 
 		}
 
 		return true;
+	}
+
+	private static void verifyPOSC(int i, String directory, IGroup gq,
+			IRing<IntegerRingElement> zq) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
