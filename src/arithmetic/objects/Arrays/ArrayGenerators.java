@@ -13,15 +13,6 @@ import arithmetic.objects.Ring.IntegerRingElement;
 public class ArrayGenerators {
 	
 
-	public static ProductGroupElement createSimplePGE (byte[] bt, IGroup group) throws UnsupportedEncodingException {
-		ArrayOfElements<IGroupElement> arr = createGroupElementArray (bt, group);
-		return new ProductGroupElement(arr);
-	}
-	
-	public static ProductGroupElement createCiphertext (ProductGroupElement left, ProductGroupElement right) {
-		return new ProductGroupElement(left, right);
-	}
-
 	
 	public static ArrayOfElements<IGroupElement> createGroupElementArray (byte[] b, IGroup group) throws UnsupportedEncodingException {
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
