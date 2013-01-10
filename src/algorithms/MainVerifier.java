@@ -33,6 +33,9 @@ public class MainVerifier {
 	private Parameters params;
 	private HashFunction H;
 
+	public MainVerifier(Parameters params){
+		this.params = params;
+	}
 	/**
 	 * @return true if verification was successful and false otherwise.
 	 * @throws IOException
