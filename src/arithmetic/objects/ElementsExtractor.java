@@ -13,6 +13,12 @@ import java.util.Arrays;
 
 import cryptographic.primitives.CryptoUtils;
 
+import arithmetic.objects.Arrays.ArrayGenerators;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.Node;
+import arithmetic.objects.Field.IField;
+import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.ECurveGroup;
 import arithmetic.objects.Groups.ECurveGroupElement;
 import arithmetic.objects.Groups.IGroup;
@@ -21,6 +27,8 @@ import arithmetic.objects.Groups.ModGroup;
 import arithmetic.objects.Groups.ModGroupElement;
 import arithmetic.objects.Groups.Point;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
 
 
 
@@ -36,7 +44,7 @@ public class ElementsExtractor {
 	 * @return the integer that the byte array represents.
 	 */
 	public static BigInteger leafToInt (byte[] arr) { 
-		byte[] a = Arrays.copyOfRange(arr, 5, arr.length-1);
+		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
 		return new BigInteger(a);
 	}
 
@@ -47,7 +55,7 @@ public class ElementsExtractor {
 	 * @throws UnsupportedEncodingException 
 	 */
 	public static String leafToString (byte[] arr) throws UnsupportedEncodingException {
-		byte[] a = Arrays.copyOfRange(arr, 5, arr.length-1);
+		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
 		return new String(a, "ASCII");
 	}
 
@@ -56,8 +64,14 @@ public class ElementsExtractor {
 	 * @param arr = a byte array that represents a point.
 	 * @return the point that arr represents.
 	 */
-	public static Point nodeToPoint (byte[] arr) {
-		return null;
+	public static Point nodeToPoint (byte[] arr, IGroup group) {
+		byte[] arrX = Arrays.copyOfRange(arr, 5, 10+group.getFieldOrder().toByteArray().length);
+		byte[] arrY = Arrays.copyOfRange(arr, 10+group.getFieldOrder().toByteArray().length, arr.length);
+		IField<IntegerFieldElement> field = new PrimeOrderField(group.getFieldOrder());
+		IntegerFieldElement x = new IntegerFieldElement(leafToInt(arrX), field);
+		IntegerFieldElement y = new IntegerFieldElement(leafToInt(arrY), field);
+		return new Point(x,y);
+		
 	}
 
 	// if file is not found, returns null.
@@ -94,19 +108,23 @@ public class ElementsExtractor {
 		if (Gq instanceof ModGroup)
 			return new ModGroupElement(leafToInt(b),(ModGroup) Gq);
 		if (Gq instanceof ECurveGroup)
-			return new ECurveGroupElement(nodeToPoint(b), (ECurveGroup) Gq);
+			return new ECurveGroupElement(nodeToPoint(b, Gq), (ECurveGroup) Gq);
 		else {
 			System.out.println("ERROR: instance is not a group element");
 			return null;
 		}
 	}
-
-	public static byte[] concatArrays(byte[] A, byte[] B) {
-		byte[] C= new byte[A.length+B.length];
-		System.arraycopy(A, 0, C, 0, A.length);
-		System.arraycopy(B, 0, C, A.length, B.length);
-		return C;
+	
+	public static ProductGroupElement createSimplePGE (byte[] bt, IGroup group) throws UnsupportedEncodingException {
+		ArrayOfElements<IGroupElement> arr = ArrayGenerators.createGroupElementArray (bt, group);
+		return new ProductGroupElement(arr);
 	}
+	
+	public static ProductGroupElement createCiphertext (ProductGroupElement left, ProductGroupElement right) {
+		return new ProductGroupElement(left, right);
+	}
+
+
 
 //	public static String hex (byte[] a) {
 //		StringBuilder sb = new StringBuilder();
@@ -130,8 +148,8 @@ public class ElementsExtractor {
 	 */
 	public static IGroup unmarshal (String s) throws UnsupportedEncodingException  {
 		int i = s.indexOf(":");
-		String type = s.substring(0, i-1);
-		s = s.substring(i+2, s.length()-1);
+		String type = s.substring(0, i);
+		s = s.substring(i+2, s.length());
 		byte[] b = CryptoUtils.hexStringToBytes(s);
 		if (type.equals("verificatum.arithm.ModPGroup"))
 			return new ModGroup(b);
@@ -143,27 +161,5 @@ public class ElementsExtractor {
 		}
 	}
 	
-	public static ArrayOfElements<ProductGroupElement> createArrayOfCipherTexts (byte[] data) {
-		return null;
-	}
-
-
-	/**
-	 * @param p = the order of the underlying field Zp.
-	 * @param seed used by the PRG to produce a random string.
-	 * @return an array of modular group elements derived from a random string.
-	 */
-	public static int[] deriveModGroupElements (int p, int seed) {
-		return null;
-	}
-
-	/**
-	 * @param q = the order of the underlying field Zq.
-	 * @param seed used by the PRG to produce a random string.
-	 * @return an array of elliptic curve points derived from a random string
-	 */
-	public static Point[] deriveECurveGroupElements (int q, int seed) {
-		return null;
-	}
-
+	
 }

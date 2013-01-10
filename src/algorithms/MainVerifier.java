@@ -1,25 +1,24 @@
 package algorithms;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import algorithms.params.Parameters;
-import algorithms.params.XMLProtocolInfo;
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
-import arithmetic.objects.StringLeaf;
-import arithmetic.objects.Field.IField;
-import arithmetic.objects.Field.IntegerFieldElement;
-import arithmetic.objects.Field.PrimeOrderField;
-import arithmetic.objects.Groups.IGroup;
+import arithmetic.objects.Arrays.ArrayGenerators;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.BasicElements.Node;
+import arithmetic.objects.BasicElements.StringLeaf;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
+import arithmetic.objects.Ring.Ring;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFunction;
-import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.SHA2HashFunction;
 
 /**
@@ -34,11 +33,11 @@ public class MainVerifier {
 
 	/**
 	 * @return true if verification was successful and false otherwise.
-	 * @throws UnsupportedEncodingException
+	 * @throws IOException
 	 */
 	public boolean verify(String protInfo, String directory, String type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
-			throws UnsupportedEncodingException {
+			throws IOException {
 
 		// *****Section 1 in the algorithm*****
 		// First create the Parameters object using the
@@ -102,24 +101,41 @@ public class MainVerifier {
 
 		// *******Section 7 in the Algorithm*********
 		// Here we call the subroutines of the verifier
-		//7a
+		// 7a -- Verify Shuffling
 		if ((params.getType().equals("mixing") || params.getType().equals(
 				"decryption"))
 				&& (params.isPosc() || params.isCcpos()))
 
-			if (!VerShuffling.verify(params.getPrefixToRO(),
-					params.getThreshold(), params.getNe(), params.getNr(),
+			if (!VerShuffling.verify(params.getDirectory(),
+					params.getPrefixToRO(), params.getThreshold(),
+					params.getN(), params.getNe(), params.getNr(),
 					params.getNe(), params.getPrg(), params.getGq(),
 					params.getFullPublicKey(), params.getCiphertexts(),
 					params.getShuffledCiphertexts(), params.isPosc(),
-					params.isCcpos()))
+					params.isCcpos(),params.getZq()))
 				return false;
-		
-		//7b
-		if ((params.getType().equals("mixing") || params.getType().equals(
-				"decryption")) && params.isDec())
-		{}
-		//TODO:finish here!
+
+		// 7b - Verify Decryption
+		if (params.isDec()) {//isDec==true means we need to check the decryption.
+			if (params.getType().equals("mixing"))
+				if (!VerDec
+						.verify(params.getDirectory(), params.getPrefixToRO(),
+								params.getN(), params.getNe(), params.getNr(),
+								params.getNv(), params.getPrg(),
+								params.getGq(), params.getFullPublicKey(),
+								params.getShuffledCiphertexts(),
+								params.getPlaintexts(),params.getZq()))
+					return false;
+
+			if (params.getType().equals("decryption"))
+				if (!VerDec.verify(params.getDirectory(),
+						params.getPrefixToRO(), params.getN(), params.getNe(),
+						params.getNr(), params.getNv(), params.getPrg(),
+						params.getGq(), params.getFullPublicKey(),
+						params.getCiphertexts(), params.getPlaintexts(),params.getZq()))
+					return false;
+
+		}
 
 		return true;
 	}
@@ -137,8 +153,9 @@ public class MainVerifier {
 			return false;
 		}
 
-		// create the field
-		params.setZq(new PrimeOrderField(params.getGq().getFieldOrder()));
+		// create the Ring
+		IRing<IntegerRingElement> temp = new Ring(params.getGq().getFieldOrder());
+		params.setZq(temp);
 
 		// Set the Hashfunction and the pseudo random generator
 		H = new SHA2HashFunction(params.getSh());
@@ -147,7 +164,7 @@ public class MainVerifier {
 		return true;
 	}
 
-	private void createPrefixToRo() {
+	private void createPrefixToRo() throws UnsupportedEncodingException {
 		String s = params.getSessionID() + "." + params.getAuxsid();
 		ByteTree btAuxid = new StringLeaf(s);
 		ByteTree version_proof = new StringLeaf(params.getVersion());
@@ -177,18 +194,16 @@ public class MainVerifier {
 		params.setPrefixToRO(H.digest((Seed)));
 	}
 
-	private boolean ReadKeys() {
-		// TODO: Change the file names and the paths so it will be generic
-		// TODO: and will fit to the new constructor.
+	private boolean ReadKeys() throws IOException {
 		ProductGroupElement pk = ElementsExtractor.createSimplePGE(
 				ElementsExtractor.btFromFile(params.getDirectory(),
 						"FullPublicKey.bt"), params.getGq());
-		IGroupElement y = pk.getArr()[1];
-		IGroupElement g = pk.getArr()[0];
+		IGroupElement y = pk.getArr().getAt(1);
+		IGroupElement g = pk.getArr().getAt(0);
 
 		params.setFullPublicKey(pk);
 		IGroupElement yi;
-		IntegerFieldElement xi;
+		IntegerRingElement xi;
 		int i;
 
 		// Here we get the Identity element and multiply all of the yi's
@@ -213,7 +228,7 @@ public class MainVerifier {
 		// Here we check the secret keys - xi:
 		// Here the file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
-			xi = new IntegerFieldElement(
+			xi = new IntegerRingElement(
 					ElementsExtractor.leafToInt(ElementsExtractor.btFromFile(
 							params.getDirectory(), "proofs", "SecretKey"
 									+ (i < 10 ? "0" : "") + (i + 1) + ".bt")),
@@ -227,6 +242,7 @@ public class MainVerifier {
 			xi = params.getMixSecretKey().getAt(i);
 			yi = params.getMixPublicKey().getAt(i);
 
+			//TODO: check this step
 			if ((xi != null) && !(yi.equal(g.power(xi.getElement()))))
 				return false;
 		}
@@ -236,14 +252,14 @@ public class MainVerifier {
 	}
 
 	// Part 6 of the algorithm
-	private boolean ReadLists() {
+	private boolean ReadLists() throws IOException {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				"Ciphertexts.bt");
 		if (file == null)
 			return false;
 
-		ArrayOfElements<ProductGroupElement> ciphertexts = ElementsExtractor
+		ArrayOfElements<ProductGroupElement> ciphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq());
 
 		params.setN(ciphertexts.getSize());
@@ -267,7 +283,7 @@ public class MainVerifier {
 				return false;
 		}
 
-		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ElementsExtractor
+		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq());
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
@@ -279,20 +295,12 @@ public class MainVerifier {
 			if (file == null)
 				return false;
 
-			ArrayOfElements<ProductGroupElement> plaintexts = ElementsExtractor
-					.createArrayOfCiphertexts(file, params.getGq());
+			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
+					.createArrayOfPlaintexts(file, params.getGq());
 			params.setPlaintexts(plaintexts);
 		}
 
 		return true;
-	}
-
-	/**
-	 * @return true if the proof params are valid and false otherwise.
-	 */
-	private boolean isProofParamsValid() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

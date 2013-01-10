@@ -5,7 +5,7 @@ package arithmetic.objects.Groups;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
-import arithmetic.objects.Node;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Field.IntegerFieldElement;
 
 

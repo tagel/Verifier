@@ -8,15 +8,16 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import cryptographic.primitives.PseudoRandomGenerator;
+import cryptographic.primitives.RandomOracle;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BooleanArrayElement;
-import arithmetic.objects.Node;
-import arithmetic.objects.Field.IField;
-import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BooleanArrayElement;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
 
 /**
  * This class describes an object that contains the parameters used by the
@@ -63,14 +64,23 @@ public class Parameters {
 		sPRG = null;
 		wDefault = 0;
 		maxciph = 0;
+		
+		ROseed = null;
+		ROchallenge = null;
+		
 		initializeMix();
 
 	}
 
+	//Random Oracles
+	RandomOracle ROseed;
+	RandomOracle ROchallenge;
+	
+	
 	//Derived Objects
 	private byte[] prefixToRO;
 	private IGroup Gq;
-	private IField<IntegerFieldElement> Zq;
+	private IRing<IntegerRingElement> Zq;
 	PseudoRandomGenerator prg;
 
 	// parameters from directory
@@ -111,8 +121,8 @@ public class Parameters {
 	private int N; //size of the arrays
 
 	// MIX -- The parameters of each party
-	private ArrayOfElements<IGroupElement> mixPublicKey;//V
-	private ArrayOfElements<IntegerFieldElement> mixSecretKey;//V
+	private ArrayOfElements<IGroupElement> mixPublicKey;//Used in Keys Verifier
+	private ArrayOfElements<IntegerRingElement> mixSecretKey;//Used in Keys Verifier
 
 	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts;
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
@@ -128,9 +138,10 @@ public class Parameters {
 	private ArrayOfElements<Node> mixDecrFactCommitment;
 	private ArrayOfElements<Node> mixDecrFactReply;
 
+	//TODO: Should we really need all of these mix-params?
 	private void initializeMix() {
 		 mixPublicKey = new ArrayOfElements<IGroupElement>();
-		 mixSecretKey = new ArrayOfElements<IntegerFieldElement>();
+		 mixSecretKey = new ArrayOfElements<IntegerRingElement>();
 		 mixCiphertexts = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
 		 mixPermutationCommitment = new
 		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
@@ -180,6 +191,8 @@ public class Parameters {
 		sGq = protXML.getGq();
 		sPRG = protXML.getPrg();
 		wDefault = protXML.getWidth();
+		
+		
 
 		return true;
 	}
@@ -226,21 +239,37 @@ public class Parameters {
 		}
 
 		w = text.nextInt();
-		System.out.println(w);
-		
+				
 		return true;
 	}
 
 	
-	//*****************************************
-	//**********Getters And Setters************
-	//*****************************************
-	public IField<IntegerFieldElement> getZq() {
+	//********************************************************************************
+	//******************************Getters And Setters*******************************
+	//********************************************************************************
+	
+	public RandomOracle getROseed() {
+		return ROseed;
+	}
+
+	public void setROseed(RandomOracle rOseed) {
+		ROseed = rOseed;
+	}
+
+	public RandomOracle getROchallenge() {
+		return ROchallenge;
+	}
+
+	public void setROchallenge(RandomOracle rOchallenge) {
+		ROchallenge = rOchallenge;
+	}
+	
+	public IRing<IntegerRingElement> getZq() {
 		return Zq;
 	}
 
-	public void setZq(IField<IntegerFieldElement> zq) {
-		Zq = zq;
+	public void setZq(IRing<IntegerRingElement> ring) {
+		Zq = ring;
 	}
 
 	public int getN() {
@@ -530,12 +559,12 @@ public class Parameters {
 		this.mixPublicKey = mixPublicKey;
 	}
 
-	public ArrayOfElements<IntegerFieldElement> getMixSecretKey() {
+	public ArrayOfElements<IntegerRingElement> getMixSecretKey() {
 		return mixSecretKey;
 	}
 
 	public void setMixSecretKey(
-			ArrayOfElements<IntegerFieldElement> mixSecretKey) {
+			ArrayOfElements<IntegerRingElement> mixSecretKey) {
 		this.mixSecretKey = mixSecretKey;
 	}
 

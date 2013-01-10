@@ -2,19 +2,18 @@ package algorithms.provers;
 
 import java.math.BigInteger;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
-import arithmetic.objects.StringLeaf;
+import arithmetic.objects.Arrays.ArrayGenerators;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.BasicElements.Node;
+import arithmetic.objects.BasicElements.StringLeaf;
 import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
-import arithmetic.objects.Groups.ModGroup;
-import arithmetic.objects.Groups.ModGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
 import arithmetic.objects.Ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
@@ -28,7 +27,7 @@ import cryptographic.primitives.RandomOracle;
  */
 public class ProveShuffling extends Prover {
 
-	public boolean prove(
+	public static boolean prove(
 			RandomOracle ROSeed,
 			RandomOracle ROChallenge,
 			byte[] ro,
@@ -38,13 +37,13 @@ public class ProveShuffling extends Prover {
 			int Nv,
 			PseudoRandomGenerator prg,
 			IGroup Gq,
-			ProductRingElement Rw,
-			ProductGroupElement Cw,
 			ProductGroupElement pk,
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput,
-			ArrayOfElements<ArrayOfElements<IGroupElement>> permutationCommitment,
+			int width,
+			ArrayOfElements<IGroupElement> permutationCommitment,
 			Node PoSCommitment, Node PoSReply) {
+		
 
 		try {
 
@@ -52,17 +51,15 @@ public class ProveShuffling extends Prover {
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
 			 * Pedersen commitments in Gq
 			 */
-			ArrayOfElements<IGroupElement> u = new ArrayOfElements<IGroupElement>(
-					permutationCommitment);
+			ArrayOfElements<IGroupElement> u = permutationCommitment;
 
 			/**
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
-
 			// creating B,A',B',C',D',F'
-			ArrayOfElements<IGroupElement> B = new ArrayOfElements<IGroupElement>(
+			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>)(
 					PoSCommitment.getAt(0));
-			ArrayOfElements<IGroupElement> Btag = new ArrayOfElements<IGroupElement>(
+			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>)(
 					PoSCommitment.getAt(2));
 
 			IGroupElement Atag = ElementsExtractor.createGroupElement(
@@ -91,21 +88,21 @@ public class ProveShuffling extends Prover {
 					ElementsExtractor
 							.leafToInt(PoSReply.getAt(3).toByteArray()),
 					Zq);
+			
 			ProductRingElement Kf = new ProductRingElement(PoSReply.getAt(5));
 
-			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
+			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>)(
 					PoSReply.getAt(1));
 
-			ArrayOfElements<IntegerFieldElement> Ke = new ArrayOfElements<IntegerFieldElement>(
+			ArrayOfElements<IntegerFieldElement> Ke = (ArrayOfElements<IntegerFieldElement>)(
 					PoSReply.getAt(4));
 
 			/**
 			 * 2 - computing the seed
 			 */
-
 			StringLeaf stringLeaf = new StringLeaf("generators");
 			byte[] independentSeed = ROSeed
-					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
+					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							stringLeaf.toByteArray()));
 			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
 					independentSeed, Nr);
@@ -123,7 +120,6 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 3 - Computation of A and F
 			 */
-
 			IGroupElement A = computeA(N, Ne, seed, prg, u);
 			ProductGroupElement F = computeF(N, Ne, seed, prg, wInput);
 
@@ -132,12 +128,12 @@ public class ProveShuffling extends Prover {
 			 */
 			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
 
-			Node nodeForChallenge = new Node(null);
+			Node nodeForChallenge = new Node();
 			nodeForChallenge.add(leaf);
 			nodeForChallenge.add(PoSCommitment);
 
 			byte[] challenge = ROChallenge
-					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
+					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							nodeForChallenge.toByteArray()));
 
 			/* Computation of v: */
@@ -180,16 +176,22 @@ public class ProveShuffling extends Prover {
 			/*
 			 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 			 */
-			
 			ProductGroupElement leftF = F.power(v).mult(Ftag);
 
 			ProductGroupElement W = wOutput.getAt(0).power(Ke.getAt(0).getElement());
 			for (int i = 1; i < N; i++) {
 				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
 			}
-			// TODO: implement the encrypt function
-			IGroupElement one = new ModGroupElement(BigInteger.ONE, (ModGroup) Gq);
-			if (!left.equal(right)) {
+
+			// create ProductGroupElement of 1s
+			ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
+			for (int i = 0; i < width; i++) {
+				arrOfOnes.add(Gq.one());
+			}
+			
+			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
+			ProductGroupElement rigthF = encrypt(ones,Kf,pk,Gq);
+			if (!leftF.equal(rigthF)) {
 				return false;
 			}
 

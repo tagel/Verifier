@@ -2,18 +2,17 @@ package algorithms.provers;
 
 import java.math.BigInteger;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.BigIntLeaf;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Node;
-import arithmetic.objects.ProductFieldElement;
+import arithmetic.objects.Arrays.ArrayGenerators;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
-import arithmetic.objects.Groups.ProductGroupElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -133,7 +132,7 @@ public class ProveSoC extends Prover {
 			nodeForChallenge.add(PoSCommitment);
 
 			byte[] challenge = ROChallenge
-					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
+					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							nodeForChallenge.toByteArray()));
 
 			/* Computation of v: */

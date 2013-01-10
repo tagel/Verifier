@@ -1,8 +1,13 @@
 package algorithms;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.GroupElement;
-import arithmetic.objects.ProductElement;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.Groups.IGroup;
+import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.Ring.IRing;
+import arithmetic.objects.Ring.IntegerRingElement;
+import cryptographic.primitives.PseudoRandomGenerator;
+
+
 
 /**
  * This class provides the functionality of verifying the decryption.
@@ -13,12 +18,20 @@ public class VerDec {
 
 	
 	/**
+	 * @param arrayOfElements2 
+	 * @param arrayOfElements 
+	 * @param productGroupElement 
+	 * @param iGroup 
+	 * @param pseudoRandomGenerator 
+	 * @param l 
+	 * @param k 
+	 * @param j 
+	 * @param i 
+	 * @param bs 
+	 * @param iRing 
 	 * @return true if verification of decryption was successful and false otherwise.
 	 */
-	static public boolean verify(byte[] prefixToRO, int sizeOfArray, int Ne, int Nr, int Nv, String sPRG, String sGq, 
-			ArrayOfElements<GroupElement> PlainTextGroup, ArrayOfElements<GroupElement> CiphertextGroup, 
-			ProductElement fullPublicKey, GroupElement[] publicKeysOfParties,
-			ArrayOfElements<GroupElement> ciphertexts, ArrayOfElements<GroupElement> plaintexts) {
+	static public boolean verify(String directory, byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2, IRing<IntegerRingElement> iRing) {
 		// TODO Auto-generated method stub
 		return false;
 	}

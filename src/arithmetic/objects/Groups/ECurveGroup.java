@@ -5,8 +5,8 @@ package arithmetic.objects.Groups;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
-import arithmetic.objects.ArrayOfElements;
-import arithmetic.objects.StringLeaf;
+import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.BasicElements.StringLeaf;
 import arithmetic.objects.Field.IField;
 import arithmetic.objects.Field.IntegerFieldElement;
 import arithmetic.objects.Field.PrimeOrderField;
