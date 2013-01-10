@@ -36,7 +36,9 @@ public class ArrayOfElements<E> implements ByteTree {
 		return elements.size();
 	}
 	
-	public boolean equals (ArrayOfElements<E> b)
+	public boolean equals (ArrayOfElements<E> b) {
+		return false;
+	}
 	
 
 	@Override
