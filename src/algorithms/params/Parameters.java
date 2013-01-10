@@ -91,7 +91,8 @@ public class Parameters {
 	private String auxsid;
 	private int w;
 	private ProductGroupElement fullPublicKey;
-	private int maxciph;
+	private int maxciph;//we don't read it in the main
+	//TODO check the maxciph
 
 	// parameters from the XML
 	private String protVersion;

@@ -18,7 +18,9 @@ import arithmetic.objects.Ring.IRing;
 import arithmetic.objects.Ring.IntegerRingElement;
 import arithmetic.objects.Ring.Ring;
 import cryptographic.primitives.HashFuncPRG;
+import cryptographic.primitives.HashFuncPRGRandomOracle;
 import cryptographic.primitives.HashFunction;
+import cryptographic.primitives.RandomOracle;
 import cryptographic.primitives.SHA2HashFunction;
 
 /**
@@ -85,10 +87,14 @@ public class MainVerifier {
 			return false;
 
 		// *******Section 3 in the Algorithm*********
+		// Derives the relevant objects: IGroup Gq, Ring Zq, Hashfunction H, and
+		// PRG.
 		if (!deriveSetsAndObjects())
 			return false;
 
 		// *******Section 4 in the Algorithm*********
+		// Also creates the random oracles used in the provers using prg and
+		// hashfunction
 		createPrefixToRo();
 
 		// *******Section 5 in the Algorithm*********
@@ -106,33 +112,37 @@ public class MainVerifier {
 				"decryption"))
 				&& (params.isPosc() || params.isCcpos()))
 
-			if (!VerShuffling.verify(params.getDirectory(),
+			if (!VerShuffling.verify(params.getROseed(),
+					params.getROchallenge(), params.getDirectory(),
 					params.getPrefixToRO(), params.getThreshold(),
 					params.getN(), params.getNe(), params.getNr(),
 					params.getNe(), params.getPrg(), params.getGq(),
 					params.getFullPublicKey(), params.getCiphertexts(),
 					params.getShuffledCiphertexts(), params.isPosc(),
-					params.isCcpos(),params.getZq()))
+					params.isCcpos(), params.getZq(),params.getW()))
 				return false;
 
 		// 7b - Verify Decryption
-		if (params.isDec()) {//isDec==true means we need to check the decryption.
+		if (params.isDec()) {// isDec==true means we need to check the
+								// decryption.
 			if (params.getType().equals("mixing"))
-				if (!VerDec
-						.verify(params.getDirectory(), params.getPrefixToRO(),
-								params.getN(), params.getNe(), params.getNr(),
-								params.getNv(), params.getPrg(),
-								params.getGq(), params.getFullPublicKey(),
-								params.getShuffledCiphertexts(),
-								params.getPlaintexts(),params.getZq()))
-					return false;
-
-			if (params.getType().equals("decryption"))
-				if (!VerDec.verify(params.getDirectory(),
+				if (!VerDec.verify(params.getROseed(),
+						params.getROchallenge(), params.getDirectory(),
 						params.getPrefixToRO(), params.getN(), params.getNe(),
 						params.getNr(), params.getNv(), params.getPrg(),
 						params.getGq(), params.getFullPublicKey(),
-						params.getCiphertexts(), params.getPlaintexts(),params.getZq()))
+						params.getShuffledCiphertexts(),
+						params.getPlaintexts(), params.getZq()))
+					return false;
+
+			if (params.getType().equals("decryption"))
+				if (!VerDec.verify(params.getROseed(),
+						params.getROchallenge(), params.getDirectory(),
+						params.getPrefixToRO(), params.getN(), params.getNe(),
+						params.getNr(), params.getNv(), params.getPrg(),
+						params.getGq(), params.getFullPublicKey(),
+						params.getCiphertexts(), params.getPlaintexts(),
+						params.getZq()))
 					return false;
 
 		}
@@ -154,7 +164,8 @@ public class MainVerifier {
 		}
 
 		// create the Ring
-		IRing<IntegerRingElement> temp = new Ring(params.getGq().getFieldOrder());
+		IRing<IntegerRingElement> temp = new Ring(params.getGq()
+				.getFieldOrder());
 		params.setZq(temp);
 
 		// Set the Hashfunction and the pseudo random generator
@@ -192,6 +203,16 @@ public class MainVerifier {
 		byte[] Seed = node.toByteArray();
 
 		params.setPrefixToRO(H.digest((Seed)));
+
+		// Set random oracles:
+		RandomOracle ROseed = new HashFuncPRGRandomOracle(H, params.getPrg()
+				.seedlen());
+		RandomOracle ROchallenge = new HashFuncPRGRandomOracle(H,
+				params.getNv());
+
+		params.setROseed(ROseed);
+		params.setROchallenge(ROchallenge);
+
 	}
 
 	private boolean ReadKeys() throws IOException {
@@ -242,7 +263,7 @@ public class MainVerifier {
 			xi = params.getMixSecretKey().getAt(i);
 			yi = params.getMixPublicKey().getAt(i);
 
-			//TODO: check this step
+			// TODO: check this step
 			if ((xi != null) && !(yi.equal(g.power(xi.getElement()))))
 				return false;
 		}

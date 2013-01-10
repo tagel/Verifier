@@ -12,6 +12,7 @@ import org.junit.Test;
 import arithmetic.objects.Arrays.ArrayGenerators;
 import arithmetic.objects.BasicElements.BigIntLeaf;
 import arithmetic.objects.BasicElements.StringLeaf;
+import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ModGroup;
 import cryptographic.primitives.CryptoUtils;
@@ -55,7 +56,7 @@ public class ElementsExtractorTests {
 							.toLowerCase(), CryptoUtils
 							.bytesToHexString(byteArr));
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -81,28 +82,24 @@ public class ElementsExtractorTests {
 							.toLowerCase(), CryptoUtils
 							.bytesToHexString(byteArr));
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 
 	@Test
 	public void createGroupElementTest() {
-		BigInteger bi = BigInteger.valueOf(258);
+		BigIntLeaf bi = new BigIntLeaf(new BigInteger("258"));
 		ModGroup Gq = new ModGroup(BigInteger.valueOf(263),
 				BigInteger.valueOf(131), null);
-		// IGroupElement ige = new ModGroupElement(bi, Gq);
-		IGroupElement ige = ElementsExtractor.createGroupElement(
-				bi.toByteArray(), Gq);
+		IGroupElement ige = ElementsExtractor.createGroupElement(bi.toByteArray(), Gq);
+				
 		try {
-			byte[] ans = ige.toByteArray();
 			Assert.assertEquals(
 					CryptoUtils.bytesToHexString(ige.toByteArray()),
 					"01000000020102");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
-
 	}
 
 	@Test
@@ -114,4 +111,19 @@ public class ElementsExtractorTests {
 		Assert.assertEquals(BIans.intValue(), 257);
 	}
 
+	@Test
+	public void unmarshal(){
+		//try {
+			String sGq = "0000000002010000001c766572696669636174756d2e61726974686d2e4543715047726f75700100000005502d323536";
+			byte[] a = CryptoUtils.hexStringToBytes(sGq);
+			int i = 0;
+			i = i++;
+//			IGroup Gq = ElementsExtractor.unmarshal(sGq);
+//			Assert.assertEquals(Gq.getGroupType(),"verificatum.arithm.ECqPGroup"); 
+//			
+//		} catch (UnsupportedEncodingException e) {
+//			System.err.println(e.getMessage());
+//		}
+		
+	}
 }
