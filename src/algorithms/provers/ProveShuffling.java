@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.Arrays.ArrayGenerators;
 import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.BasicElements.BigIntLeaf;
 import arithmetic.objects.BasicElements.Node;
@@ -87,6 +88,7 @@ public class ProveShuffling extends Prover {
 					ElementsExtractor
 							.leafToInt(PoSReply.getAt(3).toByteArray()),
 					Zq);
+			
 			ProductRingElement Kf = new ProductRingElement(PoSReply.getAt(5));
 
 			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>)(
@@ -100,7 +102,7 @@ public class ProveShuffling extends Prover {
 			 */
 			StringLeaf stringLeaf = new StringLeaf("generators");
 			byte[] independentSeed = ROSeed
-					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
+					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							stringLeaf.toByteArray()));
 			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
 					independentSeed, Nr);
@@ -131,7 +133,7 @@ public class ProveShuffling extends Prover {
 			nodeForChallenge.add(PoSCommitment);
 
 			byte[] challenge = ROChallenge
-					.getRandomOracleOutput(ElementsExtractor.concatArrays(ro,
+					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							nodeForChallenge.toByteArray()));
 
 			/* Computation of v: */
