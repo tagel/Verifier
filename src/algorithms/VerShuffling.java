@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import algorithms.provers.ProveShuffling;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.Arrays.ArrayGenerators;
 import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
@@ -93,10 +94,10 @@ public class VerShuffling {
 				//TODO check how we need to implement the equals
 				if (!retValue) //we need to check if Liminus1 == Li
 					if (i==lambda)
-						if (!Llambda.equalsShuffle(Li))
+						if (!Llambda.equals(Li))
 							return false;
 					else 
-						if (!Li.equalsShuffle(Liminus1))
+						if (!Li.equals(Liminus1))
 							return false;
 				retValue = true;
 			}
@@ -154,13 +155,13 @@ public class VerShuffling {
 		 * The following steps create the objects from the byte[] and set the
 		 * global fields, that will be sent to the provers.
 		 */
-		PermutationCommitment = ElementsExtractor.createGroupElementArray(
+		PermutationCommitment = ArrayGenerators.createGroupElementArray(
 				bPermutationCommitment, Gq);
 
 		// If i==1 it means that Liminus1 = L0, as we did in the main loop
 		if (i != 1)
 			Liminus1 = Li;
-		Li = ElementsExtractor.createArrayOfCiphertexts(bLi, Gq);
+		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq);
 
 		
 		//TODO reject if the interpretation fails
@@ -179,14 +180,14 @@ public class VerShuffling {
 		PoSCommitment.setAt(4, temp);
 		
 		//Read F' Ciphertext
-		ProductGroupElement tempF = ElementsExtractor.createCipherText(PoSCommitment.getAt(5).toByteArray(), Gq);
+		ProductGroupElement tempF = ElementsExtractor.createCiphertext(PoSCommitment.getAt(5).toByteArray(), Gq);
 		PoSCommitment.setAt(5, tempF);
 		
 		//Read B and B' arrays of N elements in Gq
-		ArrayOfElements<IGroupElement> tempB = ElementsExtractor.createGroupElementArray(
+		ArrayOfElements<IGroupElement> tempB = ArrayGenerators.createGroupElementArray(
 				PoSCommitment.getAt(0).toByteArray(), Gq);
 		PoSCommitment.setAt(0, tempF);
-		tempB = ElementsExtractor.createGroupElementArray(
+		tempB = ArrayGenerators.createGroupElementArray(
 				PoSCommitment.getAt(2).toByteArray(), Gq);
 		PoSCommitment.setAt(2, tempF);
 		
@@ -206,10 +207,10 @@ public class VerShuffling {
 		PoSReply.setAt(5, tempp);
 				
 		//Read Kb and Ke as arrays of Ring Elements
-		ArrayOfElements<IntegerRingElement> tempK = ElementsExtractor.createRingElementArray(
+		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators.createRingElementArray(
 				PoSReply.getAt(1).toByteArray(), Zq);
 		PoSCommitment.setAt(1, tempK);
-		tempK = ElementsExtractor.createRingElementArray(
+		tempK = ArrayGenerators.createRingElementArray(
 				PoSReply.getAt(4).toByteArray(), Zq);
 		PoSCommitment.setAt(4, tempK);
 		
