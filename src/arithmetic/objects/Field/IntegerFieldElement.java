@@ -51,8 +51,6 @@ public class IntegerFieldElement implements ByteTree {
 		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i
 				.add(BigInteger.ONE)) {
 			result = result.mult(this);
-			System.out.println("i = " + i + " result = " + result.getElement()
-					+ " mult = " + this.getElement());
 		}
 		return result;
 	}

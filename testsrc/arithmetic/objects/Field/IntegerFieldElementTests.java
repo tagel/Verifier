@@ -90,7 +90,7 @@ public class IntegerFieldElementTests {
 
 		ife = new IntegerFieldElement(new BigInteger("5"), pof_4);
 		ifeneg = new IntegerFieldElement(new BigInteger("3"), pof_4);
-		
+
 		Assert.assertTrue(ife.neg().equal(ifeneg));
 	}
 
@@ -138,13 +138,17 @@ public class IntegerFieldElementTests {
 				pof_4);
 		IntegerFieldElement ife3 = new IntegerFieldElement(new BigInteger("3"),
 				pof_4);
-		
+
 		Assert.assertTrue(ife3.equal(ife3.power(new BigInteger("3"))));
-		Assert.assertTrue(ife2.getField().zero().equal(ife2.power(new BigInteger("5"))));
+		Assert.assertTrue(ife2.getField().zero()
+				.equal(ife2.power(new BigInteger("5"))));
 	}
 
 	@Test
-	public void inverseTest() {
-		// TODO
+	public void inverse_pof4Test() {
+		IntegerFieldElement ife = new IntegerFieldElement(new BigInteger("3"),
+				pof_4);
+
+		Assert.assertTrue(ife.equal(ife.inverse()));
 	}
 }
