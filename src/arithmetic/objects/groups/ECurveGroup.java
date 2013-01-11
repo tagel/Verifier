@@ -1,5 +1,7 @@
 package arithmetic.objects.groups;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+
 import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -129,8 +131,43 @@ public class ECurveGroup implements IGroup{
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr) {
-		// TODO Auto-generated method stub
+		
+		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
+		int nq = this.q.bitLength();
+		
+		int length = 8 * ((int) Math.ceil((double) (nr+nq / 8)));
+		prg.setSeed(seed);
+		
+		for (int i = 0; i < N; i++) {
+			byte[] arr = prg.getNextPRGOutput(length);
+			BigInteger t = new BigInteger(arr);
+			BigInteger ttag = t.mod(BigInteger.valueOf(2).pow(nq+nr));
+			BigInteger zi = ttag.mod(this.q);
+			
+		}
+		
 		return null;
+	}
+	
+	
+	public int[] shanksTonelli(int a, int p) {
+		int[] retVal = new int[2];
+		
+		return retVal;
+	}
+	
+	//Find positive integers Q and S such that p-1=2Q
+	public int[] findPowers(int p) {
+		int[] retVal = new int[2];
+		int s;
+		int Q=1;
+		
+		while (Q%2!=0) {
+			//bla
+			
+		} 
+		
+		return retVal;
 	}
 
 

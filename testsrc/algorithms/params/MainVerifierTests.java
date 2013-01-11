@@ -10,7 +10,7 @@ import cryptographic.primitives.CryptoUtils;
 import cryptographic.primitives.HashFunction;
 import cryptographic.primitives.SHA2HashFunction;
 
-import algorithms.MainVerifier;
+import algorithms.verifiers.MainVerifier;
 
 public class MainVerifierTests {
 

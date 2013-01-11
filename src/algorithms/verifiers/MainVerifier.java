@@ -1,9 +1,11 @@
-package algorithms;
+package algorithms.verifiers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
+import algorithms.VerDec;
+import algorithms.VerShuffling;
 import algorithms.params.Parameters;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
