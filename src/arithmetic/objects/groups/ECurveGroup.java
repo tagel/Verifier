@@ -124,7 +124,21 @@ public class ECurveGroup implements IGroup{
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr) {
-		// TODO Auto-generated method stub
+		
+		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
+		int nq = this.q.bitLength();
+		
+		int length = 8 * ((int) Math.ceil((double) (nr+nq / 8)));
+		prg.setSeed(seed);
+		
+		for (int i = 0; i < N; i++) {
+			byte[] arr = prg.getNextPRGOutput(length);
+			BigInteger t = new BigInteger(arr);
+			BigInteger ttag = t.mod(BigInteger.valueOf(2).pow(nq+nr));
+			BigInteger zi = ttag.mod(this.q);
+			
+		}
+		
 		return null;
 	}
 
