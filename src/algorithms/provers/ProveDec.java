@@ -1,4 +1,4 @@
-package algorithms;
+package algorithms.provers;
 
 import algorithms.params.Parameters;
 

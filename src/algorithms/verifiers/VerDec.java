@@ -1,4 +1,4 @@
-package algorithms;
+package algorithms.verifiers;
 
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.groups.IGroup;

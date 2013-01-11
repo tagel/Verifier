@@ -3,7 +3,6 @@ package algorithms.verifiers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import algorithms.VerDec;
 import algorithms.params.Parameters;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
