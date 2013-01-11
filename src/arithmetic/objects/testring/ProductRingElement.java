@@ -1,4 +1,4 @@
-package arithmetic.objects.Ring;
+package arithmetic.objects.testring;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;

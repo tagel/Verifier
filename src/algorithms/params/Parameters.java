@@ -16,8 +16,8 @@ import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
-import arithmetic.objects.Ring.IRing;
-import arithmetic.objects.Ring.IntegerRingElement;
+import arithmetic.objects.testring.IRing;
+import arithmetic.objects.testring.IntegerRingElement;
 
 /**
  * This class describes an object that contains the parameters used by the
