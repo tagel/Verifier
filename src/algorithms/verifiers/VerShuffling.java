@@ -1,10 +1,11 @@
-package algorithms;
+package algorithms.verifiers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
+import algorithms.ProveCCPoS;
 import algorithms.provers.ProveShuffling;
 import algorithms.provers.ProveSoC;
 import arithmetic.objects.ElementsExtractor;
