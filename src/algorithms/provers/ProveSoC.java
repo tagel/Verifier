@@ -28,7 +28,7 @@ public class ProveSoC extends Prover {
 	 * @return true if the proof of shuffle of commitments was correct and false
 	 *         otherwise.
 	 */
-	public boolean prove(
+	public static boolean prove(
 			RandomOracle ROSeed,
 			RandomOracle ROChallenge,
 			byte[] ro,

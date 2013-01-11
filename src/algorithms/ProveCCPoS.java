@@ -12,7 +12,7 @@ public class ProveCCPoS {
 	/**
 	 * @return true if the commitment-consistent proof of shuffle was correct and false otherwise.
 	 */
-	public boolean prove(Parameters params) {
+	public static boolean prove(Parameters params) {
 		// TODO Auto-generated method stub
 		return false;
 	}

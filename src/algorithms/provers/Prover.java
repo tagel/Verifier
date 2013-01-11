@@ -39,10 +39,8 @@ public abstract class Prover {
 			left.add(g.power(powers.getAt(i).getElement()));
 			right.add((y.power(powers.getAt(i).getElement()).mult(ms.getAt(i))));
 		}
-		ProductGroupElement pgLeft = new ProductGroupElement(right);
-		ProductGroupElement pgRight = new ProductGroupElement(right);
 		
-    	ProductGroupElement encryptedMsg = ArrayGenerators.createCiphertext(pgLeft, pgRight);
+    	ProductGroupElement encryptedMsg = ElementsExtractor.createCiphertext(left, right);
     	return encryptedMsg; 
     }
 	
