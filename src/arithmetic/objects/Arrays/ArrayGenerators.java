@@ -7,8 +7,8 @@ import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
-import arithmetic.objects.ring.IRing;
-import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.danielring.IRing;
+import arithmetic.objects.danielring.IntegerRingElement;
 
 public class ArrayGenerators {
 	

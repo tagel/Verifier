@@ -3,8 +3,8 @@ package algorithms;
 import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.ProductGroupElement;
-import arithmetic.objects.ring.IRing;
-import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.danielring.IRing;
+import arithmetic.objects.danielring.IntegerRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
