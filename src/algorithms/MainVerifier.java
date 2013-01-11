@@ -310,6 +310,8 @@ public class MainVerifier {
 
 		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq());
+		if (ShuffledCiphertexts.getSize()!=params.getN())
+			return false;
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
 		// Section 6c of the algorithm
