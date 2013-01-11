@@ -49,7 +49,7 @@ public class ModGroupElement implements IGroupElement {
 
 	@Override
 	public ModGroupElement power(BigInteger b) {
-		BigInteger result = getElement();
+		BigInteger result = BigInteger.ONE;
 		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
 			result = result.multiply(getElement());
 		ModGroupElement ret = new ModGroupElement (result.mod(getGroup().getFieldOrder()), getGroup());

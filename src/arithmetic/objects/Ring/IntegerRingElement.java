@@ -48,7 +48,7 @@ public class IntegerRingElement implements ByteTree {
 	}
 	
 	public IntegerRingElement power (BigInteger b) {
-		IntegerRingElement result = this;
+		IntegerRingElement result = new IntegerRingElement(BigInteger.ONE, ring);
 		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
 	    	result = result.mult(this);
 		return result;

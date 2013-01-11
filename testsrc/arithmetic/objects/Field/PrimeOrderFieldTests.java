@@ -8,6 +8,11 @@ import org.junit.Test;
 
 import arithmetic.objects.Field.PrimeOrderField;
 
+/**
+ * Tests for class PrimeOrderField.
+ * @author Daniel
+ *
+ */
 public class PrimeOrderFieldTests {
 
 	@Test
