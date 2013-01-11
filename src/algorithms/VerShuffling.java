@@ -6,17 +6,19 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import algorithms.provers.ProveShuffling;
+import algorithms.provers.ProveSoC;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.Arrays.ArrayGenerators;
 import arithmetic.objects.Arrays.ArrayOfElements;
 import arithmetic.objects.BasicElements.BooleanArrayElement;
 import arithmetic.objects.BasicElements.Node;
+import arithmetic.objects.BasicElements.StringLeaf;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
-import arithmetic.objects.Ring.IRing;
-import arithmetic.objects.Ring.IntegerRingElement;
-import arithmetic.objects.Ring.ProductRingElement;
+import arithmetic.objects.ring.IRing;
+import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -30,12 +32,18 @@ public class VerShuffling {
 
 	private static ArrayOfElements<ProductGroupElement> Liminus1;
 	private static ArrayOfElements<ProductGroupElement> Li;
+	
+	private static ArrayOfElements<IGroupElement> PermutationCommitment;
+	
 	private static Node PoSCommitment;
 	private static Node PoSReply;
-	private static ArrayOfElements<IGroupElement> PermutationCommitment;
+
 	private static Node PoSCCommitment;
 	private static Node PoSCReply;
 	private static BooleanArrayElement keepList;
+
+	private static Node CCPoSCommitment;
+	private static Node CCPoSReply;
 
 	/**
 	 * @param prefixToRO
@@ -94,7 +102,7 @@ public class VerShuffling {
 									Llambda, width, PermutationCommitment,
 									PoSCommitment, PoSReply);
 				} else {
-					if (!readFiles(i, directory, Gq, Zq))
+					if (!readFilesPoS(i, directory, Gq, Zq,N))
 						retValue = false;
 					retValue = retValue
 							&& ProveShuffling.prove(ROSeed, ROChallenge,
@@ -129,7 +137,24 @@ public class VerShuffling {
 
 			for (int i = 1; i <= lambda; i++) {
 				// Step 1 in the algorithm
-				verifyPOSC(i, directory, Gq, Zq);
+				boolean retValue = true;
+				//TODO change the vars we send to the prover
+				if (!readFilesPoSC(i, directory, Gq, Zq,N)
+						|| (!ProveSoC.prove(ROChallenge, ROChallenge,
+								prefixToRO, i, i, i, i, prg, Gq, null,
+								PoSCCommitment, PoSCCommitment,
+								PermutationCommitment))) {
+					/*If the algorithm rejected or the reading failed, set permutation commitment to 
+					 * be h - an array of random group elements
+					 */
+					StringLeaf stringLeaf = new StringLeaf("generators");
+					byte[] independentSeed = ROSeed
+							.getRandomOracleOutput(ArrayGenerators.concatArrays(prefixToRO,
+									stringLeaf.toByteArray()));
+					ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
+							independentSeed, nr);
+					PermutationCommitment = h;
+				}
 
 				// Step 2: potential early abort
 				if (!ccpos)
@@ -139,21 +164,59 @@ public class VerShuffling {
 				// First, try to read the KeepList Array:
 				byte[] keepListFile = ElementsExtractor.btFromFile(directory,
 						"proofs", "KeepList" + (i < 10 ? "0" : "") + i + ".bt");
+				
 				if (keepListFile == null) {// if the file doesn't exist - we
 											// fill the array to be N truths and
 											// the rest falses.
 					boolean[] tempArr = new boolean[maxciph];
-					for (int j=0; i<maxciph; j++)
-						if (j<N)
+					for (int j = 0; i < maxciph; j++)
+						if (j < N)
 							tempArr[j] = true;
 						else
 							tempArr[j] = false;
 					keepList = new BooleanArrayElement(tempArr);
-				
-				} else { //The file does exist, we read it.
+
+				} else { // The file does exist, we read it.
 					keepList = new BooleanArrayElement(keepListFile);
 				}
-				// Secondly, 
+				//Now we shrink the permutation commitment according to keep list
+				ArrayOfElements<IGroupElement> tempArray = new ArrayOfElements<IGroupElement>();
+				for (int j = 0; i < maxciph; j++) {
+					if (keepList.getAt(j))
+						tempArray.add(PermutationCommitment.getAt(j));
+				}
+				PermutationCommitment = tempArray;
+
+				
+				
+				// Step 4 and 5 of the algorithm
+				Liminus1 = L0;// First we initialize the list
+
+				
+				// We read lists of ciphertexts until i=lambda.
+				retValue = true; // We check it later
+
+				if (i == lambda) {
+					//TODO change the parameters we send to the prover
+					// Here we send the Llambda to the prover.
+					retValue = retValue && ProveCCPoS.prove(null);
+				} else {
+					if (!readFilesCCPos(i, directory, Gq, Zq,N))
+						retValue = false;
+					retValue = retValue && ProveCCPoS.prove(null);
+				}
+
+				/*
+				 * If retValue is false, it means that reading of elements
+				 * failed or the prover rejected
+				 */
+				if (!retValue) // we need to check if Liminus1 == Li
+					if (i == lambda)
+						if (!Llambda.equals(Li))
+							return false;
+						else if (!Li.equals(Liminus1))
+							return false;
+				retValue = true;
 
 			}
 
@@ -162,24 +225,237 @@ public class VerShuffling {
 		return true;
 	}
 
-	private static void verifyPOSC(int i, String directory, IGroup gq,
-			IRing<IntegerRingElement> zq) {
-		// TODO Auto-generated method stub
+	
+	/* TODO reject if the interpretation fails - in: 
+	 * readFilesPoSC
+	 * readFilesCCPos
+	 * readFilesPoS
+	 */
+	
+	/**
+	 * 
+	 * @param i - the mix server
+	 * @param directory
+	 * @param Gq - the IGroup
+	 * @param Zq - the IRing
+	 * @return true if the reading and extraction of variables succeded
+	 * @throws IOException if bt from file fails or extraction fails
+	 */
+	private static boolean readFilesPoSC(int i, String directory, IGroup Gq,
+			IRing<IntegerRingElement> Zq, int N) throws IOException {
+		/*
+		 * The following steps read the files as byte[]. These byte[] objects
+		 * will be sent to the relevant constructors to make the objects (Node,
+		 * ciphertexts, array of commitment...) that will be sent to the
+		 * provers.
+		 */
+		byte[] bPoSCCommitment = ElementsExtractor.btFromFile(directory,
+				"proofs", "PoSCCommitment" + (i < 10 ? "0" : "") + i + ".bt");
+		if (bPoSCCommitment == null)
+			return false;
 
+		byte[] bPoSCReply = ElementsExtractor.btFromFile(directory, "proofs",
+				"PoSCReply" + (i < 10 ? "0" : "") + i + ".bt");
+		if (bPoSCReply == null)
+			return false;
+
+		byte[] bPermutationCommitment = ElementsExtractor.btFromFile(directory,
+				"proofs", "PermutationCommitment" + (i < 10 ? "0" : "") + i
+						+ ".bt");
+		if (bPermutationCommitment == null)
+			return false;
+
+		/*
+		 * The following steps create the objects from the byte[] and set the
+		 * global fields, that will be sent to the provers.
+		 */
+		PermutationCommitment = ArrayGenerators.createGroupElementArray(
+				bPermutationCommitment, Gq);
+
+		/*
+		 * each NODE needs to know which type are his children - First we create
+		 * the nodes like a generic one, and then we create the appropriate
+		 * types from the byte[] data, according to prover Algorithm
+		 */
+		PoSCCommitment = new Node(bPoSCCommitment);
+
+		// Read the A', C', D' GroupElements
+		// A'
+		IGroupElement temp = ElementsExtractor.createGroupElement(
+				PoSCCommitment.getAt(1).toByteArray(), Gq);
+		PoSCCommitment.setAt(1, temp);
+
+		// C'
+		temp = ElementsExtractor.createGroupElement(PoSCCommitment.getAt(3)
+				.toByteArray(), Gq);
+		PoSCCommitment.setAt(3, temp);
+
+		// D'
+		temp = ElementsExtractor.createGroupElement(PoSCCommitment.getAt(4)
+				.toByteArray(), Gq);
+		PoSCCommitment.setAt(4, temp);
+
+		// Read B and B' arrays of N elements in Gq, and verify if they are of size N  
+		// B
+		ArrayOfElements<IGroupElement> tempB = ArrayGenerators
+				.createGroupElementArray(PoSCCommitment.getAt(0).toByteArray(),
+						Gq);
+		if (tempB.getSize()!=N) 
+			return false;
+		PoSCCommitment.setAt(0, tempB);
+
+		// B'
+		tempB = ArrayGenerators.createGroupElementArray(PoSCCommitment.getAt(2)
+				.toByteArray(), Gq);
+		if (tempB.getSize()!=N) 
+			return false;
+		PoSCCommitment.setAt(2, tempB);
+
+		
+		
+		
+		// Create the PoSCReply in the same way
+		PoSCReply = new Node(bPoSCReply);
+
+		// Read Ka, Kc, Kd as RingElements
+		// Ka
+		IntegerRingElement tempR = new IntegerRingElement(
+				ElementsExtractor.leafToInt(PoSCReply.getAt(0).toByteArray()),
+				Zq);
+		PoSCReply.setAt(0, tempR);
+
+		// Kc
+		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSCReply
+				.getAt(2).toByteArray()), Zq);
+		PoSCReply.setAt(2, tempR);
+
+		// Kd
+		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSCReply
+				.getAt(3).toByteArray()), Zq);
+		PoSCReply.setAt(3, tempR);
+
+		
+		// Read Kb and Ke as arrays of Ring Elements, and verify if they are of size N  
+		// Kb
+		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
+				.createRingElementArray(PoSCReply.getAt(1).toByteArray(), Zq);
+		if (tempK.getSize()!=N) 
+			return false;
+		PoSCReply.setAt(1, tempK);
+
+		// Ke
+		tempK = ArrayGenerators.createRingElementArray(PoSCReply.getAt(4)
+				.toByteArray(), Zq);
+		if (tempK.getSize()!=N) 
+			return false;
+		PoSCReply.setAt(4, tempK);
+
+		return true;
 	}
 
 	/**
 	 * This method reads the relevant files for the i'th mix server. It sets the
-	 * global fields, and the main function will send them to the prover.
+	 * global fields, and the main function will send them to the Shuffling of commitments prover.
+	 * @param i - mix server index
+	 * @param directory
+	 * @param Gq the IGroup
+	 * @param Zq the IRing
+	 * @return true if the reading and extraction of variables succeded
+	 * @throws IOException if bt from file fails or extraction fails
+	 */
+	private static boolean readFilesCCPos(int i, String directory, IGroup Gq,
+			IRing<IntegerRingElement> Zq, int N) throws IOException {
+
+		/*
+		 * The following steps read the files as byte[]. These byte[] objects
+		 * will be sent to the relevant constructors to make the objects (Node,
+		 * ciphertexts, array of commitment...) that will be sent to the
+		 * provers.
+		 */
+		byte[] bLi = ElementsExtractor.btFromFile(directory, "proofs",
+				"Ciphertexts" + (i < 10 ? "0" : "") + i + ".bt");
+		if (bLi == null)
+			return false;
+
+		byte[] bCCPoSCommitment = ElementsExtractor.btFromFile(directory,
+				"proofs", "CCPoSCommitment" + (i < 10 ? "0" : "") + i + ".bt");
+		if (bCCPoSCommitment == null)
+			return false;
+
+		byte[] bCCPoSReply = ElementsExtractor.btFromFile(directory, "proofs",
+				"CCPoSReply" + (i < 10 ? "0" : "") + i + ".bt");
+		if (bCCPoSReply == null)
+			return false;
+
+		/*
+		 * The following steps create the objects from the byte[] and set the
+		 * global fields, that will be sent to the provers.
+		 */
+
+		// If i==1 it means that Liminus1 = L0, as we did in the main loop
+		if (i != 1)
+			Liminus1 = Li;
+		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq);
+		if (Li.getSize()!=N) 
+			return false;
+
+		/*
+		 * each NODE needs to know which type are his children - First we create
+		 * the nodes like a generic one, and then we create the appropriate
+		 * types from the byte[] data, according to prover Algorithm
+		 */
+		CCPoSCommitment = new Node(bCCPoSCommitment);
+
+		// A' As GroupElement
+		IGroupElement temp = ElementsExtractor.createGroupElement(
+				CCPoSCommitment.getAt(0).toByteArray(), Gq);
+		CCPoSCommitment.setAt(0, temp);
+
+		// Read B' as Ciphertext
+		ProductGroupElement tempB = ElementsExtractor.createCiphertext(
+				CCPoSCommitment.getAt(1).toByteArray(), Gq);
+		CCPoSCommitment.setAt(1, tempB);
+
+		
+		
+		// Create the CCPoSReply in the same way
+		CCPoSReply = new Node(bCCPoSReply);
+
+		// Read Ka, Kb, Ke as RingElements
+		// Ka
+		IntegerRingElement tempR = new IntegerRingElement(
+				ElementsExtractor.leafToInt(CCPoSReply.getAt(0).toByteArray()),
+				Zq);
+		CCPoSReply.setAt(0, tempR);
+
+		// Read Kb as productRingElement
+		ProductRingElement tempp = new ProductRingElement(CCPoSReply.getAt(1)
+				.toByteArray(), Zq);
+		CCPoSReply.setAt(1, tempp);
+
+		// Read Ke as arrays of Ring Elements, and verify if they are of size N  
+		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
+				.createRingElementArray(CCPoSReply.getAt(2).toByteArray(), Zq);
+		if (tempK.getSize()!=N) 
+			return false;
+		CCPoSReply.setAt(2, tempK);
+		
+
+		return true;
+	}
+
+	/**
+	 * This method reads the relevant files for the i'th mix server. It sets the
+	 * global fields, and the main function will send them to the Suffling prover.
 	 * 
 	 * @param i
 	 *            the relevant mix-server
-	 * @param gq
-	 * @return true if the reading succeded
-	 * @throws IOException
+	 * @param Gq - The IGroup
+	 * @return true if the reading and extraction of variables succeded
+	 * @throws IOException - if bt from file fails or extraction fails
 	 */
-	private static boolean readFiles(int i, String directory, IGroup Gq,
-			IRing<IntegerRingElement> Zq) throws IOException {
+	private static boolean readFilesPoS(int i, String directory, IGroup Gq,
+			IRing<IntegerRingElement> Zq, int N) throws IOException {
 		/*
 		 * The following steps read the files as byte[]. These byte[] objects
 		 * will be sent to the relevant constructors to make the objects (Node,
@@ -217,9 +493,10 @@ public class VerShuffling {
 		// If i==1 it means that Liminus1 = L0, as we did in the main loop
 		if (i != 1)
 			Liminus1 = Li;
+		if (Li.getSize()!=N) 
+			return false;
 		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq);
 
-		// TODO reject if the interpretation fails
 		/*
 		 * each NODE needs to know which type are his children - First we create
 		 * the nodes like a generic one, and then we create the appropriate
@@ -228,12 +505,17 @@ public class VerShuffling {
 		PoSCommitment = new Node(bPoSCommitment);
 
 		// Read the A', C', D' GroupElements
+		// A'
 		IGroupElement temp = ElementsExtractor.createGroupElement(PoSCommitment
 				.getAt(1).toByteArray(), Gq);
 		PoSCommitment.setAt(1, temp);
+
+		// C'
 		temp = ElementsExtractor.createGroupElement(PoSCommitment.getAt(3)
 				.toByteArray(), Gq);
 		PoSCommitment.setAt(3, temp);
+
+		// D'
 		temp = ElementsExtractor.createGroupElement(PoSCommitment.getAt(4)
 				.toByteArray(), Gq);
 		PoSCommitment.setAt(4, temp);
@@ -244,27 +526,41 @@ public class VerShuffling {
 		PoSCommitment.setAt(5, tempF);
 
 		// Read B and B' arrays of N elements in Gq
+		// B
 		ArrayOfElements<IGroupElement> tempB = ArrayGenerators
 				.createGroupElementArray(PoSCommitment.getAt(0).toByteArray(),
 						Gq);
-		PoSCommitment.setAt(0, tempF);
+		//This array should be of size N
+		if (tempB.getSize()!=N) 
+			return false;
+		PoSCommitment.setAt(0, tempB);
+
+		// B'
 		tempB = ArrayGenerators.createGroupElementArray(PoSCommitment.getAt(2)
 				.toByteArray(), Gq);
-		PoSCommitment.setAt(2, tempF);
+		if (tempB.getSize()!=N) 
+			return false;
+		PoSCommitment.setAt(2, tempB);
 
+		// Create the PoSReply in the same way
 		PoSReply = new Node(bPoSReply);
 
 		// Read Ka, Kc, Kd as RingElements
+		// Ka
 		IntegerRingElement tempR = new IntegerRingElement(
 				ElementsExtractor.leafToInt(PoSReply.getAt(0).toByteArray()),
 				Zq);
-		PoSReply.setAt(0, temp);
+		PoSReply.setAt(0, tempR);
+
+		// Kc
 		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
 				.getAt(2).toByteArray()), Zq);
-		PoSReply.setAt(2, temp);
+		PoSReply.setAt(2, tempR);
+
+		// Kd
 		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
 				.getAt(3).toByteArray()), Zq);
-		PoSReply.setAt(3, temp);
+		PoSReply.setAt(3, tempR);
 
 		// Read Kf as productRingElement
 		ProductRingElement tempp = new ProductRingElement(PoSReply.getAt(5)
@@ -272,12 +568,19 @@ public class VerShuffling {
 		PoSReply.setAt(5, tempp);
 
 		// Read Kb and Ke as arrays of Ring Elements
+		// Kb
 		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
 				.createRingElementArray(PoSReply.getAt(1).toByteArray(), Zq);
-		PoSCommitment.setAt(1, tempK);
+		if (tempK.getSize()!=N) 
+			return false;
+		PoSReply.setAt(1, tempK);
+
+		// Ke
 		tempK = ArrayGenerators.createRingElementArray(PoSReply.getAt(4)
 				.toByteArray(), Zq);
-		PoSCommitment.setAt(4, tempK);
+		if (tempK.getSize()!=N) 
+			return false;
+		PoSReply.setAt(4, tempK);
 
 		return true;
 	}

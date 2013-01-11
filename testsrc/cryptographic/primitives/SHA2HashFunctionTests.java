@@ -7,6 +7,11 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+/**
+ * Tests for class SHA2HashFunction.
+ * @author Daniel
+ *
+ */
 public class SHA2HashFunctionTests {
 
 	@Test (expected = IllegalArgumentException.class) 

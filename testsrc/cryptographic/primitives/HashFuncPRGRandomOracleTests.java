@@ -4,6 +4,11 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+/**
+ * Tests for class HashFuncPRGRandomOracle.
+ * @author Daniel
+ *
+ */
 public class HashFuncPRGRandomOracleTests {
 
 	@Test

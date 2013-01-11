@@ -14,9 +14,9 @@ import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.BasicElements.StringLeaf;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
-import arithmetic.objects.Ring.IRing;
-import arithmetic.objects.Ring.IntegerRingElement;
-import arithmetic.objects.Ring.Ring;
+import arithmetic.objects.ring.IRing;
+import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFuncPRGRandomOracle;
 import cryptographic.primitives.HashFunction;
@@ -310,6 +310,8 @@ public class MainVerifier {
 
 		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq());
+		if (ShuffledCiphertexts.getSize()!=params.getN())
+			return false;
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
 		// Section 6c of the algorithm
