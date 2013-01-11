@@ -2,7 +2,7 @@ package arithmetic.objects.groups;
 
 
 
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -19,9 +19,9 @@ public interface IGroup extends ByteTree {
 	
 	
 
-	public BigInteger getFieldOrder();
+	public LargeInteger getFieldOrder();
 	
-	public BigInteger getOrder();
+	public LargeInteger getOrder();
 	
 	public IGroupElement getGenerator();
 

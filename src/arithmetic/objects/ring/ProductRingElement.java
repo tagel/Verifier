@@ -1,7 +1,7 @@
 package arithmetic.objects.ring;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.arrays.ArrayGenerators;
@@ -54,7 +54,7 @@ public class ProductRingElement implements ByteTree {
 	 * @param integer b
 	 * @return the result of product element in the b'th power.
 	 */
-	public ProductRingElement power(BigInteger b) {
+	public ProductRingElement power(LargeInteger b) {
 			ArrayOfElements<IntegerRingElement> a = arr;
 			for (int i=0; i<arr.getSize(); i++)
 				a.setAt(i, a.getAt(i).power(b));

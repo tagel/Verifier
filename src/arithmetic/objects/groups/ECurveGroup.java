@@ -1,9 +1,6 @@
 package arithmetic.objects.groups;
-
-
-
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.StringLeaf;
@@ -27,19 +24,19 @@ public class ECurveGroup implements IGroup{
 	/**
 	 * p = order of the underlying field.
 	 */
-	private BigInteger p;
+	private LargeInteger p;
 	/**
 	 * q = order of the group
 	 */
-	private BigInteger q; 
+	private LargeInteger q; 
 	/**
 	 * a = first coefficient of the curve equation
 	 */
-	private BigInteger a;
+	private LargeInteger a;
 	/**
 	 * b = second coefficient of the curve equation
 	 */
-	private BigInteger b;
+	private LargeInteger b;
 	/**
 	 * g = standard generator
 	 */
@@ -57,7 +54,7 @@ public class ECurveGroup implements IGroup{
 	 * @param g
 	 * Constructor.
 	 */
-	public ECurveGroup (String name, BigInteger p, BigInteger q, BigInteger a, BigInteger b, Point g) {
+	public ECurveGroup (String name, LargeInteger p, LargeInteger q, LargeInteger a, LargeInteger b, Point g) {
 		this.name = name;
 		this.p=p;
 		this.q=q;
@@ -84,14 +81,22 @@ public class ECurveGroup implements IGroup{
 	}
 	
 	
-	public BigInteger getFieldOrder() {
+	public LargeInteger getFieldOrder() {
 		return p;
 	}
 	
 
 	@Override
-	public BigInteger getOrder() {
+	public LargeInteger getOrder() {
 		return q;
+	}
+	
+	public LargeInteger getXCoefficient() {
+		return a;
+	}
+	
+	public LargeInteger getB() {
+		return b;
 	}
 	
 	@Override
@@ -107,7 +112,7 @@ public class ECurveGroup implements IGroup{
 	@Override
 	public ECurveGroupElement one() {
 		IField<IntegerFieldElement> f = new PrimeOrderField(p);
-		IntegerFieldElement minusOne = new IntegerFieldElement (BigInteger.valueOf(-1), f);
+		IntegerFieldElement minusOne = new IntegerFieldElement (new LargeInteger(-1), f);
 		Point infinity = new Point(minusOne, minusOne);
 		ECurveGroupElement ret = new ECurveGroupElement(infinity, this);
 		return ret;
@@ -124,21 +129,7 @@ public class ECurveGroup implements IGroup{
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr) {
-		
-		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
-		int nq = this.q.bitLength();
-		
-		int length = 8 * ((int) Math.ceil((double) (nr+nq / 8)));
-		prg.setSeed(seed);
-		
-		for (int i = 0; i < N; i++) {
-			byte[] arr = prg.getNextPRGOutput(length);
-			BigInteger t = new BigInteger(arr);
-			BigInteger ttag = t.mod(BigInteger.valueOf(2).pow(nq+nr));
-			BigInteger zi = ttag.mod(this.q);
-			
-		}
-		
+		// TODO Auto-generated method stub
 		return null;
 	}
 

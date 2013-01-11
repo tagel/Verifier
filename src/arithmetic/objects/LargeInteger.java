@@ -1,9 +1,13 @@
 package arithmetic.objects;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 public class LargeInteger extends BigInteger {
 
+	private static final long serialVersionUID = 1L;
+	public static LargeInteger ONE = new LargeInteger(1);
+	public static LargeInteger ZERO = new LargeInteger(0);
 
 	public LargeInteger (byte[] b) {
 		super(b);
@@ -11,12 +15,16 @@ public class LargeInteger extends BigInteger {
 	}
 
 	public LargeInteger (int n) {
-		super(super.valueOf(n).toByteArray());
+		super(ByteBuffer.allocate(8).putInt(n).array());
 	}
 
 	public LargeInteger (BigInteger n) {
 		super(n.toByteArray());
 		
+	}
+	
+	public LargeInteger (String s, int i) {
+		super(s, i);
 	}
 	public LargeInteger add(LargeInteger b)
 	{
@@ -43,13 +51,19 @@ public class LargeInteger extends BigInteger {
 		return new LargeInteger(super.remainder(b));
 	}
 
-	public LargeInteger power(LargeInteger exponent)
-			throws Exception
-			{
-		if (exponent.bitLength() > 32)
-			throw new Exception("Cannot raise a large Integer to the power of a large Integer");
-		return new LargeInteger(BigInteger.pow(exponent.intValue()));
-			}
+	public LargeInteger power(LargeInteger b) {
+		LargeInteger result = ONE;
+		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i
+				.add(ONE)) {
+			result = result.multiply(this);
+		}
+		return result;
+	}
+
+	public LargeInteger power (int i) {
+		return new LargeInteger(super.pow(i));
+	}
+
 
 	public LargeInteger mod(LargeInteger n)
 	{
@@ -59,6 +73,11 @@ public class LargeInteger extends BigInteger {
 	public LargeInteger modPow(LargeInteger a, LargeInteger b)
 	{
 		return new LargeInteger(super.modPow(a, b));
+	}
+	
+	public LargeInteger modInverse(LargeInteger a)
+	{
+		return new LargeInteger(super.modInverse(a));
 	}
 
 	public int compareTo(LargeInteger b)

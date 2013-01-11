@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 import java.util.Arrays;
 
 import cryptographic.primitives.CryptoUtils;
@@ -43,9 +43,9 @@ public class ElementsExtractor {
 	 * @param byte array arr that represents a leaf of an integer
 	 * @return the integer that the byte array represents.
 	 */
-	public static BigInteger leafToInt (byte[] arr) { 
+	public static LargeInteger leafToInt (byte[] arr) { 
 		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
-		return new BigInteger(a);
+		return new LargeInteger(a);
 	}
 
 

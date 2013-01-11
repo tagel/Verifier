@@ -1,7 +1,7 @@
 package arithmetic.objects.groups;
 
 
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -70,7 +70,7 @@ public class ProductGroupElement implements ByteTree {
 	 * @param integer b
 	 * @return the result of product element in the b'th power.
 	 */
-	public ProductGroupElement power(BigInteger b) {
+	public ProductGroupElement power(LargeInteger b) {
 		if (arr!=null) {
 			ArrayOfElements<IGroupElement> a = arr;
 			for (int i=0; i<arr.getSize(); i++)

@@ -2,7 +2,7 @@ package arithmetic.objects.field;
 
 
 
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 
 
 
@@ -15,27 +15,27 @@ public class PrimeOrderField implements IField<IntegerFieldElement> {
 	/**
 	 * the order of the field
 	 */
-	private BigInteger q; 
+	private LargeInteger q; 
 	
-	public PrimeOrderField (BigInteger q) {
+	public PrimeOrderField (LargeInteger q) {
 		this.q = q;
 	}
 	
 	
-	public BigInteger getOrder() {
+	public LargeInteger getOrder() {
 		return q;
 	}
 	
 
 	
 	public IntegerFieldElement one() {
-		IntegerFieldElement ret = new IntegerFieldElement (BigInteger.ONE, this);
+		IntegerFieldElement ret = new IntegerFieldElement (LargeInteger.ONE, this);
 		return ret;
 	}
 
 	
 	public IntegerFieldElement zero() {
-		IntegerFieldElement ret = new IntegerFieldElement (BigInteger.ZERO, this);
+		IntegerFieldElement ret = new IntegerFieldElement (LargeInteger.ZERO, this);
 		return ret;
 	}
 }

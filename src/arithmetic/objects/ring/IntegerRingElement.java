@@ -1,8 +1,6 @@
 package arithmetic.objects.ring;
+import arithmetic.objects.LargeInteger;
 
-
-
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -13,15 +11,15 @@ import arithmetic.objects.ByteTree;
 public class IntegerRingElement implements ByteTree {
 
 	
-	protected BigInteger element;
+	protected LargeInteger element;
 	protected IRing<IntegerRingElement> ring;
 	
-	public IntegerRingElement (BigInteger element, IRing<IntegerRingElement> ring) {
+	public IntegerRingElement (LargeInteger element, IRing<IntegerRingElement> ring) {
 		this.element = element;
 		this.ring = ring;
 	}
 	
-	public BigInteger getElement() {
+	public LargeInteger getElement() {
 		return element;
 	}
 	
@@ -32,7 +30,7 @@ public class IntegerRingElement implements ByteTree {
 
 	
 	public IntegerRingElement neg() {
-		IntegerRingElement ret = new IntegerRingElement(this.getRing().getOrder().min(this.getElement().mod(this.getRing().getOrder())), this.getRing());
+		IntegerRingElement ret = new IntegerRingElement(this.getRing().getOrder().subtract(this.getElement().mod(this.getRing().getOrder())), this.getRing());
 		return ret;
 	}
 
@@ -48,9 +46,9 @@ public class IntegerRingElement implements ByteTree {
 		return ret;
 	}
 	
-	public IntegerRingElement power (BigInteger b) {
-		IntegerRingElement result = new IntegerRingElement(BigInteger.ONE, ring);
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+	public IntegerRingElement power (LargeInteger b) {
+		IntegerRingElement result = new IntegerRingElement(LargeInteger.ONE, ring);
+		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i.add(LargeInteger.ONE))
 	    	result = result.mult(this);
 		return result;
 	}

@@ -2,7 +2,7 @@ package arithmetic.objects.basicelements;
 
 
 
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -11,13 +11,13 @@ import arithmetic.objects.ByteTree;
 
 public class BigIntLeaf implements ByteTree {
 	
-	private BigInteger num;
+	private LargeInteger num;
 	
-	public BigIntLeaf (BigInteger num) {
+	public BigIntLeaf (LargeInteger num) {
 		this.num = num;
 	}
 	
-	public BigInteger getNum() {
+	public LargeInteger getNum() {
 		return num;
 	}
 	

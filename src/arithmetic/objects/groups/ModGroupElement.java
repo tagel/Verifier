@@ -2,7 +2,7 @@ package arithmetic.objects.groups;
 
 
 
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -11,18 +11,18 @@ import java.nio.ByteOrder;
 public class ModGroupElement implements IGroupElement {
 
 
-	private BigInteger element;
+	private LargeInteger element;
 	private ModGroup group;
 	
 
-	public ModGroupElement (BigInteger element, ModGroup group) {
+	public ModGroupElement (LargeInteger element, ModGroup group) {
 		this.element = element;
 		this.group = group;
 	}
 
 
 
-	public BigInteger getElement() {
+	public LargeInteger getElement() {
 		return element;
 	}
 
@@ -32,7 +32,7 @@ public class ModGroupElement implements IGroupElement {
 
 	@Override
 	public ModGroupElement mult(IGroupElement b) {
-		ModGroupElement ret = new ModGroupElement((this.getElement().multiply((BigInteger) ((ModGroupElement) b).getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
+		ModGroupElement ret = new ModGroupElement((this.getElement().multiply((LargeInteger) ((ModGroupElement) b).getElement())).mod(this.getGroup().getFieldOrder()), getGroup());
 		return ret;
 	}
 
@@ -48,9 +48,9 @@ public class ModGroupElement implements IGroupElement {
 	}
 
 	@Override
-	public ModGroupElement power(BigInteger b) {
-		BigInteger result = BigInteger.ONE;
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i.add(BigInteger.ONE))
+	public ModGroupElement power(LargeInteger b) {
+		LargeInteger result = getElement();
+		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i.add(LargeInteger.ONE))
 			result = result.multiply(getElement());
 		ModGroupElement ret = new ModGroupElement (result.mod(getGroup().getFieldOrder()), getGroup());
 		return ret;
@@ -59,7 +59,7 @@ public class ModGroupElement implements IGroupElement {
 
 	@Override
 	public boolean equal(IGroupElement b) {
-		if (getElement().mod(getGroup().getFieldOrder()).equals(((BigInteger) ((ModGroupElement) b).getElement()).mod(((ModGroupElement) b).getGroup().getFieldOrder()))) return true;
+		if (getElement().mod(getGroup().getFieldOrder()).equals(((LargeInteger) ((ModGroupElement) b).getElement()).mod(((ModGroupElement) b).getGroup().getFieldOrder()))) return true;
 		else return false;
 	}
 

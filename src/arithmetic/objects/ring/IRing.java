@@ -2,7 +2,7 @@ package arithmetic.objects.ring;
 
 
 
-import java.math.BigInteger;
+import arithmetic.objects.LargeInteger;
 
 
 /**
@@ -12,7 +12,7 @@ import java.math.BigInteger;
 public interface IRing<E> {
 
 	
-	public BigInteger getOrder();
+	public LargeInteger getOrder();
 	
 
 	/**

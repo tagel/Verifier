@@ -1,22 +1,23 @@
 package arithmetic.objects.field;
 
-import java.math.BigInteger;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import arithmetic.objects.ByteTree;
+import arithmetic.objects.LargeInteger;
 
 public class IntegerFieldElement implements ByteTree {
 
-	protected BigInteger element;
+	protected LargeInteger element;
 	protected IField<IntegerFieldElement> field;
 
-	public IntegerFieldElement(BigInteger element, IField<IntegerFieldElement> f) {
+	public IntegerFieldElement(LargeInteger element, IField<IntegerFieldElement> f) {
 		this.element = element;
 		this.field = f;
 	}
 
-	public BigInteger getElement() {
+	public LargeInteger getElement() {
 		return element;
 	}
 
@@ -46,10 +47,10 @@ public class IntegerFieldElement implements ByteTree {
 		return ret;
 	}
 
-	public IntegerFieldElement power(BigInteger b) {
+	public IntegerFieldElement power(LargeInteger b) {
 		IntegerFieldElement result = this.getField().one();
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(b) < 0; i = i
-				.add(BigInteger.ONE)) {
+		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i
+				.add(LargeInteger.ONE)) {
 			result = result.mult(this);
 		}
 		return result;
