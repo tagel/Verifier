@@ -110,20 +110,6 @@ public class ElementsExtractorTests {
 	}
 
 	@Test
-	public void concatArraysTest() {
-		byte[] byteArr0 = new BigIntLeaf(new BigInteger("0")).toByteArray(); // expecting
-																				// 100010
-		byte[] byteArr1 = new BigIntLeaf(new BigInteger("1")).toByteArray(); // expecting
-																				// 100011
-		byte[] ans = ArrayGenerators.concatArrays(byteArr0, byteArr1); // 100010100011
-																		// which
-																		// is
-																		// 257
-		BigInteger BIans = new BigInteger(ans);
-		Assert.assertEquals(BIans.intValue(), 257);
-	}
-
-	@Test
 	public void unmarshalTest() throws UnsupportedEncodingException {
 		IGroup Gq = ElementsExtractor
 				.unmarshal("ECqPGroup(P-256)::0000000002010000001c766572696669636174756d2e61726974686d2e4543715047726f75700100000005502d323536");
