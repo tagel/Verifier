@@ -6,6 +6,11 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+/**
+ * Tests for class HashFuncPRG.
+ * @author Daniel
+ *
+ */
 public class HashFuncPRGTests {
 
 	@Test
