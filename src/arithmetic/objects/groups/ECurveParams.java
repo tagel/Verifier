@@ -1,4 +1,4 @@
-package arithmetic.objects.Groups;
+package arithmetic.objects.groups;
 
 
 import java.math.BigInteger;

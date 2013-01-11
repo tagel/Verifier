@@ -1,10 +1,10 @@
-package arithmetic.objects.Groups;
+package arithmetic.objects.groups;
 
 
 import java.math.BigInteger;
 
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.Arrays.ArrayOfElements;
+import arithmetic.objects.arrays.ArrayOfElements;
 
 
 public class ProductGroupElement implements ByteTree {

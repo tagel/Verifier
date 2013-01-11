@@ -1,4 +1,4 @@
-package arithmetic.objects.BasicElements;
+package arithmetic.objects.basicelements;
 
 import java.io.UnsupportedEncodingException;
 

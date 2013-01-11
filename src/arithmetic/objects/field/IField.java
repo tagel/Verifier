@@ -1,4 +1,4 @@
-package arithmetic.objects.Field;
+package arithmetic.objects.field;
 
 import arithmetic.objects.ring.IRing;
 

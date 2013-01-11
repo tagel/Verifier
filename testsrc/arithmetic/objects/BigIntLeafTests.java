@@ -6,7 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import arithmetic.objects.BasicElements.BigIntLeaf;
+import arithmetic.objects.basicelements.BigIntLeaf;
 
 import cryptographic.primitives.CryptoUtils;
 

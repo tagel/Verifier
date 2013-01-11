@@ -9,18 +9,18 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import arithmetic.objects.Arrays.ArrayGenerators;
-import arithmetic.objects.BasicElements.BigIntLeaf;
-import arithmetic.objects.BasicElements.Node;
-import arithmetic.objects.BasicElements.StringLeaf;
-import arithmetic.objects.Field.IField;
-import arithmetic.objects.Field.IntegerFieldElement;
-import arithmetic.objects.Field.PrimeOrderField;
-import arithmetic.objects.Groups.ECurveGroup;
-import arithmetic.objects.Groups.IGroup;
-import arithmetic.objects.Groups.IGroupElement;
-import arithmetic.objects.Groups.ModGroup;
-import arithmetic.objects.Groups.Point;
+import arithmetic.objects.arrays.ArrayGenerators;
+import arithmetic.objects.basicelements.BigIntLeaf;
+import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.basicelements.StringLeaf;
+import arithmetic.objects.field.IField;
+import arithmetic.objects.field.IntegerFieldElement;
+import arithmetic.objects.field.PrimeOrderField;
+import arithmetic.objects.groups.ECurveGroup;
+import arithmetic.objects.groups.IGroup;
+import arithmetic.objects.groups.IGroupElement;
+import arithmetic.objects.groups.ModGroup;
+import arithmetic.objects.groups.Point;
 import cryptographic.primitives.CryptoUtils;
 
 public class ElementsExtractorTests {

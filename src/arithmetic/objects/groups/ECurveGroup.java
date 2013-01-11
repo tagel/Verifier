@@ -1,15 +1,15 @@
-package arithmetic.objects.Groups;
+package arithmetic.objects.groups;
 
 
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
-import arithmetic.objects.Arrays.ArrayOfElements;
-import arithmetic.objects.BasicElements.StringLeaf;
-import arithmetic.objects.Field.IField;
-import arithmetic.objects.Field.IntegerFieldElement;
-import arithmetic.objects.Field.PrimeOrderField;
+import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.basicelements.StringLeaf;
+import arithmetic.objects.field.IField;
+import arithmetic.objects.field.IntegerFieldElement;
+import arithmetic.objects.field.PrimeOrderField;
 
 import cryptographic.primitives.PseudoRandomGenerator;
 

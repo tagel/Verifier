@@ -6,6 +6,9 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import arithmetic.objects.field.IntegerFieldElement;
+import arithmetic.objects.field.PrimeOrderField;
+
 import cryptographic.primitives.CryptoUtils;
 
 /**

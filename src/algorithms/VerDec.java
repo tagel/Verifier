@@ -1,8 +1,8 @@
 package algorithms;
 
-import arithmetic.objects.Arrays.ArrayOfElements;
-import arithmetic.objects.Groups.IGroup;
-import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.groups.IGroup;
+import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;

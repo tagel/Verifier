@@ -1,4 +1,4 @@
-package arithmetic.objects.BasicElements;
+package arithmetic.objects.basicelements;
 
 
 
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.Arrays.ArrayGenerators;
+import arithmetic.objects.arrays.ArrayGenerators;
 
 
 public class Node implements ByteTree {

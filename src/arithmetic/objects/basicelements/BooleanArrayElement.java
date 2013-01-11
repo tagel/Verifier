@@ -1,4 +1,4 @@
-package arithmetic.objects.BasicElements;
+package arithmetic.objects.basicelements;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -13,20 +13,20 @@ import java.util.Arrays;
 
 import cryptographic.primitives.CryptoUtils;
 
-import arithmetic.objects.Arrays.ArrayGenerators;
-import arithmetic.objects.Arrays.ArrayOfElements;
-import arithmetic.objects.BasicElements.Node;
-import arithmetic.objects.Field.IField;
-import arithmetic.objects.Field.IntegerFieldElement;
-import arithmetic.objects.Field.PrimeOrderField;
-import arithmetic.objects.Groups.ECurveGroup;
-import arithmetic.objects.Groups.ECurveGroupElement;
-import arithmetic.objects.Groups.IGroup;
-import arithmetic.objects.Groups.IGroupElement;
-import arithmetic.objects.Groups.ModGroup;
-import arithmetic.objects.Groups.ModGroupElement;
-import arithmetic.objects.Groups.Point;
-import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.arrays.ArrayGenerators;
+import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.field.IField;
+import arithmetic.objects.field.IntegerFieldElement;
+import arithmetic.objects.field.PrimeOrderField;
+import arithmetic.objects.groups.ECurveGroup;
+import arithmetic.objects.groups.ECurveGroupElement;
+import arithmetic.objects.groups.IGroup;
+import arithmetic.objects.groups.IGroupElement;
+import arithmetic.objects.groups.ModGroup;
+import arithmetic.objects.groups.ModGroupElement;
+import arithmetic.objects.groups.Point;
+import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
 

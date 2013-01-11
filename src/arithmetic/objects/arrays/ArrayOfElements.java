@@ -1,4 +1,4 @@
-package arithmetic.objects.Arrays;
+package arithmetic.objects.arrays;
 
 
 

@@ -4,15 +4,15 @@ import java.math.BigInteger;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.Arrays.ArrayGenerators;
-import arithmetic.objects.Arrays.ArrayOfElements;
-import arithmetic.objects.BasicElements.BigIntLeaf;
-import arithmetic.objects.BasicElements.Node;
-import arithmetic.objects.Field.IField;
-import arithmetic.objects.Field.IntegerFieldElement;
-import arithmetic.objects.Field.PrimeOrderField;
-import arithmetic.objects.Groups.IGroup;
-import arithmetic.objects.Groups.IGroupElement;
+import arithmetic.objects.arrays.ArrayGenerators;
+import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.basicelements.BigIntLeaf;
+import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.field.IField;
+import arithmetic.objects.field.IntegerFieldElement;
+import arithmetic.objects.field.PrimeOrderField;
+import arithmetic.objects.groups.IGroup;
+import arithmetic.objects.groups.IGroupElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 

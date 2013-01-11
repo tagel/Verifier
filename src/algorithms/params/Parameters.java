@@ -10,12 +10,12 @@ import javax.xml.stream.XMLStreamException;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
-import arithmetic.objects.Arrays.ArrayOfElements;
-import arithmetic.objects.BasicElements.BooleanArrayElement;
-import arithmetic.objects.BasicElements.Node;
-import arithmetic.objects.Groups.IGroup;
-import arithmetic.objects.Groups.IGroupElement;
-import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.basicelements.BooleanArrayElement;
+import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.groups.IGroup;
+import arithmetic.objects.groups.IGroupElement;
+import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
 

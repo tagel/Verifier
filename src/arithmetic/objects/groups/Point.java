@@ -1,6 +1,6 @@
-package arithmetic.objects.Groups;
+package arithmetic.objects.groups;
 
-import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.field.IntegerFieldElement;
 
 
 

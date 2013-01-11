@@ -1,4 +1,4 @@
-package arithmetic.objects.Field;
+package arithmetic.objects.field;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import arithmetic.objects.BasicElements.BooleanArrayElement;
+import arithmetic.objects.basicelements.BooleanArrayElement;
 
 import cryptographic.primitives.CryptoUtils;
 

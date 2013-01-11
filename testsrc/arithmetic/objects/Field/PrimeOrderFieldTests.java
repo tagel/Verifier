@@ -6,7 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import arithmetic.objects.Field.PrimeOrderField;
+import arithmetic.objects.field.PrimeOrderField;
 
 /**
  * Tests for class PrimeOrderField.

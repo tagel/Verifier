@@ -1,12 +1,12 @@
-package arithmetic.objects.Arrays;
+package arithmetic.objects.arrays;
 
 import java.io.UnsupportedEncodingException;
 
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.BasicElements.Node;
-import arithmetic.objects.Groups.IGroup;
-import arithmetic.objects.Groups.IGroupElement;
-import arithmetic.objects.Groups.ProductGroupElement;
+import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.groups.IGroup;
+import arithmetic.objects.groups.IGroupElement;
+import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
 

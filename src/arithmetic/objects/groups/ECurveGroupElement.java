@@ -1,12 +1,12 @@
-package arithmetic.objects.Groups;
+package arithmetic.objects.groups;
 
 
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
-import arithmetic.objects.BasicElements.Node;
-import arithmetic.objects.Field.IntegerFieldElement;
+import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.field.IntegerFieldElement;
 
 
 

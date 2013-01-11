@@ -1,4 +1,4 @@
-package arithmetic.objects.Groups;
+package arithmetic.objects.groups;
 
 
 
@@ -6,9 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
-import arithmetic.objects.Arrays.ArrayOfElements;
-import arithmetic.objects.BasicElements.BigIntLeaf;
-import arithmetic.objects.BasicElements.Node;
+import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.basicelements.BigIntLeaf;
+import arithmetic.objects.basicelements.Node;
 
 import cryptographic.primitives.PseudoRandomGenerator;
 
