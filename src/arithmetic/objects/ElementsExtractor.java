@@ -27,8 +27,8 @@ import arithmetic.objects.Groups.ModGroup;
 import arithmetic.objects.Groups.ModGroupElement;
 import arithmetic.objects.Groups.Point;
 import arithmetic.objects.Groups.ProductGroupElement;
-import arithmetic.objects.testring.IRing;
-import arithmetic.objects.testring.IntegerRingElement;
+import arithmetic.objects.ring.IRing;
+import arithmetic.objects.ring.IntegerRingElement;
 
 
 

@@ -1,4 +1,4 @@
-package arithmetic.objects.testring;
+package arithmetic.objects.ring;
 
 
 

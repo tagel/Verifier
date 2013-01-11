@@ -15,9 +15,9 @@ import arithmetic.objects.BasicElements.Node;
 import arithmetic.objects.Groups.IGroup;
 import arithmetic.objects.Groups.IGroupElement;
 import arithmetic.objects.Groups.ProductGroupElement;
-import arithmetic.objects.testring.IRing;
-import arithmetic.objects.testring.IntegerRingElement;
-import arithmetic.objects.testring.ProductRingElement;
+import arithmetic.objects.ring.IRing;
+import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
