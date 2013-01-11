@@ -2,12 +2,12 @@ package algorithms.verifiers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 
 import algorithms.VerDec;
 import algorithms.params.Parameters;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
@@ -188,10 +188,10 @@ public class MainVerifier {
 		ByteTree sPRG = new StringLeaf(params.getsPRG());
 		ByteTree sH = new StringLeaf(params.getSh());
 
-		ByteTree Ne = new BigIntLeaf(BigInteger.valueOf(params.getNe()));
-		ByteTree Nr = new BigIntLeaf(BigInteger.valueOf(params.getNr()));
-		ByteTree Nv = new BigIntLeaf(BigInteger.valueOf(params.getNv()));
-		ByteTree btW = new BigIntLeaf(BigInteger.valueOf(params.getW()));
+		ByteTree Ne = new BigIntLeaf(new LargeInteger(params.getNe()));
+		ByteTree Nr = new BigIntLeaf(new LargeInteger(params.getNr()));
+		ByteTree Nv = new BigIntLeaf(new LargeInteger(params.getNv()));
+		ByteTree btW = new BigIntLeaf(new LargeInteger(params.getW()));
 
 		ByteTree[] input = new ByteTree[9];
 		input[0] = version_proof;
