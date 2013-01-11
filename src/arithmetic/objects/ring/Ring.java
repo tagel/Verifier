@@ -1,4 +1,4 @@
-package arithmetic.objects.danielring;
+package arithmetic.objects.ring;
 
 
 

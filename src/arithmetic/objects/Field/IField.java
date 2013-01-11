@@ -1,6 +1,6 @@
 package arithmetic.objects.Field;
 
-import arithmetic.objects.danielring.IRing;
+import arithmetic.objects.ring.IRing;
 
 
 
