@@ -156,16 +156,25 @@ public class ECurveGroup implements IGroup{
 		return retVal;
 	}
 	
-	//Find positive integers Q and S such that p-1=2Q
-	public int[] findPowers(int p) {
+	/**
+	 * Find positive integers Q and S such that p-1=Q*2^s, where p is a prime number
+	 * it means that p-1 is even.
+	 * @param p
+	 * @return an array of 2 integers where {s,Q}
+	 */
+	public static int[] findPowers(int p) {
 		int[] retVal = new int[2];
-		int s;
-		int Q=1;
+		int s=0;
+		int Q=p-1;//p-1 is even
 		
-		while (Q%2!=0) {
-			//bla
-			
+		//Q needs to be odd
+		while (Q%2==0) {
+			Q = Q/2;
+			s++;
 		} 
+		
+		retVal[0] = s;
+		retVal[1] = Q;
 		
 		return retVal;
 	}
