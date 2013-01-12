@@ -33,7 +33,13 @@ public class ArrayGenerators {
 	}
 
 	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data, IGroup group) {
-		return null;
+		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
+		Node node = new Node(data);
+		
+		
+		
+		
+		return ret;
 	}
 
 
