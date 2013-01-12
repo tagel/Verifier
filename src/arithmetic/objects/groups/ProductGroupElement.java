@@ -1,6 +1,8 @@
 package arithmetic.objects.groups;
 
 
+import java.io.UnsupportedEncodingException;
+
 import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.ByteTree;
@@ -30,10 +32,6 @@ public class ProductGroupElement implements ByteTree {
 		this.arr = null;
 		this.left = left;
 		this.right = right;
-	}
-	
-	public ProductGroupElement(ByteTree bt) {
-		//TODO: IMPLEMENT
 	}
 	
 	
@@ -101,9 +99,8 @@ public class ProductGroupElement implements ByteTree {
 	}
 	
 	@Override
-	public byte[] toByteArray() {
-		// TODO Auto-generated method stub
-		return null;
+	public byte[] toByteArray() throws UnsupportedEncodingException {
+		return arr.toByteArray();
 	}
 }
 
