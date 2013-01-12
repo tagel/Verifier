@@ -1,6 +1,6 @@
 package arithmetic.objects.groups;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+
 
 import arithmetic.objects.LargeInteger;
 
@@ -17,7 +17,7 @@ import cryptographic.primitives.PseudoRandomGenerator;
  * This class represents a standard elliptic curve over a prime order field.
  *
  */
-public class ECurveGroup implements IGroup{
+public class ECurveGroup implements IGroup {
 	
 	/**
 	 * name = the name of the standard elliptic curve.

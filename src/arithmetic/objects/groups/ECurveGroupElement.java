@@ -47,8 +47,8 @@ public class ECurveGroupElement implements IGroupElement {
 				if (getElement().getY().getElement().equals(((ECurveGroupElement) b).getElement().getY().getElement().negate()))
 					return group.one();
 				else if (getElement().getY().getElement().equals(((ECurveGroupElement) b).getElement().getY().getElement())) {
-					LargeInteger s = getElement().getX().getElement().power(2).multiply(new LargeInteger(3)).subtract(group.getXCoefficient()).divide(getElement().getY().getElement().multiply(new LargeInteger(2)));
-					LargeInteger x = s.power(2).subtract(getElement().getX().getElement().multiply(new LargeInteger(2)));
+					LargeInteger s = getElement().getX().getElement().power(2).multiply(new LargeInteger("3")).subtract(group.getXCoefficient()).divide(getElement().getY().getElement().multiply(new LargeInteger("2")));
+					LargeInteger x = s.power(2).subtract(getElement().getX().getElement().multiply(new LargeInteger("2")));
 					LargeInteger y = getElement().getY().getElement().add(s.multiply(x.subtract(getElement().getX().getElement())));
 					IntegerFieldElement newY = new IntegerFieldElement(y, getElement().getY().getField());
 					IntegerFieldElement newX = new IntegerFieldElement(x, getElement().getX().getField());
