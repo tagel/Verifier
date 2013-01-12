@@ -8,6 +8,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import arithmetic.objects.arrays.ArrayGenerators;
+import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.basicelements.StringLeaf;
@@ -19,6 +21,7 @@ import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
 import arithmetic.objects.groups.Point;
+import arithmetic.objects.groups.ProductGroupElement;
 import cryptographic.primitives.CryptoUtils;
 
 public class ElementsExtractorTests {
@@ -41,6 +44,20 @@ public class ElementsExtractorTests {
 		}
 	}
 
+	@Test
+	public void nodeToPointTest() throws UnsupportedEncodingException {
+		IGroup G = new ECurveGroup("P-192");
+		IField<IntegerFieldElement> f = new PrimeOrderField(G.getFieldOrder());
+		IntegerFieldElement a = new IntegerFieldElement(new LargeInteger("0"), f);
+		IntegerFieldElement b = new IntegerFieldElement(new LargeInteger("1"), f);
+		Node node = new Node();
+		node.add(a);
+		node.add(b);
+		Point point = ElementsExtractor.nodeToPoint(node.toByteArray(), G);
+		Assert.assertEquals(point.getX().getElement(), a.getElement());
+		Assert.assertEquals(point.getY().getElement(), b.getElement());
+	}
+	
 	@Test
 	public void btFromFileTest() {
 		Assert.assertNotNull(
@@ -105,8 +122,50 @@ public class ElementsExtractorTests {
 		} catch (UnsupportedEncodingException e) {
 			System.err.println(e.getMessage());
 		}
+		
+		//TODO: tests for elliptic curve group
 	}
 
+	@Test
+	public void createSimplePGETest() throws UnsupportedEncodingException {
+		ModGroup Gq = new ModGroup(new LargeInteger("263"), new LargeInteger(
+				"131"), null);
+		BigIntLeaf b0 = new BigIntLeaf(new LargeInteger("0"));
+		BigIntLeaf b1 = new BigIntLeaf(new LargeInteger("1"));
+		IGroupElement ige0 = ElementsExtractor.createGroupElement(
+				b0.toByteArray(), Gq);
+		IGroupElement ige1 = ElementsExtractor.createGroupElement(
+				b1.toByteArray(), Gq);
+		Node node = new Node();
+		node.add(ige0);
+		node.add(ige1);
+		ProductGroupElement arr = ElementsExtractor.createSimplePGE(node.toByteArray(), Gq);
+		Assert.assertEquals(CryptoUtils.bytesToHexString(arr.toByteArray()),
+				"00000000020100000002000001000000020001");
+		
+		//TODO: test for elliptic curve group
+	}
+
+	@Test
+	public void createCiphertextTest() throws UnsupportedEncodingException{
+		ModGroup Gq = new ModGroup(new LargeInteger("263"), new LargeInteger(
+				"131"), null);
+		BigIntLeaf b0 = new BigIntLeaf(new LargeInteger("0"));
+		BigIntLeaf b1 = new BigIntLeaf(new LargeInteger("1"));
+		IGroupElement ige0 = ElementsExtractor.createGroupElement(
+				b0.toByteArray(), Gq);
+		IGroupElement ige1 = ElementsExtractor.createGroupElement(
+				b1.toByteArray(), Gq);
+		Node node = new Node();
+		node.add(ige0);
+		node.add(ige1);
+		node.setAt(0, ige0);
+		node.setAt(1, ige1);
+		ProductGroupElement x = ElementsExtractor.createCiphertext(node.toByteArray(), Gq);
+		Assert.assertEquals(CryptoUtils.bytesToHexString(x.toByteArray()),
+				"00000000020100000002000001000000020001");
+	}
+	
 	@Test
 	public void unmarshalTest() throws UnsupportedEncodingException {
 		IGroup Gq = ElementsExtractor
@@ -117,18 +176,5 @@ public class ElementsExtractorTests {
 		Assert.assertEquals(Gq.getGroupType(), "Modular");
 	}
 	
-	@Test
-	public void nodeToPointTest() throws UnsupportedEncodingException {
-		IGroup G = new ECurveGroup("P-192");
-		IField<IntegerFieldElement> f = new PrimeOrderField(G.getFieldOrder());
-		IntegerFieldElement a = new IntegerFieldElement(new LargeInteger("0"), f);
-		IntegerFieldElement b = new IntegerFieldElement(new LargeInteger("1"), f);
-		Node node = new Node();
-		node.add(a);
-		node.add(b);
-		Point point = ElementsExtractor.nodeToPoint(node.toByteArray(), G);
-		Assert.assertEquals(point.getX().getElement(), a.getElement());
-		Assert.assertEquals(point.getY().getElement(), b.getElement());
-		
-	}
+
 }
