@@ -36,8 +36,6 @@ public class ProductRingElementTests {
 		Assert.assertEquals("00000000020100000002010201000000020005",
 				CryptoUtils.bytesToHexString(pre.toByteArray()));
 
-		// TODO - consider fixing the ProductRingElement constructor to copy the
-		// array and not use the same object
 		aoe.add(ire6_ring263);
 		Assert.assertEquals("00000000020100000002010201000000020005",
 				CryptoUtils.bytesToHexString(pre.toByteArray()));
@@ -89,8 +87,10 @@ public class ProductRingElementTests {
 		ProductRingElement pre = new ProductRingElement(aoe);
 		Assert.assertEquals(new LargeInteger("1"),
 				pre.power(new LargeInteger("3")).getArr().getAt(0).getElement());
-		Assert.assertEquals(new LargeInteger("1"),
+		Assert.assertEquals(new LargeInteger("2"),
 				pre.power(new LargeInteger("3")).getArr().getAt(1).getElement());
+		Assert.assertEquals(new LargeInteger("1"),
+				pre.power(new LargeInteger("3")).getArr().getAt(0).getElement());
 	}
 
 	@Test
@@ -105,8 +105,22 @@ public class ProductRingElementTests {
 	}
 
 	@Test
-	public void equalTest() {
-		// TODO
+	public void equal_whenEqualTest() {
+		ArrayOfElements<IntegerRingElement> aoe1 = new ArrayOfElements<IntegerRingElement>();
+		aoe1.add(ire1_ring3);
+		ProductRingElement pre1 = new ProductRingElement(aoe1);
+		ProductRingElement pre2 = new ProductRingElement(aoe1);
+		Assert.assertTrue(pre1.equal(pre2));
 	}
 
+	@Test
+	public void equal_whenNotEqualTest() {
+		ArrayOfElements<IntegerRingElement> aoe1 = new ArrayOfElements<IntegerRingElement>();
+		aoe1.add(ire1_ring3);
+		ArrayOfElements<IntegerRingElement> aoe2 = new ArrayOfElements<IntegerRingElement>();
+		aoe2.add(ire2_ring3);
+		ProductRingElement pre1 = new ProductRingElement(aoe1);
+		ProductRingElement pre2 = new ProductRingElement(aoe2);
+		Assert.assertFalse(pre1.equal(pre2));
+	}
 }
