@@ -18,6 +18,12 @@ import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.Ring;
 
+/**
+ * Tests for ArrayGenerators.
+ * 
+ * @author tagel
+ * 
+ */
 public class ArraysGeneretorsTests {
 
 	@Test

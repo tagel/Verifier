@@ -23,6 +23,12 @@ import arithmetic.objects.groups.Point;
 import arithmetic.objects.groups.ProductGroupElement;
 import cryptographic.primitives.CryptoUtils;
 
+/**
+ * Tests for Element extractor functions
+ * 
+ * @author tagel
+ *
+ */
 public class ElementsExtractorTests {
 
 	private BigIntLeaf bil = new BigIntLeaf(new LargeInteger("258"));
