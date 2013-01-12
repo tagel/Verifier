@@ -147,8 +147,23 @@ public class ElementsExtractorTests {
 	}
 
 	@Test
-	public void createCiphertextTest(){
-		
+	public void createCiphertextTest() throws UnsupportedEncodingException{
+		ModGroup Gq = new ModGroup(new LargeInteger("263"), new LargeInteger(
+				"131"), null);
+		BigIntLeaf b0 = new BigIntLeaf(new LargeInteger("0"));
+		BigIntLeaf b1 = new BigIntLeaf(new LargeInteger("1"));
+		IGroupElement ige0 = ElementsExtractor.createGroupElement(
+				b0.toByteArray(), Gq);
+		IGroupElement ige1 = ElementsExtractor.createGroupElement(
+				b1.toByteArray(), Gq);
+		Node node = new Node();
+		node.add(ige0);
+		node.add(ige1);
+		node.setAt(0, ige0);
+		node.setAt(1, ige1);
+		ProductGroupElement x = ElementsExtractor.createCiphertext(node.toByteArray(), Gq);
+		Assert.assertEquals(CryptoUtils.bytesToHexString(x.toByteArray()),
+				"00000000020100000002000001000000020001");
 	}
 	
 	@Test
