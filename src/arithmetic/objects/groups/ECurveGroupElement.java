@@ -42,11 +42,12 @@ public class ECurveGroupElement implements IGroupElement {
 		IntegerFieldElement xq = ((ECurveGroupElement) b).getElement().getX();
 		IntegerFieldElement yp = this.getElement().getY(); 
 		IntegerFieldElement yq = ((ECurveGroupElement) b).getElement().getY();
+		IField<IntegerFieldElement> field = new PrimeOrderField(this.getGroup().getFieldOrder());
 			
 		if (!xp.equal(xq)) {
-			IntegerFieldElement s = (yp.subtract(yq)).divide(xp.subtract(xq));
+			IntegerFieldElement s = yp.subtract(yq).mult(xp.subtract(xq).inverse());
 			IntegerFieldElement xr = s.power(new LargeInteger("2")).subtract(xp).subtract(xq);
-			IntegerFieldElement yr = LargeInteger.ZERO.subtract(yp.add(s.multiply(xr.subtract(xp))));
+			IntegerFieldElement yr = field.zero().subtract(yp.add(s.mult(xr.subtract(xp))));
 			ECurveGroupElement ret = new ECurveGroupElement(new Point(xr, yr), getGroup());
 			return ret;
 		}
@@ -56,14 +57,15 @@ public class ECurveGroupElement implements IGroupElement {
 		}
 		
 		if (yp.equal(yq)) {
-			IField<IntegerFieldElement> field = new PrimeOrderField(this.getGroup().getFieldOrder());
-			IntegerFieldElement s = (xp.power(new LargeInteger("2")).mult(new IntegerFieldElement(new LargeInteger("3"),field)).subtract(this.getGroup().getXCoefficient()));
-					
-			LargeInteger s = getElement().getX().getElement().power(2).multiply(new LargeInteger("3")).subtract(group.getXCoefficient()).divide(getElement().getY().getElement().multiply(new LargeInteger("2")));
-			LargeInteger x = s.power(2).subtract(getElement().getX().getElement().multiply(new LargeInteger("2")));
-			LargeInteger y = getElement().getY().getElement().add(s.multiply(x.subtract(getElement().getX().getElement())));
-			IntegerFieldElement newY = new IntegerFieldElement(y, getElement().getY().getField());
-			IntegerFieldElement newX = new IntegerFieldElement(x, getElement().getX().getField());
+			IntegerFieldElement p = new IntegerFieldElement(this.getGroup().getXCoefficient(), field);
+			IntegerFieldElement three = new IntegerFieldElement(new LargeInteger("3"),field);
+			IntegerFieldElement two = new IntegerFieldElement(new LargeInteger("2"), field);
+			IntegerFieldElement s = (xp.power(new LargeInteger("2")).mult(three).subtract(p)).mult((yp.mult(two)).inverse());
+//			LargeInteger s = getElement().getX().getElement().power(2).multiply(new LargeInteger("3")).subtract(group.getXCoefficient()).divide(getElement().getY().getElement().multiply(new LargeInteger("2")));
+//			LargeInteger x = s.power(2).subtract(getElement().getX().getElement().multiply(new LargeInteger("2")));
+//			LargeInteger y = getElement().getY().getElement().add(s.multiply(x.subtract(getElement().getX().getElement())));
+//			IntegerFieldElement newY = new IntegerFieldElement(y, getElement().getY().getField());
+//			IntegerFieldElement newX = new IntegerFieldElement(x, getElement().getX().getField());
 			Point p = new Point(newX, newY);
 			ECurveGroupElement ret = new ECurveGroupElement(p, getGroup());
 			return ret;
