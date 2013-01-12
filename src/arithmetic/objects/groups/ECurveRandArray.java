@@ -16,11 +16,11 @@ public class ECurveRandArray {
 	// Powers:
 	LargeInteger Q;
 	LargeInteger s;
-	//Least QNR
+	// Least QNR
 	LargeInteger b;
 
 	public ECurveRandArray(LargeInteger q, int N, PseudoRandomGenerator prg,
-			byte[] seed, int nr, LargeInteger p) {
+			byte[] seed, int nr) {
 
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = q.bitLength();
@@ -28,7 +28,12 @@ public class ECurveRandArray {
 		int length = 8 * ((int) Math.ceil((double) (nr + nq / 8)));
 		prg.setSeed(seed);
 
-		// Prepare the ground for running ressol algorithm.
+		/*
+		 * Prepare the ground for running ressol algorithm: We compute all of
+		 * the things we can compute only once, like the powers Q and s, the the
+		 * least quadratic non residue. We do this here because the complexity
+		 * of each function can be finally O(p).
+		 */
 		// Define Q and s to be p-1=Q2^s when Q is odd
 		LargeInteger[] powers = findPowers(p);
 		Q = powers[1];
@@ -36,10 +41,16 @@ public class ECurveRandArray {
 		// Define b as a the least quadratic non residual
 		b = findLeastQNR(p);
 
+		/*
+		 * Create the random array - first we generate numbers using prg, and
+		 * then we check if these numbers fit to the elliptic curve. We do this
+		 * by computing f(zi) and checking if f(zi) is a quadratic residue of p.
+		 * If it is - we find the roots using Shanks-Tonelli algorithm.
+		 */
 		for (int i = 0; i < N; i++) {
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = new LargeInteger(arr);
-			LargeInteger ttag = t.mod(new LargeInteger(2).power(nq + nr));
+			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
 			LargeInteger zi = ttag.mod(q);
 			// TODO finish the array after the shanks tonelli works
 		}
@@ -48,7 +59,13 @@ public class ECurveRandArray {
 
 	}
 
-	public LargeInteger[] shanksTonelli(LargeInteger a, LargeInteger p) {
+	/**
+	 * 
+	 * @param a - an integer which is a quadratic residue (mod p). 
+	 * @param p - prime order of field
+	 * @return the smallest square root that satisfies y^2 = a (mod p)
+	 */
+	public LargeInteger shanksTonelli(LargeInteger a, LargeInteger p) {
 		LargeInteger[] retVal = new LargeInteger[2];
 
 		// Verify that the Lagendre symbol of a and p is not -1:
@@ -63,20 +80,20 @@ public class ECurveRandArray {
 
 		// compute R
 		LargeInteger r = a.modPow(
-				Q.add(LargeInteger.ONE).divide(new LargeInteger(2)), p);
+				Q.add(LargeInteger.ONE).divide(new LargeInteger("2")), p);
 
 		LargeInteger i = LargeInteger.ONE;
 		LargeInteger d;
 
 		for (i = LargeInteger.ONE; !i.equals(s);) {
 			// compute the power as s-i-1
-			LargeInteger pow = new LargeInteger(2).power(s.intValue()
+			LargeInteger pow = new LargeInteger("2").power(s.intValue()
 					- i.intValue() - 1);
 			d = (r.power(2).multiply(atag).modPow(pow, p));
 
 			if (d.equals(p.subtract(LargeInteger.ONE)))
 				r = r.multiply(c).mod(p);
-			c = c.modPow(new LargeInteger(2), p);
+			c = c.modPow(new LargeInteger("2"), p);
 
 			i = i.add(LargeInteger.ONE);
 
@@ -85,7 +102,7 @@ public class ECurveRandArray {
 		retVal[0] = r;
 		retVal[1] = LargeInteger.ZERO.subtract(r).add(p); // -r mod p
 
-		return retVal;
+		return LargeInteger.min(retVal[0],retVal[1]);
 	}
 
 	/**
@@ -117,14 +134,14 @@ public class ECurveRandArray {
 	 *            - integer
 	 * @param p
 	 *            - prime
-	 * @return the Legendre symbol of a / b
+	 * @return the Legendre symbol of a / b using Euler criterion.
 	 */
 	public int Legendre(LargeInteger a, LargeInteger p) {
 		if (a.remainder(p).equals(LargeInteger.ZERO)) {
 			return 0;
 		}
 		LargeInteger exponent = p.subtract(LargeInteger.ONE);
-		exponent = exponent.divide(new LargeInteger(2));
+		exponent = exponent.divide(new LargeInteger("2"));
 		LargeInteger result = a.modPow(exponent, p); // 1 <= result <= p - 1
 
 		if (result.equals(LargeInteger.ONE)) {
@@ -150,7 +167,7 @@ public class ECurveRandArray {
 		LargeInteger Q = p.subtract(LargeInteger.ONE);// p-1 is even
 		// Q needs to be odd
 		while (Q.mod(LargeInteger.valueOf(2)).equals(LargeInteger.ZERO)) {
-			Q = Q.divide(new LargeInteger(2));
+			Q = Q.divide(new LargeInteger("2"));
 			s = s.add(LargeInteger.ONE);
 		}
 		retVal[0] = s;
