@@ -130,6 +130,30 @@ public class ECurveGroupElementTests {
 				new LargeInteger("1").mod(eCurveGroup192.getFieldOrder()),
 				eCurveElementOut.getElement().getY().getElement());
 	}
+	
+	@Test
+	public void mult_theOneTest() {
+		Point point1 = new Point(new IntegerFieldElement(
+				new LargeInteger("-1"), f192), new IntegerFieldElement(
+				new LargeInteger("-1"), f192));
+		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
+				eCurveGroup192);
+
+		Point point2 = new Point(new IntegerFieldElement(
+				new LargeInteger("-1"), f192), new IntegerFieldElement(
+				new LargeInteger("1"), f192));
+		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
+				eCurveGroup192);
+
+		ECurveGroupElement eCurveElementOut = eCurveElement1
+				.mult(eCurveElement2);
+		Assert.assertEquals(
+				new LargeInteger("-1").mod(eCurveGroup192.getFieldOrder()),
+				eCurveElementOut.getElement().getX().getElement());
+		Assert.assertEquals(
+				new LargeInteger("1").mod(eCurveGroup192.getFieldOrder()),
+				eCurveElementOut.getElement().getY().getElement());
+	}
 
 	@Test
 	public void inverseTest() {
@@ -149,12 +173,37 @@ public class ECurveGroupElementTests {
 
 	@Test
 	public void divideTest() {
-		// TODO
+		Point point1 = new Point(new IntegerFieldElement(
+				new LargeInteger("-1"), f192), new IntegerFieldElement(
+				new LargeInteger("-1"), f192));
+		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
+				eCurveGroup192);
+
+		Point point2 = new Point(new IntegerFieldElement(
+				new LargeInteger("-1"), f192), new IntegerFieldElement(
+				new LargeInteger("1"), f192));
+		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
+				eCurveGroup192);
+
+		ECurveGroupElement eCurveElementOut = eCurveElement2
+				.divide(eCurveElement1.inverse());
+		Assert.assertEquals(
+				new LargeInteger("-1").mod(eCurveGroup192.getFieldOrder()),
+				eCurveElementOut.getElement().getX().getElement());
+		Assert.assertEquals(
+				new LargeInteger("1").mod(eCurveGroup192.getFieldOrder()),
+				eCurveElementOut.getElement().getY().getElement());
 	}
 
 	@Test
-	public void powerTest() {
-		// TODO
+	public void power_oneTest() {
+		Point point1 = new Point(new IntegerFieldElement(
+				new LargeInteger("-1"), f192), new IntegerFieldElement(
+				new LargeInteger("-1"), f192));
+		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
+				eCurveGroup192);
+		Assert.assertTrue(eCurveElement1.equal(eCurveElement1.power(new LargeInteger("5"))));
+
 	}
 
 	@Test
