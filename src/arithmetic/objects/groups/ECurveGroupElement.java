@@ -68,7 +68,8 @@ public class ECurveGroupElement implements IGroupElement {
 					.mult(three).subtract(p)).divide(yp.mult(two));
 			IntegerFieldElement xr = s.power(new LargeInteger("2")).subtract(
 					xp.mult(two));
-			IntegerFieldElement yr = yp.add(s.mult(xr.subtract(xp)));
+			IntegerFieldElement yr = field.zero().subtract(
+					yp.add(s.mult(xr.subtract(xp))));
 
 			ECurveGroupElement ret = new ECurveGroupElement(new Point(xr, yr),
 					getGroup());
