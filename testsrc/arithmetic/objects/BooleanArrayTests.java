@@ -8,7 +8,12 @@ import arithmetic.objects.basicelements.BooleanArrayElement;
 
 import cryptographic.primitives.CryptoUtils;
 
-
+/**
+ * Tests for booleanArray object.
+ * 
+ * @author tagel
+ *
+ */
 public class BooleanArrayTests {
 	@Test
 	public void toByteArrayTest() {

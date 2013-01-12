@@ -2,6 +2,9 @@ package arithmetic.objects.groups;
 
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.field.IField;
+import arithmetic.objects.field.IntegerFieldElement;
+import arithmetic.objects.field.PrimeOrderField;
 import cryptographic.primitives.PseudoRandomGenerator;
 
 /**
@@ -17,11 +20,28 @@ public class ECurveRandArray {
 	LargeInteger Q;
 	LargeInteger s;
 	// Least QNR
+	LargeInteger k;
+	// Prime order of field
+	LargeInteger q;
+
+	// eCurve parameters:
+	LargeInteger a;
 	LargeInteger b;
 
-	public ECurveRandArray(LargeInteger q, int N, PseudoRandomGenerator prg,
-			byte[] seed, int nr) {
+	public ECurveRandArray(LargeInteger q) {
+		this.q = q;
+		findPowers();
+		findLeastQNR();
+	}
 
+	public ECurveRandArray(LargeInteger q, int N, PseudoRandomGenerator prg,
+			byte[] seed, int nr, LargeInteger a, LargeInteger b, ECurveGroup G) {
+
+		this.a = a;
+		this.b = b;
+		this.q = q;
+
+		IField<IntegerFieldElement> field = new PrimeOrderField(q);
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = q.bitLength();
 
@@ -35,10 +55,10 @@ public class ECurveRandArray {
 		 * complexity of each function can be finally O(q).
 		 */
 		// Define Q and s to be p-1=Q2^s when Q is odd
-		findPowers(q);
+		findPowers();
 
 		// Define b as a the least quadratic non residual
-		findLeastQNR(q);
+		findLeastQNR();
 
 		/*
 		 * Create the random array - first we generate numbers using prg, and
@@ -46,12 +66,45 @@ public class ECurveRandArray {
 		 * by computing f(zi) and checking if f(zi) is a quadratic residue of p.
 		 * If it is - we find the roots using Shanks-Tonelli algorithm.
 		 */
-		for (int i = 0; i < N; i++) {
+
+		// We count how many elements we added to the array. We need N so we
+		// will exit the loop
+		// the moment we have N elements. N<p
+		int counter = 0;
+
+		ECurveGroupElement element;
+		Point point;
+
+		// We run until q (this is the maximum, but we break when we have N
+		// elements
+		for (LargeInteger i = LargeInteger.ZERO; !i.equals(q
+				.subtract(LargeInteger.ONE));) {
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = new LargeInteger(arr);
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
-			LargeInteger zi = ttag.mod(q);
-			// TODO finish the array after the shanks tonelli works
+			// xi is the x coordinate we want to check
+			LargeInteger xi = ttag.mod(q);
+
+			// check f(xi) is a quadratic residue (mod q) and we need to find
+			// the roots.
+			LargeInteger zi = f(xi);
+			if (Legendre(zi) == 1) {
+				// find the smallest root
+				LargeInteger yi = shanksTonelli(zi);
+
+				// Add the point to the array:
+				point = new Point(new IntegerFieldElement(xi, field),
+						new IntegerFieldElement(yi, field));
+
+				element = new ECurveGroupElement(point, G);
+				RandArray.add(element);
+
+				counter++;
+				if (counter == N)
+					break;
+			}
+
+			i = i.add(LargeInteger.ONE);
 		}
 
 		Rand = RandArray;
@@ -60,50 +113,93 @@ public class ECurveRandArray {
 
 	/**
 	 * 
-	 * @param a
+	 * @param xi
+	 *            - input for the ellipic curve
+	 * @return f(xi) = y^2 = x^3 + ax +b
+	 */
+	public LargeInteger f(LargeInteger xi) {
+		return xi.power(3).add(xi.multiply(a)).add(b);
+	}
+
+	/**
+	 * 
+	 * @param num
 	 *            - an integer which is a quadratic residue (mod p).
 	 * @param p
 	 *            - prime order of field
 	 * @return the smallest square root that satisfies y^2 = a (mod p)
 	 */
-	public LargeInteger shanksTonelli(LargeInteger a, LargeInteger p) {
-		LargeInteger[] retVal = new LargeInteger[2];
+	public LargeInteger shanksTonelli(LargeInteger num) {
 
-		// Verify that the Lagendre symbol of a and p is not -1:
-		if (Legendre(a, p) == -1)
-			return null;
+		LargeInteger privateCase = simpleShanksTonelli(num);
 
-		// Find a's opposite in the modular field
-		LargeInteger atag = a.modInverse(p);
+		// If the private case isn't relevant we compute the roots.
+		if (privateCase.compareTo(LargeInteger.ZERO) == 0) {
 
-		// compute c
-		LargeInteger c = b.modPow(Q, p);
+			LargeInteger[] retVal = new LargeInteger[2];
 
-		// compute R
-		LargeInteger r = a.modPow(
-				Q.add(LargeInteger.ONE).divide(new LargeInteger("2")), p);
+			// Verify that the Lagendre symbol of a and p is not -1 or 0:
+			if (Legendre(num) <= 0)
+				return null;
 
-		LargeInteger i = LargeInteger.ONE;
-		LargeInteger d;
+			// Find a's opposite in the modular field
+			LargeInteger atag = num.modInverse(q);
 
-		for (i = LargeInteger.ONE; !i.equals(s);) {
-			// compute the power as s-i-1
-			LargeInteger pow = new LargeInteger("2").power(s.intValue()
-					- i.intValue() - 1);
-			d = (r.power(2).multiply(atag).modPow(pow, p));
+			// compute c
+			LargeInteger c = k.modPow(Q, q);
 
-			if (d.equals(p.subtract(LargeInteger.ONE)))
-				r = r.multiply(c).mod(p);
-			c = c.modPow(new LargeInteger("2"), p);
+			// compute R
+			LargeInteger r = num.modPow(
+					Q.add(LargeInteger.ONE).divide(new LargeInteger("2")), q);
 
-			i = i.add(LargeInteger.ONE);
+			LargeInteger i = LargeInteger.ONE;
+			LargeInteger d;
 
+			for (i = LargeInteger.ONE; !i.equals(s);) {
+				// compute the power as s-i-1
+				LargeInteger pow = new LargeInteger("2").power(s.intValue()
+						- i.intValue() - 1);
+				d = (r.power(2).multiply(atag).modPow(pow, q));
+
+				if (d.equals(q.subtract(LargeInteger.ONE)))
+					r = r.multiply(c).mod(q);
+				c = c.modPow(new LargeInteger("2"), q);
+
+				i = i.add(LargeInteger.ONE);
+
+			}
+
+			retVal[0] = r;
+			retVal[1] = LargeInteger.ZERO.subtract(r).add(q); // -r mod p
+
+			// return the smallest root
+			return retVal[0].min(retVal[1]);
+
+		} else {
+			return privateCase;
 		}
+	}
 
-		retVal[0] = r;
-		retVal[1] = LargeInteger.ZERO.subtract(r).add(p); // -r mod p
+	/**
+	 * This function returns the roots of some private cases of mod(p) -- some
+	 * of them have fixed function that compute the roots.
+	 * 
+	 * @param num
+	 *            - the number to find it's (mod p) square root
+	 * @return the root if the case is p= 4m (mod 3) or 0 otherwise.
+	 */
+	public LargeInteger simpleShanksTonelli(LargeInteger num) {
+		if (q.mod(new LargeInteger("4")).compareTo(new LargeInteger("3")) == 0) {
+			LargeInteger root1;
+			LargeInteger root2;
 
-		return retVal[0].min(retVal[1]);
+			LargeInteger m = q.divide(new LargeInteger("16"));
+			LargeInteger exponent = m.add(LargeInteger.ONE);
+			root1 = num.modPow(exponent, q);
+			root2 = q.subtract(root1);
+			return root1.min(root2);
+		}
+		return LargeInteger.ZERO;
 	}
 
 	/**
@@ -112,24 +208,25 @@ public class ECurveRandArray {
 	 *            - a prime number
 	 * @return the first quadratic non residue of p
 	 */
-	public void findLeastQNR(LargeInteger p) {
+	public void findLeastQNR() {
 		LargeInteger retVal = LargeInteger.ONE;
 		boolean flag = false;
 		while (!flag) {
 			retVal = retVal.add(LargeInteger.ONE);
-			if (Legendre(retVal, p) == -1) {
-				this.b = retVal;
+			if (Legendre(retVal) == -1) {
+				this.k = retVal;
 				flag = true;
+				return;
 			} else
 				retVal = retVal.add(LargeInteger.ONE);
 
-			if (retVal.compareTo(p) >= 0)
-				this.b = retVal;
+			if (retVal.compareTo(q.subtract(LargeInteger.ONE)) >= 0)
+				this.k = retVal;
 		}
 
 		// The function shouldn't get here at all. Half of the values should be
 		// quadratic non residues of p
-		this.b = retVal;
+		this.k = retVal;
 	}
 
 	/**
@@ -139,19 +236,19 @@ public class ECurveRandArray {
 	 *            - prime
 	 * @return the Legendre symbol of a / b using Euler criterion.
 	 */
-	public int Legendre(LargeInteger a, LargeInteger p) {
+	public int Legendre(LargeInteger a) {
 		// This should happen in our case because we only check numbers smaller
 		// than q, and q is prime.
-		if (a.remainder(p).equals(LargeInteger.ZERO)) {
+		if (a.remainder(q).equals(LargeInteger.ZERO)) {
 			return 0;
 		}
-		LargeInteger exponent = p.subtract(LargeInteger.ONE);
+		LargeInteger exponent = q.subtract(LargeInteger.ONE);
 		exponent = exponent.divide(new LargeInteger("2"));
-		LargeInteger result = a.modPow(exponent, p); // 1 <= result <= p - 1
+		LargeInteger result = a.modPow(exponent, q); // 1 <= result <= p - 1
 
 		if (result.equals(LargeInteger.ONE)) {
 			return 1;
-		} else if (result.equals(p.subtract(LargeInteger.ONE))) {
+		} else if (result.equals(q.subtract(LargeInteger.ONE))) {
 			return -1;
 		} else {
 			throw new ArithmeticException(
@@ -167,10 +264,10 @@ public class ECurveRandArray {
 	 * @param p
 	 * @return an array of 2 integers where {s,Q}
 	 */
-	public void findPowers(LargeInteger p) {
+	public void findPowers() {
 
 		LargeInteger s = LargeInteger.ZERO;
-		LargeInteger Q = p.subtract(LargeInteger.ONE);// p-1 is even
+		LargeInteger Q = q.subtract(LargeInteger.ONE);// p-1 is even
 		// Q needs to be odd
 		while (Q.mod(LargeInteger.valueOf(2)).equals(LargeInteger.ZERO)) {
 			Q = Q.divide(new LargeInteger("2"));
@@ -202,11 +299,11 @@ public class ECurveRandArray {
 	}
 
 	public LargeInteger getB() {
-		return b;
+		return k;
 	}
 
 	public void setB(LargeInteger b) {
-		this.b = b;
+		this.k = b;
 	}
 
 	public void setRand(ArrayOfElements<IGroupElement> rand) {
