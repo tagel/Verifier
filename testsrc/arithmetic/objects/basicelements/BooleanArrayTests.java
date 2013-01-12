@@ -1,4 +1,4 @@
-package arithmetic.objects;
+package arithmetic.objects.basicelements;
 
 import junit.framework.Assert;
 

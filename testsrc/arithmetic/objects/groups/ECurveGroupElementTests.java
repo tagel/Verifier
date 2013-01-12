@@ -133,7 +133,18 @@ public class ECurveGroupElementTests {
 
 	@Test
 	public void inverseTest() {
-		// TODO
+		Point point1 = new Point(new IntegerFieldElement(
+				new LargeInteger("1"), f192), new IntegerFieldElement(
+				new LargeInteger("1"), f192));
+		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
+				eCurveGroup192);
+		
+		Point point2 = new Point(new IntegerFieldElement(
+				new LargeInteger("1"), f192), new IntegerFieldElement(
+				new LargeInteger("-1"), f192));
+		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
+				eCurveGroup192);
+		Assert.assertTrue(eCurveElement2.equal(eCurveElement1.inverse()));
 	}
 
 	@Test

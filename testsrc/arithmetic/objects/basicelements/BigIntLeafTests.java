@@ -1,9 +1,10 @@
-package arithmetic.objects;
+package arithmetic.objects.basicelements;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import cryptographic.primitives.CryptoUtils;
 

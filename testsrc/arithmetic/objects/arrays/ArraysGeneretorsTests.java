@@ -6,18 +6,16 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import cryptographic.primitives.CryptoUtils;
-
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
-import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
+import cryptographic.primitives.CryptoUtils;
 
 /**
  * Tests for ArrayGenerators.
