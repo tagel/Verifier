@@ -1,5 +1,7 @@
 package arithmetic.objects.groups;
 
+import java.io.UnsupportedEncodingException;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -207,8 +209,18 @@ public class ECurveGroupElementTests {
 	}
 
 	@Test
-	public void toByteArrayTest() {
-		// TODO
+	public void toByteArrayTest() throws UnsupportedEncodingException {
+		Point point1 = new Point(new IntegerFieldElement(
+				new LargeInteger("0"), f192), new IntegerFieldElement(
+				new LargeInteger("0"), f192));
+		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
+				eCurveGroup192);
+		System.out.println("x " + eCurveElement1.getElement().getX().getElement());
+		System.out.println("y " + eCurveElement1.getElement().getY().getElement());
+//		Assert.assertEquals("", CryptoUtils.bytesToHexString(eCurveElement.toByteArray()));
+		System.out.println(eCurveGroup192.getFieldOrder().toByteArray().length);
+		System.out.println(eCurveElement1.toByteArray());
+		
 	}
 
 	@Test
