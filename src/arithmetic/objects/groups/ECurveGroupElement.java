@@ -31,7 +31,7 @@ public class ECurveGroupElement implements IGroupElement {
 		if (b.equal(group.one())) {
 			return this;
 		}
-		if (this==group.one()) return (ECurveGroupElement) b;
+		if (this.equal(group.one())) return (ECurveGroupElement) b;
 
 		IntegerFieldElement xp = this.getElement().getX();
 		IntegerFieldElement xq = ((ECurveGroupElement) b).getElement().getX();
