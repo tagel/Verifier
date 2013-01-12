@@ -16,6 +16,7 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 
 /**
@@ -64,6 +65,12 @@ public class ArraysGeneretorsTests {
 				CryptoUtils.bytesToHexString(ring.toByteArray()));
 	}
 
+	@Test
+	public void createArrayOfPlaintextsTest(){
+		ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators.createArrayOfCiphertexts(data, group)
+		createArrayOfPlaintexts (byte[] data, IRing<IntegerRingElement> ring)
+	}
+	
 	@Test
 	public void concatArraysTest() {
 		byte[] byteArr0 = new BigIntLeaf(new LargeInteger("0")).toByteArray(); // 100010
