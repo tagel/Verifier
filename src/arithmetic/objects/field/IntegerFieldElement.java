@@ -39,6 +39,13 @@ public class IntegerFieldElement implements ByteTree {
 						.getOrder()), this.getField());
 		return ret;
 	}
+	
+	public IntegerFieldElement subtract(IntegerFieldElement b) {
+		IntegerFieldElement ret = new IntegerFieldElement(
+				(this.getElement().subtract((b.getElement())).mod(this.getField()
+						.getOrder())), this.getField());
+		return ret;
+	}
 
 	public IntegerFieldElement mult(IntegerFieldElement b) {
 		IntegerFieldElement ret = new IntegerFieldElement(

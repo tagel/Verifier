@@ -26,6 +26,7 @@ public class LargeInteger extends BigInteger {
 	public LargeInteger (String s, int i) {
 		super(s, i);
 	}
+	
 	public LargeInteger add(LargeInteger b)
 	{
 		return new LargeInteger(super.add(b));
