@@ -19,9 +19,12 @@ public class ProductRingElement implements ByteTree {
 		arr = ArrayGenerators.createRingElementArray(bt, ring);
 	}
 	
-	// maybe copy the array
+	
 	public ProductRingElement(ArrayOfElements<IntegerRingElement> arr) {
-		this.arr = arr;
+		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
+		for (int i=0; i<arr.getSize(); i++)
+			a.add(arr.getAt(i));
+		this.arr = a;
 	}
 	
 	
@@ -60,9 +63,9 @@ public class ProductRingElement implements ByteTree {
 	 * @return the result of product element in the b'th power.
 	 */
 	public ProductRingElement power(LargeInteger b) {
-			ArrayOfElements<IntegerRingElement> a = arr;
+			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).power(b));
+				a.add(a.getAt(i).power(b));
 			return new ProductRingElement(a);
 	}
 	
@@ -71,9 +74,10 @@ public class ProductRingElement implements ByteTree {
 	 * @return the negative of this product ring element.
 	 */
 	public ProductRingElement neg() {
-			ArrayOfElements<IntegerRingElement> a = arr;
+			
+			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).neg());
+				a.add(arr.getAt(i).neg());
 			return new ProductRingElement(a);
 	}
 
