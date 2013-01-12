@@ -41,9 +41,9 @@ public class ProductRingElement implements ByteTree {
 	 * @return the result of the addition of the 2 product elements.
 	 */
 	public ProductRingElement add(ProductRingElement b) {
-			ArrayOfElements<IntegerRingElement> a = arr;
+			ArrayOfElements<IntegerRingElement> a =  new ArrayOfElements<IntegerRingElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).add(b.getArr().getAt(i)));
+				a.add(arr.getAt(i).add(b.getArr().getAt(i)));
 			return new ProductRingElement(a);
 	}
 	
@@ -52,9 +52,9 @@ public class ProductRingElement implements ByteTree {
 	 * @return the result of the multiplication of the 2 product elements.
 	 */
 	public ProductRingElement mult(ProductRingElement b) {
-			ArrayOfElements<IntegerRingElement> a = arr;
+			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).mult(b.getArr().getAt(i)));
+				a.add(arr.getAt(i).mult(b.getArr().getAt(i)));
 			return new ProductRingElement(a);
 	}
 	
@@ -65,7 +65,7 @@ public class ProductRingElement implements ByteTree {
 	public ProductRingElement power(LargeInteger b) {
 			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.add(a.getAt(i).power(b));
+				a.add(arr.getAt(i).power(b));
 			return new ProductRingElement(a);
 	}
 	
