@@ -46,7 +46,7 @@ public class IntegerRingElementTests {
 	}
 
 	@Test
-	public void getFieldTest() {
+	public void getRingTest() {
 		Assert.assertTrue(ring_4.equals(ire1_ring4.getRing()));
 
 		IntegerRingElement ife = new IntegerRingElement(new LargeInteger("1"),
