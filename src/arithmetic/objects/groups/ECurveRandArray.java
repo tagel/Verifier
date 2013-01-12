@@ -188,14 +188,14 @@ public class ECurveRandArray {
 	 *            - the number to find it's (mod p) square root
 	 * @return the root if the case is p= 4m (mod 3) or 0 otherwise.
 	 */
-	private LargeInteger simpleShanksTonelli(LargeInteger num) {
+	public LargeInteger simpleShanksTonelli(LargeInteger num) {
 		if (q.mod(new LargeInteger("4")).compareTo(new LargeInteger("3")) == 0) {
 			LargeInteger root1;
 			LargeInteger root2;
 
-			LargeInteger m = q.divide(new LargeInteger("4"));
+			LargeInteger m = q.divide(new LargeInteger("16"));
 			LargeInteger exponent = m.add(LargeInteger.ONE);
-			root1 = num.modPow(exponent, m);
+			root1 = num.modPow(exponent, q);
 			root2 = q.subtract(root1);
 			return root1.min(root2);
 		}
@@ -216,6 +216,7 @@ public class ECurveRandArray {
 			if (Legendre(retVal) == -1) {
 				this.k = retVal;
 				flag = true;
+				return;
 			} else
 				retVal = retVal.add(LargeInteger.ONE);
 
