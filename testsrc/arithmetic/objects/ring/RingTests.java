@@ -8,6 +8,12 @@ import org.junit.Test;
 
 import arithmetic.objects.LargeInteger;
 
+/**
+ * Tests for class Ring.
+ * 
+ * @author Daniel
+ * 
+ */
 public class RingTests {
 
 	@Test
