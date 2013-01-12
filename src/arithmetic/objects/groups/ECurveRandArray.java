@@ -31,15 +31,15 @@ public class ECurveRandArray {
 		/*
 		 * Prepare the ground for running ressol algorithm: We compute all of
 		 * the things we can compute only once, like the powers Q and s, the the
-		 * least quadratic non residue. We do this here because the complexity
-		 * of each function can be finally O(p).
+		 * least quadratic non residue (mod q). We do this here because the complexity
+		 * of each function can be finally O(q).
 		 */
 		// Define Q and s to be p-1=Q2^s when Q is odd
-		LargeInteger[] powers = findPowers(p);
+		LargeInteger[] powers = findPowers(q);
 		Q = powers[1];
 		s = powers[0];
 		// Define b as a the least quadratic non residual
-		b = findLeastQNR(p);
+		b = findLeastQNR(q);
 
 		/*
 		 * Create the random array - first we generate numbers using prg, and
@@ -102,7 +102,7 @@ public class ECurveRandArray {
 		retVal[0] = r;
 		retVal[1] = LargeInteger.ZERO.subtract(r).add(p); // -r mod p
 
-		return LargeInteger.min(retVal[0],retVal[1]);
+		return retVal[0].min(retVal[1]);
 	}
 
 	/**
