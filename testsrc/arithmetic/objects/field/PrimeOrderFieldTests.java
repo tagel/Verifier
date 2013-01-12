@@ -1,36 +1,33 @@
 package arithmetic.objects.field;
 
-import java.math.BigInteger;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import arithmetic.objects.field.PrimeOrderField;
+import arithmetic.objects.LargeInteger;
 
 /**
  * Tests for class PrimeOrderField.
+ * 
  * @author Daniel
- *
+ * 
  */
 public class PrimeOrderFieldTests {
+	PrimeOrderField pof = new PrimeOrderField(new LargeInteger("263"));
 
 	@Test
 	public void oneTest() {
-		PrimeOrderField pof = new PrimeOrderField(BigInteger.valueOf(263));
-		Assert.assertEquals(BigInteger.ONE, pof.one().getElement());
+
+		Assert.assertEquals(LargeInteger.ONE, pof.one().getElement());
 	}
-	
+
 	@Test
 	public void zeroTest() {
-		PrimeOrderField pof = new PrimeOrderField(BigInteger.valueOf(263));
-		Assert.assertEquals(BigInteger.ZERO, pof.zero().getElement());
+		Assert.assertEquals(LargeInteger.ZERO, pof.zero().getElement());
 	}
-	
+
 	@Test
 	public void getOrderTest() {
-		PrimeOrderField pof = new PrimeOrderField(BigInteger.valueOf(263));
-		Assert.assertEquals(BigInteger.valueOf(263), pof.getOrder());
+		Assert.assertEquals(new LargeInteger("263"), pof.getOrder());
 	}
 }
-

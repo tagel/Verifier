@@ -6,16 +6,16 @@ import java.nio.ByteBuffer;
 public class LargeInteger extends BigInteger {
 
 	private static final long serialVersionUID = 1L;
-	public static LargeInteger ONE = new LargeInteger(1);
-	public static LargeInteger ZERO = new LargeInteger(0);
+	public static LargeInteger ONE = new LargeInteger("1");
+	public static LargeInteger ZERO = new LargeInteger("0");
 
 	public LargeInteger (byte[] b) {
 		super(b);
 
 	}
 
-	public LargeInteger (int n) {
-		super(ByteBuffer.allocate(8).putInt(n).array());
+	public LargeInteger (String s) {
+		super(s);
 	}
 
 	public LargeInteger (BigInteger n) {
