@@ -31,15 +31,14 @@ public class ECurveRandArray {
 		/*
 		 * Prepare the ground for running ressol algorithm: We compute all of
 		 * the things we can compute only once, like the powers Q and s, the the
-		 * least quadratic non residue (mod q). We do this here because the complexity
-		 * of each function can be finally O(q).
+		 * least quadratic non residue (mod q). We do this here because the
+		 * complexity of each function can be finally O(q).
 		 */
 		// Define Q and s to be p-1=Q2^s when Q is odd
-		LargeInteger[] powers = findPowers(q);
-		Q = powers[1];
-		s = powers[0];
+		findPowers(q);
+
 		// Define b as a the least quadratic non residual
-		b = findLeastQNR(q);
+		findLeastQNR(q);
 
 		/*
 		 * Create the random array - first we generate numbers using prg, and
@@ -61,8 +60,10 @@ public class ECurveRandArray {
 
 	/**
 	 * 
-	 * @param a - an integer which is a quadratic residue (mod p). 
-	 * @param p - prime order of field
+	 * @param a
+	 *            - an integer which is a quadratic residue (mod p).
+	 * @param p
+	 *            - prime order of field
 	 * @return the smallest square root that satisfies y^2 = a (mod p)
 	 */
 	public LargeInteger shanksTonelli(LargeInteger a, LargeInteger p) {
@@ -111,22 +112,24 @@ public class ECurveRandArray {
 	 *            - a prime number
 	 * @return the first quadratic non residue of p
 	 */
-	public LargeInteger findLeastQNR(LargeInteger p) {
+	public void findLeastQNR(LargeInteger p) {
 		LargeInteger retVal = LargeInteger.ONE;
 		boolean flag = false;
 		while (!flag) {
 			retVal = retVal.add(LargeInteger.ONE);
-			if (Legendre(retVal, p) == -1)
-				return retVal;
-			else
+			if (Legendre(retVal, p) == -1) {
+				this.b = retVal;
+				flag = true;
+			} else
 				retVal = retVal.add(LargeInteger.ONE);
+
 			if (retVal.compareTo(p) >= 0)
-				return retVal;
+				this.b = retVal;
 		}
 
 		// The function shouldn't get here at all. Half of the values should be
 		// quadratic non residues of p
-		return retVal;
+		this.b = retVal;
 	}
 
 	/**
@@ -137,6 +140,8 @@ public class ECurveRandArray {
 	 * @return the Legendre symbol of a / b using Euler criterion.
 	 */
 	public int Legendre(LargeInteger a, LargeInteger p) {
+		// This should happen in our case because we only check numbers smaller
+		// than q, and q is prime.
 		if (a.remainder(p).equals(LargeInteger.ZERO)) {
 			return 0;
 		}
@@ -156,13 +161,14 @@ public class ECurveRandArray {
 
 	/**
 	 * Find positive integers Q and S such that p-1=Q*2^s, where p is a prime
-	 * number it means that p-1 is even.
+	 * number it means that p-1 is even. Time complexity of this function is
+	 * log(n).
 	 * 
 	 * @param p
 	 * @return an array of 2 integers where {s,Q}
 	 */
-	public LargeInteger[] findPowers(LargeInteger p) {
-		LargeInteger[] retVal = new LargeInteger[2];
+	public void findPowers(LargeInteger p) {
+
 		LargeInteger s = LargeInteger.ZERO;
 		LargeInteger Q = p.subtract(LargeInteger.ONE);// p-1 is even
 		// Q needs to be odd
@@ -170,13 +176,41 @@ public class ECurveRandArray {
 			Q = Q.divide(new LargeInteger("2"));
 			s = s.add(LargeInteger.ONE);
 		}
-		retVal[0] = s;
-		retVal[1] = Q;
-		return retVal;
+		this.s = s;
+		this.Q = Q;
+
 	}
 
 	public ArrayOfElements<IGroupElement> getRand() {
 		return Rand;
+	}
+
+	public LargeInteger getQ() {
+		return Q;
+	}
+
+	public void setQ(LargeInteger q) {
+		Q = q;
+	}
+
+	public LargeInteger getS() {
+		return s;
+	}
+
+	public void setS(LargeInteger s) {
+		this.s = s;
+	}
+
+	public LargeInteger getB() {
+		return b;
+	}
+
+	public void setB(LargeInteger b) {
+		this.b = b;
+	}
+
+	public void setRand(ArrayOfElements<IGroupElement> rand) {
+		Rand = rand;
 	}
 
 }
