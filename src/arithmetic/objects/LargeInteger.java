@@ -15,7 +15,7 @@ public class LargeInteger extends BigInteger {
 	}
 
 	public LargeInteger (int n) {
-		super(ByteBuffer.allocate(8).putInt(n).array());
+		super(ByteBuffer.allocate((Integer.SIZE-Integer.numberOfLeadingZeros(n))/8).putInt(n).array());
 	}
 
 	public LargeInteger (BigInteger n) {
