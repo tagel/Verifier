@@ -16,6 +16,7 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFuncPRGRandomOracle;
@@ -187,10 +188,10 @@ public class MainVerifier {
 		ByteTree sPRG = new StringLeaf(params.getsPRG());
 		ByteTree sH = new StringLeaf(params.getSh());
 
-		ByteTree Ne = new BigIntLeaf(new LargeInteger(params.getNe()));
-		ByteTree Nr = new BigIntLeaf(new LargeInteger(params.getNr()));
-		ByteTree Nv = new BigIntLeaf(new LargeInteger(params.getNv()));
-		ByteTree btW = new BigIntLeaf(new LargeInteger(params.getW()));
+		ByteTree Ne = new BigIntLeaf(new LargeInteger(Integer.toString(params.getNe())));
+		ByteTree Nr = new BigIntLeaf(new LargeInteger(Integer.toString(params.getNr())));
+		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params.getNv())));
+		ByteTree btW = new BigIntLeaf(new LargeInteger(Integer.toString(params.getW())));
 
 		ByteTree[] input = new ByteTree[9];
 		input[0] = version_proof;
@@ -322,8 +323,8 @@ public class MainVerifier {
 			if (file == null)
 				return false;
 
-			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
-					.createArrayOfPlaintexts(file, params.getGq());
+			ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators
+					.createArrayOfPlaintexts(file, params.getZq());
 			params.setPlaintexts(plaintexts);
 		}
 
