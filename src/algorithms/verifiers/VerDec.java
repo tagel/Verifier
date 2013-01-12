@@ -5,6 +5,7 @@ import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -34,7 +35,7 @@ public class VerDec {
 	 * @param iRing 
 	 * @return true if verification of decryption was successful and false otherwise.
 	 */
-	static public boolean verify(RandomOracle randomOracle, RandomOracle randomOracle2, String directory, byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductGroupElement> arrayOfElements2, IRing<IntegerRingElement> iRing) {
+	static public boolean verify(RandomOracle randomOracle, RandomOracle randomOracle2, String directory, byte[] bs, int i, int j, int k, int l, PseudoRandomGenerator pseudoRandomGenerator, IGroup iGroup, ProductGroupElement productGroupElement, ArrayOfElements<ProductGroupElement> arrayOfElements, ArrayOfElements<ProductRingElement> arrayOfElements2, IRing<IntegerRingElement> iRing) {
 		// TODO Auto-generated method stub
 		return false;
 	}
