@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.arrays.ArrayGenerators;
+import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
@@ -71,20 +71,20 @@ public class ProveSoC extends Prover {
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke)
 			 */
-			BigInteger q = Gq.getFieldOrder();
-			IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
-			IntegerFieldElement Ka = new IntegerFieldElement(
-					ElementsExtractor
-							.leafToInt(PoSReply.getAt(0).toByteArray()),
-					Zq);
-			IntegerFieldElement Kc = new IntegerFieldElement(
-					ElementsExtractor
-							.leafToInt(PoSReply.getAt(2).toByteArray()),
-					Zq);
-			IntegerFieldElement Kd = new IntegerFieldElement(
-					ElementsExtractor
-							.leafToInt(PoSReply.getAt(3).toByteArray()),
-					Zq);
+			LargeInteger q = Gq.getFieldOrder();
+//			IField<IntegerFieldElement> Zq = new PrimeOrderField(q);
+//			IntegerFieldElement Ka = new IntegerFieldElement(
+//					ElementsExtractor
+//							.leafToInt(PoSReply.getAt(0).toByteArray()),
+//					Zq);
+//			IntegerFieldElement Kc = new IntegerFieldElement(
+//					ElementsExtractor
+//							.leafToInt(PoSReply.getAt(2).toByteArray()),
+//					Zq);
+//			IntegerFieldElement Kd = new IntegerFieldElement(
+//					ElementsExtractor
+//							.leafToInt(PoSReply.getAt(3).toByteArray()),
+//					Zq);
 
 //			ArrayOfElements<IntegerFieldElement> Kb = new ArrayOfElements<IntegerFieldElement>(
 //					PoSReply.getAt(1));
@@ -109,11 +109,11 @@ public class ProveSoC extends Prover {
 
 			//TODO: computeE ?!
 			// Computation of e:
-			int length = (int) Math.ceil((double) (Ne / 8));
-			IntegerFieldElement pow = new IntegerFieldElement(
-					BigInteger.valueOf(8 * length), Zq);
-			//ArrayOfElements<IntegerFieldElement> e = computeE(seed, Ne, prg, N,
-			//		pow, BigInteger.valueOf(-1), BigInteger.valueOf(Ne));
+//			int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
+//			IntegerFieldElement pow = new IntegerFieldElement(
+//					BigInteger.valueOf(8 * length), Zq);
+//			ArrayOfElements<IntegerFieldElement> e = computeE(seed, Ne, prg, N,
+//				pow, BigInteger.valueOf(-1), BigInteger.valueOf(Ne));
 
 			// Computation of A:
 //			IGroupElement A = u.getAt(0).power(e.getAt(0).getElement());

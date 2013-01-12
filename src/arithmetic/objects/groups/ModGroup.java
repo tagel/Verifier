@@ -121,9 +121,21 @@ public class ModGroup implements IGroup {
 
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg,
-			byte[] seed, int nr) {
-		// TODO Auto-generated method stub
-		return null;
+			byte[] seed, int Nr) {
+		ArrayOfElements<IGroupElement> h = new ArrayOfElements<IGroupElement>() ;
+		int Np = this.p.bitLength();
+		int length = 8 * ((int) Math.ceil((double) ((Np+Nr) / 8)));
+		prg.setSeed(seed);
+		
+		for (int i = 0; i < N; i++) {
+			byte[] arr = prg.getNextPRGOutput(length);
+			LargeInteger t = new LargeInteger(arr);
+			LargeInteger ttag = t.mod(new LargeInteger("2").power(Np+Nr));
+			LargeInteger hi = ttag.power((p.subtract(LargeInteger.ONE)).divide(q)).mod(p);
+			IGroupElement ge = new ModGroupElement(hi, this);
+			h.add(ge);
+		}
+		return h;
 	}
 
 

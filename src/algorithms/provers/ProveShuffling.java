@@ -1,9 +1,8 @@
 package algorithms.provers;
 
-import java.math.BigInteger;
-
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
+import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
@@ -121,14 +120,14 @@ public class ProveShuffling extends Prover {
 							nodeForChallenge.toByteArray()));
 
 			/* Computation of v: */
-			BigInteger v = new BigInteger(challenge);
-			BigInteger twoNv = BigInteger.valueOf(2).pow(Nv);
+			LargeInteger v = new LargeInteger(challenge);
+			LargeInteger twoNv = new LargeInteger("2").power(Nv);
 			v = v.mod(twoNv);
 
 			/**
 			 * 5 - Compute C,D and verify equalities
 			 */
-			BigInteger E = computeE(N, Ne, seed, prg);
+			LargeInteger E = computeE(N, Ne, seed, prg);
 			IGroupElement C = computeC(u, h, N);
 			IGroupElement D = computeD(E, B, h, N);
 

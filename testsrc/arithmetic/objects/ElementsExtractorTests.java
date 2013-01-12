@@ -3,13 +3,11 @@ package arithmetic.objects;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.basicelements.StringLeaf;
@@ -27,8 +25,8 @@ public class ElementsExtractorTests {
 
 	@Test
 	public void leafToIntTest() {
-		BigIntLeaf bil = new BigIntLeaf(new BigInteger("263"));
-		BigInteger num = ElementsExtractor.leafToInt(bil.toByteArray());
+		BigIntLeaf bil = new BigIntLeaf(new LargeInteger("263"));
+		LargeInteger num = ElementsExtractor.leafToInt(bil.toByteArray());
 		Assert.assertEquals(num.intValue(), 263);
 	}
 
@@ -94,9 +92,9 @@ public class ElementsExtractorTests {
 
 	@Test
 	public void createGroupElementTest() {
-		BigIntLeaf bi = new BigIntLeaf(new BigInteger("258"));
-		ModGroup Gq = new ModGroup(BigInteger.valueOf(263),
-				BigInteger.valueOf(131), null);
+		BigIntLeaf bi = new BigIntLeaf(new LargeInteger("258"));
+		ModGroup Gq = new ModGroup(new LargeInteger("263"),
+				new LargeInteger("131"), null);
 		IGroupElement ige = ElementsExtractor.createGroupElement(
 				bi.toByteArray(), Gq);
 
@@ -123,8 +121,8 @@ public class ElementsExtractorTests {
 	public void nodeToPointTest() throws UnsupportedEncodingException {
 		IGroup G = new ECurveGroup("P-192");
 		IField<IntegerFieldElement> f = new PrimeOrderField(G.getFieldOrder());
-		IntegerFieldElement a = new IntegerFieldElement(BigInteger.valueOf(0), f);
-		IntegerFieldElement b = new IntegerFieldElement(BigInteger.valueOf(1), f);
+		IntegerFieldElement a = new IntegerFieldElement(new LargeInteger("0"), f);
+		IntegerFieldElement b = new IntegerFieldElement(new LargeInteger("1"), f);
 		Node node = new Node();
 		node.add(a);
 		node.add(b);
