@@ -86,6 +86,7 @@ public class Node implements ByteTree {
 	public int getChildrenSize() {
 		return children.size();
 	}
+	
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(children.size()).array();
 		byte[] b = new byte[a.length+1];
