@@ -7,6 +7,12 @@ import org.junit.Test;
 import arithmetic.objects.LargeInteger;
 import cryptographic.primitives.CryptoUtils;
 
+/**
+ * Tests for class IntegerRingElement.
+ * 
+ * @author Daniel
+ * 
+ */
 public class IntegerRingElementTests {
 
 	private Ring ring_263 = new Ring(new LargeInteger("263"));
