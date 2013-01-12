@@ -42,7 +42,6 @@ public class ProductRingElementTests {
 		Assert.assertEquals("00000000030100000002010201000000020005"
 				+ "01000000020006",
 				CryptoUtils.bytesToHexString(pre.toByteArray()));
-
 	}
 
 	@Test
@@ -75,16 +74,30 @@ public class ProductRingElementTests {
 		ProductRingElement pre2 = new ProductRingElement(aoe2);
 		Assert.assertEquals(new LargeInteger("2"), pre1.mult(pre2).getArr()
 				.getAt(0).getElement());
+		Assert.assertEquals(new LargeInteger("2"), pre1.mult(pre2).getArr()
+				.getAt(0).getElement());
 	}
 
 	@Test
 	public void powerTest() {
-		// TODO
+		aoe.add(ire1_ring3);
+		aoe.add(ire2_ring3);
+		ProductRingElement pre = new ProductRingElement(aoe);
+		Assert.assertEquals(new LargeInteger("1"),
+				pre.power(new LargeInteger("3")).getArr().getAt(0).getElement());
+		Assert.assertEquals(new LargeInteger("1"),
+				pre.power(new LargeInteger("3")).getArr().getAt(1).getElement());
 	}
 
 	@Test
 	public void neg() {
-		// TODO
+		aoe.add(ire1_ring3);
+		aoe.add(ire2_ring3);
+		ProductRingElement pre = new ProductRingElement(aoe);
+		Assert.assertEquals(new LargeInteger("2"), pre.neg().getArr().getAt(0)
+				.getElement());
+		Assert.assertEquals(new LargeInteger("1"), pre.neg().getArr().getAt(1)
+				.getElement());
 	}
 
 	@Test
