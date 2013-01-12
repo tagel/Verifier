@@ -82,9 +82,10 @@ public class ECurveGroupElement implements IGroupElement {
 
 	@Override
 	public ECurveGroupElement inverse() {
+		IField<IntegerFieldElement> field = new PrimeOrderField(getGroup().getFieldOrder());
 		IntegerFieldElement y = new IntegerFieldElement(LargeInteger.ZERO
 				.subtract(((Point) getElement()).getY().getElement()).mod(
-						getGroup().getFieldOrder()), null);
+						getGroup().getFieldOrder()), field);
 		Point p = new Point(getElement().getX(), y);
 		return new ECurveGroupElement(p, getGroup());
 	}
