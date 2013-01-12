@@ -39,6 +39,10 @@ public class ProductRingElementTests {
 		// TODO - consider fixing the ProductRingElement constructor to copy the
 		// array and not use the same object
 		aoe.add(ire6_ring263);
+		Assert.assertEquals("00000000020100000002010201000000020005",
+				CryptoUtils.bytesToHexString(pre.toByteArray()));
+
+		pre = new ProductRingElement(aoe);
 		Assert.assertEquals("00000000030100000002010201000000020005"
 				+ "01000000020006",
 				CryptoUtils.bytesToHexString(pre.toByteArray()));
@@ -49,7 +53,7 @@ public class ProductRingElementTests {
 		aoe.add(ire258_ring263);
 		aoe.add(ire5_ring263);
 		ProductRingElement pre = new ProductRingElement(aoe);
-		Assert.assertEquals(aoe, pre.getArr());
+		Assert.assertTrue(aoe.equals(pre.getArr()));
 	}
 
 	@Test
