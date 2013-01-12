@@ -19,6 +19,7 @@ public class ProductRingElement implements ByteTree {
 		arr = ArrayGenerators.createRingElementArray(bt, ring);
 	}
 	
+	// maybe copy the array
 	public ProductRingElement(ArrayOfElements<IntegerRingElement> arr) {
 		this.arr = arr;
 	}
@@ -26,6 +27,10 @@ public class ProductRingElement implements ByteTree {
 	
 	public ArrayOfElements<IntegerRingElement> getArr() {
 		return arr;
+	}
+	
+	public void addElement (IntegerRingElement element) {
+		arr.add(element);
 	}
 	
 	/**

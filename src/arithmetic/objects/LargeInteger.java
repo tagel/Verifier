@@ -1,7 +1,7 @@
 package arithmetic.objects;
 
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
+
 
 public class LargeInteger extends BigInteger {
 
@@ -83,6 +83,10 @@ public class LargeInteger extends BigInteger {
 	public int compareTo(LargeInteger b)
 	{
 		return super.compareTo(b);
+	}
+	
+	public LargeInteger min(LargeInteger b) {
+		return new LargeInteger(super.min(b));
 	}
 
 	public int bitLength()
