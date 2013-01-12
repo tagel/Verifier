@@ -10,6 +10,12 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import cryptographic.primitives.CryptoUtils;
 
+/**
+ * Tests for class ProductRingElement.
+ * 
+ * @author Daniel
+ * 
+ */
 public class ProductRingElementTests {
 
 	private Ring ring263 = new Ring(new LargeInteger("263"));
