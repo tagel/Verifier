@@ -13,8 +13,9 @@ public class IntegerFieldElement implements ByteTree {
 	protected IField<IntegerFieldElement> field;
 
 	public IntegerFieldElement(LargeInteger element, IField<IntegerFieldElement> f) {
-		this.element = element.mod(field.getOrder());
 		this.field = f;
+		this.element = element.mod(field.getOrder());
+		
 	}
 
 	public LargeInteger getElement() {
