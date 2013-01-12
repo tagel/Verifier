@@ -18,150 +18,104 @@ import cryptographic.primitives.CryptoUtils;
  */
 public class IntegerFieldElementTests {
 
-	private PrimeOrderField pof_263 = new PrimeOrderField(new LargeInteger(263));
-	private PrimeOrderField pof_4 = new PrimeOrderField(new LargeInteger(4));
+	private PrimeOrderField pof_263 = new PrimeOrderField(new LargeInteger(
+			"263"));
+	private PrimeOrderField pof_4 = new PrimeOrderField(new LargeInteger("4"));
 
 	IntegerFieldElement ife1_field4 = new IntegerFieldElement(new LargeInteger(
-			1), pof_4);
+			"1"), pof_4);
 	IntegerFieldElement ife2_field4 = new IntegerFieldElement(new LargeInteger(
-			2), pof_4);
+			"2"), pof_4);
 	IntegerFieldElement ife3_field4 = new IntegerFieldElement(new LargeInteger(
-			3), pof_4);
+			"3"), pof_4);
+	IntegerFieldElement ife5_field4 = new IntegerFieldElement(new LargeInteger(
+			"5"), pof_4);
 
 	@Test
 	public void toByteArrayTest() {
 		Assert.assertEquals("01000000020102", CryptoUtils
-				.bytesToHexString(new IntegerFieldElement(
-						new LargeInteger(258), pof_263).toByteArray()));
+				.bytesToHexString(new IntegerFieldElement(new LargeInteger(
+						"258"), pof_263).toByteArray()));
 
-		System.out.println(CryptoUtils
+		Assert.assertEquals("01000000020005", CryptoUtils
 				.bytesToHexString(new IntegerFieldElement(
-						new LargeInteger(258), pof_263).toByteArray()));
-		System.out.println("01000000020102");
-		// Assert.assertEquals("01000000020005", CryptoUtils
-		// .bytesToHexString(new IntegerFieldElement(new LargeInteger(5),
-		// pof_263).toByteArray()));
+						new LargeInteger("5"), pof_263).toByteArray()));
 	}
 
-	// @Test
-	// public void getElementTest() {
-	// IntegerFieldElement ife = new IntegerFieldElement(new LargeInteger(1),
-	// pof_4);
-	// Assert.assertEquals(new LargeInteger(1), ife.getElement());
-	// }
-	//
-	// @Test
-	// public void equalTest() {
-	// IntegerFieldElement ife = new IntegerFieldElement(new LargeInteger(1),
-	// pof_4);
-	// Assert.assertTrue(ife.equal(new IntegerFieldElement(
-	// new LargeInteger(1), pof_4)));
-	// Assert.assertTrue(ife.equal(new IntegerFieldElement(
-	// new LargeInteger(5), pof_4)));
-	// }
-	//
-	// @Test
-	// public void getFieldTest() {
-	// IntegerFieldElement ife = new IntegerFieldElement(
-	// new LargeInteger(1), pof_4);
-	// Assert.assertTrue(pof_4.equals(ife.getField()));
-	//
-	// ife = new IntegerFieldElement(new LargeInteger(1), pof_263);
-	// Assert.assertTrue(pof_263.equals(ife.getField()));
-	// }
-	//
-	// @Test
-	// public void addTest() {
-	// IntegerFieldElement ife1 = new IntegerFieldElement(
-	// new LargeInteger(1), pof_4);
-	// IntegerFieldElement ife2 = new IntegerFieldElement(
-	// new LargeInteger(2), pof_4);
-	// IntegerFieldElement ife3 = new IntegerFieldElement(
-	// new LargeInteger(3), pof_4);
-	// Assert.assertTrue(ife3.equal(ife2.add(ife1)));
-	// Assert.assertTrue(ife1.equal(ife2.add(ife3)));
-	// }
-	//
-	// @Test
-	// public void addZeroTest() {
-	// IntegerFieldElement ife1 = new IntegerFieldElement(
-	// new LargeInteger(1), pof_4);
-	// Assert.assertTrue(ife1.equal(ife1.add(ife1.getField().zero())));
-	// }
-	//
-	// @Test
-	// public void negTest() {
-	// IntegerFieldElement ife = new IntegerFieldElement(
-	// new LargeInteger(2), pof_4);
-	//
-	// Assert.assertTrue(ife.neg().equal(ife));
-	//
-	// ife = new IntegerFieldElement(new LargeInteger(1), pof_4);
-	// IntegerFieldElement ifeneg = new IntegerFieldElement(new LargeInteger(
-	// 3), pof_4);
-	// Assert.assertTrue(ife.neg().equal(ifeneg));
-	//
-	// ife = new IntegerFieldElement(new LargeInteger(5), pof_4);
-	// ifeneg = new IntegerFieldElement(new LargeInteger(3), pof_4);
-	//
-	// Assert.assertTrue(ife.neg().equal(ifeneg));
-	// }
-	//
-	// @Test
-	// public void mult1_Test() {
-	// IntegerFieldElement ife2 = new IntegerFieldElement(
-	// new LargeInteger(2), pof_4);
-	// IntegerFieldElement ife3 = new IntegerFieldElement(
-	// new LargeInteger(3), pof_4);
-	//
-	// Assert.assertTrue(ife2.equal(ife2.mult(ife3)));
-	// }
-	//
-	// @Test
-	// public void mult2_Test() {
-	// IntegerFieldElement ife1 = new IntegerFieldElement(
-	// new LargeInteger("1"), pof_4);
-	// IntegerFieldElement ife3 = new IntegerFieldElement(
-	// new LargeInteger("3"), pof_4);
-	//
-	// Assert.assertTrue(ife1.equal(ife3.mult(ife3)));
-	// Assert.assertTrue(ife3.equal(ife3.mult(ife1)));
-	// }
-	//
-	// @Test
-	// public void multWithOneTest() {
-	// IntegerFieldElement ife3 = new IntegerFieldElement(
-	// new LargeInteger("3"), pof_4);
-	//
-	// Assert.assertTrue(ife3.equal(ife3.mult(ife3.getField().one())));
-	// }
-	//
-	// @Test
-	// public void multWithZeroTest() {
-	// IntegerFieldElement ife3 = new IntegerFieldElement(
-	// new LargeInteger("3"), pof_4);
-	//
-	// Assert.assertTrue(ife3.getField().zero()
-	// .equal(ife3.mult(ife3.getField().zero())));
-	// }
-	//
-	// @Test
-	// public void powerTest() {
-	// IntegerFieldElement ife2 = new IntegerFieldElement(
-	// new LargeInteger("2"), pof_4);
-	// IntegerFieldElement ife3 = new IntegerFieldElement(
-	// new LargeInteger("3"), pof_4);
-	//
-	// Assert.assertTrue(ife3.equal(ife3.power(new LargeInteger("3"))));
-	// Assert.assertTrue(ife2.getField().zero()
-	// .equal(ife2.power(new LargeInteger("5"))));
-	// }
-	//
-	// @Test
-	// public void inverse_pof4Test() {
-	// IntegerFieldElement ife = new IntegerFieldElement(
-	// new LargeInteger("3"), pof_4);
-	//
-	// Assert.assertTrue(ife.equal(ife.inverse()));
-	// }
+	@Test
+	public void getElementTest() {
+		Assert.assertEquals(new LargeInteger("1"), ife1_field4.getElement());
+	}
+
+	@Test
+	public void equalTest() {
+		Assert.assertTrue(ife1_field4.equal(new IntegerFieldElement(
+				new LargeInteger("1"), pof_4)));
+		Assert.assertTrue(ife1_field4.equal(new IntegerFieldElement(
+				new LargeInteger("5"), pof_4)));
+	}
+
+	@Test
+	public void getFieldTest() {
+		Assert.assertTrue(pof_4.equals(ife1_field4.getField()));
+
+		IntegerFieldElement ife = new IntegerFieldElement(
+				new LargeInteger("1"), pof_263);
+		Assert.assertTrue(pof_263.equals(ife.getField()));
+	}
+
+	@Test
+	public void addTest() {
+		Assert.assertTrue(ife3_field4.equal(ife2_field4.add(ife1_field4)));
+		Assert.assertTrue(ife1_field4.equal(ife2_field4.add(ife3_field4)));
+	}
+
+	@Test
+	public void addZeroTest() {
+		Assert.assertTrue(ife1_field4.equal(ife1_field4.add(ife1_field4
+				.getField().zero())));
+	}
+
+	@Test
+	public void negTest() {
+		Assert.assertTrue(ife2_field4.neg().equal(ife2_field4));
+		Assert.assertTrue(ife1_field4.neg().equal(ife3_field4));
+		Assert.assertTrue(ife5_field4.neg().equal(ife3_field4));
+	}
+
+	@Test
+	public void mult1_Test() {
+		Assert.assertTrue(ife2_field4.equal(ife2_field4.mult(ife3_field4)));
+	}
+
+	@Test
+	public void mult2_Test() {
+		Assert.assertTrue(ife1_field4.equal(ife3_field4.mult(ife3_field4)));
+		Assert.assertTrue(ife3_field4.equal(ife3_field4.mult(ife1_field4)));
+	}
+
+	@Test
+	public void multWithOneTest() {
+		Assert.assertTrue(ife3_field4.equal(ife3_field4.mult(ife3_field4
+				.getField().one())));
+	}
+
+	@Test
+	public void multWithZeroTest() {
+		Assert.assertTrue(ife3_field4.getField().zero()
+				.equal(ife3_field4.mult(ife3_field4.getField().zero())));
+	}
+
+	@Test
+	public void powerTest() {
+		Assert.assertTrue(ife3_field4.equal(ife3_field4.power(new LargeInteger(
+				"3"))));
+		Assert.assertTrue(ife2_field4.getField().zero()
+				.equal(ife2_field4.power(new LargeInteger("5"))));
+	}
+
+	@Test
+	public void inverse_pof4Test() {
+		Assert.assertTrue(ife3_field4.equal(ife3_field4.inverse()));
+	}
 }
