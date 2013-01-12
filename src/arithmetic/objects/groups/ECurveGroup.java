@@ -114,7 +114,7 @@ public class ECurveGroup implements IGroup{
 	@Override
 	public ECurveGroupElement one() {
 		IField<IntegerFieldElement> f = new PrimeOrderField(p);
-		IntegerFieldElement minusOne = new IntegerFieldElement (new LargeInteger(-1), f);
+		IntegerFieldElement minusOne = new IntegerFieldElement (new LargeInteger("-1"), f);
 		Point infinity = new Point(minusOne, minusOne);
 		ECurveGroupElement ret = new ECurveGroupElement(infinity, this);
 		return ret;
@@ -131,7 +131,7 @@ public class ECurveGroup implements IGroup{
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr) {
-		ECurveRandArray arr = new ECurveRandArray(this.q, N, prg, seed, nr);
+		ECurveRandArray arr = new ECurveRandArray(this.q, N, prg, seed, nr, this.p);
 		return arr.getRand();
 	}
 
