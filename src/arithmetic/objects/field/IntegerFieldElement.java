@@ -62,6 +62,13 @@ public class IntegerFieldElement implements ByteTree {
 		}
 		return result;
 	}
+	
+	public IntegerFieldElement divide(IntegerFieldElement b) {
+		IntegerFieldElement ret = new IntegerFieldElement(
+				(this.getElement().multiply(b.getElement().modInverse(this.getField().getOrder()))).mod(this
+						.getField().getOrder()), this.getField());
+		return ret;
+	}
 
 	public IntegerFieldElement inverse() {
 		IntegerFieldElement ret = new IntegerFieldElement(this.getElement()
