@@ -1,57 +1,59 @@
 package arithmetic.objects.groups;
 
-
-
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import cryptographic.primitives.PseudoRandomGenerator;
 
 /**
  * This object returns a new Array of N random Elliptic Curve elements
+ * 
  * @author Sofia
- *
+ * 
  */
 public class ECurveRandArray {
-	
+
 	ArrayOfElements<IGroupElement> Rand;
-	
+	// Powers:
+	LargeInteger Q;
+	LargeInteger s;
+	//Least QNR
+	LargeInteger b;
+
 	public ECurveRandArray(LargeInteger q, int N, PseudoRandomGenerator prg,
-			byte[] seed, int nr) {
-		
+			byte[] seed, int nr, LargeInteger p) {
+
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = q.bitLength();
-		
-		int length = 8 * ((int) Math.ceil((double) (nr+nq / 8)));
+
+		int length = 8 * ((int) Math.ceil((double) (nr + nq / 8)));
 		prg.setSeed(seed);
-		
+
+		// Prepare the ground for running ressol algorithm.
+		// Define Q and s to be p-1=Q2^s when Q is odd
+		LargeInteger[] powers = findPowers(p);
+		Q = powers[1];
+		s = powers[0];
+		// Define b as a the least quadratic non residual
+		b = findLeastQNR(p);
+
 		for (int i = 0; i < N; i++) {
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = new LargeInteger(arr);
-			LargeInteger ttag = t.mod(LargeInteger.valueOf(2).pow(nq+nr));
+			LargeInteger ttag = t.mod(new LargeInteger(2).power(nq + nr));
 			LargeInteger zi = ttag.mod(q);
-			//TODO finish the array after the shanks tonelli works
+			// TODO finish the array after the shanks tonelli works
 		}
-		
-		
+
 		Rand = RandArray;
-		
+
 	}
-	
-	
+
 	public LargeInteger[] shanksTonelli(LargeInteger a, LargeInteger p) {
 		LargeInteger[] retVal = new LargeInteger[2];
 
 		// Verify that the Lagendre symbol of a and p is not -1:
 		if (Legendre(a, p) == -1)
 			return null;
-
-		// Define Q and s to be p-1=Q2^s when Q is odd
-		LargeInteger[] powers = findPowers(p);
-		LargeInteger Q = powers[1];
-		LargeInteger s = powers[0];
-
-		// Define b as a the least quadratic non residual
-		LargeInteger b = findLeastQNR(p);
 
 		// Find a's opposite in the modular field
 		LargeInteger atag = a.modInverse(p);
@@ -61,21 +63,21 @@ public class ECurveRandArray {
 
 		// compute R
 		LargeInteger r = a.modPow(
-				Q.add(LargeInteger.ONE).divide(LargeInteger.valueOf(2)), p);
+				Q.add(LargeInteger.ONE).divide(new LargeInteger(2)), p);
 
 		LargeInteger i = LargeInteger.ONE;
 		LargeInteger d;
 
-		for (i = LargeInteger.ONE; !i.equals(s); ) {
+		for (i = LargeInteger.ONE; !i.equals(s);) {
 			// compute the power as s-i-1
-			LargeInteger pow = LargeInteger.valueOf(2).pow(
-					s.intValue() - i.intValue() - 1);
-			d = (r.pow(2).multiply(atag).modPow(pow, p));
+			LargeInteger pow = new LargeInteger(2).power(s.intValue()
+					- i.intValue() - 1);
+			d = (r.power(2).multiply(atag).modPow(pow, p));
 
 			if (d.equals(p.subtract(LargeInteger.ONE)))
 				r = r.multiply(c).mod(p);
-			c = c.modPow(LargeInteger.valueOf(2), p);
-			
+			c = c.modPow(new LargeInteger(2), p);
+
 			i = i.add(LargeInteger.ONE);
 
 		}
@@ -122,7 +124,7 @@ public class ECurveRandArray {
 			return 0;
 		}
 		LargeInteger exponent = p.subtract(LargeInteger.ONE);
-		exponent = exponent.divide(LargeInteger.valueOf(2));
+		exponent = exponent.divide(new LargeInteger(2));
 		LargeInteger result = a.modPow(exponent, p); // 1 <= result <= p - 1
 
 		if (result.equals(LargeInteger.ONE)) {
@@ -147,19 +149,17 @@ public class ECurveRandArray {
 		LargeInteger s = LargeInteger.ZERO;
 		LargeInteger Q = p.subtract(LargeInteger.ONE);// p-1 is even
 		// Q needs to be odd
-		while (Q.mod(LargeInteger.valueOf(2)).equals(LargeInteger.ZERO))  {
-			Q = Q.divide(LargeInteger.valueOf(2));
+		while (Q.mod(LargeInteger.valueOf(2)).equals(LargeInteger.ZERO)) {
+			Q = Q.divide(new LargeInteger(2));
 			s = s.add(LargeInteger.ONE);
 		}
 		retVal[0] = s;
 		retVal[1] = Q;
 		return retVal;
 	}
-	
 
 	public ArrayOfElements<IGroupElement> getRand() {
 		return Rand;
 	}
-
 
 }
