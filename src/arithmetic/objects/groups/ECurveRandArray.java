@@ -1,5 +1,7 @@
 package arithmetic.objects.groups;
 
+import java.math.BigInteger;
+
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.field.IField;
@@ -29,8 +31,11 @@ public class ECurveRandArray {
 	LargeInteger b;
 
 	IField<IntegerFieldElement> field;
-	public ECurveRandArray(LargeInteger q) {
+	
+	public ECurveRandArray(LargeInteger q, LargeInteger a, LargeInteger b) {
 		this.q = q;
+		this.a = a;
+		this.b = b;
 		findPowers();
 		findLeastQNR();
 	}
@@ -85,14 +90,18 @@ public class ECurveRandArray {
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
 			// xi is the x coordinate we want to check
 			LargeInteger xValue = ttag.mod(q);
-			IntegerFieldElement xi = new IntegerFieldElement(xValue, field);
-
+			
 			// check f(xi) is a quadratic residue (mod q) and we need to find
 			// the roots.
-			IntegerFieldElement zValue = f(xi);
-			if (Legendre(zValue.getElement()) == 1) {
+			LargeInteger zValue = f(xValue);
+			if (Legendre(zValue) == 1) {
 				// find the smallest root
-				LargeInteger yValue = shanksTonelli(zValue.getElement());
+				LargeInteger yValue = shanksTonelli(zValue);
+				
+				//Create coordinate xi
+				IntegerFieldElement xi = new IntegerFieldElement(xValue, field);
+
+				//Create coordinate yi
 				IntegerFieldElement yi =  new IntegerFieldElement(yValue, field);
 
 				// Add the point to the array:
@@ -117,15 +126,15 @@ public class ECurveRandArray {
 	 * 
 	 * @param xi
 	 *            - input for the ellipic curve
-	 * @return f(xi) = y^2 = x^3 + ax +b
+	 * @return zValue = f(xi) = y^2 = x^3 + ax +b
 	 */
-	public IntegerFieldElement f(IntegerFieldElement xi) {
-		IntegerFieldElement A = new IntegerFieldElement(a, field);
-		IntegerFieldElement B = new IntegerFieldElement(b, field);
-		return xi.power(new LargeInteger("3")).add(xi.mult(A)).add(B);
-		
-
-
+	public LargeInteger f(LargeInteger xi) {
+		LargeInteger first, second, third, retval;
+		first = xi.modPow(new LargeInteger("3"), q);
+		second = (xi.multiply(a)).mod(q);
+		third = b.add(first).add(second);
+		retval = third.mod(q);
+		return retval;
 	}
 
 	/**
@@ -200,8 +209,7 @@ public class ECurveRandArray {
 			LargeInteger root1;
 			LargeInteger root2;
 
-			LargeInteger m = q.divide(new LargeInteger("16"));
-			LargeInteger exponent = m.add(LargeInteger.ONE);
+			LargeInteger exponent = (q.add(LargeInteger.ONE)).divide(new LargeInteger("4"));
 			root1 = num.modPow(exponent, q);
 			root2 = q.subtract(root1);
 			return root1.min(root2);
