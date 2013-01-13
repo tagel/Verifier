@@ -93,8 +93,14 @@ public class ECurveRandArrayTest {
 
 		ECurveGroup G = (ECurveGroup)Gq;
 		
-		ArrayOfElements<IGroupElement> h = Gq.createRandomArray(10, prg,
+		ArrayOfElements<IGroupElement> h = Gq.createRandomArray(1000, prg,
 				independentSeed, nr);
+		
+		LargeInteger s1 =new LargeInteger("2");
+		LargeInteger s2 =new LargeInteger("3");
+		LargeInteger s3 =new LargeInteger("4");
+		LargeInteger s4 =new LargeInteger("5");
+		System.out.println(s1. multiply(s2).subtract(s3));
 		
 		ECurveGroupElement check = (ECurveGroupElement) h.getAt(0);
 		Assert.assertEquals(true, isOnCurve(G.getXCoefficient(),G.getB(),check));
@@ -119,7 +125,7 @@ public class ECurveRandArrayTest {
 		
 		IntegerFieldElement A = new IntegerFieldElement(a, x.getField());
 		IntegerFieldElement B = new IntegerFieldElement(b, x.getField());
-		IntegerFieldElement res = x.power(new LargeInteger("3")).add(x.mult(A)).add(B);
+		IntegerFieldElement res = (x.power(new LargeInteger("3")).add(x.mult(A))).add(B);
 		if (y.power(new LargeInteger("2")).equals(res))
 			return true;
 

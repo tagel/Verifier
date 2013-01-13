@@ -75,7 +75,7 @@ public class ECurveRandArray {
 
 		ECurveGroupElement element;
 		Point point;
-
+		
 		// We run until q (this is the maximum, but we break when we have N
 		// elements
 		for (LargeInteger i = LargeInteger.ZERO; !i.equals(q
