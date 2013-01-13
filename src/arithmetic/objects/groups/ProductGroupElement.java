@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.ByteTree;
+import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 
 
@@ -100,7 +101,13 @@ public class ProductGroupElement implements ByteTree {
 	
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
-		return arr.toByteArray();
+		if (arr!=null) return arr.toByteArray();
+		else {
+			byte[] b = new byte[5];
+			b[0]=0; b[1]=0; b[2]=0; b[3]=0; b[4]=2;
+			b = ArrayGenerators.concatArrays(b, left.toByteArray());
+			return ArrayGenerators.concatArrays(b, right.toByteArray());
+		}
 	}
 }
 

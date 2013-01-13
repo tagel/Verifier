@@ -27,7 +27,7 @@ import cryptographic.primitives.CryptoUtils;
  * Tests for Element extractor functions
  * 
  * @author tagel
- *
+ * 
  */
 public class ElementsExtractorTests {
 
@@ -136,9 +136,11 @@ public class ElementsExtractorTests {
 				rightNode.toByteArray(), Gq);
 		node.add(leftChild);
 		node.add(rightChild);
-		ProductGroupElement cipher = ElementsExtractor.createCiphertext(leftNode, rightNode);
-		Assert.assertEquals(CryptoUtils.bytesToHexString(cipher.toByteArray()),
-				"00000000020100000002000001000000020001");
+		ProductGroupElement cipher = ElementsExtractor.createCiphertext(
+				leftNode, rightNode);
+		Assert.assertEquals(
+				"00000000020000000002010000000200000100000002000100000000020100000002000101000000020001",
+				CryptoUtils.bytesToHexString(cipher.toByteArray()));
 	}
 
 	@Test

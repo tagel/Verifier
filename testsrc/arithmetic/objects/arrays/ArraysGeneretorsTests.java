@@ -6,17 +6,16 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import cryptographic.primitives.CryptoUtils;
-
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
-import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
+import cryptographic.primitives.CryptoUtils;
 
 /**
  * Tests for ArrayGenerators.
@@ -26,6 +25,13 @@ import arithmetic.objects.ring.Ring;
  */
 public class ArraysGeneretorsTests {
 
+	private Ring ring_4 = new Ring(new LargeInteger("4"));
+	private IntegerRingElement ire1_ring4 = new IntegerRingElement(
+			new LargeInteger("1"), ring_4);
+	private IntegerRingElement ire2_ring4 = new IntegerRingElement(
+			new LargeInteger("2"), ring_4);
+	private Node node = new Node();
+	
 	@Test
 	public void createGroupElementArrayTest()
 			throws UnsupportedEncodingException {
@@ -50,12 +56,6 @@ public class ArraysGeneretorsTests {
 
 	@Test
 	public void createRingElementArray() throws UnsupportedEncodingException {
-		Ring ring_4 = new Ring(new LargeInteger("4"));
-		IntegerRingElement ire1_ring4 = new IntegerRingElement(
-				new LargeInteger("1"), ring_4);
-		IntegerRingElement ire2_ring4 = new IntegerRingElement(
-				new LargeInteger("2"), ring_4);
-		Node node = new Node();
 		node.add(ire1_ring4);
 		node.add(ire2_ring4);
 		ArrayOfElements<IntegerRingElement> ring = ArrayGenerators
@@ -64,6 +64,22 @@ public class ArraysGeneretorsTests {
 				CryptoUtils.bytesToHexString(ring.toByteArray()));
 	}
 
+	@Test
+	public void createArrayOfPlaintextsTest() throws UnsupportedEncodingException{
+		node.add(ire1_ring4);
+		node.add(ire2_ring4);
+		ArrayOfElements<IntegerRingElement> ring = ArrayGenerators
+				.createRingElementArray(node.toByteArray(), ring_4);
+		ProductRingElement pge1 = new ProductRingElement(ring);
+		ProductRingElement pge2 = new ProductRingElement(ring);
+		ArrayOfElements<ProductRingElement> arr = new ArrayOfElements<ProductRingElement>();
+		arr.add(pge1);
+		arr.add(pge2);
+		ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators.createArrayOfPlaintexts (arr.toByteArray(), ring_4);
+		Assert.assertEquals("000000000200000000020100000001010100000001010000000002010000000102010000000102",
+				CryptoUtils.bytesToHexString(plaintexts.toByteArray()));
+	}
+	
 	@Test
 	public void concatArraysTest() {
 		byte[] byteArr0 = new BigIntLeaf(new LargeInteger("0")).toByteArray(); // 100010
