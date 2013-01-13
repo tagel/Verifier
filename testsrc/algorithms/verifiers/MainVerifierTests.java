@@ -1,4 +1,4 @@
-package algorithms.params;
+package algorithms.verifiers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -10,6 +10,7 @@ import cryptographic.primitives.CryptoUtils;
 import cryptographic.primitives.HashFunction;
 import cryptographic.primitives.SHA2HashFunction;
 
+import algorithms.params.Parameters;
 import algorithms.verifiers.MainVerifier;
 
 public class MainVerifierTests {
