@@ -273,7 +273,7 @@ public class MainVerifier {
 			return false;
 
 		// Here we check the secret keys - xi:
-		// Here the file can be null
+		// The file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
 
 			byte[] xFile;
@@ -343,6 +343,7 @@ public class MainVerifier {
 				.createArrayOfCiphertexts(file, params.getGq());
 		if (ShuffledCiphertexts.getSize() != params.getN())
 			return false;
+		
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
 		// Section 6c of the algorithm
