@@ -62,6 +62,8 @@ public class MainVerifierTests {
 		Assert.assertNull(params.getShuffledCiphertexts());
 		// TODO - test case secret key does exits
 		Assert.assertNull(params.getMixSecretKey().getAt(0));
+		Assert.assertTrue(params.getProtVersion().equals(params.getVersion()));
+		Assert.assertEquals(params.getwDefault(), params.getW());
 	}
 
 	@Test
