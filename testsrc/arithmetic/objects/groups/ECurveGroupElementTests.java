@@ -10,6 +10,7 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.field.IField;
 import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.field.PrimeOrderField;
+import cryptographic.primitives.CryptoUtils;
 
 /**
  * Tests for class ECurveGroupElement.
@@ -78,11 +79,13 @@ public class ECurveGroupElementTests {
 				new LargeInteger("2"));
 		IntegerFieldElement xr = new IntegerFieldElement(
 				s.power(new LargeInteger("2")), f192);
-		IntegerFieldElement yr = new IntegerFieldElement(LargeInteger.ZERO.subtract(LargeInteger.ONE.add(s.multiply(xr.getElement()))), f192);
+		IntegerFieldElement yr = new IntegerFieldElement(
+				LargeInteger.ZERO.subtract(LargeInteger.ONE.add(s.multiply(xr
+						.getElement()))), f192);
 
 		ECurveGroupElement eCurveElementRet = new ECurveGroupElement(new Point(
 				xr, yr), eCurveGroup192);
-		
+
 		Assert.assertTrue(eCurveElementRet.equal(eCurveElement1
 				.mult(eCurveElement2)));
 	}
@@ -132,7 +135,7 @@ public class ECurveGroupElementTests {
 				new LargeInteger("1").mod(eCurveGroup192.getFieldOrder()),
 				eCurveElementOut.getElement().getY().getElement());
 	}
-	
+
 	@Test
 	public void mult_theOneTest() {
 		Point point1 = new Point(new IntegerFieldElement(
@@ -159,15 +162,13 @@ public class ECurveGroupElementTests {
 
 	@Test
 	public void inverseTest() {
-		Point point1 = new Point(new IntegerFieldElement(
-				new LargeInteger("1"), f192), new IntegerFieldElement(
-				new LargeInteger("1"), f192));
+		Point point1 = new Point(new IntegerFieldElement(new LargeInteger("1"),
+				f192), new IntegerFieldElement(new LargeInteger("1"), f192));
 		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
 				eCurveGroup192);
-		
-		Point point2 = new Point(new IntegerFieldElement(
-				new LargeInteger("1"), f192), new IntegerFieldElement(
-				new LargeInteger("-1"), f192));
+
+		Point point2 = new Point(new IntegerFieldElement(new LargeInteger("1"),
+				f192), new IntegerFieldElement(new LargeInteger("-1"), f192));
 		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
 				eCurveGroup192);
 		Assert.assertTrue(eCurveElement2.equal(eCurveElement1.inverse()));
@@ -204,23 +205,22 @@ public class ECurveGroupElementTests {
 				new LargeInteger("-1"), f192));
 		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
 				eCurveGroup192);
-		Assert.assertTrue(eCurveElement1.equal(eCurveElement1.power(new LargeInteger("5"))));
+		Assert.assertTrue(eCurveElement1.equal(eCurveElement1
+				.power(new LargeInteger("5"))));
 
 	}
 
 	@Test
 	public void toByteArrayTest() throws UnsupportedEncodingException {
-		Point point1 = new Point(new IntegerFieldElement(
-				new LargeInteger("0"), f192), new IntegerFieldElement(
-				new LargeInteger("0"), f192));
+		Point point1 = new Point(new IntegerFieldElement(new LargeInteger("0"),
+				f192), new IntegerFieldElement(new LargeInteger("0"), f192));
 		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
 				eCurveGroup192);
-		System.out.println("x " + eCurveElement1.getElement().getX().getElement());
-		System.out.println("y " + eCurveElement1.getElement().getY().getElement());
-//		Assert.assertEquals("", CryptoUtils.bytesToHexString(eCurveElement.toByteArray()));
-		System.out.println(eCurveGroup192.getFieldOrder().toByteArray().length);
-		System.out.println(eCurveElement1.toByteArray());
-		
+		 Assert.assertEquals("0000000002" + 
+					"010000001900000000000000000000000000000000000000000000000000" +
+					"010000001900000000000000000000000000000000000000000000000000",
+		 CryptoUtils.bytesToHexString(eCurveElement1.toByteArray()));
+
 	}
 
 	@Test
