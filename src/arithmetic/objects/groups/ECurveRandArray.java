@@ -1,6 +1,5 @@
 package arithmetic.objects.groups;
 
-import java.math.BigInteger;
 
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;

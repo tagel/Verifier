@@ -136,10 +136,7 @@ public class Parameters {
 	private ArrayOfElements<Node> mixCcPosReply;
 
 	private ArrayOfElements<BooleanArrayElement> mixKeepList;
-	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixDecryptionFactors;
-	private ArrayOfElements<Node> mixDecrFactCommitment;
-	private ArrayOfElements<Node> mixDecrFactReply;
-
+	
 	//TODO: Should we really need all of these mix-params?
 	private void initializeMix() {
 		 mixPublicKey = new ArrayOfElements<IGroupElement>();
@@ -154,11 +151,7 @@ public class Parameters {
 		 mixCcPosCommitment = new ArrayOfElements<Node>();
 		 mixCcPosReply = new ArrayOfElements<Node>();
 		 mixKeepList = new ArrayOfElements<BooleanArrayElement>();
-		 mixDecryptionFactors = new
-		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		 mixDecrFactCommitment = new ArrayOfElements<Node>();
-		 mixDecrFactReply = new ArrayOfElements<Node>();
-	}
+		}
 
 	// fill the relevant parameters from the given xml
 	// fill the relevant parameters:
@@ -642,32 +635,6 @@ public class Parameters {
 
 	public void setMixKeepList(ArrayOfElements<BooleanArrayElement> mixKeepList) {
 		this.mixKeepList = mixKeepList;
-	}
-
-	public ArrayOfElements<ArrayOfElements<IGroupElement>> getMixDecryptionFactors() {
-		return mixDecryptionFactors;
-	}
-
-	public void setMixDecryptionFactors(
-			ArrayOfElements<ArrayOfElements<IGroupElement>> mixDecryptionFactors) {
-		this.mixDecryptionFactors = mixDecryptionFactors;
-	}
-
-	public ArrayOfElements<Node> getMixDecrFactCommitment() {
-		return mixDecrFactCommitment;
-	}
-
-	public void setMixDecrFactCommitment(
-			ArrayOfElements<Node> mixDecrFactCommitment) {
-		this.mixDecrFactCommitment = mixDecrFactCommitment;
-	}
-
-	public ArrayOfElements<Node> getMixDecrFactReply() {
-		return mixDecrFactReply;
-	}
-
-	public void setMixDecrFactReply(ArrayOfElements<Node> mixDecrFactReply) {
-		this.mixDecrFactReply = mixDecrFactReply;
 	}
 
 }
