@@ -5,32 +5,32 @@ import org.junit.Test;
 public class ArrayOfElementsTests {
 
 	@Test
-	public void getAt() {
-		// TODO
+	public void getAtTest() {
+		// TODO - daniel
 	}
 
 	@Test
-	public void setAt() {
-		// TODO
+	public void setAtTest() {
+		// TODO - daniel
 	}
 
 	@Test
-	public void add() {
-		// TODO
+	public void addTest() {
+		// TODO - daniel
 	}
 
 	@Test
-	public void getSize() {
-		// TODO
+	public void getSizeTest() {
+		// TODO - daniel
 	}
 
 	@Test
-	public void equals() {
-		// TODO
+	public void equalsTest() {
+		// TODO - daniel
 	}
 
 	@Test
-	public void toByteArray() {
-		// TODO
+	public void toByteArrayTest() {
+		// TODO - daniel
 	}
 }
