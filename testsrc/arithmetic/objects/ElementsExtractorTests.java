@@ -3,8 +3,6 @@ package arithmetic.objects;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.spec.EllipticCurve;
-import java.util.Arrays;
 
 import junit.framework.Assert;
 
