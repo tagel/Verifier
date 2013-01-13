@@ -32,10 +32,11 @@ public class ArrayGenerators {
 		return ret;
 	}
 
-	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data, IGroup group) {
+	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data, IGroup group) throws UnsupportedEncodingException {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
-		
+		int w = node.getChildrenSize();
+		int arraySize = (new Node(node.getAt(0).toByteArray())).getChildrenSize();
 		
 		
 		

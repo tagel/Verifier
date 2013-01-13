@@ -11,7 +11,7 @@ import java.util.List;
 import arithmetic.objects.ByteTree;
 
 
-public class ArrayOfElements<E> implements ByteTree {
+public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	
 	private List<E> elements = new ArrayList<E>();
 	
@@ -50,7 +50,7 @@ public class ArrayOfElements<E> implements ByteTree {
 		System.arraycopy(a, 0, b, 1, a.length);
 		b[0] = 0;
 		for (int i=0; i<elements.size(); i++) {
-			byte[] c = ((ByteTree) elements.get(i)).toByteArray();
+			byte[] c = (elements.get(i)).toByteArray();
 			b = ArrayGenerators.concatArrays(b, c);
 		}
 		return b;
