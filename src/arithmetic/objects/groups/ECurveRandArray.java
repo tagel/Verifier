@@ -28,6 +28,7 @@ public class ECurveRandArray {
 	LargeInteger a;
 	LargeInteger b;
 
+	IField<IntegerFieldElement> field;
 	public ECurveRandArray(LargeInteger q) {
 		this.q = q;
 		findPowers();
@@ -41,7 +42,7 @@ public class ECurveRandArray {
 		this.b = b;
 		this.q = q;
 
-		IField<IntegerFieldElement> field = new PrimeOrderField(q);
+		field = new PrimeOrderField(q);
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = q.bitLength();
 
@@ -74,7 +75,7 @@ public class ECurveRandArray {
 
 		ECurveGroupElement element;
 		Point point;
-
+		
 		// We run until q (this is the maximum, but we break when we have N
 		// elements
 		for (LargeInteger i = LargeInteger.ZERO; !i.equals(q
@@ -83,18 +84,19 @@ public class ECurveRandArray {
 			LargeInteger t = new LargeInteger(arr);
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
 			// xi is the x coordinate we want to check
-			LargeInteger xi = ttag.mod(q);
+			LargeInteger xValue = ttag.mod(q);
+			IntegerFieldElement xi = new IntegerFieldElement(xValue, field);
 
 			// check f(xi) is a quadratic residue (mod q) and we need to find
 			// the roots.
-			LargeInteger zi = f(xi);
-			if (Legendre(zi) == 1) {
+			IntegerFieldElement zValue = f(xi);
+			if (Legendre(zValue.getElement()) == 1) {
 				// find the smallest root
-				LargeInteger yi = shanksTonelli(zi);
+				LargeInteger yValue = shanksTonelli(zValue.getElement());
+				IntegerFieldElement yi =  new IntegerFieldElement(yValue, field);
 
 				// Add the point to the array:
-				point = new Point(new IntegerFieldElement(xi, field),
-						new IntegerFieldElement(yi, field));
+				point = new Point(xi,yi);
 
 				element = new ECurveGroupElement(point, G);
 				RandArray.add(element);
@@ -117,8 +119,13 @@ public class ECurveRandArray {
 	 *            - input for the ellipic curve
 	 * @return f(xi) = y^2 = x^3 + ax +b
 	 */
-	public LargeInteger f(LargeInteger xi) {
-		return xi.power(3).add(xi.multiply(a)).add(b);
+	public IntegerFieldElement f(IntegerFieldElement xi) {
+		IntegerFieldElement A = new IntegerFieldElement(a, field);
+		IntegerFieldElement B = new IntegerFieldElement(b, field);
+		return xi.power(new LargeInteger("3")).add(xi.mult(A)).add(B);
+		
+
+
 	}
 
 	/**
