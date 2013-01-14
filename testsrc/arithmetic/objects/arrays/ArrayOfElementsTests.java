@@ -12,6 +12,12 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.field.PrimeOrderField;
 
+/**
+ * Tests for ArrayOfElements class.
+ * 
+ * @author Daniel
+ * 
+ */
 public class ArrayOfElementsTests {
 
 	private ArrayOfElements<IntegerFieldElement> array = new ArrayOfElements<IntegerFieldElement>();
