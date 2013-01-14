@@ -7,9 +7,14 @@ package main;
  * @author Daniel
  * 
  */
-// TODO Daniel - ask sofi - maybe main verify shouldget another arg saying which
+// TODO Daniel - ask sofi - maybe main verify should get another arg saying
+// which
 // verify to run
 public class Main {
+
+	private static String xml;
+	private static String dir;
+
 	private String auxsid = "default";
 	// TODO Daniel - ask tagel/sofi what the default is?
 	private static int width;
@@ -31,13 +36,18 @@ public class Main {
 				printCompat();
 				return;
 			}
-
 			// no match for the command - print the command line usage
 			printCommandLineUsage();
 			return;
 		}
 
-		// case there are more than 2 words in the command
+		// case there are more than 2 words in the command line but less than 4
+		if (argv.length < 4) {
+			printCommandLineUsage();
+			return;
+		}
+
+		// case there are 4 or more words in the command line
 		if (argv[1] == "-mix") {
 			verifyProofOfMix(argv);
 			return;
@@ -63,6 +73,8 @@ public class Main {
 		posc = false;
 		ccpos = false;
 		dec = true;
+
+		fillXmlAndDir(argv);
 	}
 
 	private static void verifyProofOfShuffling(String[] argv) {
@@ -71,6 +83,7 @@ public class Main {
 		ccpos = true;
 		dec = false;
 
+		fillXmlAndDir(argv);
 	}
 
 	private static void verifyProofOfMix(String[] argv) {
@@ -78,6 +91,8 @@ public class Main {
 		posc = true;
 		ccpos = true;
 		dec = true;
+
+		fillXmlAndDir(argv);
 	}
 
 	// outputs a space separated list of all versions of Verificatum for
@@ -88,5 +103,11 @@ public class Main {
 
 	private static void printCommandLineUsage() {
 		// TODO Daniel - print how to use the command line
+	}
+
+	private static void fillXmlAndDir(String[] argv) {
+		// TODO Daniel - check if need to test the xml and dir path correctness
+		xml = argv[2];
+		dir = argv[3];
 	}
 }
