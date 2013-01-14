@@ -1,3 +1,5 @@
+package main;
+
 /**
  * The main class - parsing the command line and calling the correct verifiers
  * accordingly.
@@ -5,6 +7,8 @@
  * @author Daniel
  * 
  */
+// TODO Daniel - ask sofi - maybe main verify shouldget another arg saying which
+// verify to run
 public class Main {
 	private String auxsid = "default";
 	// TODO Daniel - ask tagel/sofi what the default is?
