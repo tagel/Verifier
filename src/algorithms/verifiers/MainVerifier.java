@@ -134,22 +134,24 @@ public class MainVerifier {
 			if (params.getType().equals("mixing"))
 				if (!VerDec.verify(params.getROseed(), params.getROchallenge(),
 						params.getDirectory(), params.getPrefixToRO(),
-						params.getN(), params.getNe(), params.getNr(),
-						params.getNv(), params.getPrg(), params.getGq(),
-						params.getFullPublicKey(),
+						params.getThreshold(), params.getN(), params.getNe(),
+						params.getNr(), params.getNv(), params.getPrg(),
+						params.getGq(), params.getFullPublicKey(),
 						params.getShuffledCiphertexts(),
-						params.getPlaintexts(), params.getZq()))
+						params.getPlaintexts(), params.getZq(),
+						params.getMixPublicKey(), params.getMixSecretKey()))
 					return false;
 
 			if (params.getType().equals("decryption"))
 				if (!VerDec.verify(params.getROseed(), params.getROchallenge(),
 						params.getDirectory(), params.getPrefixToRO(),
-						params.getN(), params.getNe(), params.getNr(),
-						params.getNv(), params.getPrg(), params.getGq(),
-						params.getFullPublicKey(), params.getCiphertexts(),
-						params.getPlaintexts(), params.getZq()))
+						params.getThreshold(), params.getN(), params.getNe(),
+						params.getNr(), params.getNv(), params.getPrg(),
+						params.getGq(), params.getFullPublicKey(),
+						params.getCiphertexts(), params.getPlaintexts(),
+						params.getZq(), params.getMixPublicKey(),
+						params.getMixSecretKey()))
 					return false;
-
 		}
 
 		return true;
@@ -224,13 +226,13 @@ public class MainVerifier {
 
 	}
 
-	public boolean ReadKeys(){
+	public boolean ReadKeys() {
 		// Read Public Key
 		ProductGroupElement pk;
 		try {
-			pk = ElementsExtractor.createSimplePGE(
-					ElementsExtractor.btFromFile(params.getDirectory(),
-							"FullPublicKey.bt"), params.getGq());
+			pk = ElementsExtractor.createSimplePGE(ElementsExtractor
+					.btFromFile(params.getDirectory(), "FullPublicKey.bt"),
+					params.getGq());
 		} catch (UnsupportedEncodingException e) {
 			return false;
 		} catch (IOException e) {
@@ -255,9 +257,9 @@ public class MainVerifier {
 			// Here we assume that the file exists
 			try {
 				yi = ElementsExtractor.createGroupElement(ElementsExtractor
-						.btFromFile(params.getDirectory(), "proofs", "PublicKey"
-								+ (i < 10 ? "0" : "") + (i + 1) + ".bt"), params
-						.getGq());
+						.btFromFile(params.getDirectory(), "proofs",
+								"PublicKey" + (i < 10 ? "0" : "") + (i + 1)
+										+ ".bt"), params.getGq());
 			} catch (IOException e) {
 				return false;
 			}
@@ -288,7 +290,8 @@ public class MainVerifier {
 			if (xFile == null)
 				xi = null;
 			else
-				xi = new IntegerRingElement(ElementsExtractor.leafToInt(xFile), params.getZq());
+				xi = new IntegerRingElement(ElementsExtractor.leafToInt(xFile),
+						params.getZq());
 
 			// xi = null if the file doesn't exist
 			params.getMixSecretKey().add(xi);
@@ -343,7 +346,7 @@ public class MainVerifier {
 				.createArrayOfCiphertexts(file, params.getGq());
 		if (ShuffledCiphertexts.getSize() != params.getN())
 			return false;
-		
+
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
 		// Section 6c of the algorithm
