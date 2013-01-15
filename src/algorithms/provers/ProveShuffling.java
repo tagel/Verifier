@@ -24,23 +24,13 @@ import cryptographic.primitives.RandomOracle;
  */
 public class ProveShuffling extends Prover {
 
-	public static boolean prove(
-			RandomOracle ROSeed,
-			RandomOracle ROChallenge,
-			byte[] ro,
-			int N,
-			int Ne,
-			int Nr,
-			int Nv,
-			PseudoRandomGenerator prg,
-			IGroup Gq,
-			ProductGroupElement pk,
+	public static boolean prove(RandomOracle ROSeed, RandomOracle ROChallenge,
+			byte[] ro, int N, int Ne, int Nr, int Nv,
+			PseudoRandomGenerator prg, IGroup Gq, ProductGroupElement pk,
 			ArrayOfElements<ProductGroupElement> wInput,
-			ArrayOfElements<ProductGroupElement> wOutput,
-			int width,
+			ArrayOfElements<ProductGroupElement> wOutput, int width,
 			ArrayOfElements<IGroupElement> permutationCommitment,
 			Node PoSCommitment, Node PoSReply) {
-		
 
 		try {
 
@@ -54,31 +44,31 @@ public class ProveShuffling extends Prover {
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
 			// creating B,A',B',C',D',F'
-				ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>)(
-						PoSCommitment.getAt(0));
-			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>)(
-					PoSCommitment.getAt(2));
+			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>) (PoSCommitment
+					.getAt(0));
+			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>) (PoSCommitment
+					.getAt(2));
 
-			IGroupElement Atag = (IGroupElement)PoSCommitment.getAt(1);
-					
-			IGroupElement Ctag = (IGroupElement)PoSCommitment.getAt(3);
-			IGroupElement Dtag = (IGroupElement)PoSCommitment.getAt(4);
-			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
+			IGroupElement Atag = (IGroupElement) PoSCommitment.getAt(1);
+
+			IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
+			IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
+			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment
+					.getAt(5);
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 			 */
 			IntegerFieldElement Ka = (IntegerFieldElement) PoSReply.getAt(0);
 			IntegerFieldElement Kc = (IntegerFieldElement) PoSReply.getAt(2);
-			IntegerFieldElement Kd = (IntegerFieldElement)PoSReply.getAt(3);
-			ProductRingElement Kf = (ProductRingElement)PoSReply.getAt(5);
-			
+			IntegerFieldElement Kd = (IntegerFieldElement) PoSReply.getAt(3);
+			ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 
-			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>)(
-					PoSReply.getAt(1));
+			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>) (PoSReply
+					.getAt(1));
 
-			ArrayOfElements<IntegerFieldElement> Ke = (ArrayOfElements<IntegerFieldElement>)(
-					PoSReply.getAt(4));
+			ArrayOfElements<IntegerFieldElement> Ke = (ArrayOfElements<IntegerFieldElement>) (PoSReply
+					.getAt(4));
 
 			/**
 			 * 2 - computing the seed
@@ -134,25 +124,15 @@ public class ProveShuffling extends Prover {
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 			 */
-			verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka);
+			if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
+				return false;
+			}
 
 			/*
 			 * Equation 2: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]),
 			 * where B[-1] = h[0]
 			 */
-			IGroupElement left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
-			IGroupElement right = g.power(Kb.getAt(0).getElement()).mult(
-					h.getAt(0).power(Ke.getAt(0).getElement()));
-			if (!left.equal(right)) {
-				return false;
-			}
-
-			for (int i = 1; i < N; i++) {
-				left = (B.getAt(i)).power(v).mult(Btag.getAt(i));
-				right = g.power(Kb.getAt(i).getElement()).mult(
-						B.getAt(i - 1).power(Ke.getAt(i).getElement()));
-			}
-			if (!left.equal(right)) {
+			if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
 				return false;
 			}
 
@@ -161,7 +141,8 @@ public class ProveShuffling extends Prover {
 			 */
 			ProductGroupElement leftF = F.power(v).mult(Ftag);
 
-			ProductGroupElement W = wOutput.getAt(0).power(Ke.getAt(0).getElement());
+			ProductGroupElement W = wOutput.getAt(0).power(
+					Ke.getAt(0).getElement());
 			for (int i = 1; i < N; i++) {
 				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
 			}
@@ -171,9 +152,9 @@ public class ProveShuffling extends Prover {
 			for (int i = 0; i < width; i++) {
 				arrOfOnes.add(Gq.one());
 			}
-			
+
 			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
-			ProductGroupElement rigthF = encrypt(ones,Kf,pk,Gq);
+			ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
 			if (!leftF.equal(rigthF)) {
 				return false;
 			}
@@ -181,18 +162,14 @@ public class ProveShuffling extends Prover {
 			/*
 			 * Equation 4: (C^v)*Ctag = g^Kc
 			 */
-			left = (C.power(v)).mult(Ctag);
-			right = g.power(Kc.getElement());
-			if (!left.equal(right)) {
+			if (!verifyCvCtag(C, Ctag, v, Kc, g)) {
 				return false;
 			}
 
 			/*
 			 * Equation 5: (D^v)*Dtag = g^Kd
 			 */
-			left = (D.power(v)).mult(Dtag);
-			right = g.power(Kd.getElement());
-			if (!left.equal(right)) {
+			if (!verifyDvDtag(D, Dtag, v, Kd, g)) {
 				return false;
 			}
 
