@@ -6,18 +6,9 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import cryptographic.primitives.HashFuncPRG;
-import cryptographic.primitives.HashFuncPRGRandomOracle;
-import cryptographic.primitives.HashFunction;
-import cryptographic.primitives.PseudoRandomGenerator;
-import cryptographic.primitives.RandomOracle;
-import cryptographic.primitives.SHA2HashFunction;
-
 import algorithms.params.Parameters;
-import arithmetic.objects.*;
-import arithmetic.objects.arrays.ArrayGenerators;
-import arithmetic.objects.arrays.ArrayOfElements;
-import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.ByteTree;
+import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.StringLeaf;
 
 
@@ -50,17 +41,17 @@ public class ECurveRandArrayTest {
 		Assert.assertEquals(new LargeInteger("7"), tst3);
 
 		// Create the array:
-		int nr = 100;
-		IGroup Gq = ElementsExtractor
-				.unmarshal("ECqPGroup(P-256)::0000000002010000001c766572696669636174756d2e61726974686d2e4543715047726f75700100000005502d323536");
-		PseudoRandomGenerator prg = new HashFuncPRG(new SHA2HashFunction(
-				"SHA-256"));
-		HashFunction H = new SHA2HashFunction("SHA-256");
+//		int nr = 100;
+//		IGroup Gq = ElementsExtractor
+//				.unmarshal("ECqPGroup(P-256)::0000000002010000001c766572696669636174756d2e61726974686d2e4543715047726f75700100000005502d323536");
+//		PseudoRandomGenerator prg = new HashFuncPRG(new SHA2HashFunction(
+//				"SHA-256"));
+//		HashFunction H = new SHA2HashFunction("SHA-256");
 
 		Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
-				"type", "auxsid", 1, false, false, false);
+				null, "auxsid", 1, false, false, false);
 		Assert.assertNotNull("res is not in the classpath - ask Daniel",
 				getClass().getClassLoader()
 						.getResource("export/default/proofs"));
@@ -82,22 +73,22 @@ public class ECurveRandArrayTest {
 		input[3] = sPRG;
 		input[4] = sH;
 
-		Node node = new Node(input);
-		byte[] Seed = node.toByteArray();
+//		Node node = new Node(input);
+//		byte[] Seed = node.toByteArray();
+//
+//		RandomOracle ROseed = new HashFuncPRGRandomOracle(H, prg.seedlen());
+//
+//		StringLeaf stringLeaf = new StringLeaf("generators");
+//		byte[] independentSeed = ROseed.getRandomOracleOutput(ArrayGenerators
+//				.concatArrays(H.digest(Seed), stringLeaf.toByteArray()));
 
-		RandomOracle ROseed = new HashFuncPRGRandomOracle(H, prg.seedlen());
-
-		StringLeaf stringLeaf = new StringLeaf("generators");
-		byte[] independentSeed = ROseed.getRandomOracleOutput(ArrayGenerators
-				.concatArrays(H.digest(Seed), stringLeaf.toByteArray()));
-
-		ECurveGroup G = (ECurveGroup)Gq;
-		
-		ArrayOfElements<IGroupElement> h = Gq.createRandomArray(1000, prg,
-				independentSeed, nr);
-		
-		ECurveGroupElement check;
-		
+//		ECurveGroup G = (ECurveGroup)Gq;
+//		
+//		ArrayOfElements<IGroupElement> h = Gq.createRandomArray(1000, prg,
+//				independentSeed, nr);
+//		
+//		ECurveGroupElement check;
+//		
 		//Check the field order of the point:
 		//Assert.assertEquals(new LargeInteger("115792089210356248762697446949407573530086143415290314195533631308867097853951"), check.getGroup().getFieldOrder());
 		

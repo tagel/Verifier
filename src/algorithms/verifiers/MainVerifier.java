@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import algorithms.params.Parameters;
+import algorithms.params.Parameters.Type;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
@@ -32,18 +33,38 @@ import cryptographic.primitives.SHA2HashFunction;
 public class MainVerifier {
 
 	private Parameters params;
-	private HashFunction H;
+	public Parameters getParams() {
+		return params;
+	}
 
-	public MainVerifier(Parameters params, HashFunction H) {
+	private HashFunction H;
+	private static final String ciphertextsFilePath = "Ciphertexts.bt";
+	private static final String shuffCTFilePath = "ShuffledCiphertexts.bt";
+	private static final String plaintextsFilePath = "Plaintexts.bt";
+	
+	
+	/**
+	 * Constructor for tests
+	 * @param params
+	 * @param H
+	 */
+	MainVerifier(Parameters params, HashFunction H) {
 		this.params = params;
 		this.H = H;
 	}
 
 	/**
+	 * Empty constructor for the cmd line
+	 */
+	public MainVerifier() {
+		
+	}
+	
+	/**
 	 * @return true if verification was successful and false otherwise.
 	 * @throws IOException
 	 */
-	public boolean verify(String protInfo, String directory, String type,
+	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
 			throws IOException {
 
@@ -114,8 +135,8 @@ public class MainVerifier {
 		// *******Section 7 in the Algorithm*********
 		// Here we call the subroutines of the verifier
 		// 7a -- Verify Shuffling
-		if ((params.getType().equals("mixing") || params.getType().equals(
-				"decryption"))
+		if ((params.getType().equals(Type.MIXING) || params.getType().equals(
+				Type.SHUFFLING))
 				&& (params.isPosc() || params.isCcpos()))
 
 			if (!VerShuffling.verify(params.getROseed(),
@@ -131,7 +152,7 @@ public class MainVerifier {
 		// 7b - Verify Decryption
 		if (params.isDec()) {// isDec==true means we need to check the
 								// decryption.
-			if (params.getType().equals("mixing"))
+			if (params.getType().equals(Type.MIXING))
 				if (!VerDec.verify(params.getROseed(), params.getROchallenge(),
 						params.getDirectory(), params.getPrefixToRO(),
 						params.getThreshold(), params.getN(), params.getNe(),
@@ -142,7 +163,7 @@ public class MainVerifier {
 						params.getMixPublicKey(), params.getMixSecretKey()))
 					return false;
 
-			if (params.getType().equals("decryption"))
+			if (params.getType().equals(Type.DECRYPTION))
 				if (!VerDec.verify(params.getROseed(), params.getROchallenge(),
 						params.getDirectory(), params.getPrefixToRO(),
 						params.getThreshold(), params.getN(), params.getNe(),
@@ -314,7 +335,7 @@ public class MainVerifier {
 	public boolean ReadLists() throws IOException {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
-				"Ciphertexts.bt");
+				ciphertextsFilePath);
 		if (file == null)
 			return false;
 
@@ -328,15 +349,16 @@ public class MainVerifier {
 		// Directory
 		// if the type==shuffling, read the file Ciphertexts_threshold from
 		// Directory/proofs
-		if (params.getType().equals("mixing")) {
+		if (params.getType().equals(Type.MIXING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"ShuffledCiphertexts.bt");
+					ciphertextsFilePath);
 			if (file == null)
 				return false;
-		} else if (params.getType().equals("shuffling")) {
+		} 
+		
+		if (params.getType().equals(Type.SHUFFLING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"proofs",
-					"Ciphertexts" + (params.getThreshold() < 10 ? "0" : "")
+					shuffCTFilePath+ (params.getThreshold() < 10 ? "0" : "")
 							+ params.getThreshold() + ".bt");
 			if (file == null)
 				return false;
@@ -350,10 +372,10 @@ public class MainVerifier {
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
 		// Section 6c of the algorithm
-		if (params.getType().equals("mixing")
-				|| params.getType().equals("decryption")) {
+		if (params.getType().equals(Type.MIXING)
+				|| params.getType().equals(Type.DECRYPTION)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"Plaintexts.bt");
+					plaintextsFilePath);
 			if (file == null)
 				return false;
 
