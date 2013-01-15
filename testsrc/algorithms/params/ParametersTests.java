@@ -7,7 +7,7 @@ public class ParametersTests {
 
 	private Parameters params = new Parameters(getClass().getClassLoader()
 			.getResource("protInfo.xml").getFile(), getClass().getClassLoader()
-			.getResource("export/default").getFile(), "type", "auxsid", 1,
+			.getResource("export/default").getFile(), null, "auxsid", 1,
 			false, false, false);
 
 	@Test

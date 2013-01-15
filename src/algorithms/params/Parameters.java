@@ -27,12 +27,17 @@ import arithmetic.objects.ring.ProductRingElement;
  * @author Tagel & Sofi
  */
 public class Parameters {
+	
+	public enum Type {
+		MIXING, SHUFFLING, DECRYPTION;
+	}
+	
 
 	/**
 	 * 
 	 * @params - All the parameters we get from the cmd line 
 	 */
-	public Parameters(String protInfo, String directory, String type,
+	public Parameters(String protInfo, String directory, Type type,
 			java.lang.String auxsid, int w, boolean posc, boolean ccpos,
 			boolean dec) {
 
@@ -88,7 +93,7 @@ public class Parameters {
 	private String protInfo;
 	private String directory;
 	private String version;
-	private String type;
+	private Type type;
 	private String auxsid;
 	private int w;
 	private ProductGroupElement fullPublicKey;
@@ -109,7 +114,7 @@ public class Parameters {
 	private int wDefault;
 
 	// parameters from CMD
-	private String typeExpected;
+	private Type typeExpected;
 	private boolean posc;
 	private boolean ccpos;
 	private boolean dec;
@@ -224,7 +229,8 @@ public class Parameters {
 			return false;
 		}
 
-		type = text.next().trim();
+		type = stringToType(text.next().trim());
+		
 	
 		try {
 			text = new Scanner(new File(directory, "width"));
@@ -239,9 +245,22 @@ public class Parameters {
 	}
 
 	
+	
+
 	//********************************************************************************
 	//******************************Getters And Setters*******************************
 	//********************************************************************************
+	public Type stringToType(String next) {
+		if (next.equals("mixing"))
+			return Type.MIXING;
+		if (next.equals("shuffling"))
+			return Type.SHUFFLING;
+		if (next.equals("decryption"))
+			return Type.DECRYPTION;
+		
+		return null;
+	}
+	
 	
 	public RandomOracle getROseed() {
 		return ROseed;
@@ -294,7 +313,7 @@ public class Parameters {
 	/**
 	 * @return the proof type: "mixing" \ "shuffling" \ "decryption"
 	 */
-	public String getType() {
+	public Type getType() {
 		return type;
 	}
 
@@ -366,11 +385,11 @@ public class Parameters {
 		this.dec = dec;
 	}
 
-	public void setTypeExpected(String typeExpected) {
+	public void setTypeExpected(Type typeExpected) {
 		this.typeExpected = typeExpected;
 	}
 
-	public String getTypeExpected() {
+	public Type getTypeExpected() {
 		return typeExpected;
 	}
 

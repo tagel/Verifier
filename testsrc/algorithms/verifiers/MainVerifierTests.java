@@ -11,6 +11,7 @@ import cryptographic.primitives.HashFunction;
 import cryptographic.primitives.SHA2HashFunction;
 
 import algorithms.params.Parameters;
+import algorithms.params.Parameters.Type;
 import algorithms.verifiers.MainVerifier;
 
 public class MainVerifierTests {
@@ -20,7 +21,7 @@ public class MainVerifierTests {
 		Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
-				"type", "auxsid", 1, false, false, false);
+				null, "auxsid", 1, false, false, false);
 		params.fillFromXML();
 		params.fillFromDirectory();
 		HashFunction H = new SHA2HashFunction(params.getSh());
@@ -33,7 +34,7 @@ public class MainVerifierTests {
 		Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
-				"type", "auxsid", 1, false, false, false);
+				null, "auxsid", 1, false, false, false);
 		params.fillFromXML();
 		params.fillFromDirectory();
 		HashFunction H = new SHA2HashFunction(params.getSh());
@@ -51,7 +52,7 @@ public class MainVerifierTests {
 		Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
-				"type", "auxsid", 1, false, false, false);
+				null, "auxsid", 1, false, false, false);
 		params.fillFromXML();
 		params.fillFromDirectory();
 		HashFunction H = new SHA2HashFunction(params.getSh());
@@ -68,8 +69,18 @@ public class MainVerifierTests {
 	}
 
 	@Test
-	public void readListsTest() {
-		// TODO - need to test after create random cipher text array
+	public void readListsTest() throws IOException {
+		Parameters params = new Parameters(getClass().getClassLoader()
+				.getResource("protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("export/default").getFile(),
+				Type.MIXING, "auxsid", 1, false, false, false);
+		params.fillFromXML();
+		params.fillFromDirectory();
+		HashFunction H = new SHA2HashFunction(params.getSh());
+		MainVerifier mainVer = new MainVerifier(params, H);
+		mainVer.deriveSetsAndObjects();
+		Assert.assertTrue(mainVer.ReadLists());
+		
 	}
 
 }
