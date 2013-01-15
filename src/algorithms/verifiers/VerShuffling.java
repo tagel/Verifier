@@ -143,8 +143,7 @@ public class VerShuffling {
 				if (!readFilesPoSC(i, directory, Gq, Zq,N)
 						|| (!ProveSoC.prove(ROChallenge, ROChallenge,
 								prefixToRO, i, i, i, i, prg, Gq, null,
-								PoSCCommitment, PoSCCommitment,
-								PermutationCommitment))) {
+								PoSCCommitment, PoSCCommitment))) {
 					/*If the algorithm rejected or the reading failed, set permutation commitment to 
 					 * be h - an array of random group elements
 					 */

@@ -343,7 +343,7 @@ public class MainVerifier {
 		// Directory/proofs
 		if (params.getType().equals(Type.MIXING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"ShuffledCiphertexts.bt");
+					"Ciphertexts");
 			if (file == null)
 				return false;
 		} 
@@ -351,7 +351,7 @@ public class MainVerifier {
 		if (params.getType().equals(Type.SHUFFLING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
 					"proofs",
-					"Ciphertexts" + (params.getThreshold() < 10 ? "0" : "")
+					"ShuffledCiphertexts.bt"+ (params.getThreshold() < 10 ? "0" : "")
 							+ params.getThreshold() + ".bt");
 			if (file == null)
 				return false;
