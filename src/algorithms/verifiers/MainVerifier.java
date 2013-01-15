@@ -33,8 +33,16 @@ import cryptographic.primitives.SHA2HashFunction;
 public class MainVerifier {
 
 	private Parameters params;
-	private HashFunction H;
+	public Parameters getParams() {
+		return params;
+	}
 
+	private HashFunction H;
+	private static final String ciphertextsFilePath = "Ciphertexts.bt";
+	private static final String shuffCTFilePath = "ShuffledCiphertexts.bt";
+	private static final String plaintextsFilePath = "Plaintexts.bt";
+	
+	
 	/**
 	 * Constructor for tests
 	 * @param params
@@ -327,7 +335,7 @@ public class MainVerifier {
 	public boolean ReadLists() throws IOException {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
-				"Ciphertexts.bt");
+				ciphertextsFilePath);
 		if (file == null)
 			return false;
 
@@ -343,15 +351,14 @@ public class MainVerifier {
 		// Directory/proofs
 		if (params.getType().equals(Type.MIXING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"ShuffledCiphertexts.bt");
+					ciphertextsFilePath);
 			if (file == null)
 				return false;
 		} 
 		
 		if (params.getType().equals(Type.SHUFFLING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"proofs",
-					"Ciphertexts" + (params.getThreshold() < 10 ? "0" : "")
+					shuffCTFilePath+ (params.getThreshold() < 10 ? "0" : "")
 							+ params.getThreshold() + ".bt");
 			if (file == null)
 				return false;
@@ -368,7 +375,7 @@ public class MainVerifier {
 		if (params.getType().equals(Type.MIXING)
 				|| params.getType().equals(Type.DECRYPTION)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"Plaintexts.bt");
+					plaintextsFilePath);
 			if (file == null)
 				return false;
 
