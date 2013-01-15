@@ -7,23 +7,23 @@ package main;
  * @author Daniel
  * 
  */
-// TODO Daniel - ask sofi - maybe main verify should get another arg saying
-// which
-// verify to run
+
 public class Main {
 
 	private static String xml;
 	private static String dir;
 
 	private String auxsid = "default";
-	// TODO Daniel - ask tagel/sofi what the default is?
-	private static int width;
+	private static int width = 0;
 	private static boolean posc;
 	private static boolean ccpos;
 	private static boolean dec;
 
 	public static void main(String[] argv) {
+		parseCommand(argv);
+	}
 
+	private static void parseCommand(String[] argv) {
 		// no match for the command - print the command line usage
 		if (argv.length < 2) {
 			printCommandLineUsage();
@@ -68,15 +68,17 @@ public class Main {
 		return;
 	}
 
-	private static void verifyProofOfDecryption(String[] argv) {
-		// TODO Daniel - decryption case
-		posc = false;
-		ccpos = false;
+	// MIX
+	private static void verifyProofOfMix(String[] argv) {
+		// TODO Daniel - mix case
+		posc = true;
+		ccpos = true;
 		dec = true;
 
 		fillXmlAndDir(argv);
 	}
 
+	// SHUFFLE
 	private static void verifyProofOfShuffling(String[] argv) {
 		// TODO Daniel - shuffle case
 		posc = true;
@@ -86,10 +88,11 @@ public class Main {
 		fillXmlAndDir(argv);
 	}
 
-	private static void verifyProofOfMix(String[] argv) {
-		// TODO Daniel - mix case
-		posc = true;
-		ccpos = true;
+	// DECRYPT
+	private static void verifyProofOfDecryption(String[] argv) {
+		// TODO Daniel - decryption case
+		posc = false;
+		ccpos = false;
 		dec = true;
 
 		fillXmlAndDir(argv);
@@ -106,8 +109,13 @@ public class Main {
 	}
 
 	private static void fillXmlAndDir(String[] argv) {
-		// TODO Daniel - check if need to test the xml and dir path correctness
 		xml = argv[2];
 		dir = argv[3];
+	}
+
+	private static void callMainVerifier() {
+		// TODO Daniel
+		// MainVerifier verifier = new MainVerifier(params, H);
+
 	}
 }
