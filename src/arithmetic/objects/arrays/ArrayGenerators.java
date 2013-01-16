@@ -37,9 +37,12 @@ public class ArrayGenerators {
 		Node node = new Node(data);
 		int w = node.getChildrenSize();
 		int arraySize = (new Node(node.getAt(0).toByteArray())).getChildrenSize();
-		
-		
-		
+		for (int i=0; i<arraySize; i++) {
+			ProductGroupElement simplePGEleft = ElementsExtractor.createSimplePGE(new Node(node.getAt(0).toByteArray()).getAt(i).toByteArray(), group);
+			ProductGroupElement simplePGEright = ElementsExtractor.createSimplePGE(new Node(node.getAt(1).toByteArray()).getAt(i).toByteArray(), group);
+			ProductGroupElement ciphertext = new ProductGroupElement(simplePGEleft, simplePGEright);
+			ret.add(ciphertext);
+			}
 		return ret;
 	}
 
