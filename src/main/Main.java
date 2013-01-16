@@ -17,15 +17,13 @@ public class Main {
 	public static void main(String[] argv) {
 		CommandLineParser parser = new CommandLineParser();
 		parser.parseCommand(argv);
-		if (parser.shouldVerify() && parser.getType() != null) {
+		if (parser.shouldVerify()) {
 			try {
 				callMainVerifier(parser);
 			} catch (IOException e) {
 				// TODO Daniel - talk to sofi (shouldn't throw exception)
 				e.printStackTrace();
 			}
-		} else {
-			// TODO Daniel talk to sofi
 		}
 	}
 
@@ -36,5 +34,4 @@ public class Main {
 				parser.getAuxsid(), parser.getWidth(), parser.getPosc(),
 				parser.getCcpos(), parser.getDec());
 	}
-
 }
