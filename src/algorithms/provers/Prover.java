@@ -250,4 +250,46 @@ public abstract class Prover {
 		return true;
 	}
 
+	protected static boolean verifyBvBtag(ArrayOfElements<IGroupElement> B,
+			ArrayOfElements<IGroupElement> Btag,
+			ArrayOfElements<IntegerFieldElement> Kb,
+			ArrayOfElements<IntegerFieldElement> Ke, IGroupElement g,
+			LargeInteger v, ArrayOfElements<IGroupElement> h, int N) {
+		IGroupElement left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
+		IGroupElement right = g.power(Kb.getAt(0).getElement()).mult(
+				h.getAt(0).power(Ke.getAt(0).getElement()));
+		if (!left.equal(right)) {
+			return false;
+		}
+
+		for (int i = 1; i < N; i++) {
+			left = (B.getAt(i)).power(v).mult(Btag.getAt(i));
+			right = g.power(Kb.getAt(i).getElement()).mult(
+					B.getAt(i - 1).power(Ke.getAt(i).getElement()));
+		}
+		if (!left.equal(right)) {
+			return false;
+		}
+		return true;
+	}
+
+	protected static boolean verifyCvCtag(IGroupElement C, IGroupElement Ctag,
+			LargeInteger v, IntegerFieldElement Kc, IGroupElement g) {
+		IGroupElement left = (C.power(v)).mult(Ctag);
+		IGroupElement right = g.power(Kc.getElement());
+		if (!left.equal(right)) {
+			return false;
+		}
+		return true;
+	}
+
+	protected static boolean verifyDvDtag(IGroupElement D, IGroupElement Dtag,
+			LargeInteger v, IntegerFieldElement Kd, IGroupElement g) {
+		IGroupElement left = (D.power(v)).mult(Dtag);
+		IGroupElement right = g.power(Kd.getElement());
+		if (!left.equal(right)) {
+			return false;
+		}
+		return true;
+	}
 }

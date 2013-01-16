@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import algorithms.params.Parameters;
+import algorithms.params.Parameters.Type;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
@@ -32,17 +33,38 @@ import cryptographic.primitives.SHA2HashFunction;
 public class MainVerifier {
 
 	private Parameters params;
-	private HashFunction H;
+	public Parameters getParams() {
+		return params;
+	}
 
-	public MainVerifier(Parameters params, HashFunction H){
+	private HashFunction H;
+	private static final String ciphertextsFilePath = "Ciphertexts.bt";
+	private static final String shuffCTFilePath = "ShuffledCiphertexts.bt";
+	private static final String plaintextsFilePath = "Plaintexts.bt";
+	
+	
+	/**
+	 * Constructor for tests
+	 * @param params
+	 * @param H
+	 */
+	MainVerifier(Parameters params, HashFunction H) {
 		this.params = params;
 		this.H = H;
 	}
+
+	/**
+	 * Empty constructor for the cmd line
+	 */
+	public MainVerifier() {
+		
+	}
+	
 	/**
 	 * @return true if verification was successful and false otherwise.
 	 * @throws IOException
 	 */
-	public boolean verify(String protInfo, String directory, String type,
+	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
 			throws IOException {
 
@@ -113,8 +135,8 @@ public class MainVerifier {
 		// *******Section 7 in the Algorithm*********
 		// Here we call the subroutines of the verifier
 		// 7a -- Verify Shuffling
-		if ((params.getType().equals("mixing") || params.getType().equals(
-				"decryption"))
+		if ((params.getType().equals(Type.MIXING) || params.getType().equals(
+				Type.SHUFFLING))
 				&& (params.isPosc() || params.isCcpos()))
 
 			if (!VerShuffling.verify(params.getROseed(),
@@ -124,32 +146,33 @@ public class MainVerifier {
 					params.getNe(), params.getPrg(), params.getGq(),
 					params.getFullPublicKey(), params.getCiphertexts(),
 					params.getShuffledCiphertexts(), params.isPosc(),
-					params.isCcpos(), params.getZq(),params.getW()))
+					params.isCcpos(), params.getZq(), params.getW()))
 				return false;
 
 		// 7b - Verify Decryption
 		if (params.isDec()) {// isDec==true means we need to check the
 								// decryption.
-			if (params.getType().equals("mixing"))
-				if (!VerDec.verify(params.getROseed(),
-						params.getROchallenge(), params.getDirectory(),
-						params.getPrefixToRO(), params.getN(), params.getNe(),
+			if (params.getType().equals(Type.MIXING))
+				if (!VerDec.verify(params.getROseed(), params.getROchallenge(),
+						params.getDirectory(), params.getPrefixToRO(),
+						params.getThreshold(), params.getN(), params.getNe(),
 						params.getNr(), params.getNv(), params.getPrg(),
 						params.getGq(), params.getFullPublicKey(),
 						params.getShuffledCiphertexts(),
-						params.getPlaintexts(), params.getZq()))
+						params.getPlaintexts(), params.getZq(),
+						params.getMixPublicKey(), params.getMixSecretKey()))
 					return false;
 
-			if (params.getType().equals("decryption"))
-				if (!VerDec.verify(params.getROseed(),
-						params.getROchallenge(), params.getDirectory(),
-						params.getPrefixToRO(), params.getN(), params.getNe(),
+			if (params.getType().equals(Type.DECRYPTION))
+				if (!VerDec.verify(params.getROseed(), params.getROchallenge(),
+						params.getDirectory(), params.getPrefixToRO(),
+						params.getThreshold(), params.getN(), params.getNe(),
 						params.getNr(), params.getNv(), params.getPrg(),
 						params.getGq(), params.getFullPublicKey(),
 						params.getCiphertexts(), params.getPlaintexts(),
-						params.getZq()))
+						params.getZq(), params.getMixPublicKey(),
+						params.getMixSecretKey()))
 					return false;
-
 		}
 
 		return true;
@@ -188,10 +211,14 @@ public class MainVerifier {
 		ByteTree sPRG = new StringLeaf(params.getsPRG());
 		ByteTree sH = new StringLeaf(params.getSh());
 
-		ByteTree Ne = new BigIntLeaf(new LargeInteger(Integer.toString(params.getNe())));
-		ByteTree Nr = new BigIntLeaf(new LargeInteger(Integer.toString(params.getNr())));
-		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params.getNv())));
-		ByteTree btW = new BigIntLeaf(new LargeInteger(Integer.toString(params.getW())));
+		ByteTree Ne = new BigIntLeaf(new LargeInteger(Integer.toString(params
+				.getNe())));
+		ByteTree Nr = new BigIntLeaf(new LargeInteger(Integer.toString(params
+				.getNr())));
+		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params
+				.getNv())));
+		ByteTree btW = new BigIntLeaf(new LargeInteger(Integer.toString(params
+				.getW())));
 
 		ByteTree[] input = new ByteTree[9];
 		input[0] = version_proof;
@@ -220,14 +247,26 @@ public class MainVerifier {
 
 	}
 
-	public boolean ReadKeys() throws IOException {
-		ProductGroupElement pk = ElementsExtractor.createSimplePGE(
-				ElementsExtractor.btFromFile(params.getDirectory(),
-						"FullPublicKey.bt"), params.getGq());
+	public boolean ReadKeys() {
+		// Read Public Key
+		ProductGroupElement pk;
+		try {
+			pk = ElementsExtractor.createSimplePGE(ElementsExtractor
+					.btFromFile(params.getDirectory(), "FullPublicKey.bt"),
+					params.getGq());
+		} catch (UnsupportedEncodingException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+
+		// Extract y and g from the public key
 		IGroupElement y = pk.getArr().getAt(1);
 		IGroupElement g = pk.getArr().getAt(0);
 
 		params.setFullPublicKey(pk);
+
+		// Initialize the elements
 		IGroupElement yi;
 		IntegerRingElement xi;
 		int i;
@@ -237,12 +276,18 @@ public class MainVerifier {
 
 		for (i = 0; i < params.getThreshold(); i++) {
 			// Here we assume that the file exists
-			yi = ElementsExtractor.createGroupElement(ElementsExtractor
-					.btFromFile(params.getDirectory(), "proofs", "PublicKey"
-							+ (i < 10 ? "0" : "") + (i + 1) + ".bt"), params
-					.getGq());
+			try {
+				yi = ElementsExtractor.createGroupElement(ElementsExtractor
+						.btFromFile(params.getDirectory(), "proofs",
+								"PublicKey" + (i < 10 ? "0" : "") + (i + 1)
+										+ ".bt"), params.getGq());
+			} catch (IOException e) {
+				return false;
+			}
+			// Check if yi exists
 			if (yi == null)
 				return false;
+
 			params.getMixPublicKey().add(yi);
 			res = res.mult(yi);
 		}
@@ -250,17 +295,27 @@ public class MainVerifier {
 		if (!res.equal(y))
 			return false;
 
-		// TODO: The bt from file returns NULL, not the FieldElement!!!
 		// Here we check the secret keys - xi:
-		// Here the file can be null
+		// The file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
-			xi = new IntegerRingElement(
-					ElementsExtractor.leafToInt(ElementsExtractor.btFromFile(
-							params.getDirectory(), "proofs", "SecretKey"
-									+ (i < 10 ? "0" : "") + (i + 1) + ".bt")),
-					params.getZq());
-			params.getMixSecretKey().add(xi);
+
+			byte[] xFile;
+			try {
+				xFile = ElementsExtractor.btFromFile(params.getDirectory(),
+						"proofs", "SecretKey" + (i < 10 ? "0" : "") + (i + 1)
+								+ ".bt");
+			} catch (IOException e) {
+				return false;
+			}
+
+			if (xFile == null)
+				xi = null;
+			else
+				xi = new IntegerRingElement(ElementsExtractor.leafToInt(xFile),
+						params.getZq());
+
 			// xi = null if the file doesn't exist
+			params.getMixSecretKey().add(xi);
 		}
 
 		// Check the 3.b part of keys verifier
@@ -268,7 +323,6 @@ public class MainVerifier {
 			xi = params.getMixSecretKey().getAt(i);
 			yi = params.getMixPublicKey().getAt(i);
 
-			// TODO: check this step
 			if ((xi != null) && !(yi.equal(g.power(xi.getElement()))))
 				return false;
 		}
@@ -281,7 +335,7 @@ public class MainVerifier {
 	public boolean ReadLists() throws IOException {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
-				"Ciphertexts.bt");
+				ciphertextsFilePath);
 		if (file == null)
 			return false;
 
@@ -295,15 +349,16 @@ public class MainVerifier {
 		// Directory
 		// if the type==shuffling, read the file Ciphertexts_threshold from
 		// Directory/proofs
-		if (params.getType().equals("mixing")) {
+		if (params.getType().equals(Type.MIXING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"ShuffledCiphertexts.bt");
+					ciphertextsFilePath);
 			if (file == null)
 				return false;
-		} else if (params.getType().equals("shuffling")) {
+		} 
+		
+		if (params.getType().equals(Type.SHUFFLING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"proofs",
-					"Ciphertexts" + (params.getThreshold() < 10 ? "0" : "")
+					shuffCTFilePath+ (params.getThreshold() < 10 ? "0" : "")
 							+ params.getThreshold() + ".bt");
 			if (file == null)
 				return false;
@@ -311,15 +366,16 @@ public class MainVerifier {
 
 		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq());
-		if (ShuffledCiphertexts.getSize()!=params.getN())
+		if (ShuffledCiphertexts.getSize() != params.getN())
 			return false;
+
 		params.setShuffledCiphertexts(ShuffledCiphertexts);
 
 		// Section 6c of the algorithm
-		if (params.getType().equals("mixing")
-				|| params.getType().equals("decryption")) {
+		if (params.getType().equals(Type.MIXING)
+				|| params.getType().equals(Type.DECRYPTION)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					"Plaintexts.bt");
+					plaintextsFilePath);
 			if (file == null)
 				return false;
 
