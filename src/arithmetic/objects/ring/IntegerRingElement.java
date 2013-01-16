@@ -20,7 +20,7 @@ public class IntegerRingElement implements ByteTree {
 	}
 	
 	public LargeInteger getElement() {
-		return element;
+		return element.mod(ring.getOrder());
 	}
 	
 	public IRing<IntegerRingElement> getRing() {

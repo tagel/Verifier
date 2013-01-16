@@ -16,7 +16,7 @@ public class ModGroupElement implements IGroupElement {
 	
 
 	public ModGroupElement (LargeInteger element, ModGroup group) {
-		this.element = element;
+		this.element = element.mod(group.getFieldOrder());
 		this.group = group;
 	}
 
