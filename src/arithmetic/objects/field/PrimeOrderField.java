@@ -29,13 +29,12 @@ public class PrimeOrderField implements IField<IntegerFieldElement> {
 
 	
 	public IntegerFieldElement one() {
-		IntegerFieldElement ret = new IntegerFieldElement (LargeInteger.ONE, this);
-		return ret;
+		return new IntegerFieldElement (LargeInteger.ONE, this);
 	}
 
 	
 	public IntegerFieldElement zero() {
-		IntegerFieldElement ret = new IntegerFieldElement (LargeInteger.ZERO, this);
-		return ret;
+		 return new IntegerFieldElement (LargeInteger.ZERO, this);
+		
 	}
 }
