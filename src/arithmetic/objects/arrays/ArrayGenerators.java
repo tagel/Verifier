@@ -32,17 +32,30 @@ public class ArrayGenerators {
 		return ret;
 	}
 
-	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data, IGroup group) throws UnsupportedEncodingException {
+	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts (byte[] data, IGroup group, int w) throws UnsupportedEncodingException {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
-		int w = node.getChildrenSize();
 		int arraySize = (new Node(node.getAt(0).toByteArray())).getChildrenSize();
-		for (int i=0; i<arraySize; i++) {
-			ProductGroupElement simplePGEleft = ElementsExtractor.createSimplePGE(new Node(node.getAt(0).toByteArray()).getAt(i).toByteArray(), group);
-			ProductGroupElement simplePGEright = ElementsExtractor.createSimplePGE(new Node(node.getAt(1).toByteArray()).getAt(i).toByteArray(), group);
-			ProductGroupElement ciphertext = new ProductGroupElement(simplePGEleft, simplePGEright);
-			ret.add(ciphertext);
+		if (w==1 && new Node(new Node(node.getAt(0).toByteArray()).getAt(0).toByteArray()).getChildrenSize()==2) {
+			ArrayOfElements<IGroupElement> leftArr = createGroupElementArray(node.getAt(0).toByteArray(), group);
+			ArrayOfElements<IGroupElement> rightArr = createGroupElementArray(node.getAt(1).toByteArray(), group);
+			for (int i=0; i<arraySize; i++) {
+				ArrayOfElements<IGroupElement> arr1 = new ArrayOfElements<IGroupElement>();
+				arr1.add(leftArr.getAt(i));
+				ArrayOfElements<IGroupElement> arr2 = new ArrayOfElements<IGroupElement>();
+				arr2.add(rightArr.getAt(i));
+				ProductGroupElement ciphertext = ElementsExtractor.createCiphertext(arr1, arr2);
+				ret.add(ciphertext);
 			}
+		}
+		else {
+			for (int i=0; i<arraySize; i++) {
+				ProductGroupElement simplePGEleft = ElementsExtractor.createSimplePGE(new Node(node.getAt(0).toByteArray()).getAt(i).toByteArray(), group);
+				ProductGroupElement simplePGEright = ElementsExtractor.createSimplePGE(new Node(node.getAt(1).toByteArray()).getAt(i).toByteArray(), group);
+				ProductGroupElement ciphertext = new ProductGroupElement(simplePGEleft, simplePGEright);
+				ret.add(ciphertext);
+			}
+		}
 		return ret;
 	}
 

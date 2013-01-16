@@ -15,7 +15,7 @@ public class IntegerFieldElement implements ByteTree {
 	public IntegerFieldElement(LargeInteger element, IField<IntegerFieldElement> f) {
 		this.field = f;
 		this.element = element.mod(field.getOrder());
-		
+
 	}
 
 	public LargeInteger getElement() {
@@ -27,25 +27,20 @@ public class IntegerFieldElement implements ByteTree {
 	}
 
 	public IntegerFieldElement neg() {
-		IntegerFieldElement ret = new IntegerFieldElement(this.getField()
-				.getOrder()
-				.subtract(this.getElement().mod(this.getField().getOrder())),
+		return new IntegerFieldElement(this.getField().getOrder().subtract(this.getElement().mod(this.getField().getOrder())),
 				this.getField());
-		return ret;
 	}
 
 	public IntegerFieldElement add(IntegerFieldElement b) {
-		IntegerFieldElement ret = new IntegerFieldElement(
+		return new IntegerFieldElement(
 				(this.getElement().add(b.getElement())).mod(this.getField()
 						.getOrder()), this.getField());
-		return ret;
 	}
-	
+
 	public IntegerFieldElement subtract(IntegerFieldElement b) {
-		IntegerFieldElement ret = new IntegerFieldElement(
-				(this.getElement().subtract((b.getElement())).mod(this.getField()
+		return new IntegerFieldElement(
+(this.getElement().subtract((b.getElement())).mod(this.getField()
 						.getOrder())), this.getField());
-		return ret;
 	}
 
 	public IntegerFieldElement mult(IntegerFieldElement b) {
@@ -63,7 +58,7 @@ public class IntegerFieldElement implements ByteTree {
 		}
 		return result;
 	}
-	
+
 	public IntegerFieldElement divide(IntegerFieldElement b) {
 		IntegerFieldElement ret = new IntegerFieldElement(
 				(this.getElement().multiply(b.getElement().modInverse(this.getField().getOrder()))).mod(this
