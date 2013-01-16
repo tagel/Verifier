@@ -99,14 +99,14 @@ public class ArraysGeneretorsTests {
 
 	@Test
 	public void createArrayOfCiphertextsTest() throws UnsupportedEncodingException {
-		Parameters params = new Parameters(getClass().getClassLoader().getResource("protInfo.xml").getFile(), getClass().getClassLoader().getResource("export/default").getFile(), "type", "auxsid", 1, false, false, false);
-		params.fillFromXML();
-		params.fillFromDirectory();
-		HashFunction H = new SHA2HashFunction(params.getSh());
-		MainVerifier mainVer = new MainVerifier(params,H);
-		mainVer.deriveSetsAndObjects();
+		//Parameters params = new Parameters(getClass().getClassLoader().getResource("protInfo.xml").getFile(), getClass().getClassLoader().getResource("export/default").getFile(), "type", "auxsid", 1, false, false, false);
+		//params.fillFromXML();
+		//params.fillFromDirectory();
+		//HashFunction H = new SHA2HashFunction(params.getSh());
+		//MainVerifier mainVer = new MainVerifier(params,H);
+		//mainVer.deriveSetsAndObjects();
 		byte[] b = {0,0,0,0,2,0,0,0,0,3,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,3,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5};
-		IGroup group = params.getGq();
+		IGroup group = new ModGroup(new LargeInteger("100"), new LargeInteger("100"), new LargeInteger("2"));
 		ArrayOfElements<ProductGroupElement> arr = ArrayGenerators.createArrayOfCiphertexts(b, group);
 		System.out.println(Arrays.toString(arr.toByteArray()));
 		for (int i=0; i<arr.getSize(); i++) {

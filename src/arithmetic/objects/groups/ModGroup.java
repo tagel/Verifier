@@ -3,8 +3,10 @@ package arithmetic.objects.groups;
 
 
 import java.io.UnsupportedEncodingException;
+
+import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
-import java.nio.ByteBuffer;
+
 
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
@@ -48,37 +50,16 @@ public class ModGroup implements IGroup {
 		this.g = g;
 	}
 
-	public ModGroup (byte[] arr) {
-		byte[] a = new byte[4];
-		a[0] = arr[6];
-		a[1] = arr[7];
-		a[2] = arr[8];
-		a[3] = arr[9];
-		int x = ByteBuffer.wrap(a).getInt();
-		a = new byte[x];
-		for (int i=0; i<x; i++)
-			a[i] = arr[10+i];
-		this.p = new LargeInteger(a);
-		a = new byte[4];
-		a[0] = arr[9+x+2];
-		a[1] = arr[9+x+3];
-		a[2] = arr[9+x+4];
-		a[3] = arr[9+x+5];
-		int y = ByteBuffer.wrap(a).getInt();
-		a = new byte[y];
-		for (int i=0; i<y; i++)
-			a[i] = arr[9+x+6+i];
-		this.q = new LargeInteger(a);
-		a = new byte[4];
-		a[0] = arr[9+x+5+y+2];
-		a[1] = arr[9+x+5+y+3];
-		a[2] = arr[9+x+5+y+4];
-		a[3] = arr[9+x+5+y+5];
-		int z = ByteBuffer.wrap(a).getInt();
-		a = new byte[z];
-		for (int i=0; i<z; i++)
-			a[i] = arr[9+x+6+y+6+i];
-		this.g = new LargeInteger(a);
+	public ModGroup (byte[] arr) throws UnsupportedEncodingException  {
+		Node node = new Node(arr);
+		if (node.getChildrenSize()!=3)
+			System.out.println("Error: byte array is not of a correct modular group structure");
+		else {
+			p = ElementsExtractor.leafToInt(node.getAt(0).toByteArray());
+			q = ElementsExtractor.leafToInt(node.getAt(1).toByteArray());
+			g = ElementsExtractor.leafToInt(node.getAt(2).toByteArray());
+		}
+
 	}
 
 
@@ -126,7 +107,7 @@ public class ModGroup implements IGroup {
 		int Np = this.p.bitLength();
 		int length = 8 * ((int) Math.ceil((double) ((Np+Nr) / 8)));
 		prg.setSeed(seed);
-		
+
 		for (int i = 0; i < N; i++) {
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = new LargeInteger(arr);
