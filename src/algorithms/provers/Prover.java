@@ -19,6 +19,23 @@ import cryptographic.primitives.RandomOracle;
 public abstract class Prover {
 
 	/**
+	 * This function decrypts a given ciphertext back to its plaintext. Input
+	 * description is as follows: x - Additive inverse of the exponent by which
+	 * the standard generator in the public key is raised u - First part of
+	 * ciphertext to be decrypted
+	 */
+	public static ProductGroupElement PDecrypt(IntegerFieldElement x,
+			ProductGroupElement A) throws Exception {
+		return A.getLeft().power(x.getElement());
+	}
+
+	public static ProductGroupElement TDecrypt(ProductGroupElement v,
+			ProductGroupElement f) {
+		ProductGroupElement result = f.mult(v);
+		return result;
+	}
+
+	/**
 	 * This function encrypts the message m using the public key pk, and returns
 	 * the CipherText.
 	 * 
