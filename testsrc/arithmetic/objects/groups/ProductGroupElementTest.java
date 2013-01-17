@@ -12,7 +12,6 @@ import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.groups.ModGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.groups.ModGroup;
-import cryptographic.primitives.CryptoUtils;
 
 public class ProductGroupElementTest {
 	
@@ -37,17 +36,19 @@ public class ProductGroupElementTest {
 		aoe.add(ire258_Group263);
 		aoe.add(ire5_Group263);
 		ProductGroupElement pre = new ProductGroupElement(aoe);
-		Assert.assertEquals("0000210002991000205",
+		byte[] b = {0,0,0,0,2,1,0,0,0,2,1,2,1,0,0,0,2,0,5};
+		Assert.assertEquals(Arrays.toString(b),
 				Arrays.toString(pre.toByteArray()));
 
 		aoe.add(ire6_Group263);
-		Assert.assertEquals("00000000020100000002010201000000020005",
-				CryptoUtils.bytesToHexString(pre.toByteArray()));
+		byte[] c = {0,0,0,0,3,1,0,0,0,2,1,2,1,0,0,0,2,0,5,1,0,0,0,2,0,6};
+		Assert.assertEquals(Arrays.toString(c),
+				Arrays.toString(pre.toByteArray()));
 
 		pre = new ProductGroupElement(aoe);
-		Assert.assertEquals("00000000030100000002010201000000020005"
-				+ "01000000020006",
-				CryptoUtils.bytesToHexString(pre.toByteArray()));
+		Assert.assertEquals(Arrays.toString(c),
+				Arrays.toString(pre.toByteArray()));
+
 	}
 
 	@Test
@@ -79,7 +80,7 @@ public class ProductGroupElementTest {
 		Assert.assertEquals(new LargeInteger("1"),
 				((ModGroupElement) pre.power(new LargeInteger("3")).getElements().getAt(0)).getElement());
 		Assert.assertEquals(new LargeInteger("2"),
-				((ModGroupElement) pre.power(new LargeInteger("3")).getElements().getAt(1)).getElement());
+				((ModGroupElement) pre.getElements().getAt(1)).getElement());
 		Assert.assertEquals(new LargeInteger("1"),
 				((ModGroupElement) pre.power(new LargeInteger("3")).getElements().getAt(0)).getElement());
 	}
