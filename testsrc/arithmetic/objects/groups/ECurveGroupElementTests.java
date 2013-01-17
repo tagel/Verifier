@@ -63,7 +63,7 @@ public class ECurveGroupElementTests {
 	}
 
 	@Test
-	public void mult_caseXequalsYequalTest() {
+	public void mult_caseXequalsYequalTest() throws Exception {
 		Point point1 = new Point(new IntegerFieldElement(new LargeInteger("0"),
 				f192), new IntegerFieldElement(new LargeInteger("1"), f192));
 		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,

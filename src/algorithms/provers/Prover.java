@@ -23,15 +23,25 @@ public abstract class Prover {
 	 * the standard generator in the public key is raised u - First part of
 	 * ciphertext to be decrypted
 	 */
-	public static ProductGroupElement PDecrypt(IntegerRingElement x,
+	public static ArrayOfElements<ProductRingElement> PDecrypt(IntegerRingElement x,
 			ProductGroupElement A) throws Exception {
 		return A.getLeft().power(x.getElement());
+	}
+	
+	//TODO Check how we do this for an array
+	public static ArrayOfElements<ProductRingElement> PDecrypt(IntegerRingElement x,
+			ArrayOfElements<ProductGroupElement> A) throws Exception {
+		return A.getAt(0);
 	}
 
 	public static ProductGroupElement TDecrypt(ProductGroupElement v,
 			ProductGroupElement f) {
 		ProductGroupElement result = f.mult(v);
 		return result;
+	}
+	
+	public static ArrayOfElements<ProductRingElement> TDecrypt(ArrayOfElements<ProductGroupElement> L, ProductRingElement f) {
+		return null;
 	}
 
 	/**

@@ -85,7 +85,7 @@ public class MainVerifierTests {
 	}
 	
 	@Test
-	public void VerifyShuffleTest() throws IOException {
+	public void VerifyShuffleTest() throws Exception {
 		
 		MainVerifier mainVer = new MainVerifier();
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()

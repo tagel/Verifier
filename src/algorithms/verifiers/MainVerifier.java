@@ -62,11 +62,11 @@ public class MainVerifier {
 	
 	/**
 	 * @return true if verification was successful and false otherwise.
-	 * @throws IOException
+	 * @throws Exception 
 	 */
 	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
-			throws IOException {
+			throws Exception {
 
 		// *****Section 1 in the algorithm*****
 		// First create the Parameters object using the
