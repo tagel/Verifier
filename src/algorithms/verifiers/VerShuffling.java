@@ -430,7 +430,7 @@ public class VerShuffling {
 
 		// Read B' as Ciphertext
 		ProductGroupElement tempB = ElementsExtractor.createCiphertext(
-				CCPoSCommitment.getAt(1).toByteArray(), Gq);
+				CCPoSCommitment.getAt(1).toByteArray(), Gq, width);
 		CCPoSCommitment.setAt(1, tempB);
 
 		// Create the CCPoSReply in the same way
