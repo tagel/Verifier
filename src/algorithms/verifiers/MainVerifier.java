@@ -342,6 +342,7 @@ public class MainVerifier {
 		ArrayOfElements<ProductGroupElement> ciphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 
+		params.setCiphertexts(ciphertexts);
 		params.setN(ciphertexts.getSize());
 
 		// section 6b of the Algorithm
@@ -349,6 +350,8 @@ public class MainVerifier {
 		// Directory
 		// if the type==shuffling, read the file Ciphertexts_threshold from
 		// Directory/proofs
+		
+		//TODO: fix the logic of the following code
 		if (params.getType().equals(Type.MIXING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
 					ciphertextsFilePath);
