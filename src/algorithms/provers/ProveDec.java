@@ -12,6 +12,7 @@ import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
+import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
@@ -25,19 +26,28 @@ import cryptographic.primitives.RandomOracle;
 public class ProveDec extends Prover {
 
 	/**
+	 * @param plaintexts
+	 * @param ciphertexts
+	 * @param secretKeys
+	 * @param publicKeys
+	 * @param g
+	 * @param gq
+	 * @param prg
+	 * @param nv
+	 * @param nr
+	 * @param ne
+	 * @param n
+	 * @param prefixToRO
+	 * @param j
 	 * @return true if the decryption was correct and false otherwise.
 	 */
-	public static boolean prove(RandomOracle ROSeed, RandomOracle ROChallenge,
-			int j, byte[] ro, int N, int Ne, int Nr, int Nv,
-			PseudoRandomGenerator prg, IGroup Gq,
-			IGroupElement g,
-			ArrayOfElements<ProductGroupElement> y,
-			ArrayOfElements<ProductGroupElement> wInput,
-			ArrayOfElements<ArrayOfElements<IGroupElement>> f, // decryption
-																// factors
-			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node decCommitment, Node decReply) {
-
+	public static boolean prove(int j, byte[] prefixToRO, int n, int ne,
+			int nr, int nv, PseudoRandomGenerator prg, IGroup Gq,
+			IGroupElement g, ArrayOfElements<IGroupElement> publicKeys,
+			ArrayOfElements<IntegerRingElement> secretKeys,
+			ArrayOfElements<ProductGroupElement> ciphertexts,
+			ArrayOfElements<ProductRingElement> plaintexts) {
+		
 		try {
 
 			/**
@@ -143,7 +153,6 @@ public class ProveDec extends Prover {
 					}
 					B = B.mult(fl.power(e[i]));
 				}
-				
 
 			} else if (j > 0) {
 
