@@ -63,7 +63,7 @@ public class VerShuffling {
 	 * @param Zq
 	 * @return true if verification of shuffling was successful and false
 	 *         otherwise.
-	 * @throws IOException
+	 * @throws Exception 
 	 */
 	static public boolean verify(RandomOracle ROSeed, RandomOracle ROChallenge,
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,
@@ -71,7 +71,7 @@ public class VerShuffling {
 			ProductGroupElement pk, ArrayOfElements<ProductGroupElement> L0,
 			ArrayOfElements<ProductGroupElement> Llambda, boolean posc,
 			boolean ccpos, IRing<IntegerRingElement> Zq, int width)
-			throws IOException {
+			throws Exception {
 
 		/*
 		 * This step sets the N0 size that indicates if there was a
