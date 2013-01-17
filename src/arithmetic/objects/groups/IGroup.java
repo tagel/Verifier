@@ -32,7 +32,7 @@ public interface IGroup extends ByteTree {
 	 */
 	public IGroupElement one();
 	
-	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg, byte[] seed, int nr);
+	public ArrayOfElements<IGroupElement> createRandomArray(int N, PseudoRandomGenerator prg, byte[] seed, int nr) throws Exception;
 
 		
 

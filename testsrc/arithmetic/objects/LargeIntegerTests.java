@@ -81,7 +81,7 @@ public class LargeIntegerTests {
 	}
 
 	@Test
-	public void powerWithLargeIntegerTest() {
+	public void powerWithLargeIntegerTest() throws Exception {
 		LargeInteger large = new LargeInteger("5");
 		Assert.assertEquals(new LargeInteger("25"),
 				large.power(new LargeInteger("2")));

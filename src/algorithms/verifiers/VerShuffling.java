@@ -63,7 +63,7 @@ public class VerShuffling {
 	 * @param Zq
 	 * @return true if verification of shuffling was successful and false
 	 *         otherwise.
-	 * @throws IOException
+	 * @throws Exception 
 	 */
 	static public boolean verify(RandomOracle ROSeed, RandomOracle ROChallenge,
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,
@@ -71,7 +71,7 @@ public class VerShuffling {
 			ProductGroupElement pk, ArrayOfElements<ProductGroupElement> L0,
 			ArrayOfElements<ProductGroupElement> Llambda, boolean posc,
 			boolean ccpos, IRing<IntegerRingElement> Zq, int width)
-			throws IOException {
+			throws Exception {
 
 		/*
 		 * This step sets the N0 size that indicates if there was a
@@ -445,7 +445,7 @@ public class VerShuffling {
 
 		// Read Kb as productRingElement
 		ProductRingElement tempp = new ProductRingElement(CCPoSReply.getAt(1)
-				.toByteArray(), Zq);
+				.toByteArray(), Zq, width);
 		CCPoSReply.setAt(1, tempp);
 
 		// Read Ke as arrays of Ring Elements, and verify if they are of size N
@@ -582,7 +582,7 @@ public class VerShuffling {
 
 		// Read Kf as productRingElement
 		ProductRingElement tempp = new ProductRingElement(PoSReply.getAt(5)
-				.toByteArray(), Zq);
+				.toByteArray(), Zq, width);
 		PoSReply.setAt(5, tempp);
 
 		// Read Kb and Ke as arrays of Ring Elements
