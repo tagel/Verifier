@@ -19,7 +19,9 @@ public class ProductRingElement implements ByteTree {
 	
 	public ProductRingElement(byte[] bt, IRing<IntegerRingElement> ring, int w) throws UnsupportedEncodingException {
 		if (w==1) {
-			arr.add(new IntegerRingElement(ElementsExtractor.leafToInt(bt), ring));
+			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
+			a.add(new IntegerRingElement(ElementsExtractor.leafToInt(bt), ring));
+			arr=a;
 		}
 		arr = ArrayGenerators.createRingElementArray(bt, ring);
 	}
