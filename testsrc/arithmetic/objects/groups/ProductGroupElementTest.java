@@ -54,7 +54,7 @@ public class ProductGroupElementTest {
 		aoe.add(ire258_Group263);
 		aoe.add(ire5_Group263);
 		ProductGroupElement pre = new ProductGroupElement(aoe);
-		Assert.assertTrue(aoe.equals(pre.getArr()));
+		Assert.assertTrue(aoe.equals(pre.getElements()));
 	}
 
 
@@ -66,9 +66,9 @@ public class ProductGroupElementTest {
 		aoe2.add(ire2_Group3);
 		ProductGroupElement pre1 = new ProductGroupElement(aoe1);
 		ProductGroupElement pre2 = new ProductGroupElement(aoe2);
-		Assert.assertEquals(new LargeInteger("2"), ((ModGroupElement) pre1.mult(pre2).getArr()
+		Assert.assertEquals(new LargeInteger("2"), ((ModGroupElement) pre1.mult(pre2).getElements()
 				.getAt(0)).getElement());
-		Assert.assertEquals(new LargeInteger("2"), ((ModGroupElement) pre1.mult(pre2).getArr()
+		Assert.assertEquals(new LargeInteger("2"), ((ModGroupElement) pre1.mult(pre2).getElements()
 				.getAt(0)).getElement());
 	}
 
@@ -78,11 +78,11 @@ public class ProductGroupElementTest {
 		aoe.add(ire2_Group3);
 		ProductGroupElement pre = new ProductGroupElement(aoe);
 		Assert.assertEquals(new LargeInteger("1"),
-				((ModGroupElement) pre.power(new LargeInteger("3")).getArr().getAt(0)).getElement());
+				((ModGroupElement) pre.power(new LargeInteger("3")).getElements().getAt(0)).getElement());
 		Assert.assertEquals(new LargeInteger("2"),
-				((ModGroupElement) pre.power(new LargeInteger("3")).getArr().getAt(1)).getElement());
+				((ModGroupElement) pre.power(new LargeInteger("3")).getElements().getAt(1)).getElement());
 		Assert.assertEquals(new LargeInteger("1"),
-				((ModGroupElement) pre.power(new LargeInteger("3")).getArr().getAt(0)).getElement());
+				((ModGroupElement) pre.power(new LargeInteger("3")).getElements().getAt(0)).getElement());
 	}
 
 

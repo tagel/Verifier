@@ -57,7 +57,7 @@ public class ProductRingElementTests {
 		aoe.add(ire258_ring263);
 		aoe.add(ire5_ring263);
 		ProductRingElement pre = new ProductRingElement(aoe);
-		Assert.assertTrue(aoe.equals(pre.getArr()));
+		Assert.assertTrue(aoe.equals(pre.getElements()));
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class ProductRingElementTests {
 		aoe2.add(ire2_ring3);
 		ProductRingElement pre1 = new ProductRingElement(aoe1);
 		ProductRingElement pre2 = new ProductRingElement(aoe2);
-		Assert.assertEquals(new LargeInteger("0"), pre1.add(pre2).getArr()
+		Assert.assertEquals(new LargeInteger("0"), pre1.add(pre2).getElements()
 				.getAt(0).getElement());
 	}
 
@@ -80,9 +80,9 @@ public class ProductRingElementTests {
 		aoe2.add(ire2_ring3);
 		ProductRingElement pre1 = new ProductRingElement(aoe1);
 		ProductRingElement pre2 = new ProductRingElement(aoe2);
-		Assert.assertEquals(new LargeInteger("2"), pre1.mult(pre2).getArr()
+		Assert.assertEquals(new LargeInteger("2"), pre1.mult(pre2).getElements()
 				.getAt(0).getElement());
-		Assert.assertEquals(new LargeInteger("2"), pre1.mult(pre2).getArr()
+		Assert.assertEquals(new LargeInteger("2"), pre1.mult(pre2).getElements()
 				.getAt(0).getElement());
 	}
 
@@ -92,11 +92,11 @@ public class ProductRingElementTests {
 		aoe.add(ire2_ring3);
 		ProductRingElement pre = new ProductRingElement(aoe);
 		Assert.assertEquals(new LargeInteger("1"),
-				pre.power(new LargeInteger("3")).getArr().getAt(0).getElement());
+				pre.power(new LargeInteger("3")).getElements().getAt(0).getElement());
 		Assert.assertEquals(new LargeInteger("2"),
-				pre.power(new LargeInteger("3")).getArr().getAt(1).getElement());
+				pre.power(new LargeInteger("3")).getElements().getAt(1).getElement());
 		Assert.assertEquals(new LargeInteger("1"),
-				pre.power(new LargeInteger("3")).getArr().getAt(0).getElement());
+				pre.power(new LargeInteger("3")).getElements().getAt(0).getElement());
 	}
 
 	@Test
@@ -104,9 +104,9 @@ public class ProductRingElementTests {
 		aoe.add(ire1_ring3);
 		aoe.add(ire2_ring3);
 		ProductRingElement pre = new ProductRingElement(aoe);
-		Assert.assertEquals(new LargeInteger("2"), pre.neg().getArr().getAt(0)
+		Assert.assertEquals(new LargeInteger("2"), pre.neg().getElements().getAt(0)
 				.getElement());
-		Assert.assertEquals(new LargeInteger("1"), pre.neg().getArr().getAt(1)
+		Assert.assertEquals(new LargeInteger("1"), pre.neg().getElements().getAt(1)
 				.getElement());
 	}
 

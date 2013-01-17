@@ -28,8 +28,12 @@ public class ProductRingElement implements ByteTree {
 	}
 	
 	
-	public ArrayOfElements<IntegerRingElement> getArr() {
+	public ArrayOfElements<IntegerRingElement> getElements() {
 		return arr;
+	}
+	
+	public int getSize() {
+		return arr.getSize();
 	}
 	
 	public void addElement (IntegerRingElement element) {
@@ -43,7 +47,7 @@ public class ProductRingElement implements ByteTree {
 	public ProductRingElement add(ProductRingElement b) {
 			ArrayOfElements<IntegerRingElement> a =  new ArrayOfElements<IntegerRingElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.add(arr.getAt(i).add(b.getArr().getAt(i)));
+				a.add(arr.getAt(i).add(b.getElements().getAt(i)));
 			return new ProductRingElement(a);
 	}
 	
@@ -54,7 +58,7 @@ public class ProductRingElement implements ByteTree {
 	public ProductRingElement mult(ProductRingElement b) {
 			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.add(arr.getAt(i).mult(b.getArr().getAt(i)));
+				a.add(arr.getAt(i).mult(b.getElements().getAt(i)));
 			return new ProductRingElement(a);
 	}
 	
@@ -84,7 +88,7 @@ public class ProductRingElement implements ByteTree {
 	public boolean equal(ProductRingElement b) {
 			ArrayOfElements<IntegerRingElement> a = arr;
 			for (int i=0; i<arr.getSize(); i++)
-				if (!(a.getAt(i).equal(b.getArr().getAt(i)))) return false;
+				if (!(a.getAt(i).equal(b.getElements().getAt(i)))) return false;
 			return true;
 	}
 

@@ -7,8 +7,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import algorithms.params.Parameters;
-import algorithms.verifiers.MainVerifier;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.BigIntLeaf;
@@ -16,14 +14,11 @@ import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
-import arithmetic.objects.groups.ModGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.CryptoUtils;
-import cryptographic.primitives.HashFunction;
-import cryptographic.primitives.SHA2HashFunction;
 
 /**
  * Tests for ArrayGenerators.
@@ -107,15 +102,15 @@ public class ArraysGeneretorsTests {
 		//mainVer.deriveSetsAndObjects();
 		byte[] b = {0,0,0,0,2,0,0,0,0,3,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,3,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5};
 		IGroup group = new ModGroup(new LargeInteger("100"), new LargeInteger("100"), new LargeInteger("2"));
-		ArrayOfElements<ProductGroupElement> arr = ArrayGenerators.createArrayOfCiphertexts(b, group);
+		ArrayOfElements<ProductGroupElement> arr = ArrayGenerators.createArrayOfCiphertexts(b, group, 2);
 		System.out.println(Arrays.toString(arr.toByteArray()));
 		for (int i=0; i<arr.getSize(); i++) {
 			System.out.println("left:");	
-			for (int j=0; j<arr.getAt(i).getLeft().getArr().getSize(); j++) 	
-				System.out.println(ElementsExtractor.leafToInt(((arr.getAt(i).getLeft().getArr().getAt(j)).toByteArray())));
+			for (int j=0; j<arr.getAt(i).getLeft().getSize(); j++) 	
+				System.out.println(ElementsExtractor.leafToInt(((arr.getAt(i).getLeft().getElements().getAt(j)).toByteArray())));
 			System.out.println("right:");	
-			for (int j=0; j<arr.getAt(i).getLeft().getArr().getSize(); j++) 	
-				System.out.println(Arrays.toString(arr.getAt(i).getRight().getArr().getAt(j).toByteArray()));
+			for (int j=0; j<arr.getAt(i).getLeft().getSize(); j++) 	
+				System.out.println(Arrays.toString(arr.getAt(i).getRight().getElements().getAt(j).toByteArray()));
 
 		}
 		System.out.println(arr.getSize());

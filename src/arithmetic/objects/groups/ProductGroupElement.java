@@ -36,7 +36,7 @@ public class ProductGroupElement implements ByteTree {
 	}
 	
 	
-	public ArrayOfElements<IGroupElement> getArr() {
+	public ArrayOfElements<IGroupElement> getElements() {
 		return arr;
 	}
 
@@ -50,6 +50,11 @@ public class ProductGroupElement implements ByteTree {
 		return right;
 	}
 
+	public int getSize() {
+		if (arr==null) return 2;
+		else return arr.getSize();
+	}
+	
 
 	/**
 	 * @param b
@@ -59,7 +64,7 @@ public class ProductGroupElement implements ByteTree {
 		if (arr!=null) {
 			ArrayOfElements<IGroupElement> a = arr;
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).mult(b.getArr().getAt(i)));
+				a.setAt(i, a.getAt(i).mult(b.getElements().getAt(i)));
 			return new ProductGroupElement(a);
 		}
 		else return new ProductGroupElement(left.mult(b.left), right.mult(b.right));
@@ -93,7 +98,7 @@ public class ProductGroupElement implements ByteTree {
 		if (arr!=null) {
 			ArrayOfElements<IGroupElement> a = arr;
 			for (int i=0; i<arr.getSize(); i++)
-				if (!(a.getAt(i).equal(b.getArr().getAt(i)))) return false;
+				if (!(a.getAt(i).equal(b.getElements().getAt(i)))) return false;
 			return true;
 		}
 		else return (left.equal(b.left) && right.equal(b.right));
