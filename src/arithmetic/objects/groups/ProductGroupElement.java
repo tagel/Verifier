@@ -8,6 +8,7 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.ring.IntegerRingElement;
 
 
 public class ProductGroupElement implements ByteTree {
@@ -62,9 +63,9 @@ public class ProductGroupElement implements ByteTree {
 	 */
 	public ProductGroupElement mult(ProductGroupElement b) {
 		if (arr!=null) {
-			ArrayOfElements<IGroupElement> a = arr;
+			ArrayOfElements<IGroupElement> a = new ArrayOfElements<IGroupElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).mult(b.getElements().getAt(i)));
+				a.add(arr.getAt(i).mult(b.getElements().getAt(i)));
 			return new ProductGroupElement(a);
 		}
 		else return new ProductGroupElement(left.mult(b.left), right.mult(b.right));

@@ -119,14 +119,29 @@ public class ElementsExtractor {
 		return new ProductGroupElement(arr);
 	}
 
-	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group)
+	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group, int w)
 			throws UnsupportedEncodingException {
 		Node node = new Node(bt);
+		if (w == 1
+				&& new Node(node.getAt(0).toByteArray()).getChildrenSize() == 2) {
+			ArrayOfElements<IGroupElement> leftArr = ArrayGenerators.createGroupElementArray(
+					node.getAt(0).toByteArray(), group);
+			ArrayOfElements<IGroupElement> rightArr = ArrayGenerators.createGroupElementArray(
+					node.getAt(1).toByteArray(), group);
+			
+				ProductGroupElement ciphertext = ElementsExtractor
+						.createCiphertext(leftArr, rightArr);
+				return (ciphertext);
+			}
+		
+			else {
+		
 		ProductGroupElement left = createSimplePGE(node.getAt(0).toByteArray(),
 				group);
 		ProductGroupElement right = createSimplePGE(
 				node.getAt(1).toByteArray(), group);
 		return new ProductGroupElement(left, right);
+			}
 	}
 
 	public static ProductGroupElement createCiphertext(
