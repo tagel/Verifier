@@ -8,10 +8,10 @@ import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.basicelements.StringLeaf;
-import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
+import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
@@ -55,9 +55,9 @@ public class ProveCCPoS extends Prover{
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Ke)
 			 */
-			IntegerFieldElement Ka = (IntegerFieldElement) PoSReply.getAt(0);
+			IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
 			ProductRingElement Kb = (ProductRingElement) PoSReply.getAt(1);
-			ArrayOfElements<IntegerFieldElement> Ke = (ArrayOfElements<IntegerFieldElement>) (PoSReply
+			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(2));
 
 			/**
