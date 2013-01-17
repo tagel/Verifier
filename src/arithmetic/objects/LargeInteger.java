@@ -52,7 +52,7 @@ public class LargeInteger extends BigInteger {
 		return new LargeInteger(super.remainder(b));
 	}
 
-	public LargeInteger power(LargeInteger b) throws Exception {
+	public LargeInteger power(LargeInteger b) {
 		
 		//LargeInteger result = ONE;
 		//for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i
@@ -61,8 +61,10 @@ public class LargeInteger extends BigInteger {
 		//}
 		//return result;
 		
-		  if (b.bitLength() > 32)
-		      throw new Exception("Cannot raise a large number to the power of a large number");
+		  if (b.bitLength() > 32) {
+		      System.out.println("Cannot raise a large number to the power of a large number");
+		      return null;
+		  }
 		    return new LargeInteger(super.pow(b.intValue()));
 		  }
 	
