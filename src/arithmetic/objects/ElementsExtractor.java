@@ -122,8 +122,7 @@ public class ElementsExtractor {
 	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group, int w)
 			throws UnsupportedEncodingException {
 		Node node = new Node(bt);
-		if (w == 1
-				&& new Node(node.getAt(0).toByteArray()).getChildrenSize() == 2) {
+		if (w == 1) {
 			ArrayOfElements<IGroupElement> leftArr = new ArrayOfElements<IGroupElement>();
 			leftArr.add(createGroupElement(node.getAt(0).toByteArray(), group));
 			ArrayOfElements<IGroupElement> rightArr = new ArrayOfElements<IGroupElement>();

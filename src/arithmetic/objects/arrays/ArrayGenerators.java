@@ -42,9 +42,7 @@ public class ArrayGenerators {
 		Node node = new Node(data);
 		int arraySize = (new Node(node.getAt(0).toByteArray()))
 				.getChildrenSize();
-		if (w == 1
-				&& new Node(new Node(node.getAt(0).toByteArray()).getAt(0)
-						.toByteArray()).getChildrenSize() == 2) {
+		if (w == 1) {
 			ArrayOfElements<IGroupElement> leftArr = createGroupElementArray(
 					node.getAt(0).toByteArray(), group);
 			ArrayOfElements<IGroupElement> rightArr = createGroupElementArray(
