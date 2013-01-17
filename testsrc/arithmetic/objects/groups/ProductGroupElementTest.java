@@ -1,6 +1,7 @@
 package arithmetic.objects.groups;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 import junit.framework.Assert;
 
@@ -36,8 +37,8 @@ public class ProductGroupElementTest {
 		aoe.add(ire258_Group263);
 		aoe.add(ire5_Group263);
 		ProductGroupElement pre = new ProductGroupElement(aoe);
-		Assert.assertEquals("00000000020100000002010201000000020005",
-				CryptoUtils.bytesToHexString(pre.toByteArray()));
+		Assert.assertEquals("0000210002991000205",
+				Arrays.toString(pre.toByteArray()));
 
 		aoe.add(ire6_Group263);
 		Assert.assertEquals("00000000020100000002010201000000020005",

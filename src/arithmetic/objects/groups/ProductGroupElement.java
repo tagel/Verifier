@@ -77,9 +77,9 @@ public class ProductGroupElement implements ByteTree {
 	 */
 	public ProductGroupElement power(LargeInteger b) {
 		if (arr!=null) {
-			ArrayOfElements<IGroupElement> a = arr;
+			ArrayOfElements<IGroupElement> a = new ArrayOfElements<IGroupElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).power(b));
+				a.add(arr.getAt(i).power(b));
 			return new ProductGroupElement(a);
 		}
 		else return new ProductGroupElement(left.power(b), right.power(b));
@@ -87,9 +87,9 @@ public class ProductGroupElement implements ByteTree {
 	
 	public ProductGroupElement inverse() {
 		if (arr!=null) {
-			ArrayOfElements<IGroupElement> a = arr;
+			ArrayOfElements<IGroupElement> a = new ArrayOfElements<IGroupElement>();
 			for (int i=0; i<arr.getSize(); i++)
-				a.setAt(i, a.getAt(i).inverse());
+				a.add(arr.getAt(i).inverse());
 			return new ProductGroupElement(a);
 		}
 		else return new ProductGroupElement(left.inverse(), right.inverse());
