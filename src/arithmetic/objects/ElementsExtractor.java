@@ -124,14 +124,13 @@ public class ElementsExtractor {
 		Node node = new Node(bt);
 		if (w == 1
 				&& new Node(node.getAt(0).toByteArray()).getChildrenSize() == 2) {
-			ArrayOfElements<IGroupElement> leftArr = ArrayGenerators.createGroupElementArray(
-					node.getAt(0).toByteArray(), group);
-			ArrayOfElements<IGroupElement> rightArr = ArrayGenerators.createGroupElementArray(
-					node.getAt(1).toByteArray(), group);
+			ArrayOfElements<IGroupElement> leftArr = new ArrayOfElements<IGroupElement>();
+			leftArr.add(createGroupElement(node.getAt(0).toByteArray(), group));
+			ArrayOfElements<IGroupElement> rightArr = new ArrayOfElements<IGroupElement>();
+			rightArr.add(createGroupElement(node.getAt(1).toByteArray(), group));
 			
-				ProductGroupElement ciphertext = ElementsExtractor
-						.createCiphertext(leftArr, rightArr);
-				return (ciphertext);
+				return createCiphertext(leftArr, rightArr);
+				
 			}
 		
 			else {
