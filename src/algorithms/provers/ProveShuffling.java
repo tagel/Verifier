@@ -53,8 +53,8 @@ public class ProveShuffling extends Prover {
 
 			IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
 			IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
-//			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment
-//					.getAt(5);
+			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment
+					.getAt(5);
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
@@ -139,25 +139,25 @@ public class ProveShuffling extends Prover {
 			/*
 			 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 			 */
-//			ProductGroupElement leftF = F.power(v).mult(Ftag);
-//
-//			ProductGroupElement W = wOutput.getAt(0).power(
-//					Ke.getAt(0).getElement());
-//			for (int i = 1; i < N; i++) {
-//				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
-//			}
-//
-//			// create ProductGroupElement of 1s
-//			ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
-//			for (int i = 0; i < width; i++) {
-//				arrOfOnes.add(Gq.one());
-//			}
-//
-//			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
-//			ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
-//			if (!leftF.equal(rigthF)) {
-//				return false;
-//			}
+			ProductGroupElement leftF = F.power(v).mult(Ftag);
+
+			ProductGroupElement W = wOutput.getAt(0).power(
+					Ke.getAt(0).getElement());
+			for (int i = 1; i < N; i++) {
+				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
+			}
+
+			// create ProductGroupElement of 1s
+			ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
+			for (int i = 0; i < width; i++) {
+				arrOfOnes.add(Gq.one());
+			}
+
+			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
+			ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
+			if (!leftF.equal(rigthF)) {
+				return false;
+			}
 
 			/*
 			 * Equation 4: (C^v)*Ctag = g^Kc
