@@ -511,9 +511,9 @@ public class VerShuffling {
 		// If i==1 it means that Liminus1 = L0, as we did in the main loop
 		if (i != 1)
 			Liminus1 = Li;
+		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq, width);
 		if (Li.getSize() != N)
 			return false;
-		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq, width);
 
 		/*
 		 * each NODE needs to know which type are his children - First we create
@@ -540,7 +540,7 @@ public class VerShuffling {
 
 		// Read F' Ciphertext
 		ProductGroupElement tempF = ElementsExtractor.createCiphertext(
-				PoSCommitment.getAt(5).toByteArray(), Gq);
+				PoSCommitment.getAt(5).toByteArray(), Gq, width);
 		PoSCommitment.setAt(5, tempF);
 
 		// Read B and B' arrays of N elements in Gq
