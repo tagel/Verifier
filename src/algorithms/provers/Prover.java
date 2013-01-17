@@ -50,10 +50,10 @@ public abstract class Prover {
 	public static ProductGroupElement encrypt(ProductGroupElement m,
 			ProductRingElement s, ProductGroupElement pk, IGroup Gq) {
 
-		IGroupElement g = pk.getArr().getAt(0);
-		IGroupElement y = pk.getArr().getAt(1);
-		ArrayOfElements<IntegerRingElement> powers = s.getArr();
-		ArrayOfElements<IGroupElement> ms = m.getArr();
+		IGroupElement g = pk.getElements().getAt(0);
+		IGroupElement y = pk.getElements().getAt(1);
+		ArrayOfElements<IntegerRingElement> powers = s.getElements();
+		ArrayOfElements<IGroupElement> ms = m.getElements();
 		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
 		ArrayOfElements<IGroupElement> right = new ArrayOfElements<IGroupElement>();
 		for (int i = 0; i < powers.getSize(); i++) {

@@ -261,8 +261,8 @@ public class MainVerifier {
 		}
 
 		// Extract y and g from the public key
-		IGroupElement y = pk.getArr().getAt(1);
-		IGroupElement g = pk.getArr().getAt(0);
+		IGroupElement y = pk.getElements().getAt(1);
+		IGroupElement g = pk.getElements().getAt(0);
 
 		params.setFullPublicKey(pk);
 
