@@ -52,7 +52,7 @@ public class ModGroup implements IGroup {
 
 	public ModGroup (byte[] arr) throws UnsupportedEncodingException  {
 		Node node = new Node(arr);
-		if (node.getChildrenSize()!=3)
+		if (node.getChildrenSize()!=3 && node.getChildrenSize()!=4) 
 			System.out.println("Error: byte array is not of a correct modular group structure");
 		else {
 			p = ElementsExtractor.leafToInt(node.getAt(0).toByteArray());

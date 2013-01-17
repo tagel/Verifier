@@ -68,8 +68,6 @@ public class ProductGroupElementTest {
 		ProductGroupElement pre2 = new ProductGroupElement(aoe2);
 		Assert.assertEquals(new LargeInteger("2"), ((ModGroupElement) pre1.mult(pre2).getElements()
 				.getAt(0)).getElement());
-		Assert.assertEquals(new LargeInteger("2"), ((ModGroupElement) pre1.mult(pre2).getElements()
-				.getAt(0)).getElement());
 	}
 
 	@Test
