@@ -32,6 +32,7 @@ public class VerDec {
 	/**
 	 * @param arrayOfElements2
 	 * @param publicKeys
+	 * @param width 
 	 * @param randomOracle2
 	 * @param randomOracle
 	 * @param arrayOfElements2
@@ -55,7 +56,7 @@ public class VerDec {
 			ArrayOfElements<ProductRingElement> m,
 			IRing<IntegerRingElement> Zq,
 			ArrayOfElements<IGroupElement> publicKeys,
-			ArrayOfElements<IntegerRingElement> secretKeys) {
+			ArrayOfElements<IntegerRingElement> secretKeys, int width) {
 
 		// Create the arrays of the different factors
 		if (!readDecriptionFactors(lambda, directory, Gq)
