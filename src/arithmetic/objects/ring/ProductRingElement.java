@@ -1,6 +1,8 @@
 package arithmetic.objects.ring;
 
 import java.io.UnsupportedEncodingException;
+
+import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 
 import arithmetic.objects.ByteTree;
@@ -15,7 +17,10 @@ public class ProductRingElement implements ByteTree {
 	private ArrayOfElements<IntegerRingElement> arr;
 	
 	
-	public ProductRingElement(byte[] bt, IRing<IntegerRingElement> ring) throws UnsupportedEncodingException {
+	public ProductRingElement(byte[] bt, IRing<IntegerRingElement> ring, int w) throws UnsupportedEncodingException {
+		if (w==1) {
+			arr.add(new IntegerRingElement(ElementsExtractor.leafToInt(bt), ring));
+		}
 		arr = ArrayGenerators.createRingElementArray(bt, ring);
 	}
 	
