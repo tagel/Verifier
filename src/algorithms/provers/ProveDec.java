@@ -26,6 +26,8 @@ import cryptographic.primitives.RandomOracle;
 public class ProveDec extends Prover {
 
 	/**
+	 * @param ROChallenge
+	 * @param ROSeed
 	 * @param plaintexts
 	 * @param ciphertexts
 	 * @param secretKeys
@@ -39,20 +41,38 @@ public class ProveDec extends Prover {
 	 * @param n
 	 * @param prefixToRO
 	 * @param j
+	 * @param decrFactReplies
+	 * @param decrFactCommitments
+	 * @param decryptionFactors
 	 * @return true if the decryption was correct and false otherwise.
 	 */
-	public static boolean prove(int j, byte[] prefixToRO, int n, int ne,
-			int nr, int nv, PseudoRandomGenerator prg, IGroup Gq,
-			IGroupElement g, ArrayOfElements<IGroupElement> publicKeys,
+	public static boolean prove(
+			RandomOracle ROSeed,
+			RandomOracle ROChallenge,
+			int j,
+			byte[] ro,
+			int N,
+			int Ne,
+			int Nr,
+			int Nv,
+			PseudoRandomGenerator prg,
+			IGroup Gq,
+			IGroupElement g,
+			ArrayOfElements<IGroupElement> y,
 			ArrayOfElements<IntegerRingElement> secretKeys,
-			ArrayOfElements<ProductGroupElement> ciphertexts,
-			ArrayOfElements<ProductRingElement> plaintexts) {
-		
+			ArrayOfElements<ProductGroupElement> wInput,
+			ArrayOfElements<ProductRingElement> plaintexts,
+			ArrayOfElements<ArrayOfElements<ProductRingElement>> f,
+			ArrayOfElements<Node> decrFactCommitments,
+			ArrayOfElements<IntegerRingElement> decrFactReplies) {
+
 		try {
 
 			/**
 			 * 1(a) - interpret Tdec as Node(yl',B')
 			 */
+			Node decCommitment = decrFactCommitments.getAt(j);
+
 			IGroupElement yltag = (IGroupElement) decCommitment.getAt(0);
 			ProductRingElement Bltag = (ProductRingElement) decCommitment
 					.getAt(1);
@@ -60,7 +80,7 @@ public class ProveDec extends Prover {
 			/**
 			 * 1(b) - interpret Odec as ByteTree(Klx)
 			 */
-			IntegerFieldElement klx = (IntegerFieldElement) decReply.getAt(0);
+			IntegerRingElement klx = decrFactReplies.getAt(j);
 
 			/**
 			 * 2 - computing the seed
@@ -145,11 +165,12 @@ public class ProveDec extends Prover {
 				 * compute B = PI((PI(fli)^ei) and accept if PI(yl)^v*PI(yltag)
 				 * == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
 				 */
+				//TODO fl is an array, so we need to multiply fj's elements
 				IGroupElement B = Gq.one();
 				for (int i = 0; i < N; i++) {
 					IGroupElement fl = Gq.one();
 					for (int l = 0; i < f.getSize(); i++) {
-						fl = fl.mult(f.getAt(0).getAt(l));
+						//fl = fl.mult(f.getAt(0).getAt(l));
 					}
 					B = B.mult(fl.power(e[i]));
 				}
