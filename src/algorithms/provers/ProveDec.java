@@ -33,7 +33,8 @@ public class ProveDec extends Prover {
 			IGroupElement g,
 			ArrayOfElements<ProductGroupElement> y,
 			ArrayOfElements<ProductGroupElement> wInput,
-			ArrayOfElements<IGroupElement> f, // decryption factors
+			ArrayOfElements<ArrayOfElements<IGroupElement>> f, // decryption
+																// factors
 			ArrayOfElements<IGroupElement> permutationCommitment,
 			Node decCommitment, Node decReply) {
 
@@ -130,10 +131,21 @@ public class ProveDec extends Prover {
 			ProductGroupElement A = new ProductGroupElement(left, ones);
 
 			if (j == 0) {
+				/*
+				 * compute B = PI((PI(fli)^ei) and accept if PI(yl)^v*PI(yltag)
+				 * == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
+				 */
+				IGroupElement B = Gq.one();
+				for (int i = 0; i < N; i++) {
+					IGroupElement fl = Gq.one();
+					for (int l = 0; i < f.getSize(); i++) {
+						fl = fl.mult(f.getAt(0).getAt(l));
+					}
+					B = B.mult(fl.power(e[i]));
+				}
 				
 
 			} else if (j > 0) {
-				
 
 			} else {
 				return false;
@@ -147,5 +159,4 @@ public class ProveDec extends Prover {
 			return false;
 		}
 	}
-
 }

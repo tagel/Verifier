@@ -160,7 +160,7 @@ public class MainVerifier {
 						params.getGq(), params.getFullPublicKey(),
 						params.getShuffledCiphertexts(),
 						params.getPlaintexts(), params.getZq(),
-						params.getMixPublicKey(), params.getMixSecretKey()))
+						params.getMixPublicKey(), params.getMixSecretKey(), params.getW()))
 					return false;
 
 			if (params.getType().equals(Type.DECRYPTION))
@@ -171,7 +171,7 @@ public class MainVerifier {
 						params.getGq(), params.getFullPublicKey(),
 						params.getCiphertexts(), params.getPlaintexts(),
 						params.getZq(), params.getMixPublicKey(),
-						params.getMixSecretKey()))
+						params.getMixSecretKey(), params.getW()))
 					return false;
 		}
 
@@ -340,7 +340,7 @@ public class MainVerifier {
 			return false;
 
 		ArrayOfElements<ProductGroupElement> ciphertexts = ArrayGenerators
-				.createArrayOfCiphertexts(file, params.getGq());
+				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 
 		params.setN(ciphertexts.getSize());
 
@@ -365,7 +365,7 @@ public class MainVerifier {
 		}
 
 		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
-				.createArrayOfCiphertexts(file, params.getGq());
+				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 		if (ShuffledCiphertexts.getSize() != params.getN())
 			return false;
 
