@@ -80,7 +80,20 @@ public class MainVerifierTests {
 		MainVerifier mainVer = new MainVerifier(params, H);
 		mainVer.deriveSetsAndObjects();
 		Assert.assertTrue(mainVer.ReadLists());
+		Assert.assertEquals(mainVer.getParams().getN(),100);
 		
 	}
+	
+	@Test
+	public void VerifyShuffleTest() throws IOException {
+		
+		MainVerifier mainVer = new MainVerifier();
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("export/default").getFile(),
+				Type.MIXING, "default", 1, true, false, false));
+	}
+	
 
+	
 }

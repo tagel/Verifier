@@ -41,11 +41,11 @@ public class Parameters {
 			java.lang.String auxsid, int w, boolean posc, boolean ccpos,
 			boolean dec) {
 
-		this.auxsid = auxsid;
+		this.auxidExp = auxsid;
 		this.protInfo = protInfo;
 		this.directory = directory;
-		this.type = type;
-		this.w = w;
+		this.typeExpected = type;
+		this.widthExp = w;
 		this.posc = posc;
 		this.ccpos = ccpos;
 		this.dec = dec;
