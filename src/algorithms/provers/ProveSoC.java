@@ -1,7 +1,5 @@
 package algorithms.provers;
 
-import java.math.BigInteger;
-
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
@@ -10,13 +8,9 @@ import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.basicelements.StringLeaf;
-import arithmetic.objects.field.IField;
-import arithmetic.objects.field.IntegerFieldElement;
-import arithmetic.objects.field.PrimeOrderField;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
-import arithmetic.objects.groups.ProductGroupElement;
-import arithmetic.objects.ring.ProductRingElement;
+import arithmetic.objects.ring.IntegerRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -62,12 +56,12 @@ public class ProveSoC extends Prover {
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke)
 			 */
-			IntegerFieldElement Ka = (IntegerFieldElement) PoSReply.getAt(0);
-			IntegerFieldElement Kc = (IntegerFieldElement) PoSReply.getAt(2);
-			IntegerFieldElement Kd = (IntegerFieldElement) PoSReply.getAt(3);
-			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>) (PoSReply
+			IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
+			IntegerRingElement Kc = (IntegerRingElement) PoSReply.getAt(2);
+			IntegerRingElement Kd = (IntegerRingElement) PoSReply.getAt(3);
+			ArrayOfElements<IntegerRingElement> Kb = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(1));
-			ArrayOfElements<IntegerFieldElement> Ke = (ArrayOfElements<IntegerFieldElement>) (PoSReply
+			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(4));
 
 			/**

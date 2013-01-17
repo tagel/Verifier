@@ -8,10 +8,10 @@ import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.basicelements.StringLeaf;
-import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
+import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
@@ -53,21 +53,21 @@ public class ProveShuffling extends Prover {
 
 			IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
 			IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
-			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment
-					.getAt(5);
+//			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment
+//					.getAt(5);
 
 			/**
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 			 */
-			IntegerFieldElement Ka = (IntegerFieldElement) PoSReply.getAt(0);
-			IntegerFieldElement Kc = (IntegerFieldElement) PoSReply.getAt(2);
-			IntegerFieldElement Kd = (IntegerFieldElement) PoSReply.getAt(3);
+			IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
+			IntegerRingElement Kc = (IntegerRingElement) PoSReply.getAt(2);
+			IntegerRingElement Kd = (IntegerRingElement) PoSReply.getAt(3);
 			ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 
-			ArrayOfElements<IntegerFieldElement> Kb = (ArrayOfElements<IntegerFieldElement>) (PoSReply
+			ArrayOfElements<IntegerRingElement> Kb = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(1));
 
-			ArrayOfElements<IntegerFieldElement> Ke = (ArrayOfElements<IntegerFieldElement>) (PoSReply
+			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(4));
 
 			/**
@@ -139,25 +139,25 @@ public class ProveShuffling extends Prover {
 			/*
 			 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 			 */
-			ProductGroupElement leftF = F.power(v).mult(Ftag);
-
-			ProductGroupElement W = wOutput.getAt(0).power(
-					Ke.getAt(0).getElement());
-			for (int i = 1; i < N; i++) {
-				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
-			}
-
-			// create ProductGroupElement of 1s
-			ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
-			for (int i = 0; i < width; i++) {
-				arrOfOnes.add(Gq.one());
-			}
-
-			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
-			ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
-			if (!leftF.equal(rigthF)) {
-				return false;
-			}
+//			ProductGroupElement leftF = F.power(v).mult(Ftag);
+//
+//			ProductGroupElement W = wOutput.getAt(0).power(
+//					Ke.getAt(0).getElement());
+//			for (int i = 1; i < N; i++) {
+//				W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
+//			}
+//
+//			// create ProductGroupElement of 1s
+//			ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
+//			for (int i = 0; i < width; i++) {
+//				arrOfOnes.add(Gq.one());
+//			}
+//
+//			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
+//			ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
+//			if (!leftF.equal(rigthF)) {
+//				return false;
+//			}
 
 			/*
 			 * Equation 4: (C^v)*Ctag = g^Kc

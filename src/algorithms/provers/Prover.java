@@ -7,7 +7,6 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.Node;
-import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
@@ -24,7 +23,7 @@ public abstract class Prover {
 	 * the standard generator in the public key is raised u - First part of
 	 * ciphertext to be decrypted
 	 */
-	public static ProductGroupElement PDecrypt(IntegerFieldElement x,
+	public static ProductGroupElement PDecrypt(IntegerRingElement x,
 			ProductGroupElement A) throws Exception {
 		return A.getLeft().power(x.getElement());
 	}
@@ -251,9 +250,9 @@ public abstract class Prover {
 	 * @return true if the equation is correct and false otherwise.
 	 */
 	protected static boolean verifyAvAtag(IGroupElement A, IGroupElement Atag,
-			LargeInteger v, ArrayOfElements<IntegerFieldElement> Ke,
+			LargeInteger v, ArrayOfElements<IntegerRingElement> Ke,
 			IGroupElement g, int N, ArrayOfElements<IGroupElement> h,
-			IntegerFieldElement Ka) {
+			IntegerRingElement Ka) {
 
 		IGroupElement left = (A.power(v)).mult(Atag);
 		IGroupElement hPi = h.getAt(0).power(Ke.getAt(0).getElement());
@@ -269,8 +268,8 @@ public abstract class Prover {
 
 	protected static boolean verifyBvBtag(ArrayOfElements<IGroupElement> B,
 			ArrayOfElements<IGroupElement> Btag,
-			ArrayOfElements<IntegerFieldElement> Kb,
-			ArrayOfElements<IntegerFieldElement> Ke, IGroupElement g,
+			ArrayOfElements<IntegerRingElement> Kb,
+			ArrayOfElements<IntegerRingElement> Ke, IGroupElement g,
 			LargeInteger v, ArrayOfElements<IGroupElement> h, int N) {
 		IGroupElement left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
 		IGroupElement right = g.power(Kb.getAt(0).getElement()).mult(
@@ -291,7 +290,7 @@ public abstract class Prover {
 	}
 
 	protected static boolean verifyCvCtag(IGroupElement C, IGroupElement Ctag,
-			LargeInteger v, IntegerFieldElement Kc, IGroupElement g) {
+			LargeInteger v, IntegerRingElement Kc, IGroupElement g) {
 		IGroupElement left = (C.power(v)).mult(Ctag);
 		IGroupElement right = g.power(Kc.getElement());
 		if (!left.equal(right)) {
@@ -301,7 +300,7 @@ public abstract class Prover {
 	}
 
 	protected static boolean verifyDvDtag(IGroupElement D, IGroupElement Dtag,
-			LargeInteger v, IntegerFieldElement Kd, IGroupElement g) {
+			LargeInteger v, IntegerRingElement Kd, IGroupElement g) {
 		IGroupElement left = (D.power(v)).mult(Dtag);
 		IGroupElement right = g.power(Kd.getElement());
 		if (!left.equal(right)) {
