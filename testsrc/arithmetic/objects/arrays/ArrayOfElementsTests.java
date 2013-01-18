@@ -31,16 +31,16 @@ public class ArrayOfElementsTests {
 	public void getAtTest() {
 		array.add(element3);
 		array.add(element4);
-		Assert.assertTrue(element3.equal(array.getAt(0)));
-		Assert.assertTrue(element4.equal(array.getAt(1)));
+		Assert.assertTrue(element3.equals(array.getAt(0)));
+		Assert.assertTrue(element4.equals(array.getAt(1)));
 	}
 
 	@Test
 	public void setAtTest() {
 		array.add(element3);
-		Assert.assertTrue(element3.equal(array.getAt(0)));
+		Assert.assertTrue(element3.equals(array.getAt(0)));
 		array.setAt(0, element4);
-		Assert.assertTrue(element4.equal(array.getAt(0)));
+		Assert.assertTrue(element4.equals(array.getAt(0)));
 	}
 
 	@Test

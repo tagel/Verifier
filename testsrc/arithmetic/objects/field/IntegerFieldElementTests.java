@@ -49,9 +49,9 @@ public class IntegerFieldElementTests {
 
 	@Test
 	public void equalTest() {
-		Assert.assertTrue(ife1_field4.equal(new IntegerFieldElement(
+		Assert.assertTrue(ife1_field4.equals(new IntegerFieldElement(
 				new LargeInteger("1"), pof_4)));
-		Assert.assertTrue(ife1_field4.equal(new IntegerFieldElement(
+		Assert.assertTrue(ife1_field4.equals(new IntegerFieldElement(
 				new LargeInteger("5"), pof_4)));
 	}
 
@@ -66,56 +66,56 @@ public class IntegerFieldElementTests {
 
 	@Test
 	public void addTest() {
-		Assert.assertTrue(ife3_field4.equal(ife2_field4.add(ife1_field4)));
-		Assert.assertTrue(ife1_field4.equal(ife2_field4.add(ife3_field4)));
+		Assert.assertTrue(ife3_field4.equals(ife2_field4.add(ife1_field4)));
+		Assert.assertTrue(ife1_field4.equals(ife2_field4.add(ife3_field4)));
 	}
 
 	@Test
 	public void addZeroTest() {
-		Assert.assertTrue(ife1_field4.equal(ife1_field4.add(ife1_field4
+		Assert.assertTrue(ife1_field4.equals(ife1_field4.add(ife1_field4
 				.getField().zero())));
 	}
 
 	@Test
 	public void negTest() {
-		Assert.assertTrue(ife2_field4.neg().equal(ife2_field4));
-		Assert.assertTrue(ife1_field4.neg().equal(ife3_field4));
-		Assert.assertTrue(ife5_field4.neg().equal(ife3_field4));
+		Assert.assertTrue(ife2_field4.neg().equals(ife2_field4));
+		Assert.assertTrue(ife1_field4.neg().equals(ife3_field4));
+		Assert.assertTrue(ife5_field4.neg().equals(ife3_field4));
 	}
 
 	@Test
 	public void mult1_Test() {
-		Assert.assertTrue(ife2_field4.equal(ife2_field4.mult(ife3_field4)));
+		Assert.assertTrue(ife2_field4.equals(ife2_field4.mult(ife3_field4)));
 	}
 
 	@Test
 	public void mult2_Test() {
-		Assert.assertTrue(ife1_field4.equal(ife3_field4.mult(ife3_field4)));
-		Assert.assertTrue(ife3_field4.equal(ife3_field4.mult(ife1_field4)));
+		Assert.assertTrue(ife1_field4.equals(ife3_field4.mult(ife3_field4)));
+		Assert.assertTrue(ife3_field4.equals(ife3_field4.mult(ife1_field4)));
 	}
 
 	@Test
 	public void multWithOneTest() {
-		Assert.assertTrue(ife3_field4.equal(ife3_field4.mult(ife3_field4
+		Assert.assertTrue(ife3_field4.equals(ife3_field4.mult(ife3_field4
 				.getField().one())));
 	}
 
 	@Test
 	public void multWithZeroTest() {
 		Assert.assertTrue(ife3_field4.getField().zero()
-				.equal(ife3_field4.mult(ife3_field4.getField().zero())));
+				.equals(ife3_field4.mult(ife3_field4.getField().zero())));
 	}
 
 	@Test
 	public void powerTest() {
-		Assert.assertTrue(ife3_field4.equal(ife3_field4.power(new LargeInteger(
+		Assert.assertTrue(ife3_field4.equals(ife3_field4.power(new LargeInteger(
 				"3"))));
 		Assert.assertTrue(ife2_field4.getField().zero()
-				.equal(ife2_field4.power(new LargeInteger("5"))));
+				.equals(ife2_field4.power(new LargeInteger("5"))));
 	}
 
 	@Test
 	public void inverse_pof4Test() {
-		Assert.assertTrue(ife3_field4.equal(ife3_field4.inverse()));
+		Assert.assertTrue(ife3_field4.equals(ife3_field4.inverse()));
 	}
 }
