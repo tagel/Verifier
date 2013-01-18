@@ -18,7 +18,7 @@ import cryptographic.primitives.PseudoRandomGenerator;
 public interface IGroup extends ByteTree {
 	
 	
-
+	
 	public LargeInteger getFieldOrder();
 	
 	public LargeInteger getOrder();

@@ -52,22 +52,14 @@ public class LargeInteger extends BigInteger {
 		return new LargeInteger(super.remainder(b));
 	}
 
-//	public LargeInteger power(LargeInteger b) throws CloneNotSupportedException {
-//		
-//		LargeInteger base = (LargeInteger) super.clone();
-//	    LargeInteger result = LargeInteger.ONE;
-//	    
-//	    String str = b.toString(2);
-//	    
-//	    for (int i = str.length()-1; i>-1; i--)
-//	    {
-//	        if (str.charAt(i)=='1')
-//	            result = (LargeInteger) super.multiply(result);
-//	        base =  base.multiply(base);
-//	    }
-//
-//	    return result
-//	}
+	public LargeInteger power(LargeInteger b) {
+		LargeInteger ret = LargeInteger.ONE;
+		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b)<0; i.add(LargeInteger.ONE)) {
+			super.multiply(ret);
+		}
+		return ret;
+	}
+
 		
 	
 
