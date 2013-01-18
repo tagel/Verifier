@@ -7,7 +7,6 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.Node;
-import arithmetic.objects.groups.ECurveGroupElement;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
@@ -280,7 +279,7 @@ public abstract class Prover {
 			hPi = hPi.mult(h.getAt(i).power(Ke.getAt(i).getElement()));
 		}
 		IGroupElement right = (g.power(Ka.getElement())).mult(hPi);
-		if (!left.equal(right)) {
+		if (!left.equals(right)) {
 			return false;
 		}
 		return true;
@@ -294,7 +293,7 @@ public abstract class Prover {
 		IGroupElement left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
 		IGroupElement right = g.power(Kb.getAt(0).getElement()).mult(
 				h.getAt(0).power(Ke.getAt(0).getElement()));
-		if (!left.equal(right)) {
+		if (!left.equals(right)) {
 			return false;
 		}
 
@@ -303,7 +302,7 @@ public abstract class Prover {
 			right = g.power(Kb.getAt(i).getElement()).mult(
 					B.getAt(i - 1).power(Ke.getAt(i).getElement()));
 		}
-		if (!left.equal(right)) {
+		if (!left.equals(right)) {
 			return false;
 		}
 		return true;
@@ -313,7 +312,7 @@ public abstract class Prover {
 			LargeInteger v, IntegerRingElement Kc, IGroupElement g) {
 		IGroupElement left = (C.power(v)).mult(Ctag);
 		IGroupElement right = g.power(Kc.getElement());
-		if (!left.equal(right)) {
+		if (!left.equals(right)) {
 			return false;
 		}
 		return true;
@@ -323,7 +322,7 @@ public abstract class Prover {
 			LargeInteger v, IntegerRingElement Kd, IGroupElement g) {
 		IGroupElement left = (D.power(v)).mult(Dtag);
 		IGroupElement right = g.power(Kd.getElement());
-		if (!left.equal(right)) {
+		if (!left.equals(right)) {
 			return false;
 		}
 		return true;

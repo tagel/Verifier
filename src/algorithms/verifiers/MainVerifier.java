@@ -305,7 +305,7 @@ public class MainVerifier {
 			res = res.mult(yi);
 		}
 
-		if (!res.equal(y)) {
+		if (!res.equals(y)) {
 			return false;
 		}
 
@@ -333,7 +333,7 @@ public class MainVerifier {
 			xi = params.getMixSecretKey().getAt(i);
 			yi = params.getMixPublicKey().getAt(i);
 
-			if ((xi != null) && !(yi.equal(g.power(xi.getElement())))) {
+			if ((xi != null) && !(yi.equals(g.power(xi.getElement())))) {
 				return false;
 			}
 		}
