@@ -24,6 +24,8 @@ import cryptographic.primitives.RandomOracle;
  */
 public class ProveShuffling extends Prover {
 
+	private static final String GENERATORS = "generators";
+
 	public static boolean prove(RandomOracle ROSeed, RandomOracle ROChallenge,
 			byte[] ro, int N, int Ne, int Nr, int Nv,
 			PseudoRandomGenerator prg, IGroup Gq, ProductGroupElement pk,
@@ -44,13 +46,14 @@ public class ProveShuffling extends Prover {
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
 			// creating B,A',B',C',D',F'
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>) (PoSCommitment
 					.getAt(0));
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>) (PoSCommitment
 					.getAt(2));
 
 			IGroupElement Atag = (IGroupElement) PoSCommitment.getAt(1);
-
 			IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
 			IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment
@@ -64,16 +67,18 @@ public class ProveShuffling extends Prover {
 			IntegerRingElement Kd = (IntegerRingElement) PoSReply.getAt(3);
 			ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IntegerRingElement> Kb = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(1));
 
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(4));
 
 			/**
 			 * 2 - computing the seed
 			 */
-			StringLeaf stringLeaf = new StringLeaf("generators");
+			StringLeaf stringLeaf = new StringLeaf(GENERATORS);
 			byte[] independentSeed = ROSeed
 					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							stringLeaf.toByteArray()));
@@ -82,7 +87,7 @@ public class ProveShuffling extends Prover {
 
 			IGroupElement g = Gq.getGenerator();
 			Node nodeForSeed = new Node();
-			nodeForSeed.add(g);
+			nodeForSeed.add(g); // TODO Daniel - think how to move to func
 			nodeForSeed.add(h);
 			nodeForSeed.add(u);
 			nodeForSeed.add(pk);
@@ -99,7 +104,7 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 4 - Computation of the challenge
 			 */
-			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
+			ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
 
 			Node nodeForChallenge = new Node();
 			nodeForChallenge.add(leaf);
