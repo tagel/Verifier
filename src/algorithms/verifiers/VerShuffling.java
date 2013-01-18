@@ -63,7 +63,7 @@ public class VerShuffling {
 	 * @param Zq
 	 * @return true if verification of shuffling was successful and false
 	 *         otherwise.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	static public boolean verify(RandomOracle ROSeed, RandomOracle ROChallenge,
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,
@@ -92,9 +92,10 @@ public class VerShuffling {
 			Liminus1 = L0;
 
 			// We read lists of ciphertexts until i=lambda.
-			boolean retValue = true; // We check it later
+			boolean retValue; // We check it later
 
 			for (int i = 1; i <= lambda; i++) {
+				retValue = true;
 				if (i == lambda) {
 					// Here we send the Llambda to the prover.
 					retValue = retValue
@@ -115,13 +116,16 @@ public class VerShuffling {
 				 * If retValue is false, it means that reading of elements
 				 * failed or the prover rejected
 				 */
-				if (!retValue) // we need to check if Liminus1 == Li
-					if (i == lambda)
-						if (!Llambda.equals(Li))
+				if (!retValue) { // we need to check if Liminus1 == Li
+					if (i == lambda) {
+						if (!Llambda.equals(Li)) {
 							return false;
-						else if (!Li.equals(Liminus1))
-							return false;
-				retValue = true;
+						}
+					} else if (!Li.equals(Liminus1)) {
+						return false;
+					}
+				}
+
 			}
 
 			return true;
@@ -210,8 +214,8 @@ public class VerShuffling {
 						retValue = false;
 					retValue = retValue
 							&& ProveCCPoS.prove(ROSeed, ROChallenge,
-									prefixToRO, N, ne, nr, nv, prg, Gq, pk, Liminus1,
-									Li, width, PermutationCommitment,
+									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
+									Liminus1, Li, width, PermutationCommitment,
 									PoSCommitment, PoSReply);
 				}
 

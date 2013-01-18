@@ -7,6 +7,7 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.groups.ECurveGroupElement;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
@@ -91,9 +92,8 @@ public abstract class Prover {
 	 */
 	protected static byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed,
 			byte[] ro) throws UnsupportedEncodingException {
-		byte[] seed = ROSeed.getRandomOracleOutput(ArrayGenerators
+		return ROSeed.getRandomOracleOutput(ArrayGenerators
 				.concatArrays(ro, nodeForSeed.toByteArray()));
-		return seed;
 	}
 
 	/**
@@ -116,14 +116,15 @@ public abstract class Prover {
 			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u) {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
+		
 		byte[] ByteArrToBigInt = prg.getNextPRGOutput(length);
-		LargeInteger t = ElementsExtractor.leafToInt(ByteArrToBigInt);
+		LargeInteger t = new LargeInteger(ByteArrToBigInt);
 		LargeInteger e = t.mod(new LargeInteger("2").power(Ne));
 		IGroupElement A = u.getAt(0).power(e);
 
 		for (int i = 1; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = ElementsExtractor.leafToInt(ByteArrToBigInt);
+			t = new LargeInteger(ByteArrToBigInt);
 			e = t.mod(new LargeInteger("2").power(Ne));
 			A = A.mult(u.getAt(i).power(e));
 		}
@@ -148,15 +149,22 @@ public abstract class Prover {
 			PseudoRandomGenerator prg) {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
-		byte[] ByteArrToBigInt = prg.getNextPRGOutput(length);
-		LargeInteger t = ElementsExtractor.leafToInt(ByteArrToBigInt);
-		LargeInteger E = t.mod(new LargeInteger("2").power(Ne));
+		byte[] ByteArrToBigInt = null;
+		LargeInteger t = null;
+		LargeInteger E = LargeInteger.ONE;
 
-		for (int i = 1; i < N; i++) {
+		for (int i = 0; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = ElementsExtractor.leafToInt(ByteArrToBigInt);
-			E = E.multiply(t.mod(new LargeInteger("2").power(Ne)));
+			t = new LargeInteger(ByteArrToBigInt);
+			System.out.println("t: " + t.toString());
+			LargeInteger pow = new LargeInteger("2").power(Ne);
+			System.out.println("pow: " + pow);
+			LargeInteger a = t.mod(pow);
+			System.out.println("a: " + a);
+			E = E.multiply(a);
+			System.out.println("E: " + E.toString());
 		}
+		
 		return E;
 	}
 
@@ -183,13 +191,13 @@ public abstract class Prover {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
 		byte[] ByteArrToBigInt = prg.getNextPRGOutput(length);
-		LargeInteger t = ElementsExtractor.leafToInt(ByteArrToBigInt);
+		LargeInteger t = new LargeInteger(ByteArrToBigInt);
 		LargeInteger e = t.mod(new LargeInteger("2").power(Ne));
 		ProductGroupElement F = wInput.getAt(0).power(e);
 
 		for (int i = 1; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = ElementsExtractor.leafToInt(ByteArrToBigInt);
+			t = new LargeInteger(ByteArrToBigInt);
 			e = t.mod(new LargeInteger("2").power(Ne));
 			F = F.mult(wInput.getAt(i).power(e));
 		}
@@ -205,7 +213,7 @@ public abstract class Prover {
 	 *            - Array of random elements used to compute the seed
 	 * @param N
 	 *            - size of the arrays
-	 * @return C, the multiplication of Ui N times
+	 * @return C, the multiplication of Ui N times divided by multiplication of hi N times 
 	 */
 	protected static IGroupElement computeC(ArrayOfElements<IGroupElement> u,
 			ArrayOfElements<IGroupElement> h, int N) {
@@ -271,7 +279,7 @@ public abstract class Prover {
 		for (int i = 1; i < N; i++) {
 			hPi = hPi.mult(h.getAt(i).power(Ke.getAt(i).getElement()));
 		}
-		IGroupElement right = g.power(Ka.getElement()).mult(hPi);
+		IGroupElement right = (g.power(Ka.getElement())).mult(hPi);
 		if (!left.equal(right)) {
 			return false;
 		}
