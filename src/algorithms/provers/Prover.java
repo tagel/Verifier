@@ -155,13 +155,9 @@ public abstract class Prover {
 		for (int i = 0; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
 			t = new LargeInteger(ByteArrToBigInt);
-			System.out.println("t: " + t.toString());
 			LargeInteger pow = new LargeInteger("2").power(Ne);
-			System.out.println("pow: " + pow);
 			LargeInteger a = t.mod(pow);
-			System.out.println("a: " + a);
 			E = E.multiply(a);
-			System.out.println("E: " + E.toString());
 		}
 		
 		return E;
