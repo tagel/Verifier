@@ -55,8 +55,9 @@ public class LargeInteger extends BigInteger {
 	public LargeInteger power(LargeInteger b) {
 		LargeInteger ret = LargeInteger.ONE;
 		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b)<0; i.add(LargeInteger.ONE)) {
-			
+			super.multiply(ret);
 		}
+		return ret;
 	}
 
 		
