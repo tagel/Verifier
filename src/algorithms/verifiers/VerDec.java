@@ -21,17 +21,23 @@ import cryptographic.primitives.RandomOracle;
 /**
  * This class provides the functionality of verifying the decryption.
  * 
- * @author Tagel & Sofi
+ * @author Sofi
  */
 
 public class VerDec {
+	private static final String BT_FILE_EXT = ".bt";
+	private static final String PROOFS = "proofs";
+	private static final String DECRIPTION_FACTORS = "DecriptionFactors";
+	private static final String DECR_FACT_COMMITMENT = "DecrFactCommitment";
+	private static final String DECR_FACT_REPLY = "DecrFactReply";
 
 	private static ArrayOfElements<ArrayOfElements<ProductRingElement>> DecryptionFactors;
 	private static ArrayOfElements<Node> DecrFactCommitments;
 	private static ArrayOfElements<IntegerRingElement> DecrFactReplies;
 
-	// TODO change the comment
 	/**
+	 * // TODO change the comment
+	 * 
 	 * @param arrayOfElements2
 	 * @param publicKeys
 	 * @param width
@@ -78,64 +84,62 @@ public class VerDec {
 		// ********Step 2 in the algorithm**********
 		// Now we try to do the combined proof
 		// If this return true, we skip to step 4
-		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv, prg, Gq, g,
-				publicKeys, secretKeys, L, m, DecryptionFactors,
-				DecrFactCommitments, DecrFactReplies))
+		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv,
+				prg, Gq, g, publicKeys, secretKeys, L, m, DecryptionFactors,
+				DecrFactCommitments, DecrFactReplies)) {
 
 			// ********Step 3 in the algorithm**********
 			for (int i = 1; i <= lambda; i++) {
-				if (!ProveDec.prove(ROSeed, ROChallenge, i - 1, prefixToRO, N, ne, nr, nv, prg, Gq,
-						g, publicKeys, secretKeys, L, m, DecryptionFactors,
-						DecrFactCommitments, DecrFactReplies)
+				boolean proveDec = ProveDec.prove(ROSeed, ROChallenge, i - 1,
+						prefixToRO, N, ne, nr, nv, prg, Gq, g, publicKeys,
+						secretKeys, L, m, DecryptionFactors,
+						DecrFactCommitments, DecrFactReplies);
+				if (!proveDec
 						&& (secretKeys.getAt(i - 1) == null || !DecryptionFactors
 								.getAt(i - 1).equals(
 										Prover.PDecrypt(
-												secretKeys.getAt(i - 1), L))))
+												secretKeys.getAt(i - 1), L)))) {
 					return false;
+				}
 			}
+		}
 
 		// ********Step 4 in the algorithm**********
-		// Verify Plainexts:
+		// Verify Plaintexts:
 		// TODO MULTIPLY ARRAYS?!
 		ProductRingElement f = null;
-
-		if (!m.equals(Prover.TDecrypt(L, f)))
+		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
-
+		}
 		return true;
 	}
 
-	//TODO change the strings to static variables
 	private static boolean readDecrFactCommitment(int lambda, String directory,
 			IGroup Gq, int i) throws UnsupportedEncodingException {
 
 		byte[] bDecrFactCommitment;
 		try {
 			bDecrFactCommitment = ElementsExtractor.btFromFile(directory,
-					"proofs", "DecrFactCommitment" + (i < 10 ? "0" : "") + i
-							+ ".bt");
+					PROOFS, DECR_FACT_COMMITMENT + (i < 10 ? "0" : "") + i
+							+ BT_FILE_EXT);
 		} catch (IOException e) {
 			return false;
 		}
-		if (bDecrFactCommitment == null)
+
+		if (bDecrFactCommitment == null) {
 			return false;
+		}
 
 		// Now interpret the DecrFactCommitment as a Node with two children:
-
 		Node DecrFactCommitment = new Node(bDecrFactCommitment);
 
 		// Read ytag as GroupElement
-		IGroupElement temp = ElementsExtractor.createGroupElement(
-				DecrFactCommitment.getAt(0).toByteArray(), Gq);
-
-		DecrFactCommitment.setAt(0, temp);
+		DecrFactCommitment.setAt(0, ElementsExtractor.createGroupElement(
+				DecrFactCommitment.getAt(0).toByteArray(), Gq));
 
 		// Read Btag as plaintext
-		ProductGroupElement tempB = ElementsExtractor.createSimplePGE(
-				DecrFactCommitment.getAt(0).toByteArray(), Gq);
-
-		DecrFactCommitment.setAt(1, tempB);
-
+		DecrFactCommitment.setAt(1, ElementsExtractor.createSimplePGE(
+				DecrFactCommitment.getAt(0).toByteArray(), Gq));
 		DecrFactCommitments.add(DecrFactCommitment);
 
 		return true;
@@ -146,19 +150,18 @@ public class VerDec {
 
 		byte[] bDecrFactReply;
 		try {
-			bDecrFactReply = ElementsExtractor.btFromFile(directory, "proofs",
-					"DecrFactReply" + (i < 10 ? "0" : "") + i + ".bt");
+			bDecrFactReply = ElementsExtractor.btFromFile(directory, PROOFS,
+					DECR_FACT_REPLY + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
 		} catch (IOException e) {
 			return false;
 		}
-		if (bDecrFactReply == null)
+
+		if (bDecrFactReply == null) {
 			return false;
+		}
 
-		IntegerRingElement temp = new IntegerRingElement(
-				ElementsExtractor.leafToInt(bDecrFactReply), Zq);
-
-		DecrFactReplies.add(temp);
-
+		DecrFactReplies.add(new IntegerRingElement(ElementsExtractor
+				.leafToInt(bDecrFactReply), Zq));
 		return true;
 	}
 
@@ -168,23 +171,24 @@ public class VerDec {
 
 		byte[] bDecrFact;
 		try {
-			bDecrFact = ElementsExtractor.btFromFile(directory, "proofs",
-					"DecriptionFactors" + (i < 10 ? "0" : "") + i + ".bt");
+			bDecrFact = ElementsExtractor.btFromFile(directory, PROOFS,
+					DECRIPTION_FACTORS + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
 		} catch (IOException e) {
 			return false;
 		}
-		if (bDecrFact == null)
+
+		if (bDecrFact == null) {
 			return false;
+		}
 
 		ArrayOfElements<ProductRingElement> factor = ArrayGenerators
 				.createArrayOfPlaintexts(bDecrFact, Zq);
 
-		if (factor.getSize() != N)
+		if (factor.getSize() != N) {
 			return false;
+		}
 
 		DecryptionFactors.add(factor);
-
 		return true;
 	}
-
 }

@@ -31,6 +31,7 @@ public class ECurveRandArray {
 
 	IField<IntegerFieldElement> field;
 	
+	//Constructor for tests
 	public ECurveRandArray(LargeInteger q, LargeInteger a, LargeInteger b) {
 		this.q = q;
 		this.a = a;
@@ -39,6 +40,16 @@ public class ECurveRandArray {
 		findLeastQNR();
 	}
 
+	/**
+	 * 
+	 * @param q - prime field order
+	 * @param N - size of the array
+	 * @param prg - PseudoRandomGenerator to generate random numbers
+	 * @param seed - for the PRG
+	 * @param nr
+	 * @param a,b - parameters of the elliptic curve
+	 * @param G - the group
+	 */
 	public ECurveRandArray(LargeInteger q, int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr, LargeInteger a, LargeInteger b, ECurveGroup G) {
 
