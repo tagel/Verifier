@@ -1,4 +1,5 @@
 package arithmetic.objects.ring;
+
 import arithmetic.objects.LargeInteger;
 
 import java.nio.ByteBuffer;
@@ -6,76 +7,87 @@ import java.nio.ByteOrder;
 
 import arithmetic.objects.ByteTree;
 
-
-
+/**
+ * 
+ * @author Itay
+ * 
+ */
 public class IntegerRingElement implements ByteTree {
 
-	
 	protected LargeInteger element;
 	protected IRing<IntegerRingElement> ring;
-	
-	public IntegerRingElement (LargeInteger element, IRing<IntegerRingElement> ring) {
+
+	public IntegerRingElement(LargeInteger element,
+			IRing<IntegerRingElement> ring) {
 		this.element = element;
 		this.ring = ring;
 	}
-	
+
 	public LargeInteger getElement() {
-		return element.mod(ring.getOrder());
+		return element.mod(getRingOrder());
 	}
-	
+
 	public IRing<IntegerRingElement> getRing() {
 		return ring;
 	}
 
-
-	
 	public IntegerRingElement neg() {
-		IntegerRingElement ret = new IntegerRingElement(this.getRing().getOrder().subtract(this.getElement().mod(this.getRing().getOrder())), this.getRing());
-		return ret;
+		return new IntegerRingElement(getRingOrder().subtract(
+				this.getElement().mod(getRingOrder())), this.getRing());
 	}
 
-	
 	public IntegerRingElement add(IntegerRingElement b) {
-		IntegerRingElement ret = new IntegerRingElement ((this.getElement().add(b.getElement())).mod(this.getRing().getOrder()), this.getRing());
-		return ret;
+		return new IntegerRingElement(
+				(this.getElement().add(b.getElement())).mod(getRingOrder()),
+				this.getRing());
 	}
 
-	
 	public IntegerRingElement mult(IntegerRingElement b) {
-		IntegerRingElement ret = new IntegerRingElement ((this.getElement().multiply(b.getElement())).mod(this.getRing().getOrder()), this.getRing());
-		return ret;
+		return new IntegerRingElement((this.getElement().multiply(b
+				.getElement())).mod(getRingOrder()), this.getRing());
 	}
-	
-	public IntegerRingElement power (LargeInteger b) {
-		IntegerRingElement result = new IntegerRingElement(LargeInteger.ONE, ring);
-		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i.add(LargeInteger.ONE))
-	    	result = result.mult(this);
+
+	// TODO Itay - make power faster
+	public IntegerRingElement power(LargeInteger b) {
+		IntegerRingElement result = new IntegerRingElement(LargeInteger.ONE,
+				this.ring);
+		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i
+				.add(LargeInteger.ONE)) {
+			result = result.mult(this);
+		}
 		return result;
 	}
 
-	
 	public boolean equal(IntegerRingElement b) {
-		if (this.getElement().mod(this.getRing().getOrder()).equals(b.getElement().mod(this.getRing().getOrder()))) return true;
-		else return false;
+		if (this.getElement().mod(getRingOrder())
+				.equals(b.getElement().mod(getRingOrder()))) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public byte[] toByteArray() {
-		int numOfOrderBytes = this.ring.getOrder().toByteArray().length;
-		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfOrderBytes).array();
+		int numOfOrderBytes = getRingOrder().toByteArray().length;
+		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+				.putInt(numOfOrderBytes).array();
 		byte[] b = element.toByteArray();
-		while (b.length<numOfOrderBytes) {
-			byte[] d = new byte[b.length+1];
+		while (b.length < numOfOrderBytes) {
+			byte[] d = new byte[b.length + 1];
 			System.arraycopy(b, 0, d, 1, b.length);
 			d[0] = 0;
 			b = d;
 		}
-		byte[] c= new byte[a.length+b.length];
+		byte[] c = new byte[a.length + b.length];
 		System.arraycopy(a, 0, c, 0, a.length);
 		System.arraycopy(b, 0, c, a.length, b.length);
-		byte[] ret = new byte[c.length+1];
+		byte[] ret = new byte[c.length + 1];
 		System.arraycopy(c, 0, ret, 1, c.length);
 		ret[0] = 1;
 		return ret;
+	}
+
+	private LargeInteger getRingOrder() {
+		return this.ring.getOrder();
 	}
 }
