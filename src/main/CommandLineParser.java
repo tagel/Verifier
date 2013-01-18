@@ -11,9 +11,9 @@ public class CommandLineParser {
 	private String auxsid = "default";
 	private int width = 0;
 	private boolean verify = false;
-	private boolean posc;
-	private boolean ccpos;
-	private boolean dec;
+	private boolean posc = true;
+	private boolean ccpos = true;
+	private boolean dec = true;
 
 	public void parseCommand(String[] argv) {
 		// missing arguments - print command line usage
@@ -115,6 +115,8 @@ public class CommandLineParser {
 
 	// parse which proof to verify 
 	private void parseVerifier(String[] argv) {
+		fillXmlAndDir(argv);
+		
 		if (argv[1] == "-mix") {
 			verify = verifyProofOfMix(argv);
 		} else if (argv[1] == "-shuffle") {
@@ -127,11 +129,7 @@ public class CommandLineParser {
 	// MIX Proof
 	private boolean verifyProofOfMix(String[] argv) {
 		type = Type.MIXING;
-		posc = true;
-		ccpos = true;
-		dec = true;
 
-		fillXmlAndDir(argv);
 		// TODO Daniel - parse flags
 		return true;
 	}
@@ -139,11 +137,8 @@ public class CommandLineParser {
 	// SHUFFLE Proof
 	private boolean verifyProofOfShuffling(String[] argv) {
 		type = Type.SHUFFLING;
-		posc = true;
-		ccpos = true;
-		dec = false;
+		setFalgNodec();
 
-		fillXmlAndDir(argv);
 		// TODO Daniel - parse flags
 		return true;
 	}
@@ -151,11 +146,8 @@ public class CommandLineParser {
 	// DECRYPT Proof
 	private boolean verifyProofOfDecryption(String[] argv) {
 		type = Type.DECRYPTION;
-		posc = false;
-		ccpos = false;
-		dec = true;
+		setFalgNopos();
 
-		fillXmlAndDir(argv);
 		// TODO Daniel - parse flags
 		return true;
 	}
