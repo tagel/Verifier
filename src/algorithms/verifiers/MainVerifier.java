@@ -33,19 +33,15 @@ import cryptographic.primitives.SHA2HashFunction;
 public class MainVerifier {
 
 	private Parameters params;
-	public Parameters getParams() {
-		return params;
-	}
-
 	private HashFunction H;
 	private static final String ciphertextsFilePath = "Ciphertexts.bt";
 	private static final String partialCipherFilePath = "Ciphertexts";
 	private static final String shuffCTFilePath = "ShuffledCiphertexts.bt";
 	private static final String plaintextsFilePath = "Plaintexts.bt";
-	
-	
+
 	/**
 	 * Constructor for tests
+	 * 
 	 * @param params
 	 * @param H
 	 */
@@ -58,39 +54,27 @@ public class MainVerifier {
 	 * Empty constructor for the cmd line
 	 */
 	public MainVerifier() {
-		
+
 	}
-	
+
 	/**
 	 * @return true if verification was successful and false otherwise.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
 			throws Exception {
 
 		// *****Section 1 in the algorithm*****
-		// First create the Parameters object using the
-		// command line parameters
+		// create the Parameters object using the command line parameters
 		params = new Parameters(protInfo, directory, type, auxid, w, posc,
 				ccpos, dec);
 
-		// create the Xml protInfo file and check it
-		// fill the relevant parameters:
-		// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
-		// fillFromXML checks if the file is valid, rejects if not
-		if (!params.fillFromXML()) {
+		// fill parameters from the xml and dir
+		if (!fillParamsFromXmlAndDir(params)) {
 			return false;
 		}
 
-		// *****Section 2 in the algorithm*****
-		// fill version_proof(Version) type, auxid, w from proof directory
-		// if this fails, return false.
-		if (!params.fillFromDirectory()) {
-			return false;
-		}
-
-		// params.getVersion() = version_proof in the document
 		if (!params.getProtVersion().equals(params.getVersion()))
 			return false;
 
@@ -100,12 +84,6 @@ public class MainVerifier {
 		if (!params.getAuxsid().equals(params.getAuxidExp()))
 			return false;
 
-		// The document says that widthExp should be NULL, but here we will only
-		// assign 0
-		// Document: Code:
-		// w_expected w_expected
-		// w w
-		// w_deafult wDeafult
 		if ((params.getWidthExp() == 0)
 				&& (params.getW() != params.getwDefault()))
 			return false;
@@ -161,7 +139,8 @@ public class MainVerifier {
 						params.getGq(), params.getFullPublicKey(),
 						params.getShuffledCiphertexts(),
 						params.getPlaintexts(), params.getZq(),
-						params.getMixPublicKey(), params.getMixSecretKey(), params.getW()))
+						params.getMixPublicKey(), params.getMixSecretKey(),
+						params.getW()))
 					return false;
 
 			if (params.getType().equals(Type.DECRYPTION))
@@ -176,6 +155,22 @@ public class MainVerifier {
 					return false;
 		}
 
+		return true;
+	}
+
+	private boolean fillParamsFromXmlAndDir(Parameters params) {
+		// fill the parameters from the xml, also checks that the file is valid
+		if (!params.fillFromXML()) {
+			return false;
+		}
+
+		// *****Section 2 in the algorithm*****
+		// fill version_proof(Version) type, auxid, w from proof directory
+		// if this fails, return false.
+		if (!params.fillFromDirectory()) {
+			return false;
+		}
+		// TODO Auto-generated method stub
 		return true;
 	}
 
@@ -348,16 +343,18 @@ public class MainVerifier {
 
 		// section 6b of the Algorithm -- read shuffled ciphertexts
 		// if the type==mixing, read the file Ciphertexts_threshold from
-		// Directory/proofs 
-		// if the type==shuffling, read the file ShuffledCiphertexts.bt from Directory
-		
+		// Directory/proofs
+		// if the type==shuffling, read the file ShuffledCiphertexts.bt from
+		// Directory
+
 		if (params.getType().equals(Type.MIXING)) {
-			file = ElementsExtractor.btFromFile(params.getDirectory(),"proofs",
-					partialCipherFilePath+(params.getThreshold() < 10 ? "0" : "")+".bt");
+			file = ElementsExtractor.btFromFile(params.getDirectory(),
+					"proofs", partialCipherFilePath
+							+ (params.getThreshold() < 10 ? "0" : "") + params.getThreshold() + ".bt");
 			if (file == null)
 				return false;
-		} 
-		
+		}
+
 		if (params.getType().equals(Type.SHUFFLING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
 					shuffCTFilePath);
@@ -386,6 +383,14 @@ public class MainVerifier {
 		}
 
 		return true;
+	}
+
+	/**
+	 * 
+	 * @return the parameters
+	 */
+	public Parameters getParams() {
+		return params;
 	}
 
 }
