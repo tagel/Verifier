@@ -109,10 +109,10 @@ public class ProductRingElement implements ByteTree {
 		return new ProductRingElement(a);
 	}
 
-	public boolean equal(ProductRingElement b) {
+	public boolean equals(ProductRingElement b) {
 		ArrayOfElements<IntegerRingElement> a = arr;
 		for (int i = 0; i < arr.getSize(); i++) {
-			if (!(a.getAt(i).equal(b.getElements().getAt(i)))) {
+			if (!(a.getAt(i).equals(b.getElements().getAt(i)))) {
 				return false;
 			}
 		}

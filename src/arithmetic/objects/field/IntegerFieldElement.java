@@ -51,12 +51,19 @@ public class IntegerFieldElement implements ByteTree {
 	}
 
 	public IntegerFieldElement power(LargeInteger b) {
+		IntegerFieldElement base = this;
 		IntegerFieldElement result = this.getField().one();
-		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i
-				.add(LargeInteger.ONE)) {
-			result = result.mult(this);
-		}
-		return result;
+	    
+	    String str = b.toString(2);
+	    
+	    for (int i = str.length()-1; i>-1; i--)
+	    {
+	        if (str.charAt(i)=='1')
+	            result = result.mult(base);
+	        base =  base.mult(base);
+	    }
+
+	    return result;
 	}
 
 	public IntegerFieldElement divide(IntegerFieldElement b) {
@@ -72,7 +79,7 @@ public class IntegerFieldElement implements ByteTree {
 		return ret;
 	}
 
-	public boolean equal(IntegerFieldElement b) {
+	public boolean equals(IntegerFieldElement b) {
 		if (this.getElement().mod(this.getField().getOrder())
 				.equals(b.getElement().mod(this.getField().getOrder())))
 			return true;

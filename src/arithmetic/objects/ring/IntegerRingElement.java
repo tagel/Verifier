@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import arithmetic.objects.ByteTree;
+import arithmetic.objects.groups.ECurveGroupElement;
 
 /**
  * 
@@ -47,18 +48,25 @@ public class IntegerRingElement implements ByteTree {
 				.getElement())).mod(getRingOrder()), this.getRing());
 	}
 
-	// TODO Itay - make power faster
+	
 	public IntegerRingElement power(LargeInteger b) {
-		IntegerRingElement result = new IntegerRingElement(LargeInteger.ONE,
-				this.ring);
-		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i
-				.add(LargeInteger.ONE)) {
-			result = result.mult(this);
-		}
-		return result;
-	}
+		IntegerRingElement base = this;
+		IntegerRingElement result = this.getRing().one();
+	    
+	    String str = b.toString(2);
+	    
+	    for (int i = str.length()-1; i>-1; i--)
+	    {
+	        if (str.charAt(i)=='1')
+	            result = result.mult(base);
+	        base =  base.mult(base);
+	    }
 
-	public boolean equal(IntegerRingElement b) {
+	    return result;
+	}
+	
+
+	public boolean equals(IntegerRingElement b) {
 		if (this.getElement().mod(getRingOrder())
 				.equals(b.getElement().mod(getRingOrder()))) {
 			return true;
