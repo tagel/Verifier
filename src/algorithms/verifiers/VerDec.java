@@ -35,9 +35,8 @@ public class VerDec {
 	private static ArrayOfElements<Node> DecrFactCommitments;
 	private static ArrayOfElements<IntegerRingElement> DecrFactReplies;
 
+	// TODO Sofi - change the comment
 	/**
-	 * // TODO change the comment
-	 * 
 	 * @param arrayOfElements2
 	 * @param publicKeys
 	 * @param width
@@ -106,7 +105,7 @@ public class VerDec {
 
 		// ********Step 4 in the algorithm**********
 		// Verify Plaintexts:
-		// TODO MULTIPLY ARRAYS?!
+		// TODO Sofi - MULTIPLY ARRAYS?!
 		ProductRingElement f = null;
 		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
