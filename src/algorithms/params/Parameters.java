@@ -24,70 +24,27 @@ import arithmetic.objects.ring.ProductRingElement;
  * This class describes an object that contains the parameters used by the
  * verifying algorithms
  * 
- * @author Tagel & Sofi
+ * @author Sofi
  */
 public class Parameters {
-	
-	public enum Type {
-		MIXING, SHUFFLING, DECRYPTION;
-	}
-	
 
-	/**
-	 * 
-	 * @params - All the parameters we get from the cmd line 
-	 */
-	public Parameters(String protInfo, String directory, Type type,
-			java.lang.String auxsid, int w, boolean posc, boolean ccpos,
-			boolean dec) {
+	private static final String DECRYPTION = "decryption";
+	private static final String SHUFFLING = "shuffling";
+	private static final String MIXING = "mixing";
+	private static final String EMPTY_STRING = "";
+	private static final String WIDTH_FILE_NAME = "width";
+	private static final String TYPE_FILE_NAME = "type";
+	private static final String VERSION_FILE_NAME = "version";
+	private static final String AUXSID_FILE_NAME = "auxsid";
+	// Random Oracles
+	private RandomOracle ROseed;
+	private RandomOracle ROchallenge;
 
-		this.auxidExp = auxsid;
-		this.protInfo = protInfo;
-		this.directory = directory;
-		this.typeExpected = type;
-		this.widthExp = w;
-		this.posc = posc;
-		this.ccpos = ccpos;
-		this.dec = dec;
-
-		prefixToRO = null;
-		Gq = null;
-		prg = null;
-		version = null;
-		type = null;
-		auxsid = null;
-		w = 0;
-		fullPublicKey = null;
-		protVersion = null;
-		sessionID = null;
-		numOfParties = 0;
-		threshold = 0;
-		Ne = 0;
-		Nr = 0;
-		Nv = 0;
-		sh = null;
-		sGq = null;
-		sPRG = null;
-		wDefault = 0;
-		maxciph = 0;
-		
-		ROseed = null;
-		ROchallenge = null;
-		
-		initializeMix();
-
-	}
-
-	//Random Oracles
-	RandomOracle ROseed;
-	RandomOracle ROchallenge;
-	
-	
-	//Derived Objects
+	// Derived Objects
 	private byte[] prefixToRO;
 	private IGroup Gq;
 	private IRing<IntegerRingElement> Zq;
-	PseudoRandomGenerator prg;
+	private PseudoRandomGenerator prg;
 
 	// parameters from directory
 	private String protInfo;
@@ -97,8 +54,8 @@ public class Parameters {
 	private String auxsid;
 	private int w;
 	private ProductGroupElement fullPublicKey;
-	private int maxciph;//we don't read it in the main
-	//TODO check the maxciph
+	private int maxciph;// we don't read it in the main
+	// TODO Sofi - check the maxciph
 
 	// parameters from the XML
 	private String protVersion;
@@ -122,14 +79,15 @@ public class Parameters {
 	private int widthExp;
 
 	// parameters from lists
-	private ArrayOfElements<ProductGroupElement> ciphertexts;//V
-	private ArrayOfElements<ProductGroupElement> ShuffledCiphertexts; //V
-	private ArrayOfElements<ProductRingElement> plaintexts;//V
-	private int N; //size of the arrays
+	private ArrayOfElements<ProductGroupElement> ciphertexts;// V
+	private ArrayOfElements<ProductGroupElement> ShuffledCiphertexts; // V
+	private ArrayOfElements<ProductRingElement> plaintexts;// V
+	private int N; // size of the arrays
 
 	// MIX -- The parameters of each party
-	private ArrayOfElements<IGroupElement> mixPublicKey;//Used in Keys Verifier
-	private ArrayOfElements<IntegerRingElement> mixSecretKey;//Used in Keys Verifier
+	private ArrayOfElements<IGroupElement> mixPublicKey;// Used in Keys Verifier
+	private ArrayOfElements<IntegerRingElement> mixSecretKey;// Used in Keys
+																// Verifier
 
 	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts;
 	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
@@ -139,29 +97,80 @@ public class Parameters {
 	private ArrayOfElements<Node> mixPoSCReply;
 	private ArrayOfElements<Node> mixCcPosCommitment;
 	private ArrayOfElements<Node> mixCcPosReply;
-
 	private ArrayOfElements<BooleanArrayElement> mixKeepList;
-	
-	//TODO: Should we really need all of these mix-params?
-	private void initializeMix() {
-		 mixPublicKey = new ArrayOfElements<IGroupElement>();
-		 mixSecretKey = new ArrayOfElements<IntegerRingElement>();
-		 mixCiphertexts = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
-		 mixPermutationCommitment = new
-		 ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		 mixPoSCommitment = new ArrayOfElements<Node>();
-		 mixPoSReply = new ArrayOfElements<Node>();
-		 mixPoSCCommitment = new ArrayOfElements<Node>();
-		 mixPoSCReply = new ArrayOfElements<Node>();
-		 mixCcPosCommitment = new ArrayOfElements<Node>();
-		 mixCcPosReply = new ArrayOfElements<Node>();
-		 mixKeepList = new ArrayOfElements<BooleanArrayElement>();
-		}
 
-	// fill the relevant parameters from the given xml
-	// fill the relevant parameters:
-	// versionprot, sid, k, thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault
-	// (width);
+	// type of verification
+	public enum Type {
+		MIXING, SHUFFLING, DECRYPTION;
+	}
+
+	/**
+	 * 
+	 * @params - All the parameters we get from the cmd line
+	 */
+	public Parameters(String protInfo, String directory, Type type,
+			java.lang.String auxsid, int w, boolean posc, boolean ccpos,
+			boolean dec) {
+
+		this.auxidExp = auxsid;
+		this.protInfo = protInfo;
+		this.directory = directory;
+		this.typeExpected = type;
+		this.widthExp = w;
+		this.posc = posc;
+		this.ccpos = ccpos;
+		this.dec = dec;
+
+		initializeParams();
+		initializeMix();
+	}
+
+	private void initializeParams() {
+		this.w = 0;
+		this.numOfParties = 0;
+		this.threshold = 0;
+		this.Ne = 0;
+		this.Nr = 0;
+		this.Nv = 0;
+		this.wDefault = 0;
+		this.maxciph = 0;
+		this.prefixToRO = null;
+		this.Gq = null;
+		this.prg = null;
+		this.version = null;
+		this.type = null;
+		this.auxsid = null;
+		this.fullPublicKey = null;
+		this.protVersion = null;
+		this.sessionID = null;
+		this.sh = null;
+		this.sGq = null;
+		this.sPRG = null;
+		this.ROseed = null;
+		this.ROchallenge = null;
+	}
+
+	// TODO Sofi - Should we really need all of these mix-params?
+	private void initializeMix() {
+		mixPublicKey = new ArrayOfElements<IGroupElement>();
+		mixSecretKey = new ArrayOfElements<IntegerRingElement>();
+		mixCiphertexts = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
+		mixPermutationCommitment = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
+		mixPoSCommitment = new ArrayOfElements<Node>();
+		mixPoSReply = new ArrayOfElements<Node>();
+		mixPoSCCommitment = new ArrayOfElements<Node>();
+		mixPoSCReply = new ArrayOfElements<Node>();
+		mixCcPosCommitment = new ArrayOfElements<Node>();
+		mixCcPosReply = new ArrayOfElements<Node>();
+		mixKeepList = new ArrayOfElements<BooleanArrayElement>();
+	}
+
+	/**
+	 * fill the relevant parameters from the given xml: versionprot, sid, k,
+	 * thresh, ne, nr, nv, sH, sPRG, sGq , and wdefault (width).
+	 * 
+	 * @return false if there was a problem reading the file, or missing args.
+	 */
 	public boolean fillFromXML() {
 		XMLProtocolInfo protXML;
 		try {
@@ -191,77 +200,72 @@ public class Parameters {
 		sGq = protXML.getGq();
 		sPRG = protXML.getPrg();
 		wDefault = protXML.getWidth();
-		
-		
 
 		return true;
 	}
 
-	// fill the relevant parameters from the given directory
-	// fill version_proof(Version) type, auxid, w from proof directory
+	/**
+	 * fill the relevant parameters from the given directory: fill
+	 * version_proof(Version) type, auxid, w from proof directory.
+	 * 
+	 * @return true if succeeded, false otherwise.
+	 */
 	public boolean fillFromDirectory() {
 		Scanner text = null;
 		try {
-			text = new Scanner(new File(directory, "auxsid"));
+			text = new Scanner(new File(directory, AUXSID_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + "auxsid");
+			System.out.println("ERROR: Cannot find file " + AUXSID_FILE_NAME);
 			return false;
 		}
-
 		auxsid = text.next().trim();
 
 		try {
-			text = new Scanner(new File(directory, "version"));
+			text = new Scanner(new File(directory, VERSION_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + "version");
+			System.out.println("ERROR: Cannot find file " + VERSION_FILE_NAME);
 			return false;
 		}
 
-		if (text.hasNext())
+		if (text.hasNext()) {
 			version = text.next().trim();
-		else
-			version = "";
-
-		try {
-			text = new Scanner(new File(directory, "type"));
-		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + "type");
-			return false;
+		} else {
+			version = EMPTY_STRING;
 		}
 
+		try {
+			text = new Scanner(new File(directory, TYPE_FILE_NAME));
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: Cannot find file " + TYPE_FILE_NAME);
+			return false;
+		}
 		type = stringToType(text.next().trim());
-		
-	
+
 		try {
-			text = new Scanner(new File(directory, "width"));
+			text = new Scanner(new File(directory, WIDTH_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + "auxsid");
+			System.out.println("ERROR: Cannot find file " + WIDTH_FILE_NAME);
 			return false;
 		}
-
 		w = text.nextInt();
-				
+
 		return true;
 	}
 
-	
-	
-
-	//********************************************************************************
-	//******************************Getters And Setters*******************************
-	//********************************************************************************
+	// ************************************************************************
+	// **************************Getters And Setters***************************
+	// ************************************************************************
 	public Type stringToType(String next) {
-		if (next.equals("mixing"))
+		if (next.equals(MIXING))
 			return Type.MIXING;
-		if (next.equals("shuffling"))
+		if (next.equals(SHUFFLING))
 			return Type.SHUFFLING;
-		if (next.equals("decryption"))
+		if (next.equals(DECRYPTION))
 			return Type.DECRYPTION;
-		
+
 		return null;
 	}
-	
-	
+
 	public RandomOracle getROseed() {
 		return ROseed;
 	}
@@ -277,7 +281,7 @@ public class Parameters {
 	public void setROchallenge(RandomOracle rOchallenge) {
 		ROchallenge = rOchallenge;
 	}
-	
+
 	public IRing<IntegerRingElement> getZq() {
 		return Zq;
 	}
@@ -293,8 +297,7 @@ public class Parameters {
 	public void setN(int n) {
 		N = n;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @return the directory path
@@ -393,7 +396,6 @@ public class Parameters {
 		return typeExpected;
 	}
 
-	
 	/**
 	 * @return the version id of the verificatum.
 	 */
@@ -488,7 +490,6 @@ public class Parameters {
 		this.fullPublicKey = fullPublicKey;
 	}
 
-	
 	public void setCiphertexts(ArrayOfElements<ProductGroupElement> ciphertexts) {
 		this.ciphertexts = ciphertexts;
 	}
@@ -501,6 +502,7 @@ public class Parameters {
 	public void setPlaintexts(ArrayOfElements<ProductRingElement> plaintexts2) {
 		this.plaintexts = plaintexts2;
 	}
+
 	/**
 	 * @return the input ciphertexts
 	 */
@@ -555,8 +557,7 @@ public class Parameters {
 	public void setPrefixToRO(byte[] prefixToRO) {
 		this.prefixToRO = prefixToRO;
 	}
-	
-	
+
 	public PseudoRandomGenerator getPrg() {
 		return prg;
 	}
@@ -577,8 +578,7 @@ public class Parameters {
 		return mixSecretKey;
 	}
 
-	public void setMixSecretKey(
-			ArrayOfElements<IntegerRingElement> mixSecretKey) {
+	public void setMixSecretKey(ArrayOfElements<IntegerRingElement> mixSecretKey) {
 		this.mixSecretKey = mixSecretKey;
 	}
 
