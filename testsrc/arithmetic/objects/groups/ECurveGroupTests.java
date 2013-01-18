@@ -79,7 +79,7 @@ public class ECurveGroupTests {
 						"4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
 						16), f);
 		Point g = new Point(gx, gy);
-		Assert.assertTrue(new ECurveGroupElement(g, eCurve).equal(eCurve
+		Assert.assertTrue(new ECurveGroupElement(g, eCurve).equals(eCurve
 				.getGenerator()));
 	}
 
@@ -94,7 +94,7 @@ public class ECurveGroupTests {
 				new LargeInteger("-1"), new PrimeOrderField(
 						eCurve.getFieldOrder()));
 		Point infinity = new Point(minusOne, minusOne);
-		Assert.assertTrue(new ECurveGroupElement(infinity, eCurve).equal(eCurve
+		Assert.assertTrue(new ECurveGroupElement(infinity, eCurve).equals(eCurve
 				.one()));
 	}
 }

@@ -116,7 +116,7 @@ public class ProductRingElementTests {
 		aoe1.add(ire1_ring3);
 		ProductRingElement pre1 = new ProductRingElement(aoe1);
 		ProductRingElement pre2 = new ProductRingElement(aoe1);
-		Assert.assertTrue(pre1.equal(pre2));
+		Assert.assertTrue(pre1.equals(pre2));
 	}
 
 	@Test
@@ -127,6 +127,6 @@ public class ProductRingElementTests {
 		aoe2.add(ire2_ring3);
 		ProductRingElement pre1 = new ProductRingElement(aoe1);
 		ProductRingElement pre2 = new ProductRingElement(aoe2);
-		Assert.assertFalse(pre1.equal(pre2));
+		Assert.assertFalse(pre1.equals(pre2));
 	}
 }

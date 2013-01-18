@@ -170,10 +170,10 @@ public class ECurveRandArrayTest {
 
 		
 		//Check points associativity
-		Assert.assertTrue(check1.mult((check2).mult(check3)).equal(
+		Assert.assertTrue(check1.mult((check2).mult(check3)).equals(
 				(check1.mult(check2)).mult(check3)));
 		
-		Assert.assertTrue(check1.mult(check1.mult(check1.mult(check1))).equal((check1.mult(check1)).mult(check1.mult(check1))));
+		Assert.assertTrue(check1.mult(check1.mult(check1.mult(check1))).equals((check1.mult(check1)).mult(check1.mult(check1))));
 
 	}
 	

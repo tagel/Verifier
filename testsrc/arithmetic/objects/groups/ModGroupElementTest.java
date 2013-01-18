@@ -40,9 +40,9 @@ public class ModGroupElementTest {
 
 	@Test
 	public void equalTest() {
-		Assert.assertTrue(a.equal(new ModGroupElement(
+		Assert.assertTrue(a.equals(new ModGroupElement(
 				new LargeInteger("1"), group1)));
-		Assert.assertTrue(a.equal(new ModGroupElement(
+		Assert.assertTrue(a.equals(new ModGroupElement(
 				new LargeInteger("264"), group1)));
 	}
 
@@ -57,18 +57,18 @@ public class ModGroupElementTest {
 
 	@Test
 	public void mult1_Test() {
-		Assert.assertTrue(a.equal(e.mult(group1.one())));
+		Assert.assertTrue(a.equals(e.mult(group1.one())));
 	}
 
 
 	@Test
 	public void powerTest() {
-		Assert.assertTrue(e.power(new LargeInteger("3")).equal(new ModGroupElement(e.getElement().modPow(new LargeInteger("3"), e.getGroup().getFieldOrder()), group1)));
+		Assert.assertTrue(e.power(new LargeInteger("3")).equals(new ModGroupElement(e.getElement().modPow(new LargeInteger("3"), e.getGroup().getFieldOrder()), group1)));
 	}
 
 	@Test
 	public void inverse_pof4Test() {
-		Assert.assertTrue(b.equal(f.inverse()));
+		Assert.assertTrue(b.equals(f.inverse()));
 	}
 }
 

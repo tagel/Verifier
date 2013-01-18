@@ -45,9 +45,9 @@ public class IntegerRingElementTests {
 
 	@Test
 	public void equalTest() {
-		Assert.assertTrue(ire1_ring4.equal(new IntegerRingElement(
+		Assert.assertTrue(ire1_ring4.equals(new IntegerRingElement(
 				new LargeInteger("1"), ring_4)));
-		Assert.assertTrue(ire1_ring4.equal(new IntegerRingElement(
+		Assert.assertTrue(ire1_ring4.equals(new IntegerRingElement(
 				new LargeInteger("5"), ring_4)));
 	}
 
@@ -62,51 +62,51 @@ public class IntegerRingElementTests {
 
 	@Test
 	public void addTest() {
-		Assert.assertTrue(ire3_ring4.equal(ire2_ring4.add(ire1_ring4)));
-		Assert.assertTrue(ire1_ring4.equal(ire2_ring4.add(ire3_ring4)));
+		Assert.assertTrue(ire3_ring4.equals(ire2_ring4.add(ire1_ring4)));
+		Assert.assertTrue(ire1_ring4.equals(ire2_ring4.add(ire3_ring4)));
 	}
 
 	@Test
 	public void addZeroTest() {
-		Assert.assertTrue(ire1_ring4.equal(ire1_ring4.add(ire1_ring4
+		Assert.assertTrue(ire1_ring4.equals(ire1_ring4.add(ire1_ring4
 				.getRing().zero())));
 	}
 
 	@Test
 	public void negTest() {
-		Assert.assertTrue(ire2_ring4.neg().equal(ire2_ring4));
-		Assert.assertTrue(ire1_ring4.neg().equal(ire3_ring4));
-		Assert.assertTrue(ire5_ring4.neg().equal(ire3_ring4));
+		Assert.assertTrue(ire2_ring4.neg().equals(ire2_ring4));
+		Assert.assertTrue(ire1_ring4.neg().equals(ire3_ring4));
+		Assert.assertTrue(ire5_ring4.neg().equals(ire3_ring4));
 	}
 
 	@Test
 	public void mult1_Test() {
-		Assert.assertTrue(ire2_ring4.equal(ire2_ring4.mult(ire3_ring4)));
+		Assert.assertTrue(ire2_ring4.equals(ire2_ring4.mult(ire3_ring4)));
 	}
 
 	@Test
 	public void mult2_Test() {
-		Assert.assertTrue(ire1_ring4.equal(ire3_ring4.mult(ire3_ring4)));
-		Assert.assertTrue(ire3_ring4.equal(ire3_ring4.mult(ire1_ring4)));
+		Assert.assertTrue(ire1_ring4.equals(ire3_ring4.mult(ire3_ring4)));
+		Assert.assertTrue(ire3_ring4.equals(ire3_ring4.mult(ire1_ring4)));
 	}
 
 	@Test
 	public void multWithOneTest() {
-		Assert.assertTrue(ire3_ring4.equal(ire3_ring4.mult(ire3_ring4
+		Assert.assertTrue(ire3_ring4.equals(ire3_ring4.mult(ire3_ring4
 				.getRing().one())));
 	}
 
 	@Test
 	public void multWithZeroTest() {
 		Assert.assertTrue(ire3_ring4.getRing().zero()
-				.equal(ire3_ring4.mult(ire3_ring4.getRing().zero())));
+				.equals(ire3_ring4.mult(ire3_ring4.getRing().zero())));
 	}
 
 	@Test
 	public void powerTest() {
-		Assert.assertTrue(ire3_ring4.equal(ire3_ring4.power(new LargeInteger(
+		Assert.assertTrue(ire3_ring4.equals(ire3_ring4.power(new LargeInteger(
 				"3"))));
 		Assert.assertTrue(ire2_ring4.getRing().zero()
-				.equal(ire2_ring4.power(new LargeInteger("5"))));
+				.equals(ire2_ring4.power(new LargeInteger("5"))));
 	}
 }

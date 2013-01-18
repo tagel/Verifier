@@ -25,18 +25,18 @@ public class PointTests {
 
 	@Test
 	public void getXTest() {
-		Assert.assertTrue(element3.equal(point.getX()));
+		Assert.assertTrue(element3.equals(point.getX()));
 	}
 
 	@Test
 	public void getYTest() {
-		Assert.assertTrue(element4.equal(point.getY()));
+		Assert.assertTrue(element4.equals(point.getY()));
 	}
 
 	@Test
 	public void changeCoordinatesTest() {
 		point.changeCoordinates(element4, element4);
-		Assert.assertTrue(element4.equal(point.getX()));
-		Assert.assertTrue(element4.equal(point.getY()));
+		Assert.assertTrue(element4.equals(point.getX()));
+		Assert.assertTrue(element4.equals(point.getY()));
 	}
 }

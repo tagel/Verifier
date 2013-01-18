@@ -58,11 +58,11 @@ public class ECurveGroupElementTests {
 		ECurveGroupElement eCurveElementRet = new ECurveGroupElement(pointRet,
 				eCurveGroup192);
 
-		Assert.assertTrue(eCurveElementRet.equal(eCurveElement1
+		Assert.assertTrue(eCurveElementRet.equals(eCurveElement1
 				.mult(eCurveElement2)));
 	}
 
-	@Test
+	@Test // TODO Itay - why not running?
 	public void mult_caseXequalsYequalTest() throws Exception {
 		Point point1 = new Point(new IntegerFieldElement(new LargeInteger("0"),
 				f192), new IntegerFieldElement(new LargeInteger("1"), f192));
@@ -86,7 +86,7 @@ public class ECurveGroupElementTests {
 		ECurveGroupElement eCurveElementRet = new ECurveGroupElement(new Point(
 				xr, yr), eCurveGroup192);
 
-		Assert.assertTrue(eCurveElementRet.equal(eCurveElement1
+		Assert.assertTrue(eCurveElementRet.equals(eCurveElement1
 				.mult(eCurveElement2)));
 	}
 
@@ -171,7 +171,7 @@ public class ECurveGroupElementTests {
 				f192), new IntegerFieldElement(new LargeInteger("-1"), f192));
 		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
 				eCurveGroup192);
-		Assert.assertTrue(eCurveElement2.equal(eCurveElement1.inverse()));
+		Assert.assertTrue(eCurveElement2.equals(eCurveElement1.inverse()));
 	}
 
 	@Test
@@ -205,7 +205,7 @@ public class ECurveGroupElementTests {
 				new LargeInteger("-1"), f192));
 		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
 				eCurveGroup192);
-		Assert.assertTrue(eCurveElement1.equal(eCurveElement1
+		Assert.assertTrue(eCurveElement1.equals(eCurveElement1
 				.power(new LargeInteger("5"))));
 
 	}
@@ -236,7 +236,7 @@ public class ECurveGroupElementTests {
 				new LargeInteger("-1"), f192));
 		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
 				eCurveGroup192);
-		Assert.assertTrue(eCurveElement1.equal(eCurveElement2));
+		Assert.assertTrue(eCurveElement1.equals(eCurveElement2));
 	}
 
 	@Test
@@ -252,7 +252,7 @@ public class ECurveGroupElementTests {
 				new LargeInteger("-2"), f192));
 		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
 				eCurveGroup192);
-		Assert.assertFalse(eCurveElement1.equal(eCurveElement2));
+		Assert.assertFalse(eCurveElement1.equals(eCurveElement2));
 	}
 
 	@Test
@@ -268,6 +268,6 @@ public class ECurveGroupElementTests {
 				new LargeInteger("-1"), f256));
 		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
 				eCurveGroup256);
-		Assert.assertFalse(eCurveElement1.equal(eCurveElement2));
+		Assert.assertFalse(eCurveElement1.equals(eCurveElement2));
 	}
 }
