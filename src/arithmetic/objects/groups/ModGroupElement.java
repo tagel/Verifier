@@ -49,11 +49,19 @@ public class ModGroupElement implements IGroupElement {
 
 	@Override
 	public ModGroupElement power(LargeInteger b) {
-		LargeInteger result = getElement();
-		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b) < 0; i = i.add(LargeInteger.ONE))
-			result = result.multiply(getElement());
-		ModGroupElement ret = new ModGroupElement (result.mod(getGroup().getFieldOrder()), getGroup());
-		return ret;
+		ModGroupElement base = this;
+	    ModGroupElement result = this.getGroup().one();
+	    
+	    String str = b.toString(2);
+	    
+	    for (int i = str.length()-1; i>-1; i--)
+	    {
+	        if (str.charAt(i)=='1')
+	            result = result.mult(base);
+	        base =  base.mult(base);
+	    }
+
+	    return result;
 	}
 
 
