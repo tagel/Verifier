@@ -1,7 +1,6 @@
 package arithmetic.objects.groups;
 
 import java.io.UnsupportedEncodingException;
-
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.field.IField;
@@ -98,12 +97,23 @@ public class ECurveGroupElement implements IGroupElement {
 	}
 
 	public ECurveGroupElement power(LargeInteger b) {
-		ECurveGroupElement result = this;
-		for (LargeInteger i = LargeInteger.ONE; i.compareTo(b) < 0; i = i
-				.add(LargeInteger.ONE))
-			result = result.mult(this);
-		return result;
-	}
+	
+	
+			ECurveGroupElement base = this;
+		    ECurveGroupElement result = this.getGroup().one();
+		    
+		    String str = b.toString(2);
+		    
+		    for (int i = str.length()-1; i>-1; i--)
+		    {
+		        if (str.charAt(i)=='1')
+		            result = result.mult(base);
+		        base =  base.mult(base);
+		    }
+
+		    return result;
+		}
+	
 
 	@Override
 	public boolean equal(IGroupElement b) {
