@@ -78,30 +78,34 @@ public class VerDec {
 		// ********Step 2 in the algorithm**********
 		// Now we try to do the combined proof
 		// If this return true, we skip to step 4
-		if (!ProveDec.prove(0, prefixToRO, N, ne, nr, nv, prg, Gq, g,
-				publicKeys, secretKeys, L, m))
+		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv, prg, Gq, g,
+				publicKeys, secretKeys, L, m, DecryptionFactors,
+				DecrFactCommitments, DecrFactReplies))
 
 			// ********Step 3 in the algorithm**********
 			for (int i = 1; i <= lambda; i++) {
-				if (!ProveDec.prove(i - 1, prefixToRO, N, ne, nr, nv, prg, Gq,
-						g, publicKeys, secretKeys, L, m)
+				if (!ProveDec.prove(ROSeed, ROChallenge, i - 1, prefixToRO, N, ne, nr, nv, prg, Gq,
+						g, publicKeys, secretKeys, L, m, DecryptionFactors,
+						DecrFactCommitments, DecrFactReplies)
 						&& (secretKeys.getAt(i - 1) == null || !DecryptionFactors
-								.getAt(i - 1).equals(Prover.PDecrypt(
-								secretKeys.getAt(i - 1), L))))
+								.getAt(i - 1).equals(
+										Prover.PDecrypt(
+												secretKeys.getAt(i - 1), L))))
 					return false;
 			}
 
 		// ********Step 4 in the algorithm**********
-		//Verify Plainexts:
-		//TODO MULTIPLY ARRAYS?!
+		// Verify Plainexts:
+		// TODO MULTIPLY ARRAYS?!
 		ProductRingElement f = null;
-		
+
 		if (!m.equals(Prover.TDecrypt(L, f)))
 			return false;
 
 		return true;
 	}
 
+	//TODO change the strings to static variables
 	private static boolean readDecrFactCommitment(int lambda, String directory,
 			IGroup Gq, int i) throws UnsupportedEncodingException {
 
@@ -174,10 +178,10 @@ public class VerDec {
 
 		ArrayOfElements<ProductRingElement> factor = ArrayGenerators
 				.createArrayOfPlaintexts(bDecrFact, Zq);
-		
-		if (factor.getSize()!=N)
+
+		if (factor.getSize() != N)
 			return false;
-		
+
 		DecryptionFactors.add(factor);
 
 		return true;

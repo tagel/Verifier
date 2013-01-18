@@ -25,13 +25,15 @@ public abstract class Prover {
 	 */
 	public static ArrayOfElements<ProductRingElement> PDecrypt(IntegerRingElement x,
 			ProductGroupElement A) throws Exception {
-		return A.getLeft().power(x.getElement());
+		//return A.getLeft().power(x.getElement());
+		return null;
 	}
 	
 	//TODO Check how we do this for an array
 	public static ArrayOfElements<ProductRingElement> PDecrypt(IntegerRingElement x,
 			ArrayOfElements<ProductGroupElement> A) throws Exception {
-		return A.getAt(0);
+		//return A.getAt(0);
+		return null;
 	}
 
 	public static ProductGroupElement TDecrypt(ProductGroupElement v,

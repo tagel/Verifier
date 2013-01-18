@@ -39,6 +39,7 @@ public class MainVerifier {
 
 	private HashFunction H;
 	private static final String ciphertextsFilePath = "Ciphertexts.bt";
+	private static final String partialCipherFilePath = "Ciphertexts";
 	private static final String shuffCTFilePath = "ShuffledCiphertexts.bt";
 	private static final String plaintextsFilePath = "Plaintexts.bt";
 	
@@ -345,24 +346,21 @@ public class MainVerifier {
 		params.setCiphertexts(ciphertexts);
 		params.setN(ciphertexts.getSize());
 
-		// section 6b of the Algorithm
-		// if the type==mixing, read the file ShuffledCiphertexts.bt from
-		// Directory
-		// if the type==shuffling, read the file Ciphertexts_threshold from
-		// Directory/proofs
+		// section 6b of the Algorithm -- read shuffled ciphertexts
+		// if the type==mixing, read the file Ciphertexts_threshold from
+		// Directory/proofs 
+		// if the type==shuffling, read the file ShuffledCiphertexts.bt from Directory
 		
-		//TODO: fix the logic of the following code
 		if (params.getType().equals(Type.MIXING)) {
-			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					ciphertextsFilePath);
+			file = ElementsExtractor.btFromFile(params.getDirectory(),"proofs",
+					partialCipherFilePath+(params.getThreshold() < 10 ? "0" : "")+".bt");
 			if (file == null)
 				return false;
 		} 
 		
 		if (params.getType().equals(Type.SHUFFLING)) {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					shuffCTFilePath+ (params.getThreshold() < 10 ? "0" : "")
-							+ params.getThreshold() + ".bt");
+					shuffCTFilePath);
 			if (file == null)
 				return false;
 		}
