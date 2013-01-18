@@ -23,6 +23,7 @@ import cryptographic.primitives.SHA2HashFunction;
 
 public class ECurveRandArrayTest {
 	
+	//ECurveGroup parameters
 	LargeInteger Q = new LargeInteger(
 			"115792089210356248762697446949407573530086143415290314195533631308867097853951");
 	LargeInteger a = new LargeInteger(
@@ -138,8 +139,6 @@ public class ECurveRandArrayTest {
 		byte[] independentSeed = ROseed.getRandomOracleOutput(ArrayGenerators
 				.concatArrays(H.digest(Seed), stringLeaf.toByteArray()));
 
-		ECurveGroup G = (ECurveGroup) Gq;
-
 		ArrayOfElements<IGroupElement> h = Gq.createRandomArray(100, prg,
 				independentSeed, nr);
 
@@ -162,20 +161,15 @@ public class ECurveRandArrayTest {
 						"115792089210356248762697446949407573530086143415290314195533631308867097853951"),
 				check3.getGroup().getFieldOrder());
 
-		// Print some points and check their values
-		for (int i = 0; i < 4; i++) {
+		// Check some points
+		for (int i = 0; i < 100; i++) {
 			check = (ECurveGroupElement) h.getAt(i);
-			System.out.println("point number " + i);
-			System.out.println("yValue = "
-					+ check.getElement().getY().getElement());
-			System.out.println("xValue = "
-					+ check.getElement().getX().getElement());
-			System.out.println();
 			Assert.assertTrue(f(check.getElement().getX().getElement(),check.getElement().getY().getElement()));
 			
 		}
 
 		
+		//Check points associativity
 		Assert.assertTrue(check1.mult((check2).mult(check3)).equal(
 				(check1.mult(check2)).mult(check3)));
 		

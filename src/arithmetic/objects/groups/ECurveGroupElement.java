@@ -27,10 +27,10 @@ public class ECurveGroupElement implements IGroupElement {
 
 	@Override
 	public ECurveGroupElement mult(IGroupElement b) {
-		if (b.equal(group.one())) {
+		if (b.equals(group.one())) {
 			return this;
 		}
-		if (this.equal(group.one())) return (ECurveGroupElement) b;
+		if (this.equals(group.one())) return (ECurveGroupElement) b;
 
 		IntegerFieldElement xp = this.getElement().getX();
 		IntegerFieldElement xq = ((ECurveGroupElement) b).getElement().getX();
@@ -40,7 +40,7 @@ public class ECurveGroupElement implements IGroupElement {
 		IField<IntegerFieldElement> field = new PrimeOrderField(this.getGroup()
 				.getFieldOrder());
 
-		if (!xp.equal(xq)) {
+		if (!xp.equals(xq)) {
 			IntegerFieldElement s = yp.subtract(yq).mult(
 					xp.subtract(xq).inverse());
 			IntegerFieldElement xr = s.power(new LargeInteger("2"))
@@ -52,11 +52,11 @@ public class ECurveGroupElement implements IGroupElement {
 			return ret;
 		}
 
-		if (yp.equal(yq.neg())) {
+		if (yp.equals(yq.neg())) {
 			return group.one();
 		}
 
-		if (yp.equal(yq)) {
+		if (yp.equals(yq)) {
 			IntegerFieldElement p = new IntegerFieldElement(this.getGroup()
 					.getXCoefficient(), field);
 			IntegerFieldElement three = new IntegerFieldElement(
@@ -115,11 +115,10 @@ public class ECurveGroupElement implements IGroupElement {
 		}
 	
 
-	@Override
-	public boolean equal(IGroupElement b) {
-		if (getElement().getX().equal(
+	public boolean equals(IGroupElement b) {
+		if (getElement().getX().equals(
 				(((ECurveGroupElement) b).getElement()).getX())
-				&& (getElement()).getY().equal(
+				&& (getElement()).getY().equals(
 						(((ECurveGroupElement) b).getElement()).getY()))
 			return true;
 		else

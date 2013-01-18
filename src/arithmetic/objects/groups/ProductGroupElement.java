@@ -99,7 +99,7 @@ public class ProductGroupElement implements ByteTree {
 		if (arr!=null) {
 			ArrayOfElements<IGroupElement> a = arr;
 			for (int i=0; i<arr.getSize(); i++)
-				if (!(a.getAt(i).equal(b.getElements().getAt(i)))) return false;
+				if (!(a.getAt(i).equals(b.getElements().getAt(i)))) return false;
 			return true;
 		}
 		else return (left.equal(b.left) && right.equal(b.right));

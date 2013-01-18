@@ -18,5 +18,5 @@ public interface IGroupElement extends ByteTree {
 	
 	public abstract IGroupElement power(LargeInteger b);
 	
-	public abstract boolean equal(IGroupElement b);
+	public abstract boolean equals(IGroupElement b);
 }
