@@ -25,7 +25,8 @@ public class ModGroupElement implements IGroupElement {
 	public LargeInteger getElement() {
 		return element;
 	}
-
+	
+	@Override
 	public ModGroup getGroup() {
 		return group;
 	}

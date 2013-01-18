@@ -8,7 +8,7 @@ import arithmetic.objects.LargeInteger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
-import arithmetic.objects.ring.IntegerRingElement;
+
 
 
 public class ProductGroupElement implements ByteTree {

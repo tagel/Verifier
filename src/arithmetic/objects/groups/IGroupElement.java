@@ -8,7 +8,7 @@ public interface IGroupElement extends ByteTree {
 	
 	
 	
-
+	public abstract IGroup getGroup();
 
 	public abstract IGroupElement mult(IGroupElement b);
 	
