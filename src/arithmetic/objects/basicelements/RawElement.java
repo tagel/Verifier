@@ -1,7 +1,5 @@
 package arithmetic.objects.basicelements;
 
-import java.io.UnsupportedEncodingException;
-
 import arithmetic.objects.ByteTree;
 
 /**

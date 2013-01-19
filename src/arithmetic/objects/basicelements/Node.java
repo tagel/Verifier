@@ -1,6 +1,5 @@
 package arithmetic.objects.basicelements;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;

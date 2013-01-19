@@ -9,7 +9,7 @@ import arithmetic.objects.field.PrimeOrderField;
 import cryptographic.primitives.PseudoRandomGenerator;
 
 /**
- * This object returns a new Array of N random Elliptic Curve elements
+ * This object returns a new array of N random elliptic curve points.
  * 
  * @author Sofia
  * 

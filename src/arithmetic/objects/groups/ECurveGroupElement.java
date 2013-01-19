@@ -1,6 +1,5 @@
 package arithmetic.objects.groups;
 
-import java.io.UnsupportedEncodingException;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.field.IField;

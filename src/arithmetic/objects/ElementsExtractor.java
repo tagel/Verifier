@@ -125,6 +125,7 @@ public class ElementsExtractor {
 	 *            a byte array representing a group element
 	 * @param Gq
 	 *            the group which the element belongs to.
+	 *            
 	 * @return the group element which b represents. this static function is
 	 *         needed because there are two types of groups currently in our
 	 *         verifier: modular, and elliptic curve. the provers and verifiers
