@@ -43,7 +43,7 @@ public class Logger {
 	 * @param verbose
 	 *            new value for verbose
 	 */
-	public void setVerbos(boolean verbose) {
+	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 	}
 
