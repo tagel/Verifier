@@ -62,7 +62,7 @@ public class ECurveGroupElementTests {
 				.mult(eCurveElement2)));
 	}
 
-	@Test // TODO Itay - why not running?
+	@Test 
 	public void mult_caseXequalsYequalTest() throws Exception {
 		Point point1 = new Point(new IntegerFieldElement(new LargeInteger("0"),
 				f192), new IntegerFieldElement(new LargeInteger("1"), f192));
