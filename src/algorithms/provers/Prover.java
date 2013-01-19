@@ -112,16 +112,16 @@ public abstract class Prover {
 	 * @return A - a multiplication of Ui^Ei N times
 	 */
 	protected static IGroupElement computeA(int N, int Ne, byte[] seed,
-			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u) {
+			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u, IGroup Gq) {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
 		
-		byte[] ByteArrToBigInt = prg.getNextPRGOutput(length);
-		LargeInteger t = new LargeInteger(ByteArrToBigInt);
-		LargeInteger e = t.mod(new LargeInteger("2").power(Ne));
-		IGroupElement A = u.getAt(0).power(e);
+		byte[] ByteArrToBigInt;
+		LargeInteger t;
+		LargeInteger e;
+		IGroupElement A = Gq.one();
 
-		for (int i = 1; i < N; i++) {
+		for (int i = 0; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
 			t = new LargeInteger(ByteArrToBigInt);
 			e = t.mod(new LargeInteger("2").power(Ne));
@@ -146,10 +146,11 @@ public abstract class Prover {
 	 */
 	protected static LargeInteger computeE(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg) {
+		
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
-		byte[] ByteArrToBigInt = null;
-		LargeInteger t = null;
+		byte[] ByteArrToBigInt;
+		LargeInteger t;
 		LargeInteger E = LargeInteger.ONE;
 
 		for (int i = 0; i < N; i++) {
@@ -212,6 +213,7 @@ public abstract class Prover {
 	 */
 	protected static IGroupElement computeC(ArrayOfElements<IGroupElement> u,
 			ArrayOfElements<IGroupElement> h, int N) {
+		
 		IGroupElement CNumerator = u.getAt(0);
 		IGroupElement CDenominator = h.getAt(0);
 		for (int i = 1; i < N; i++) {
@@ -238,6 +240,7 @@ public abstract class Prover {
 	protected static IGroupElement computeD(LargeInteger E,
 			ArrayOfElements<IGroupElement> B, ArrayOfElements<IGroupElement> h,
 			int N) {
+		
 		IGroupElement D = B.getAt(N - 1).divide(h.getAt(0).power(E));
 		return D;
 	}
