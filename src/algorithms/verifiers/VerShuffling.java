@@ -30,6 +30,7 @@ import cryptographic.primitives.RandomOracle;
 
 public class VerShuffling {
 
+	private static final String POSC_COMMITMENT = "PoSCCommitment";
 	private static final String EMPTY_STRING = "";
 	private static final String PERMUTATION_COMMITMENT = "PermutationCommitment";
 	private static final String POS_REPLY = "PoSReply";
@@ -134,7 +135,6 @@ public class VerShuffling {
 			for (int i = 1; i <= lambda; i++) {
 				// Step 1 in the algorithm
 				retValue = true; // initialize
-				// TODO change the vars we send to the prover
 				if (!readFilesPoSC(i, directory, Gq, Zq, N, width)
 						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO, N,
 								ne, nr, nv, prg, Gq, PermutationCommitment,
@@ -152,7 +152,7 @@ public class VerShuffling {
 				// Step 3: Shrink permutation commitment
 				// trying to read the KeepList Array
 				byte[] keepListFile = ElementsExtractor.btFromFile(directory,
-						PROOFS, KEEP_LIST + (i < 10 ? "0" : EMPTY_STRING) + i
+						PROOFS, KEEP_LIST + getNumStringForFileName(i)
 								+ BT_FILE_EXT);
 				// if the file doesn't exist - fill the array with N truths and
 				// the rest are false.
@@ -262,21 +262,21 @@ public class VerShuffling {
 			IRing<IntegerRingElement> Zq, int N, int width) throws IOException {
 
 		byte[] bPoSCCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, "PoSCCommitment" + (i < 10 ? "0" : EMPTY_STRING) + i
+				PROOFS, POSC_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bPoSCCommitment == null) {
 			return false;
 		}
 
 		byte[] bPoSCReply = ElementsExtractor.btFromFile(directory, PROOFS,
-				"PoSCReply" + (i < 10 ? "0" : EMPTY_STRING) + i + BT_FILE_EXT);
+				"PoSCReply" + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSCReply == null) {
 			return false;
 		}
 
 		byte[] bPermutationCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, PERMUTATION_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING)
-						+ i + BT_FILE_EXT);
+				PROOFS, PERMUTATION_COMMITMENT + getNumStringForFileName(i)
+						+ BT_FILE_EXT);
 		if (bPermutationCommitment == null) {
 			return false;
 		}
@@ -352,6 +352,16 @@ public class VerShuffling {
 	}
 
 	/**
+	 * @param i
+	 *            the number to change
+	 * @return the number as string, if i < 10, add "0" to the begining of the
+	 *         string
+	 */
+	private static String getNumStringForFileName(int i) {
+		return (i < 10 ? "0" : EMPTY_STRING) + i;
+	}
+
+	/**
 	 * This method reads the relevant files for the i'th mix server. It sets the
 	 * global fields, and the main function will send them to the Shuffling of
 	 * commitments prover.
@@ -374,20 +384,20 @@ public class VerShuffling {
 
 		// read the files as byte[]
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
-				CIPHERTEXTS + (i < 10 ? "0" : EMPTY_STRING) + i + BT_FILE_EXT);
+				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bLi == null) {
 			return false;
 		}
 
 		byte[] bCCPoSCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, CCPOS_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING) + i
+				PROOFS, CCPOS_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bCCPoSCommitment == null) {
 			return false;
 		}
 
 		byte[] bCCPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
-				CCPOS_REPLY + (i < 10 ? "0" : EMPTY_STRING) + i + BT_FILE_EXT);
+				CCPOS_REPLY + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bCCPoSReply == null) {
 			return false;
 		}
@@ -457,27 +467,26 @@ public class VerShuffling {
 
 		// read the files as byte[].
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
-				CIPHERTEXTS + (i < 10 ? "0" : EMPTY_STRING) + i + BT_FILE_EXT);
+				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bLi == null) {
 			return false;
 		}
 
 		byte[] bPoSCommitment = ElementsExtractor.btFromFile(directory, PROOFS,
-				POS_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING) + i
-						+ BT_FILE_EXT);
+				POS_COMMITMENT + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSCommitment == null) {
 			return false;
 		}
 
 		byte[] bPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
-				POS_REPLY + (i < 10 ? "0" : EMPTY_STRING) + i + BT_FILE_EXT);
+				POS_REPLY + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSReply == null) {
 			return false;
 		}
 
 		byte[] bPermutationCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, PERMUTATION_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING)
-						+ i + BT_FILE_EXT);
+				PROOFS, PERMUTATION_COMMITMENT + getNumStringForFileName(i)
+						+ BT_FILE_EXT);
 		if (bPermutationCommitment == null) {
 			return false;
 		}
@@ -489,7 +498,7 @@ public class VerShuffling {
 		PermutationCommitment = ArrayGenerators.createGroupElementArray(
 				bPermutationCommitment, Gq);
 
-		// If i==1 it means that Liminus1 = L0, as we did in the main loop
+		// If i == 1 it means that Liminus1 = L0, as we did in the main loop
 		if (i != 1) {
 			Liminus1 = Li;
 		}
@@ -499,11 +508,8 @@ public class VerShuffling {
 			return false;
 		}
 
-		/*
-		 * each NODE needs to know which type are his children - First we create
-		 * the nodes like a generic one, and then we create the appropriate
-		 * types from the byte[] data, according to prover Algorithm
-		 */
+		// first create the nodes like a generic one, and then create the
+		// appropriate types from the byte[] data, according to prover Algorithm
 		PoSCommitment = new Node(bPoSCommitment);
 
 		// Read the A', C', D' GroupElements
@@ -541,7 +547,6 @@ public class VerShuffling {
 
 		// Read Ka, Kc, Kd as RingElements
 
-		IntegerRingElement tempR;
 		PoSReply.setAt(
 				0,
 				new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
@@ -575,7 +580,7 @@ public class VerShuffling {
 			return false;
 		}
 		PoSReply.setAt(4, tempK); // Ke
-		
+
 		return true;
 	}
 
