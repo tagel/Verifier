@@ -104,7 +104,7 @@ public class Node implements ByteTree {
  * @param a a byte array
  * @return the integer this byte array represents. 
  */
-	public int intFromByteArray(byte[] a) {
+	private int intFromByteArray(byte[] a) {
 		ByteBuffer b = ByteBuffer.wrap(a);
 		return b.getInt();
 	}
