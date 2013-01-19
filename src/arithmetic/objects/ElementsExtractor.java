@@ -48,10 +48,14 @@ public class ElementsExtractor {
 	 * @return the string that arr represents.
 	 * 
 	 */
-	public static String leafToString(byte[] arr)
-			throws UnsupportedEncodingException {
+	public static String leafToString(byte[] arr) {
 		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
-		return new String(a, "ASCII");
+		try {
+			return new String(a, "ASCII");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+
 	}
 
 	/**
@@ -124,7 +128,7 @@ public class ElementsExtractor {
 	 *            a byte array representing a group element
 	 * @param Gq
 	 *            the group which the element belongs to.
-	 *            
+	 * 
 	 * @return the group element which b represents. this static function is
 	 *         needed because there are two types of groups currently in our
 	 *         verifier: modular, and elliptic curve. the provers and verifiers
@@ -209,10 +213,10 @@ public class ElementsExtractor {
 	 *         converting the hexa string to a byte array, converting the byte
 	 *         array into a byte tree, and converting the byte tree into the
 	 *         group.
+	 * @throws UnsupportedEncodingException
 	 * 
 	 */
-	public static IGroup unmarshal(String s)
-			throws UnsupportedEncodingException {
+	public static IGroup unmarshal(String s) {
 		int i = s.indexOf(":");
 		s = s.substring(i + 2, s.length());
 		byte[] b = CryptoUtils.hexStringToBytes(s);

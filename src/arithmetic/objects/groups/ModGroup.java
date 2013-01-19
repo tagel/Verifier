@@ -1,7 +1,5 @@
 package arithmetic.objects.groups;
 
-import java.io.UnsupportedEncodingException;
-
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 
@@ -39,7 +37,7 @@ public class ModGroup implements IGroup {
 		this.g = g;
 	}
 
-	public ModGroup(byte[] arr) throws UnsupportedEncodingException {
+	public ModGroup(byte[] arr) {
 		Node node = new Node(arr);
 		if (node.getChildrenSize() != 3 && node.getChildrenSize() != 4)
 			System.out
