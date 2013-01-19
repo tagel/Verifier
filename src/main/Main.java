@@ -15,20 +15,13 @@ public class Main {
 	public static void main(String[] argv) {
 		CommandLineParser parser = new CommandLineParser();
 		parser.parseCommand(argv);
-		
-		if (parser.shouldVerify()) {
-			try {
-				callMainVerifier(parser);
-			} catch (Exception e) {
-				// TODO Daniel - talk to Sofi, shouldn't trow
-				e.printStackTrace();
-			}
 
+		if (parser.shouldVerify()) {
+			callMainVerifier(parser);
 		}
 	}
 
-	private static void callMainVerifier(CommandLineParser parser)
-			throws Exception {
+	private static void callMainVerifier(CommandLineParser parser) {
 		MainVerifier verifier = new MainVerifier();
 		verifier.verify(parser.getXml(), parser.getDir(), parser.getType(),
 				parser.getAuxsid(), parser.getWidth(), parser.getPosc(),

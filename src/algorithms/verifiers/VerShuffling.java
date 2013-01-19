@@ -2,7 +2,6 @@ package algorithms.verifiers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 
 import algorithms.provers.ProveCCPoS;
@@ -69,9 +68,8 @@ public class VerShuffling {
 	 * @param posc
 	 * @param ccpos
 	 * @param Zq
-	 * @return true if verification of shuffling was successful and false
+	 * @return true if verification of shuffling was successful, false
 	 *         otherwise.
-	 * @throws Exception
 	 */
 	static public boolean verify(RandomOracle ROSeed, RandomOracle ROChallenge,
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,
@@ -79,7 +77,7 @@ public class VerShuffling {
 			ProductGroupElement pk, ArrayOfElements<ProductGroupElement> L0,
 			ArrayOfElements<ProductGroupElement> Llambda, boolean posc,
 			boolean ccpos, IRing<IntegerRingElement> Zq, int width,
-			ArrayOfElements<IGroupElement> h) throws Exception {
+			ArrayOfElements<IGroupElement> h) {
 
 		// set maxciph (indicates if there was pre-computation)
 		int maxciph = readMaxciph(directory);
@@ -235,10 +233,8 @@ public class VerShuffling {
 		return true;
 	}
 
-	/*
-	 * TODO Sofi - reject if the interpretation fails - in: readFilesPoSC
-	 * readFilesCCPos readFilesPoS
-	 */
+	// TODO Sofi - reject if the interpretation fails - in: readFilesPoSC
+	// readFilesCCPos readFilesPoS
 
 	/**
 	 * Read the files as byte[]. These byte[] objects will be sent to the
@@ -255,11 +251,9 @@ public class VerShuffling {
 	 *            the IRing
 	 * @param width
 	 * @return true if the reading and extraction of variables succeeded
-	 * @throws IOException
-	 *             if bt from file fails or extraction fails
 	 */
 	private static boolean readFilesPoSC(int i, String directory, IGroup Gq,
-			IRing<IntegerRingElement> Zq, int N, int width) throws IOException {
+			IRing<IntegerRingElement> Zq, int N, int width) {
 
 		byte[] bPoSCCommitment = ElementsExtractor.btFromFile(directory,
 				PROOFS, POSC_COMMITMENT + getNumStringForFileName(i)
@@ -375,12 +369,10 @@ public class VerShuffling {
 	 * @param Zq
 	 *            the IRing
 	 * @param width
-	 * @return true if the reading and extraction of variables succeded
-	 * @throws IOException
-	 *             if bt from file fails or extraction fails
+	 * @return true if the reading and extraction of variables succeeded
 	 */
 	private static boolean readFilesCCPos(int i, String directory, IGroup Gq,
-			IRing<IntegerRingElement> Zq, int N, int width) throws IOException {
+			IRing<IntegerRingElement> Zq, int N, int width) {
 
 		// read the files as byte[]
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
@@ -459,11 +451,9 @@ public class VerShuffling {
 	 *            - The IGroup
 	 * @param width
 	 * @return true if the reading and extraction of variables succeded
-	 * @throws IOException
-	 *             - if bt from file fails or extraction fails
 	 */
 	private static boolean readFilesPoS(int i, String directory, IGroup Gq,
-			IRing<IntegerRingElement> Zq, int N, int width) throws IOException {
+			IRing<IntegerRingElement> Zq, int N, int width) {
 
 		// read the files as byte[].
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
@@ -546,7 +536,6 @@ public class VerShuffling {
 		PoSReply = new Node(bPoSReply);
 
 		// Read Ka, Kc, Kd as RingElements
-
 		PoSReply.setAt(
 				0,
 				new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
