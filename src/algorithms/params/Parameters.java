@@ -44,6 +44,7 @@ public class Parameters {
 	private IGroup Gq;
 	private IRing<IntegerRingElement> Zq;
 	private PseudoRandomGenerator prg;
+	private ArrayOfElements<IGroupElement> randArray;
 
 	// parameters from directory
 	private String protInfo;
@@ -97,6 +98,7 @@ public class Parameters {
 	private ArrayOfElements<Node> mixCcPosCommitment;
 	private ArrayOfElements<Node> mixCcPosReply;
 	private ArrayOfElements<BooleanArrayElement> mixKeepList;
+	
 
 	// type of verification
 	public enum Type {
@@ -653,6 +655,15 @@ public class Parameters {
 
 	public void setMixKeepList(ArrayOfElements<BooleanArrayElement> mixKeepList) {
 		this.mixKeepList = mixKeepList;
+	}
+
+	public void setRandArray(ArrayOfElements<IGroupElement> h) {
+		this.randArray = h;
+		
+	}
+	
+	public ArrayOfElements<IGroupElement> getRandArray() {
+		return randArray;
 	}
 
 }

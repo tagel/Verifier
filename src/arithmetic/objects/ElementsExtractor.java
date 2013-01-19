@@ -26,6 +26,9 @@ import cryptographic.primitives.CryptoUtils;
 
 /**
  * This class has methods which help us extract elements from given byte arrays.
+ * the functions in this class are static and are mainly used by the verifiers
+ * and provers, helping them derive the right elements from the .bt files that
+ * we got from the verificatum.
  * 
  */
 public class ElementsExtractor {
@@ -42,7 +45,7 @@ public class ElementsExtractor {
 	/**
 	 * @param byte array arr that represents a leaf of a string.
 	 * @return the string that arr represents.
-	 * @throws UnsupportedEncodingException
+	 * 
 	 */
 	public static String leafToString(byte[] arr)
 			throws UnsupportedEncodingException {
@@ -69,7 +72,15 @@ public class ElementsExtractor {
 
 	}
 
-	// if file is not found, returns null.
+	/**
+	 * 
+	 * @param path
+	 *            a path to the file
+	 * @param filename
+	 *            the name of the .bt file
+	 * @return the byte array written in the file. If the file is not found,
+	 *         returns null.
+	 */
 	public static byte[] btFromFile(String path, String filename)
 			throws IOException {
 		try {
@@ -85,6 +96,11 @@ public class ElementsExtractor {
 
 	}
 
+	/**
+	 * 
+	 * the same function as the above, only here the input is a path and a
+	 * subpath.
+	 */
 	public static byte[] btFromFile(String path, String subpath, String filename)
 			throws IOException {
 		try {
@@ -101,6 +117,19 @@ public class ElementsExtractor {
 
 	}
 
+	/**
+	 * 
+	 * @param b
+	 *            a byte array representing a group element
+	 * @param Gq
+	 *            the group which the element belongs to.
+	 * @return the group element which b represents. this static function is
+	 *         needed because there are two types of groups currently in our
+	 *         verifier: modular, and elliptic curve. the provers and verifiers
+	 *         do not know which kind of group element they need to create and
+	 *         for that reason this function checks which kind of group element
+	 *         needs to be created and creates it appropriately.
+	 */
 	public static IGroupElement createGroupElement(byte[] b, IGroup Gq) {
 		if (Gq instanceof ModGroup)
 			return new ModGroupElement(leafToInt(b), (ModGroup) Gq);
@@ -119,45 +148,41 @@ public class ElementsExtractor {
 		return new ProductGroupElement(arr);
 	}
 
-	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group, int w)
-			throws UnsupportedEncodingException {
+	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group,
+			int w) throws UnsupportedEncodingException {
 		Node node = new Node(bt);
 		if (w == 1) {
 			ArrayOfElements<IGroupElement> leftArr = new ArrayOfElements<IGroupElement>();
 			leftArr.add(createGroupElement(node.getAt(0).toByteArray(), group));
 			ArrayOfElements<IGroupElement> rightArr = new ArrayOfElements<IGroupElement>();
 			rightArr.add(createGroupElement(node.getAt(1).toByteArray(), group));
-			
-				return createCiphertext(leftArr, rightArr);
-				
-			}
-		
-			else {
-		
-		ProductGroupElement left = createSimplePGE(node.getAt(0).toByteArray(),
-				group);
-		ProductGroupElement right = createSimplePGE(
-				node.getAt(1).toByteArray(), group);
-		return new ProductGroupElement(left, right);
-			}
+			return new ProductGroupElement(new ProductGroupElement(leftArr),
+					new ProductGroupElement(rightArr));
+		} else {
+			ProductGroupElement left = createSimplePGE(node.getAt(0)
+					.toByteArray(), group);
+			ProductGroupElement right = createSimplePGE(node.getAt(1)
+					.toByteArray(), group);
+			return new ProductGroupElement(left, right);
+		}
 	}
 
-	public static ProductGroupElement createCiphertext(
-			ArrayOfElements<IGroupElement> left,
-			ArrayOfElements<IGroupElement> right) {
-		return new ProductGroupElement(new ProductGroupElement(left),
-				new ProductGroupElement(right));
-	}
+//	public static ProductGroupElement createCiphertext(
+//			ArrayOfElements<IGroupElement> left,
+//			ArrayOfElements<IGroupElement> right) {
+//		return new ProductGroupElement(new ProductGroupElement(left),
+//				new ProductGroupElement(right));
+//	}
 
 	/**
 	 * @param <E>
-	 * @param a
+	 * @param s
 	 *            string s, representing a certain group.
 	 * @return the group recovered from s by removing the comment and colons,
 	 *         converting the hexa string to a byte array, converting the byte
 	 *         array into a byte tree, and converting the byte tree into the
 	 *         group.
-	 * @throws UnsupportedEncodingException
+	 * 
 	 */
 	public static IGroup unmarshal(String s)
 			throws UnsupportedEncodingException {
