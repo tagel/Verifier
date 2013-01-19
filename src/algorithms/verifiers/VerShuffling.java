@@ -30,6 +30,11 @@ import cryptographic.primitives.RandomOracle;
 
 public class VerShuffling {
 
+	private static final String POSC_COMMITMENT = "PoSCCommitment";
+	private static final String EMPTY_STRING = "";
+	private static final String PERMUTATION_COMMITMENT = "PermutationCommitment";
+	private static final String POS_REPLY = "PoSReply";
+	private static final String POS_COMMITMENT = "PoSCommitment";
 	private static final String MAXCIPH = "maxciph";
 	private static final String CCPOS_REPLY = "CCPoSReply";
 	private static final String CCPOS_COMMITMENT = "CCPoSCommitment";
@@ -130,7 +135,6 @@ public class VerShuffling {
 			for (int i = 1; i <= lambda; i++) {
 				// Step 1 in the algorithm
 				retValue = true; // initialize
-				// TODO change the vars we send to the prover
 				if (!readFilesPoSC(i, directory, Gq, Zq, N, width)
 						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO, N,
 								ne, nr, nv, prg, Gq, PermutationCommitment,
@@ -148,7 +152,7 @@ public class VerShuffling {
 				// Step 3: Shrink permutation commitment
 				// trying to read the KeepList Array
 				byte[] keepListFile = ElementsExtractor.btFromFile(directory,
-						PROOFS, KEEP_LIST + (i < 10 ? "0" : "") + i
+						PROOFS, KEEP_LIST + getNumStringForFileName(i)
 								+ BT_FILE_EXT);
 				// if the file doesn't exist - fill the array with N truths and
 				// the rest are false.
@@ -258,20 +262,20 @@ public class VerShuffling {
 			IRing<IntegerRingElement> Zq, int N, int width) throws IOException {
 
 		byte[] bPoSCCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, "PoSCCommitment" + (i < 10 ? "0" : "") + i
+				PROOFS, POSC_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bPoSCCommitment == null) {
 			return false;
 		}
 
 		byte[] bPoSCReply = ElementsExtractor.btFromFile(directory, PROOFS,
-				"PoSCReply" + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+				"PoSCReply" + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSCReply == null) {
 			return false;
 		}
 
 		byte[] bPermutationCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, "PermutationCommitment" + (i < 10 ? "0" : "") + i
+				PROOFS, PERMUTATION_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bPermutationCommitment == null) {
 			return false;
@@ -348,6 +352,16 @@ public class VerShuffling {
 	}
 
 	/**
+	 * @param i
+	 *            the number to change
+	 * @return the number as string, if i < 10, add "0" to the begining of the
+	 *         string
+	 */
+	private static String getNumStringForFileName(int i) {
+		return (i < 10 ? "0" : EMPTY_STRING) + i;
+	}
+
+	/**
 	 * This method reads the relevant files for the i'th mix server. It sets the
 	 * global fields, and the main function will send them to the Shuffling of
 	 * commitments prover.
@@ -370,26 +384,26 @@ public class VerShuffling {
 
 		// read the files as byte[]
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
-				CIPHERTEXTS + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bLi == null) {
 			return false;
 		}
 
 		byte[] bCCPoSCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, CCPOS_COMMITMENT + (i < 10 ? "0" : "") + i
+				PROOFS, CCPOS_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bCCPoSCommitment == null) {
 			return false;
 		}
 
 		byte[] bCCPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
-				CCPOS_REPLY + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+				CCPOS_REPLY + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bCCPoSReply == null) {
 			return false;
 		}
 
-		// create the objects from the byte[] and set the global fields 
-		
+		// create the objects from the byte[] and set the global fields
+
 		if (i != 1) { // If i == 1 then Liminus1 = L0, as in the main loop
 			Liminus1 = Li;
 		}
@@ -398,39 +412,32 @@ public class VerShuffling {
 			return false;
 		}
 
-		/*
-		 * each NODE needs to know which type are his children - First we create
-		 * the nodes like a generic one, and then we create the appropriate
-		 * types from the byte[] data, according to prover Algorithm
-		 */
+		// first create generic nodes, then create the appropriate types from
+		// the byte[] data according to the prover Algorithm
 		CCPoSCommitment = new Node(bCCPoSCommitment);
 
 		// A' As GroupElement
-		IGroupElement temp = ElementsExtractor.createGroupElement(
-				CCPoSCommitment.getAt(0).toByteArray(), Gq);
-		CCPoSCommitment.setAt(0, temp);
+		CCPoSCommitment.setAt(0, ElementsExtractor.createGroupElement(
+				CCPoSCommitment.getAt(0).toByteArray(), Gq));
 
-		// Read B' as Ciphertext
-		ProductGroupElement tempB = ElementsExtractor.createCiphertext(
-				CCPoSCommitment.getAt(1).toByteArray(), Gq, width);
-		CCPoSCommitment.setAt(1, tempB);
+		// read B' as Ciphertext
+		CCPoSCommitment.setAt(1, ElementsExtractor.createCiphertext(
+				CCPoSCommitment.getAt(1).toByteArray(), Gq, width));
 
-		// Create the CCPoSReply in the same way
+		// create the CCPoSReply in the same way
 		CCPoSReply = new Node(bCCPoSReply);
 
-		// Read Ka, Kb, Ke as RingElements
-		// Ka
-		IntegerRingElement tempR = new IntegerRingElement(
-				ElementsExtractor.leafToInt(CCPoSReply.getAt(0).toByteArray()),
-				Zq);
-		CCPoSReply.setAt(0, tempR);
+		// read Ka, Kb, Ke as RingElements
+		CCPoSReply.setAt(
+				0,
+				new IntegerRingElement(ElementsExtractor.leafToInt(CCPoSReply
+						.getAt(0).toByteArray()), Zq)); // Ka
 
-		// Read Kb as productRingElement
-		ProductRingElement tempp = new ProductRingElement(CCPoSReply.getAt(1)
-				.toByteArray(), Zq, width);
-		CCPoSReply.setAt(1, tempp);
+		// read Kb as productRingElement
+		CCPoSReply.setAt(1, new ProductRingElement(CCPoSReply.getAt(1)
+				.toByteArray(), Zq, width));
 
-		// Read Ke as arrays of Ring Elements, and verify if they are of size N
+		// read Ke as arrays of Ring Elements, and verify if they are of size N
 		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
 				.createRingElementArray(CCPoSReply.getAt(2).toByteArray(), Zq);
 		if (tempK.getSize() != N) {
@@ -457,32 +464,28 @@ public class VerShuffling {
 	 */
 	private static boolean readFilesPoS(int i, String directory, IGroup Gq,
 			IRing<IntegerRingElement> Zq, int N, int width) throws IOException {
-		/*
-		 * The following steps read the files as byte[]. These byte[] objects
-		 * will be sent to the relevant constructors to make the objects (Node,
-		 * ciphertexts, array of commitment...) that will be sent to the
-		 * provers.
-		 */
+
+		// read the files as byte[].
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
-				CIPHERTEXTS + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bLi == null) {
 			return false;
 		}
 
 		byte[] bPoSCommitment = ElementsExtractor.btFromFile(directory, PROOFS,
-				"PoSCommitment" + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+				POS_COMMITMENT + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSCommitment == null) {
 			return false;
 		}
 
 		byte[] bPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
-				"PoSReply" + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+				POS_REPLY + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSReply == null) {
 			return false;
 		}
 
 		byte[] bPermutationCommitment = ElementsExtractor.btFromFile(directory,
-				PROOFS, "PermutationCommitment" + (i < 10 ? "0" : "") + i
+				PROOFS, PERMUTATION_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bPermutationCommitment == null) {
 			return false;
@@ -495,7 +498,7 @@ public class VerShuffling {
 		PermutationCommitment = ArrayGenerators.createGroupElementArray(
 				bPermutationCommitment, Gq);
 
-		// If i==1 it means that Liminus1 = L0, as we did in the main loop
+		// If i == 1 it means that Liminus1 = L0, as we did in the main loop
 		if (i != 1) {
 			Liminus1 = Li;
 		}
@@ -505,95 +508,79 @@ public class VerShuffling {
 			return false;
 		}
 
-		/*
-		 * each NODE needs to know which type are his children - First we create
-		 * the nodes like a generic one, and then we create the appropriate
-		 * types from the byte[] data, according to prover Algorithm
-		 */
+		// first create the nodes like a generic one, and then create the
+		// appropriate types from the byte[] data, according to prover Algorithm
 		PoSCommitment = new Node(bPoSCommitment);
 
 		// Read the A', C', D' GroupElements
-		// A'
-		IGroupElement temp = ElementsExtractor.createGroupElement(PoSCommitment
-				.getAt(1).toByteArray(), Gq);
-		PoSCommitment.setAt(1, temp);
+		PoSCommitment.setAt(1, ElementsExtractor.createGroupElement(
+				PoSCommitment.getAt(1).toByteArray(), Gq)); // A'
 
-		// C'
-		temp = ElementsExtractor.createGroupElement(PoSCommitment.getAt(3)
-				.toByteArray(), Gq);
-		PoSCommitment.setAt(3, temp);
+		PoSCommitment.setAt(3, ElementsExtractor.createGroupElement(
+				PoSCommitment.getAt(3).toByteArray(), Gq)); // C'
 
-		// D'
-		temp = ElementsExtractor.createGroupElement(PoSCommitment.getAt(4)
-				.toByteArray(), Gq);
-		PoSCommitment.setAt(4, temp);
+		PoSCommitment.setAt(4, ElementsExtractor.createGroupElement(
+				PoSCommitment.getAt(4).toByteArray(), Gq)); // D'
 
-		// Read F' Ciphertext
-		ProductGroupElement tempF = ElementsExtractor.createCiphertext(
-				PoSCommitment.getAt(5).toByteArray(), Gq, width);
-		PoSCommitment.setAt(5, tempF);
+		// read F' Ciphertext
+		PoSCommitment.setAt(5, ElementsExtractor.createCiphertext(PoSCommitment
+				.getAt(5).toByteArray(), Gq, width));
 
-		// Read B and B' arrays of N elements in Gq
-		// B
+		// read B and B' arrays of N elements in Gq
 		ArrayOfElements<IGroupElement> tempB = ArrayGenerators
 				.createGroupElementArray(PoSCommitment.getAt(0).toByteArray(),
 						Gq);
-		// This array should be of size N
 		if (tempB.getSize() != N) {
 			return false;
 		}
-		PoSCommitment.setAt(0, tempB);
+		PoSCommitment.setAt(0, tempB); // B
 
-		// B'
 		tempB = ArrayGenerators.createGroupElementArray(PoSCommitment.getAt(2)
 				.toByteArray(), Gq);
 		if (tempB.getSize() != N) {
 			return false;
 		}
-		PoSCommitment.setAt(2, tempB);
+		PoSCommitment.setAt(2, tempB); // B'
 
-		// Create the PoSReply in the same way
+		// create the PoSReply in the same way
 		PoSReply = new Node(bPoSReply);
 
 		// Read Ka, Kc, Kd as RingElements
-		// Ka
-		IntegerRingElement tempR = new IntegerRingElement(
-				ElementsExtractor.leafToInt(PoSReply.getAt(0).toByteArray()),
-				Zq);
-		PoSReply.setAt(0, tempR);
 
-		// Kc
-		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
-				.getAt(2).toByteArray()), Zq);
-		PoSReply.setAt(2, tempR);
+		PoSReply.setAt(
+				0,
+				new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
+						.getAt(0).toByteArray()), Zq)); // Ka
 
-		// Kd
-		tempR = new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
-				.getAt(3).toByteArray()), Zq);
-		PoSReply.setAt(3, tempR);
+		PoSReply.setAt(
+				2,
+				new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
+						.getAt(2).toByteArray()), Zq)); // Kc
+
+		PoSReply.setAt(
+				3,
+				new IntegerRingElement(ElementsExtractor.leafToInt(PoSReply
+						.getAt(3).toByteArray()), Zq)); // Kd
 
 		// Read Kf as productRingElement
-		ProductRingElement tempp = new ProductRingElement(PoSReply.getAt(5)
-				.toByteArray(), Zq, width);
-		PoSReply.setAt(5, tempp);
+		PoSReply.setAt(5, new ProductRingElement(PoSReply.getAt(5)
+				.toByteArray(), Zq, width));
 
 		// Read Kb and Ke as arrays of Ring Elements
-		// Kb
 		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
 				.createRingElementArray(PoSReply.getAt(1).toByteArray(), Zq);
 		if (tempK.getSize() != N) {
 			return false;
 		}
-		PoSReply.setAt(1, tempK);
+		PoSReply.setAt(1, tempK); // Kb
 
-		// Ke
 		tempK = ArrayGenerators.createRingElementArray(PoSReply.getAt(4)
 				.toByteArray(), Zq);
 		if (tempK.getSize() != N) {
 			return false;
 		}
+		PoSReply.setAt(4, tempK); // Ke
 
-		PoSReply.setAt(4, tempK);
 		return true;
 	}
 
