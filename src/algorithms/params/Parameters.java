@@ -18,7 +18,6 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 
 /**
  * This class describes an object that contains the parameters used by the
@@ -81,7 +80,7 @@ public class Parameters {
 	// parameters from lists
 	private ArrayOfElements<ProductGroupElement> ciphertexts;// V
 	private ArrayOfElements<ProductGroupElement> ShuffledCiphertexts; // V
-	private ArrayOfElements<ProductRingElement> plaintexts;// V
+	private ArrayOfElements<ProductGroupElement> plaintexts;// V
 	private int N; // size of the arrays
 
 	// MIX -- The parameters of each party
@@ -499,7 +498,7 @@ public class Parameters {
 		ShuffledCiphertexts = shuffledCiphertexts;
 	}
 
-	public void setPlaintexts(ArrayOfElements<ProductRingElement> plaintexts2) {
+	public void setPlaintexts(ArrayOfElements<ProductGroupElement> plaintexts2) {
 		this.plaintexts = plaintexts2;
 	}
 
@@ -522,7 +521,7 @@ public class Parameters {
 	 * @return the output plaintext elements that has not been decoded in any
 	 *         way
 	 */
-	public ArrayOfElements<ProductRingElement> getPlaintexts() {
+	public ArrayOfElements<ProductGroupElement> getPlaintexts() {
 		return plaintexts;
 	}
 

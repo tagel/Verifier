@@ -399,8 +399,8 @@ public class MainVerifier {
 				return false;
 			}
 
-			ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators
-					.createArrayOfPlaintexts(file, params.getZq());
+			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
+					.createArrayOfPlaintexts(file, params.getGq(), params.getW());
 			params.setPlaintexts(plaintexts);
 		}
 		return true;
