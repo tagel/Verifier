@@ -23,7 +23,7 @@ public class VerDec {
 	private static final String EMPTY_STRING = "";
 	private static final String BT_FILE_EXT = ".bt";
 	private static final String PROOFS = "proofs";
-	private static final String DECRIPTION_FACTORS = "DecriptionFactors";
+	private static final String DECRIPTION_FACTORS = "DecryptionFactors";
 	private static final String DECR_FACT_COMMITMENT = "DecrFactCommitment";
 	private static final String DECR_FACT_REPLY = "DecrFactReply";
 
@@ -80,7 +80,7 @@ public class VerDec {
 		// try to do the combined proof if this return true, we skip to step 4
 		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv,
 				prg, Gq, g, publicKeys, L, DecryptionFactors,
-				DecrFactCommitments, DecrFactReplies)) {
+				DecrFactCommitments, DecrFactReplies, randArray)) {
 
 			// ********Step 3 in the algorithm**********
 			for (int i = 1; i <= lambda; i++) {
@@ -88,7 +88,7 @@ public class VerDec {
 						.prove(ROSeed, ROChallenge, i - 1, prefixToRO, N, ne,
 								nr, nv, prg, Gq, g, publicKeys, L,
 								DecryptionFactors, DecrFactCommitments,
-								DecrFactReplies);
+								DecrFactReplies, randArray);
 				if (!proveDec
 						&& (secretKeys.getAt(i - 1) == null || !DecryptionFactors
 								.getAt(i - 1).equals(
@@ -108,7 +108,13 @@ public class VerDec {
 		return true;
 	}
 
-	private static ArrayOfElements<ProductGroupElement> multiplyArrays(
+	
+	/**
+	 * 
+	 * @param arrays - array of the arrays to multiply
+	 * @return an array of multiplied arrays
+	 */
+	public static ArrayOfElements<ProductGroupElement> multiplyArrays(
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> arrays) {
 
 		ArrayOfElements<ProductGroupElement> retVal = new ArrayOfElements<ProductGroupElement>();
@@ -125,7 +131,13 @@ public class VerDec {
 		return retVal;
 	}
 
-	private static ArrayOfElements<ProductGroupElement> multArrays(
+	/**
+	 * Multiplies two arrays
+	 * @param one
+	 * @param two
+	 * @return
+	 */
+	public static ArrayOfElements<ProductGroupElement> multArrays(
 			ArrayOfElements<ProductGroupElement> one,
 			ArrayOfElements<ProductGroupElement> two) {
 		
