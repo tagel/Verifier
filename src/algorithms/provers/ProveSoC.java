@@ -32,13 +32,13 @@ public class ProveSoC extends Prover {
 			ArrayOfElements<IGroupElement> permutationCommitment,
 			Node PoSCommitment, Node PoSReply) {
 
-			/**
+			/*
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
 			 * Pedersen commitments in Gq
 			 */
 			ArrayOfElements<IGroupElement> u = permutationCommitment;
 
-			/**
+			/*
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D')
 			 */
 
@@ -53,7 +53,7 @@ public class ProveSoC extends Prover {
 			IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
 			IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 
-			/**
+			/*
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke)
 			 */
 			IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
@@ -66,7 +66,7 @@ public class ProveSoC extends Prover {
 			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(4));
 
-			/**
+			/*
 			 * 2 - computing the seed
 			 */
 
@@ -84,12 +84,12 @@ public class ProveSoC extends Prover {
 			nodeForSeed.add(u);
 			byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
-			/**
+			/*
 			 * 3 - Computation of A
 			 */
 			IGroupElement A = computeA(N, Ne, seed, prg, u, Gq);
 
-			/**
+			/*
 			 * 4 - Computation of the challenge
 			 */
 			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
@@ -107,7 +107,7 @@ public class ProveSoC extends Prover {
 			LargeInteger twoNv = new LargeInteger("2").power(Nv);
 			v = v.mod(twoNv);
 
-			/**
+			/*
 			 * 5 - Compute C,D and verify equalities
 			 */
 			LargeInteger E = computeE(N, Ne, seed, prg);
