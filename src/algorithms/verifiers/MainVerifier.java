@@ -1,6 +1,5 @@
 package algorithms.verifiers;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import algorithms.params.Parameters;
@@ -29,6 +28,7 @@ import cryptographic.primitives.SHA2HashFunction;
  */
 public class MainVerifier {
 
+	private static final String EMPTY_STRING = "";
 	private static final String SECRET_KEY = "SecretKey";
 	private static final String PROOFS = "proofs";
 	private static final String BT_EXT = ".bt";
@@ -96,8 +96,8 @@ public class MainVerifier {
 		if (!ReadLists()) {
 			return false;
 		}
-		
-		//Create the random array to send to the verifiers
+
+		// Create the random array to send to the verifiers
 		createRandomArray();
 
 		// *******Section 7 in the Algorithm*********
@@ -132,14 +132,16 @@ public class MainVerifier {
 	}
 
 	private void createRandomArray() throws Exception {
-		
+
 		StringLeaf stringLeaf = new StringLeaf("generators");
-		byte[] independentSeed = params.getROseed().getRandomOracleOutput(ArrayGenerators
-				.concatArrays(params.getPrefixToRO(), stringLeaf.toByteArray()));
-		ArrayOfElements<IGroupElement> h = params.getGq().createRandomArray(params.getN(), params.getPrg(),
-				independentSeed, params.getNr());
+		byte[] independentSeed = params.getROseed().getRandomOracleOutput(
+				ArrayGenerators.concatArrays(params.getPrefixToRO(),
+						stringLeaf.toByteArray()));
+		ArrayOfElements<IGroupElement> h = params.getGq()
+				.createRandomArray(params.getN(), params.getPrg(),
+						independentSeed, params.getNr());
 		params.setRandArray(h);
-		
+
 	}
 
 	// expect type to be MIXING or DECRYPTION
@@ -218,7 +220,7 @@ public class MainVerifier {
 	 *         function H and the PRG and false otherwise.
 	 */
 	public boolean deriveSetsAndObjects() {
-		// Unmarshall Gq
+		// unmarshall Gq
 		try {
 			params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
 		} catch (UnsupportedEncodingException e) {
@@ -271,7 +273,6 @@ public class MainVerifier {
 				.seedlen()));
 		params.setROchallenge(new HashFuncPRGRandomOracle(H, params.getNv()));
 
-		
 	}
 
 	public boolean ReadKeys() {
@@ -282,8 +283,6 @@ public class MainVerifier {
 					.btFromFile(params.getDirectory(), FULL_PUBLIC_KEY_BT),
 					params.getGq());
 		} catch (UnsupportedEncodingException e) {
-			return false;
-		} catch (IOException e) {
 			return false;
 		}
 
@@ -303,14 +302,10 @@ public class MainVerifier {
 
 		for (i = 0; i < params.getThreshold(); i++) {
 			// Here we assume that the file exists
-			try {
-				yi = ElementsExtractor.createGroupElement(ElementsExtractor
-						.btFromFile(params.getDirectory(), PROOFS, "PublicKey"
-								+ (i < 10 ? "0" : "") + (i + 1) + ".bt"),
-						params.getGq());
-			} catch (IOException e) {
-				return false;
-			}
+			yi = ElementsExtractor.createGroupElement(ElementsExtractor
+					.btFromFile(params.getDirectory(), PROOFS, "PublicKey"
+							+ (i < 10 ? "0" : EMPTY_STRING) + (i + 1) + ".bt"), params
+					.getGq());
 			// Check if yi exists
 			if (yi == null) {
 				return false;
@@ -327,15 +322,9 @@ public class MainVerifier {
 		// Here we check the secret keys - xi:
 		// The file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
-
-			byte[] xFile;
-			try {
-				xFile = ElementsExtractor.btFromFile(params.getDirectory(),
-						PROOFS, SECRET_KEY + (i < 10 ? "0" : "") + (i + 1)
-								+ BT_EXT);
-			} catch (IOException e) {
-				return false;
-			}
+			byte[] xFile = ElementsExtractor
+					.btFromFile(params.getDirectory(), PROOFS, SECRET_KEY
+							+ (i < 10 ? "0" : EMPTY_STRING) + (i + 1) + BT_EXT);
 
 			// xi = null if the file doesn't exist
 			xi = (xFile == null) ? null : new IntegerRingElement(
@@ -352,12 +341,11 @@ public class MainVerifier {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
 	// Part 6 of the algorithm
-	public boolean ReadLists()  {
+	public boolean ReadLists() {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				CIPHERTEXTS_FILE_NAME + BT_EXT);
@@ -382,7 +370,7 @@ public class MainVerifier {
 					params.getDirectory(),
 					PROOFS,
 					CIPHERTEXTS_FILE_NAME
-							+ (params.getThreshold() < 10 ? "0" : "")
+							+ (params.getThreshold() < 10 ? "0" : EMPTY_STRING)
 							+ params.getThreshold() + BT_EXT);
 			if (file == null) {
 				return false;
