@@ -6,9 +6,11 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.groups.ECurveGroupElement;
 
 /**
+ * This class represents an integer ring element. since some integers may be
+ * very large, we will use the LargeInteger class to store them. for every such
+ * element, we will store both the integer and the ring that it belongs to.
  * 
  * @author Itay
  * 
@@ -18,6 +20,14 @@ public class IntegerRingElement implements ByteTree {
 	protected LargeInteger element;
 	protected IRing<IntegerRingElement> ring;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param element
+	 *            - the large integer
+	 * @param ring
+	 *            - the ring which the large integer belongs to.
+	 */
 	public IntegerRingElement(LargeInteger element,
 			IRing<IntegerRingElement> ring) {
 		this.element = element;
@@ -25,30 +35,49 @@ public class IntegerRingElement implements ByteTree {
 	}
 
 	public LargeInteger getElement() {
-		return element.mod(getRingOrder());
+		return element.mod(getRing().getOrder());
 	}
 
 	public IRing<IntegerRingElement> getRing() {
 		return ring;
 	}
 
+	/**
+	 * 
+	 * @return The additive inverse of our element
+	 */
 	public IntegerRingElement neg() {
-		return new IntegerRingElement(getRingOrder().subtract(
-				this.getElement().mod(getRingOrder())), this.getRing());
+		return new IntegerRingElement(getRing().getOrder().subtract(
+				this.getElement().mod(getRing().getOrder())), this.getRing());
 	}
-
+	
+	/**
+	 * 
+	 * @param b
+	 *            another integer ring element
+	 * @return The result of the addition of our element and b.
+	 */
 	public IntegerRingElement add(IntegerRingElement b) {
 		return new IntegerRingElement(
-				(this.getElement().add(b.getElement())).mod(getRingOrder()),
+				(this.getElement().add(b.getElement())).mod(getRing().getOrder()),
 				this.getRing());
 	}
-
+	
+	/**
+	 * @param b
+	 *            another integer ring element
+	 * @return The result of the multiplication of our element and b.
+	 */
 	public IntegerRingElement mult(IntegerRingElement b) {
 		return new IntegerRingElement((this.getElement().multiply(b
-				.getElement())).mod(getRingOrder()), this.getRing());
+				.getElement())).mod(getRing().getOrder()), this.getRing());
 	}
 
-	
+	/**
+	 * 
+	 * @param b a large integer which is the exponent.
+	 * @return our element in the b'th power.
+	 */
 	public IntegerRingElement power(LargeInteger b) {
 		IntegerRingElement base = this;
 		IntegerRingElement result = this.getRing().one();
@@ -66,17 +95,25 @@ public class IntegerRingElement implements ByteTree {
 	}
 	
 
+	/**
+	 * 
+	 * @param b another integer ring element
+	 * @return true if and only if our element and b are equal. That means, represent the same large integer and belong to the same ring.
+	 */
 	public boolean equals(IntegerRingElement b) {
-		if (this.getElement().mod(getRingOrder())
-				.equals(b.getElement().mod(getRingOrder()))) {
+		if (this.getElement().mod(getRing().getOrder())
+				.equals(b.getElement().mod(getRing().getOrder()))) {
 			return true;
 		}
 		return false;
 	}
-
+	
+	/**
+	 * returns the byte array representation (as a byte tree) of the integer ring element.
+	 */
 	@Override
 	public byte[] toByteArray() {
-		int numOfOrderBytes = getRingOrder().toByteArray().length;
+		int numOfOrderBytes = getRing().getOrder().toByteArray().length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(numOfOrderBytes).array();
 		byte[] b = element.toByteArray();
@@ -93,9 +130,5 @@ public class IntegerRingElement implements ByteTree {
 		System.arraycopy(c, 0, ret, 1, c.length);
 		ret[0] = 1;
 		return ret;
-	}
-
-	private LargeInteger getRingOrder() {
-		return this.ring.getOrder();
 	}
 }

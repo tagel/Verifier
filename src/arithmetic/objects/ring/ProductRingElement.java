@@ -9,6 +9,11 @@ import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 
 /**
+ * This class represents a product ring element. This product ring element has
+ * coordinates which are integer ring elements. In our project this is the only
+ * kind of product ring element we need to implement. That means we do not need
+ * recursive product ring elements where some of the coordinates can also be
+ * product elements.
  * 
  * @author Itay
  * 
@@ -53,7 +58,9 @@ public class ProductRingElement implements ByteTree {
 
 	/**
 	 * add element to product
-	 * @param element the element to add
+	 * 
+	 * @param element
+	 *            the element to add
 	 */
 	public void addElement(IntegerRingElement element) {
 		arr.add(element);
@@ -61,7 +68,10 @@ public class ProductRingElement implements ByteTree {
 
 	/**
 	 * @param b
-	 * @return the result of the addition of the 2 product elements.
+	 *            another product ring element
+	 * @return the result of the addition of the 2 product elements. That is, a
+	 *         new product ring element composed of the addition of the
+	 *         coordinates of our two addition parameters.
 	 */
 	public ProductRingElement add(ProductRingElement b) {
 		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
@@ -73,7 +83,10 @@ public class ProductRingElement implements ByteTree {
 
 	/**
 	 * @param b
-	 * @return the result of the multiplication of the 2 product elements.
+	 *            another product ring element
+	 * @return the result of the multiplication of the 2 product elements.That
+	 *         is, a new product ring element composed of the multiplication of
+	 *         the coordinates of our two multiplication parameters.
 	 */
 	public ProductRingElement mult(ProductRingElement b) {
 		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
@@ -85,7 +98,10 @@ public class ProductRingElement implements ByteTree {
 
 	/**
 	 * @param b
-	 * @return the result of product element in the b'th power.
+	 *            a large integer representing the exponent.
+	 * @return the result of product element in the b'th power. That is, a new
+	 *         product ring element composed of the coordinates of the original
+	 *         element, each one to the b'th power.
 	 */
 	public ProductRingElement power(LargeInteger b) {
 		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
@@ -98,7 +114,9 @@ public class ProductRingElement implements ByteTree {
 
 	/**
 	 * 
-	 * @return the negative of this product ring element.
+	 * @return the negative of this product ring element. That is, a new product
+	 *         ring element composed of the negative coordinates of the original
+	 *         element.
 	 */
 	public ProductRingElement neg() {
 		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
@@ -109,6 +127,13 @@ public class ProductRingElement implements ByteTree {
 		return new ProductRingElement(a);
 	}
 
+	/**
+	 * 
+	 * @param b
+	 *            another product ring element
+	 * @return true if and only if our element and b are equal. That means, all
+	 *         their coordinates are equal.
+	 */
 	public boolean equals(ProductRingElement b) {
 		ArrayOfElements<IntegerRingElement> a = arr;
 		for (int i = 0; i < arr.getSize(); i++) {
@@ -119,6 +144,10 @@ public class ProductRingElement implements ByteTree {
 		return true;
 	}
 
+	/**
+	 * returns the byte array representation (as a byte tree) of the product
+	 * ring element.
+	 */
 	@Override
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		return arr.toByteArray();
