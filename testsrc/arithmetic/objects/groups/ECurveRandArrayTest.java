@@ -21,16 +21,20 @@ import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 import cryptographic.primitives.SHA2HashFunction;
 
+/**
+ * Tests for the ECurveRandArray class.
+ * @author Sofi
+ *
+ */
 public class ECurveRandArrayTest {
-	
-	//ECurveGroup parameters
+
+	// ECurveGroup parameters
 	LargeInteger Q = new LargeInteger(
 			"115792089210356248762697446949407573530086143415290314195533631308867097853951");
 	LargeInteger a = new LargeInteger(
 			"115792089210356248762697446949407573530086143415290314195533631308867097853948");
 	LargeInteger b = new LargeInteger(
 			"41058363725152142129326129780047268409114441015993725554835256314039467401291");
-
 
 	@Test
 	public void TestArr() throws UnsupportedEncodingException {
@@ -164,24 +168,24 @@ public class ECurveRandArrayTest {
 		// Check some points
 		for (int i = 0; i < 100; i++) {
 			check = (ECurveGroupElement) h.getAt(i);
-			Assert.assertTrue(f(check.getElement().getX().getElement(),check.getElement().getY().getElement()));
-			
+			Assert.assertTrue(f(check.getElement().getX().getElement(), check
+					.getElement().getY().getElement()));
+
 		}
 
-		
-		//Check points associativity
+		// Check points associativity
 		Assert.assertTrue(check1.mult((check2).mult(check3)).equals(
 				(check1.mult(check2)).mult(check3)));
-		
-		Assert.assertTrue(check1.mult(check1.mult(check1.mult(check1))).equals((check1.mult(check1)).mult(check1.mult(check1))));
+
+		Assert.assertTrue(check1.mult(check1.mult(check1.mult(check1))).equals(
+				(check1.mult(check1)).mult(check1.mult(check1))));
 
 	}
-	
-	
+
 	private boolean f(LargeInteger xValue, LargeInteger yValue) {
 		LargeInteger f_xi = (xValue.modPow(new LargeInteger("3"), Q).add(
 				xValue.multiply(a)).add(b)).mod(Q);
-		
+
 		return f_xi.equals(yValue.modPow(new LargeInteger("2"), Q));
 	}
 

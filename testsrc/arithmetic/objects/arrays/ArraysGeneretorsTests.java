@@ -68,7 +68,8 @@ public class ArraysGeneretorsTests {
 	}
 
 	@Test
-	public void createArrayOfPlaintextsTest() throws UnsupportedEncodingException{
+	public void createArrayOfPlaintextsTest()
+			throws UnsupportedEncodingException {
 		node.add(ire1_ring4);
 		node.add(ire2_ring4);
 		ArrayOfElements<IntegerRingElement> ring = ArrayGenerators
@@ -78,8 +79,10 @@ public class ArraysGeneretorsTests {
 		ArrayOfElements<ProductRingElement> arr = new ArrayOfElements<ProductRingElement>();
 		arr.add(pge1);
 		arr.add(pge2);
-		ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators.createArrayOfPlaintexts (arr.toByteArray(), ring_4);
-		Assert.assertEquals("000000000200000000020100000001010100000001010000000002010000000102010000000102",
+		ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators
+				.createArrayOfPlaintexts(arr.toByteArray(), ring_4);
+		Assert.assertEquals(
+				"000000000200000000020100000001010100000001010000000002010000000102010000000102",
 				CryptoUtils.bytesToHexString(plaintexts.toByteArray()));
 	}
 
@@ -93,27 +96,43 @@ public class ArraysGeneretorsTests {
 	}
 
 	@Test
-	public void createArrayOfCiphertextsTest() throws UnsupportedEncodingException {
-		//Parameters params = new Parameters(getClass().getClassLoader().getResource("protInfo.xml").getFile(), getClass().getClassLoader().getResource("export/default").getFile(), "type", "auxsid", 1, false, false, false);
-		//params.fillFromXML();
-		//params.fillFromDirectory();
-		//HashFunction H = new SHA2HashFunction(params.getSh());
-		//MainVerifier mainVer = new MainVerifier(params,H);
-		//mainVer.deriveSetsAndObjects();
-		byte[] b = {0,0,0,0,2,0,0,0,0,3,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,3,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,0,0,0,0,4,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5,1,0,0,0,1,5};
-		IGroup group = new ModGroup(new LargeInteger("100"), new LargeInteger("100"), new LargeInteger("2"));
-		ArrayOfElements<ProductGroupElement> arr = ArrayGenerators.createArrayOfCiphertexts(b, group, 2);
+	public void createArrayOfCiphertextsTest()
+			throws UnsupportedEncodingException {
+		// Parameters params = new
+		// Parameters(getClass().getClassLoader().getResource("protInfo.xml").getFile(),
+		// getClass().getClassLoader().getResource("export/default").getFile(),
+		// "type", "auxsid", 1, false, false, false);
+		// params.fillFromXML();
+		// params.fillFromDirectory();
+		// HashFunction H = new SHA2HashFunction(params.getSh());
+		// MainVerifier mainVer = new MainVerifier(params,H);
+		// mainVer.deriveSetsAndObjects();
+		byte[] b = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 4, 1, 0, 0, 0,
+				1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 0,
+				0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1,
+				5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0,
+				0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 3, 0,
+				0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1,
+				5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0,
+				0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 4, 1,
+				0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0,
+				1, 5 };
+		IGroup group = new ModGroup(new LargeInteger("100"), new LargeInteger(
+				"100"), new LargeInteger("2"));
+		ArrayOfElements<ProductGroupElement> arr = ArrayGenerators
+				.createArrayOfCiphertexts(b, group, 2);
 		System.out.println(Arrays.toString(arr.toByteArray()));
-		for (int i=0; i<arr.getSize(); i++) {
-			System.out.println("left:");	
-			for (int j=0; j<arr.getAt(i).getLeft().getSize(); j++) 	
-				System.out.println(ElementsExtractor.leafToInt(((arr.getAt(i).getLeft().getElements().getAt(j)).toByteArray())));
-			System.out.println("right:");	
-			for (int j=0; j<arr.getAt(i).getLeft().getSize(); j++) 	
-				System.out.println(Arrays.toString(arr.getAt(i).getRight().getElements().getAt(j).toByteArray()));
+		for (int i = 0; i < arr.getSize(); i++) {
+			System.out.println("left:");
+			for (int j = 0; j < arr.getAt(i).getLeft().getSize(); j++)
+				System.out.println(ElementsExtractor.leafToInt(((arr.getAt(i)
+						.getLeft().getElements().getAt(j)).toByteArray())));
+			System.out.println("right:");
+			for (int j = 0; j < arr.getAt(i).getLeft().getSize(); j++)
+				System.out.println(Arrays.toString(arr.getAt(i).getRight()
+						.getElements().getAt(j).toByteArray()));
 
 		}
 		System.out.println(arr.getSize());
 	}
 }
-

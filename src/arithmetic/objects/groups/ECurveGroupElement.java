@@ -1,6 +1,5 @@
 package arithmetic.objects.groups;
 
-import java.io.UnsupportedEncodingException;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.field.IField;
@@ -126,7 +125,7 @@ public class ECurveGroupElement implements IGroupElement {
 	}
 
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public byte[] toByteArray() {
 		Node pointNode = new Node();
 		pointNode.add(element.getX());
 		pointNode.add(element.getY());

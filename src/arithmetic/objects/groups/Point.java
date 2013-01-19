@@ -7,7 +7,7 @@ import arithmetic.objects.field.IntegerFieldElement;
 
 /**
  * this class represents a point representing a location in (x,y) coordinate space, specified in integer precision.
- *
+ *@author Itay
  */
 public class Point {
 

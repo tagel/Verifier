@@ -7,7 +7,6 @@ import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
-import arithmetic.objects.basicelements.StringLeaf;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
@@ -100,21 +99,19 @@ public class ProveDec extends Prover {
 			/**
 			 * 2 - computing the seed
 			 */
-			StringLeaf stringLeaf = new StringLeaf(GENERATORS);
-			byte[] independentSeed = ROSeed
-					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
-							stringLeaf.toByteArray()));
-
+			// creating node(g,w)
 			Node leftNode = new Node();
 			leftNode.add(g);
 			leftNode.add(wInput);
 
+			// creating node(a,b)
 			Node rightNode = new Node();
 			Node a = new Node(y.toByteArray());
 			Node b = new Node(decryptionFactors.toByteArray());
 			rightNode.add(a);
 			rightNode.add(b);
 
+			// creating node(node(g,w),node(a,b))
 			Node nodeForSeed = new Node();
 			nodeForSeed.add(leftNode);
 			nodeForSeed.add(rightNode);
@@ -122,7 +119,7 @@ public class ProveDec extends Prover {
 			byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
 			/**
-			 * 3 - Computation of e
+			 * 3 - Setting the PRG and computing e
 			 */
 
 			LargeInteger[] e = new LargeInteger[N];
@@ -140,8 +137,13 @@ public class ProveDec extends Prover {
 			/**
 			 * 4 - Computation of the challenge
 			 */
-			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
+			// creating leaf(s)
+			ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
+
+			// creating node(T1Dec,...,TlambdaDec)
 			Node decCommitmentsNode = new Node(decCommitment.toByteArray());
+
+			// creating node(leaf(s),node(T1Dec,...,TlambdaDec))
 			Node nodeForChallenge = new Node();
 			nodeForChallenge.add(leaf);
 			nodeForChallenge.add(decCommitmentsNode);
@@ -158,11 +160,15 @@ public class ProveDec extends Prover {
 			/**
 			 * 5 - Compute A and B
 			 */
+
+			// compute ui where wInput = (ui,vi)
 			ArrayOfElements<ProductGroupElement> u = new ArrayOfElements<ProductGroupElement>();
 			for (int i = 0; i < wInput.getSize(); i++) {
 				u.add(wInput.getAt(i).getLeft());
 			}
 
+			// compute A = (PI(ui ^ ei),1) . marking "left" = PI(ui ^ ei),
+			// "ones" = ProductGroupElement of 1's
 			ProductGroupElement left = u.getAt(0).power(e[0]);
 			for (int i = 1; i < N; i++) {
 				left = left.mult(u.getAt(i).power(e[i]));
@@ -175,11 +181,11 @@ public class ProveDec extends Prover {
 			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
 			ProductGroupElement A = new ProductGroupElement(left, ones);
 
+			/*
+			 * if j==0 then compute B = PI((PI(fli)^ei) and accept if
+			 * PI(yl)^v*PI(yltag) == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
+			 */
 			if (j == 0) {
-				/*
-				 * compute B = PI((PI(fli)^ei) and accept if PI(yl)^v*PI(yltag)
-				 * == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
-				 */
 				// TODO fl is an array, so we need to multiply fj's elements
 				IGroupElement B = Gq.one();
 				for (int i = 0; i < N; i++) {

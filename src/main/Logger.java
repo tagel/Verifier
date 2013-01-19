@@ -30,7 +30,9 @@ public class Logger {
 	 *            the severity of the message.
 	 */
 	public void sendLog(String message, Severity severity) {
-		if (verbose || severity.equals(Severity.ERROR)) {
+		if (severity.equals(Severity.ERROR)) {
+			System.err.println(getDate() + " " + message);
+		} else if (verbose ) {
 			System.out.println(getDate() + " " + message);
 		}
 	}

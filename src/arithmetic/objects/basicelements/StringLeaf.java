@@ -29,8 +29,13 @@ public class StringLeaf  implements ByteTree{
 	/**
 	 * returns the byte array representation (as a byte tree) of the string.
 	 */
-	public byte[] toByteArray() throws UnsupportedEncodingException {
-		byte[] b = str.getBytes("ASCII");
+	public byte[] toByteArray()  {
+		byte[] b;
+		try {
+		 b= str.getBytes("ASCII");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 		int numOfBytes = b.length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(numOfBytes).array();
 		byte[] c= new byte[a.length+b.length];
@@ -40,7 +45,7 @@ public class StringLeaf  implements ByteTree{
 		System.arraycopy(c, 0, ret, 1, c.length);
 		ret[0] = 1;
 		return ret;
-	}
+		}
 
 }
 

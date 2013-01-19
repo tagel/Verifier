@@ -1,7 +1,5 @@
 package arithmetic.objects.basicelements;
 
-import java.io.UnsupportedEncodingException;
-
 import arithmetic.objects.ByteTree;
 
 /**
@@ -23,7 +21,7 @@ public class RawElement implements ByteTree {
 	}
 
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public byte[] toByteArray() {
 		return byteArr;
 	}
 

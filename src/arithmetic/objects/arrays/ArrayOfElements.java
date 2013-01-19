@@ -88,7 +88,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 * returns the byte array representation (as a byte tree) of the array.
 	 */
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public byte[] toByteArray() {
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(elements.size()).array();
 		byte[] b = new byte[a.length + 1];
