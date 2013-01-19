@@ -10,10 +10,11 @@ import arithmetic.objects.arrays.ArrayOfElements;
 
 /**
  * This class represents a product ring element. This product ring element has
- * coordinates which are integer ring elements. In our project this is the only
- * kind of product ring element we need to implement. That means we do not need
- * recursive product ring elements where some of the coordinates can also be
- * product elements.
+ * coordinates which are integer ring elements that all belong to the same ring.
+ * In our project this is the only kind of product ring element we need to
+ * implement. That means we do not need recursive product ring elements where
+ * some of the coordinates can also be product elements, or ring elements which
+ * belong to different rings.
  * 
  * @author Itay
  * 
@@ -22,6 +23,24 @@ public class ProductRingElement implements ByteTree {
 
 	private ArrayOfElements<IntegerRingElement> arr;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param bt
+	 *            - a byte array representation (as a byte tree) of the product
+	 *            ring element.
+	 * @param ring
+	 *            - the ring which the coordinates of the product element belong
+	 *            to.
+	 * @param w
+	 *            - the width of the product element = the number of coordinates
+	 *            it has. this parameter is needed for the end case that it
+	 *            equals 1. in this case, the byte array representation of a
+	 *            product ring element that contains only one element is
+	 *            different and therefore this case needs to be handled
+	 *            differently.
+	 * 
+	 */
 	public ProductRingElement(byte[] bt, IRing<IntegerRingElement> ring, int w)
 			throws UnsupportedEncodingException {
 		if (w == 1) {
@@ -32,6 +51,12 @@ public class ProductRingElement implements ByteTree {
 			arr = ArrayGenerators.createRingElementArray(bt, ring);
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param arr
+	 *            an array of all the coordinates of the product element.
+	 */
 	public ProductRingElement(ArrayOfElements<IntegerRingElement> arr) {
 		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
 		for (int i = 0; i < arr.getSize(); i++) {
@@ -42,7 +67,7 @@ public class ProductRingElement implements ByteTree {
 
 	/**
 	 * 
-	 * @return the array of elements
+	 * @return an array of the product element coordinates.
 	 */
 	public ArrayOfElements<IntegerRingElement> getElements() {
 		return arr;
@@ -50,7 +75,7 @@ public class ProductRingElement implements ByteTree {
 
 	/**
 	 * 
-	 * @return the size of the array
+	 * @return the number of coordinates in the product element.
 	 */
 	public int getSize() {
 		return arr.getSize();

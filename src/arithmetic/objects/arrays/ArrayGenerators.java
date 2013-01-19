@@ -116,7 +116,7 @@ public class ArrayGenerators {
 	 * @param data
 	 *            = a byte array representation of an array of plaintexts
 	 * @param group
-	 *            = the plaintexts in the array all contain product group
+	 *            = the plaintexts in the array are all product group
 	 *            elements which contain group elements belonging to the same
 	 *            group. this group is our input group.
 	 * @return an array of product group elements which is an array of

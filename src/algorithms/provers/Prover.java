@@ -2,7 +2,6 @@ package algorithms.provers;
 
 import java.io.UnsupportedEncodingException;
 
-import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -16,6 +15,8 @@ import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
 public abstract class Prover {
+
+	protected static final String GENERATORS = "generators";
 
 	/**
 	 * This function decrypts a given ciphertext back to its plaintext. Input
@@ -81,8 +82,8 @@ public abstract class Prover {
 			right.add((y.power(powers.getAt(i).getElement()).mult(ms.getAt(i))));
 		}
 
-		ProductGroupElement encryptedMsg = ElementsExtractor.createCiphertext(
-				left, right);
+		ProductGroupElement encryptedMsg = new ProductGroupElement(new ProductGroupElement(left),
+			new ProductGroupElement(right));
 		return encryptedMsg;
 	}
 
@@ -187,7 +188,7 @@ public abstract class Prover {
 	 *            Pseudo-random generator used to derive random vectors for
 	 *            batching
 	 * @param wInput
-	 *            - array of input ciphertexts
+	 *            Array of input ciphertexts
 	 * @return F, the multiplication of Wi^Ei N times
 	 */
 	protected static ProductGroupElement computeF(int N, int Ne, byte[] seed,

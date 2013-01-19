@@ -23,7 +23,47 @@ import cryptographic.primitives.RandomOracle;
  */
 public class ProveShuffling extends Prover {
 
-	private static final String GENERATORS = "generators";
+	
+	/**
+	 * This is the main function of this class which executes the shuffling
+	 * algorithm.
+	 * 
+	 * @param ROSeed
+	 *            RandomOracle for computing the seed
+	 * @param ROChallenge
+	 *            RandomOracle for computing the challenge
+	 * @param ro
+	 *            prefix to random oracle
+	 * @param N
+	 *            size of the arrays
+	 * @param Ne
+	 *            number of bits in each component
+	 * @param Nr
+	 *            Acceptable "statistical error" when deriving independent
+	 *            generators
+	 * @param Nv
+	 *            Number of bits in the challenge
+	 * @param prg
+	 *            Pseudo-random generator used to derive random vectors for
+	 *            batching
+	 * @param Gq
+	 *            The group
+	 * @param pk
+	 *            The public key
+	 * @param wInput
+	 *            Array of input ciphertexts
+	 * @param wOutput
+	 *            Array of output ciphertexts
+	 * @param width
+	 *            width of plaintexts and ciphertexts
+	 * @param permutationCommitment
+	 *            commitment to a permutation
+	 * @param PoSCommitment
+	 *            “Proof commitment” of the proof of a shuffle
+	 * @param PoSReply
+	 *            “Proof reply” of the proof of a shuffle
+	 * @return true if we accept the proof and false otherwise
+	 */
 
 	public static boolean prove(RandomOracle ROSeed, RandomOracle ROChallenge,
 			byte[] ro, int N, int Ne, int Nr, int Nv,
@@ -44,6 +84,7 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
+			
 			// creating B,A',B',C',D',F'
 			@SuppressWarnings("unchecked")
 			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>) (PoSCommitment
@@ -84,7 +125,6 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
 					independentSeed, Nr);
 
-			//TODO: verify that g = generator and not pk=(g,y) - IGroupElement g = pk.getElements().getAt(0);
 			IGroupElement g = Gq.getGenerator();
 
 			ByteTree[] input = new ByteTree[6];
@@ -128,7 +168,7 @@ public class ProveShuffling extends Prover {
 			LargeInteger E = computeE(N, Ne, seed, prg);
 			IGroupElement C = computeC(u, h, N);
 			IGroupElement D = computeD(E, B, h, N);
-			//TODO: B-1 = ho - WTF??
+			// TODO: B-1 = ho - WTF??
 
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])

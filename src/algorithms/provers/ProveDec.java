@@ -12,7 +12,6 @@ import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -25,25 +24,44 @@ import cryptographic.primitives.RandomOracle;
 public class ProveDec extends Prover {
 
 	/**
-	 * @param ROChallenge
+	 * This is the main function of this class which executes the decryption
+	 * algorithm.
+	 * 
 	 * @param ROSeed
-	 * @param m
-	 * @param ciphertexts
-	 * @param secretKeys
-	 * @param publicKeys
-	 * @param g
-	 * @param gq
-	 * @param prg
-	 * @param nv
-	 * @param nr
-	 * @param ne
-	 * @param n
-	 * @param prefixToRO
+	 *            RandomOracle for computing the seed
+	 * @param ROChallenge
+	 *            RandomOracle for computing the challenge
 	 * @param j
-	 * @param decrFactReplies
-	 * @param decrFactCommitments
+	 *            index of proof to verify
+	 * @param ro
+	 *            prefix to random oracleF
+	 * @param N
+	 *            size of the arrays
+	 * @param Ne
+	 *            number of bits in each component
+	 * @param Nr
+	 *            Acceptable "statistical error" when deriving independent
+	 *            generators
+	 * @param Nv
+	 *            Number of bits in the challenge
+	 * @param prg
+	 *            Pseudo-random generator used to derive random vectors for
+	 *            batching
+	 * @param Gq
+	 *            group of prime order
+	 * @param g
+	 *            standard generator of the group
+	 * @param y
+	 *            Partial public keys
+	 * @param wInput
+	 *            Array of input ciphertexts
 	 * @param decryptionFactors
-	 * @return true if the decryption was correct and false otherwise.
+	 *            Arrays fi = (fi0,fi1,...fiN-1) of decryption factors in Mw
+	 * @param decrFactCommitments
+	 *            commitments of Fiat-Shamir proofs
+	 * @param decrFactReplies
+	 *            Replies of Fiat-Shamir proofs
+	 * @return true if we accept the proof and false otherwise
 	 */
 	public static boolean prove(
 			RandomOracle ROSeed,
@@ -58,9 +76,7 @@ public class ProveDec extends Prover {
 			IGroup Gq,
 			IGroupElement g,
 			ArrayOfElements<IGroupElement> y,
-			ArrayOfElements<IntegerRingElement> secretKeys,
 			ArrayOfElements<ProductGroupElement> wInput,
-			ArrayOfElements<ProductGroupElement> m,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors,
 			ArrayOfElements<Node> decrFactCommitments,
 			ArrayOfElements<IntegerRingElement> decrFactReplies) {
@@ -73,7 +89,7 @@ public class ProveDec extends Prover {
 			Node decCommitment = decrFactCommitments.getAt(j);
 
 			IGroupElement yltag = (IGroupElement) decCommitment.getAt(0);
-			ProductRingElement Bltag = (ProductRingElement) decCommitment
+			ProductGroupElement Bltag = (ProductGroupElement) decCommitment
 					.getAt(1);
 
 			/**
@@ -84,7 +100,7 @@ public class ProveDec extends Prover {
 			/**
 			 * 2 - computing the seed
 			 */
-			StringLeaf stringLeaf = new StringLeaf("generators");
+			StringLeaf stringLeaf = new StringLeaf(GENERATORS);
 			byte[] independentSeed = ROSeed
 					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							stringLeaf.toByteArray()));
@@ -164,12 +180,12 @@ public class ProveDec extends Prover {
 				 * compute B = PI((PI(fli)^ei) and accept if PI(yl)^v*PI(yltag)
 				 * == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
 				 */
-				//TODO fl is an array, so we need to multiply fj's elements
+				// TODO fl is an array, so we need to multiply fj's elements
 				IGroupElement B = Gq.one();
 				for (int i = 0; i < N; i++) {
 					IGroupElement fl = Gq.one();
 					for (int l = 0; i < decryptionFactors.getSize(); i++) {
-						//fl = fl.mult(f.getAt(0).getAt(l));
+						// fl = fl.mult(f.getAt(0).getAt(l));
 					}
 					B = B.mult(fl.power(e[i]));
 				}
