@@ -166,7 +166,7 @@ public class ProveShuffling extends Prover {
 			LargeInteger E = computeE(N, Ne, seed, prg);
 			IGroupElement C = computeC(u, h, N);
 			IGroupElement D = computeD(E, B, h, N);
-			// TODO: B-1 = ho - WTF??
+			// TODO Tagel: B-1 = ho - WTF??
 
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
