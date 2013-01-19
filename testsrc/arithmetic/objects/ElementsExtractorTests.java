@@ -226,8 +226,8 @@ public class ElementsExtractorTests {
 		ArrayOfElements<IGroupElement> rightNode = new ArrayOfElements<IGroupElement>();
 		rightNode.add(ige1);
 		rightNode.add(ige1);
-		ProductGroupElement cipher = ElementsExtractor.createCiphertext(
-				leftNode, rightNode);
+		ProductGroupElement cipher = new ProductGroupElement(
+				new ProductGroupElement(leftNode), new ProductGroupElement(rightNode));
 		Assert.assertEquals(
 				"00000000020000000002010000000200000100000002000100000000020100000002000101000000020001",
 				CryptoUtils.bytesToHexString(cipher.toByteArray()));
@@ -245,8 +245,7 @@ public class ElementsExtractorTests {
 		ArrayOfElements<IGroupElement> rightEllipticNode = new ArrayOfElements<IGroupElement>();
 		rightEllipticNode.add(eCurveElement1);
 		rightEllipticNode.add(eCurveElement2);
-		cipher = ElementsExtractor.createCiphertext(leftEllipticNode,
-				rightEllipticNode);
+		cipher = new ProductGroupElement(new ProductGroupElement(leftEllipticNode), new ProductGroupElement(rightEllipticNode));
 		Assert.assertEquals(
 				"0000000002000000000200000000020100000019000000000000000000000000000000000000000000000000000100000019000000000000000000000000000000000000000000000000010000000002010000001900000000000000000000000000000000000000000000000000010000001900000000000000000000000000000000000000000000000001000000000200000000020100000019000000000000000000000000000000000000000000000000000100000019000000000000000000000000000000000000000000000000010000000002010000001900000000000000000000000000000000000000000000000000010000001900000000000000000000000000000000000000000000000001",
 				CryptoUtils.bytesToHexString(cipher.toByteArray()));
