@@ -28,8 +28,9 @@ import cryptographic.primitives.CryptoUtils;
  * This class has methods which help us extract elements from given byte arrays.
  * the functions in this class are static and are mainly used by the verifiers
  * and provers, helping them derive the right elements from the .bt files that
- * we got from the verificatum.
+ * we get from the verificatum.
  * 
+ * @author Itay
  */
 public class ElementsExtractor {
 
@@ -141,12 +142,39 @@ public class ElementsExtractor {
 		}
 	}
 
+	/**
+	 * A simple PGE (=Product Group Element) means the product element has only
+	 * group elements in its coordinates (it's not recursive, its coordinates
+	 * cannot be product elements themselves), and all group elements belong to
+	 * the same group. this is a static "helper" function for the verifiers and
+	 * provers.
+	 * 
+	 * @param bt
+	 *            a byte array representing a "simple" product group element.
+	 * @param group
+	 *            the group which all the group elements belong to.
+	 * @return the product group element which bt represents.
+	 * 
+	 */
 	public static ProductGroupElement createSimplePGE(byte[] bt, IGroup group)
 			throws UnsupportedEncodingException {
 		ArrayOfElements<IGroupElement> arr = ArrayGenerators
 				.createGroupElementArray(bt, group);
 		return new ProductGroupElement(arr);
 	}
+
+	/**
+	 * A ciphertext is a product group element which has two coordinates
+	 * (referred to as "left" and "right" in our project), each of the two
+	 * coordinates is a product group element itself containing an equal number
+	 * (w) of group elements, all belong to the same group.
+	 * 
+	 * @param bt a byte array representing a ciphertext (as a byte tree)
+	 * @param group the group which all the group elements inside the ciphertext belong to.
+	 * @param w the width, the number of coordinates the "left" and "right" product elements have.
+	 * @return the ciphertext which bt represents (which is a profuct group element).
+	 * 
+	 */
 
 	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group,
 			int w) throws UnsupportedEncodingException {
@@ -166,13 +194,6 @@ public class ElementsExtractor {
 			return new ProductGroupElement(left, right);
 		}
 	}
-
-//	public static ProductGroupElement createCiphertext(
-//			ArrayOfElements<IGroupElement> left,
-//			ArrayOfElements<IGroupElement> right) {
-//		return new ProductGroupElement(new ProductGroupElement(left),
-//				new ProductGroupElement(right));
-//	}
 
 	/**
 	 * @param <E>
