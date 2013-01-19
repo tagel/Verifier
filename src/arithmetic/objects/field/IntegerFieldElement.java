@@ -41,7 +41,7 @@ public class IntegerFieldElement implements ByteTree {
 
 	/**
 	 * 
-	 * @return
+	 * @return The additive inverse of our element
 	 */
 	public IntegerFieldElement neg() {
 		return new IntegerFieldElement(this.getField().getOrder()

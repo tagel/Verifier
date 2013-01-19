@@ -93,7 +93,7 @@ public class ProductGroupElementTest {
 		aoe1.add(ire1_Group3);
 		ProductGroupElement pre1 = new ProductGroupElement(aoe1);
 		ProductGroupElement pre2 = new ProductGroupElement(aoe1);
-		Assert.assertTrue(pre1.equal(pre2));
+		Assert.assertTrue(pre1.equals(pre2));
 	}
 
 	@Test
@@ -104,7 +104,7 @@ public class ProductGroupElementTest {
 		aoe2.add(ire2_Group3);
 		ProductGroupElement pre1 = new ProductGroupElement(aoe1);
 		ProductGroupElement pre2 = new ProductGroupElement(aoe2);
-		Assert.assertFalse(pre1.equal(pre2));
+		Assert.assertFalse(pre1.equals(pre2));
 	}
 }
 
