@@ -3,11 +3,9 @@ package algorithms.provers;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
-import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
-import arithmetic.objects.basicelements.StringLeaf;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
@@ -30,7 +28,7 @@ public class ProveSoC extends Prover {
 			byte[] ro, int N, int Ne, int Nr, int Nv,
 			PseudoRandomGenerator prg, IGroup Gq,
 			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node PoSCommitment, Node PoSReply) {
+			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h) {
 
 			/*
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
@@ -70,13 +68,6 @@ public class ProveSoC extends Prover {
 			 * 2 - computing the seed
 			 */
 
-			StringLeaf stringLeaf = new StringLeaf("generators");
-			byte[] independentSeed = ROSeed
-					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
-							stringLeaf.toByteArray()));
-			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
-					independentSeed, Nr);
-
 			IGroupElement g = Gq.getGenerator();
 			Node nodeForSeed = new Node();
 			nodeForSeed.add(g);
@@ -94,18 +85,10 @@ public class ProveSoC extends Prover {
 			 */
 			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
 
-			Node nodeForChallenge = new Node();
-			nodeForChallenge.add(leaf);
-			nodeForChallenge.add(PoSCommitment);
+			byte[] challenge = computeChallenge(ROChallenge, ro, PoSCommitment,
+					leaf);
 
-			byte[] challenge = ROChallenge
-					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
-							nodeForChallenge.toByteArray()));
-
-			/* Computation of v: */
-			LargeInteger v = new LargeInteger(challenge);
-			LargeInteger twoNv = new LargeInteger("2").power(Nv);
-			v = v.mod(twoNv);
+			LargeInteger v = computeV(Nv, challenge);
 
 			/*
 			 * 5 - Compute C,D and verify equalities

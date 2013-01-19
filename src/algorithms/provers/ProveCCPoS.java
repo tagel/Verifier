@@ -3,11 +3,9 @@ package algorithms.provers;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
-import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
-import arithmetic.objects.basicelements.StringLeaf;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
@@ -34,7 +32,7 @@ public class ProveCCPoS extends Prover{
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput, int width,
 			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node PoSCommitment, Node PoSReply) {
+			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h) {
 
 			/*
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
@@ -62,21 +60,7 @@ public class ProveCCPoS extends Prover{
 			/*
 			 * 2 - computing the seed
 			 */
-			StringLeaf stringLeaf = new StringLeaf("generators");
-			byte[] independentSeed = ROSeed
-					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
-							stringLeaf.toByteArray()));
-			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
-					independentSeed, Nr);
-
-			IGroupElement g = Gq.getGenerator();
-			Node nodeForSeed = new Node();
-			nodeForSeed.add(g);
-			nodeForSeed.add(h);
-			nodeForSeed.add(u);
-			nodeForSeed.add(pk);
-			nodeForSeed.add(wInput);
-			nodeForSeed.add(wOutput);
+			Node nodeForSeed = computeNodeForSeed(Gq, pk, wInput, wOutput, h, u);
 			byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
 			/*
@@ -88,19 +72,10 @@ public class ProveCCPoS extends Prover{
 			 * 4 - Computation of the challenge
 			 */
 			ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
+			byte[] challenge = computeChallenge(ROChallenge, ro, PoSCommitment,
+					leaf);
 
-			Node nodeForChallenge = new Node();
-			nodeForChallenge.add(leaf);
-			nodeForChallenge.add(PoSCommitment);
-
-			byte[] challenge = ROChallenge
-					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
-							nodeForChallenge.toByteArray()));
-
-			/* Computation of v: */
-			LargeInteger v = new LargeInteger(challenge);
-			LargeInteger twoNv = new LargeInteger("2").power(Nv);
-			v = v.mod(twoNv);
+			LargeInteger v = computeV(Nv, challenge);
 
 			/*
 			 * 5 - Compute B and verify equalities
@@ -110,7 +85,7 @@ public class ProveCCPoS extends Prover{
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 			 */
-			if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
+			if (!verifyAvAtag(A, Atag, v, Ke, Gq.getGenerator(), N, h, Ka)) {
 				return false;
 			}
 
@@ -139,6 +114,19 @@ public class ProveCCPoS extends Prover{
 
 			/* All equalities exist. */
 			return true;
+	}
 
+	private static Node computeNodeForSeed(IGroup Gq, ProductGroupElement pk,
+			ArrayOfElements<ProductGroupElement> wInput,
+			ArrayOfElements<ProductGroupElement> wOutput,
+			ArrayOfElements<IGroupElement> h, ArrayOfElements<IGroupElement> u) {
+		Node nodeForSeed = new Node();
+		nodeForSeed.add(Gq.getGenerator());
+		nodeForSeed.add(h);
+		nodeForSeed.add(u);
+		nodeForSeed.add(pk);
+		nodeForSeed.add(wInput);
+		nodeForSeed.add(wOutput);
+		return nodeForSeed;
 	}
 }
