@@ -158,8 +158,7 @@ public class ElementsExtractor {
 	 * @return the product group element which bt represents.
 	 * 
 	 */
-	public static ProductGroupElement createSimplePGE(byte[] bt, IGroup group)
-			throws UnsupportedEncodingException {
+	public static ProductGroupElement createSimplePGE(byte[] bt, IGroup group) {
 		ArrayOfElements<IGroupElement> arr = ArrayGenerators
 				.createGroupElementArray(bt, group);
 		return new ProductGroupElement(arr);
