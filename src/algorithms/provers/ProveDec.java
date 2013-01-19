@@ -3,7 +3,6 @@ package algorithms.provers;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
-import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
@@ -122,19 +121,11 @@ public class ProveDec extends Prover {
 		/* creating node(T1Dec,...,TlambdaDec) */
 		Node decCommitmentsNode = new Node(decCommitment.toByteArray());
 
-		/* creating node(leaf(s),node(T1Dec,...,TlambdaDec)) */
-		Node nodeForChallenge = new Node();
-		nodeForChallenge.add(leaf);
-		nodeForChallenge.add(decCommitmentsNode);
+		byte[] challenge = computeChallenge(ROChallenge, ro, decCommitmentsNode,
+				leaf);
 
-		byte[] challenge = ROChallenge.getRandomOracleOutput(ArrayGenerators
-				.concatArrays(ro, nodeForChallenge.toByteArray()));
-
-		/* Computation of v: */
-		LargeInteger v = new LargeInteger(challenge);
-		LargeInteger twoNv = new LargeInteger("2").power(Nv);
-		v = v.mod(twoNv);
-
+		LargeInteger v = computeV(Nv, challenge);
+		
 		/*
 		 * 5 - Compute A and B
 		 */
