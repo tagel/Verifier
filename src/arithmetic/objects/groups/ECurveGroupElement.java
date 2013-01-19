@@ -11,6 +11,14 @@ public class ECurveGroupElement implements IGroupElement {
 	private Point element;
 	private ECurveGroup group;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param element
+	 *            - the elliptic curve point.
+	 * @param group
+	 *            - the group which the large integer belongs to.
+	 */
 	public ECurveGroupElement(Point element, ECurveGroup group) {
 		this.element = element;
 		this.group = group;

@@ -26,7 +26,7 @@ public interface IGroupElement extends ByteTree {
 
 	/**
 	 * 
-	 * @return the multiplication inverse of our element.
+	 * @return the multiplicative inverse of our element.
 	 */
 	public abstract IGroupElement inverse();
 
