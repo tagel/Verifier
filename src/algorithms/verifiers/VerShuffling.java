@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import junit.framework.Assert;
+
 import algorithms.provers.ProveCCPoS;
 import algorithms.provers.ProveShuffling;
 import algorithms.provers.ProveSoC;
@@ -103,13 +105,13 @@ public class VerShuffling {
 							&& ProveShuffling.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk, Li,
 									Llambda, width, PermutationCommitment,
-									PoSCommitment, PoSReply);
+									PoSCommitment, PoSReply, h);
 				} else {
 					retValue = retValue
 							&& ProveShuffling.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
 									Liminus1, Li, width, PermutationCommitment,
-									PoSCommitment, PoSReply);
+									PoSCommitment, PoSReply, h);
 				}
 
 				// If !retValue, it means that reading the elements
@@ -136,7 +138,7 @@ public class VerShuffling {
 				if (!readFilesPoSC(i, directory, Gq, Zq, N, width)
 						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO, N,
 								ne, nr, nv, prg, Gq, PermutationCommitment,
-								PoSCCommitment, PoSCCommitment))) {
+								PoSCCommitment, PoSCCommitment, h))) {
 					// if the algorithm rejects or reading failed set
 					// permutation commitment to be h
 					PermutationCommitment = h;
@@ -176,13 +178,13 @@ public class VerShuffling {
 							&& ProveCCPoS.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk, Li,
 									Llambda, width, PermutationCommitment,
-									PoSCommitment, PoSReply);
+									PoSCommitment, PoSReply, h);
 				} else {
 					retValue = retValue
 							&& ProveCCPoS.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
 									Liminus1, Li, width, PermutationCommitment,
-									PoSCommitment, PoSReply);
+									PoSCommitment, PoSReply, h);
 				}
 
 				// If !retValue, it means that reading the elements
@@ -588,5 +590,18 @@ public class VerShuffling {
 		}
 
 		return text.nextInt();
+	}
+
+	private static boolean compareCiphertextsArrays(
+			ArrayOfElements<ProductGroupElement> one,
+			ArrayOfElements<ProductGroupElement> two) {
+		
+		for (int i = 0; i<one.getSize(); i++) {
+			if (one.getAt(i).equals(two.getAt(i))) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

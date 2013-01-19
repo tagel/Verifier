@@ -23,7 +23,7 @@ public class VerDec {
 	private static final String EMPTY_STRING = "";
 	private static final String BT_FILE_EXT = ".bt";
 	private static final String PROOFS = "proofs";
-	private static final String DECRIPTION_FACTORS = "DecriptionFactors";
+	private static final String DECRIPTION_FACTORS = "DecryptionFactors";
 	private static final String DECR_FACT_COMMITMENT = "DecrFactCommitment";
 	private static final String DECR_FACT_REPLY = "DecrFactReply";
 
@@ -108,7 +108,13 @@ public class VerDec {
 		return true;
 	}
 
-	private static ArrayOfElements<ProductGroupElement> multiplyArrays(
+	
+	/**
+	 * 
+	 * @param arrays - array of the arrays to multiply
+	 * @return an array of multiplied arrays
+	 */
+	public static ArrayOfElements<ProductGroupElement> multiplyArrays(
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> arrays) {
 
 		ArrayOfElements<ProductGroupElement> retVal = new ArrayOfElements<ProductGroupElement>();
@@ -119,13 +125,19 @@ public class VerDec {
 			ArrayOfElements<ProductGroupElement> two;
 			for (int i = 1; i < arrays.getSize(); i++) {
 				two = arrays.getAt(i);
-				retVal = multArrays(retVal, two);
+				retVal = multTwoArrays(retVal, two);
 			}
 		}
 		return retVal;
 	}
 
-	private static ArrayOfElements<ProductGroupElement> multArrays(
+	/**
+	 * Multiplies two arrays
+	 * @param one
+	 * @param two
+	 * @return
+	 */
+	public static ArrayOfElements<ProductGroupElement> multTwoArrays(
 			ArrayOfElements<ProductGroupElement> one,
 			ArrayOfElements<ProductGroupElement> two) {
 		

@@ -1,5 +1,6 @@
 package algorithms.provers;
 
+import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -100,7 +101,27 @@ public abstract class Prover {
 		return ROSeed.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 				nodeForSeed.toByteArray()));
 	}
+	
+	protected static LargeInteger computeV(int Nv, byte[] challenge) {
+		/* Computation of v: */
+		LargeInteger v = new LargeInteger(challenge);
+		LargeInteger twoNv = new LargeInteger("2").power(Nv);
+		v = v.mod(twoNv);
+		return v;
+	}
+	
+	protected static byte[] computeChallenge(RandomOracle ROChallenge,
+			byte[] ro, Node node, ByteTree leaf) {
+		ByteTree[] inputChallenge = new ByteTree[2];
+		inputChallenge[0] = leaf;
+		inputChallenge[1] = node;
+		Node nodeForChallenge = new Node(inputChallenge);
 
+		byte[] challenge = ROChallenge
+				.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
+						nodeForChallenge.toByteArray()));
+		return challenge;
+	}
 	/**
 	 * This function computes A, needed in the proof.
 	 * 
