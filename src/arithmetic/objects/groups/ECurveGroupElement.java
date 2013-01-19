@@ -6,6 +6,14 @@ import arithmetic.objects.field.IField;
 import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.field.PrimeOrderField;
 
+/**
+ * This class is used to represent an element in an elliptic curve group.for
+ * every such element, we will store both the point and the group that it
+ * belongs to. the (x, y) coordinates are both integer field elements.
+ * 
+ * @author Itay
+ * 
+ */
 public class ECurveGroupElement implements IGroupElement {
 
 	private Point element;
@@ -17,27 +25,40 @@ public class ECurveGroupElement implements IGroupElement {
 	 * @param element
 	 *            - the elliptic curve point.
 	 * @param group
-	 *            - the group which the large integer belongs to.
+	 *            - the group(elliptic curve) which the point belongs to.
 	 */
 	public ECurveGroupElement(Point element, ECurveGroup group) {
 		this.element = element;
 		this.group = group;
 	}
 
+	/**
+	 * 
+	 * @return the point
+	 */
 	public Point getElement() {
 		return element;
 	}
 
+	/**
+	 * @return the elliptic curve which this point belongs to.
+	 */
 	public ECurveGroup getGroup() {
 		return group;
 	}
-
+	
+	/**
+	 * @param b
+	 *            another elliptic curve element
+	 * @return The result of the multiplication of our element and b.
+	 */
 	@Override
 	public ECurveGroupElement mult(IGroupElement b) {
 		if (b.equals(group.one())) {
 			return this;
 		}
-		if (this.equals(group.one())) return (ECurveGroupElement) b;
+		if (this.equals(group.one()))
+			return (ECurveGroupElement) b;
 
 		IntegerFieldElement xp = this.getElement().getX();
 		IntegerFieldElement xq = ((ECurveGroupElement) b).getElement().getX();
@@ -83,14 +104,19 @@ public class ECurveGroupElement implements IGroupElement {
 			return ret;
 		}
 
-		// Not suppose to get here!
+		// Not supposed to get here!
 		System.out.println("Error.");
 		return null;
 	}
-
+	
+	/**
+	 * 
+	 * @return the multiplicative inverse of our element.
+	 */
 	@Override
 	public ECurveGroupElement inverse() {
-		IField<IntegerFieldElement> field = new PrimeOrderField(getGroup().getFieldOrder());
+		IField<IntegerFieldElement> field = new PrimeOrderField(getGroup()
+				.getFieldOrder());
 		IntegerFieldElement y = new IntegerFieldElement(LargeInteger.ZERO
 				.subtract(((Point) getElement()).getY().getElement()).mod(
 						getGroup().getFieldOrder()), field);
@@ -98,30 +124,47 @@ public class ECurveGroupElement implements IGroupElement {
 		return new ECurveGroupElement(p, getGroup());
 	}
 
+	/**
+	 * 
+	 * @param b
+	 *            another elliptic curve element
+	 * @return the result of the multiplication of our element with the inverse
+	 *         of b (division).
+	 */
 	@Override
 	public ECurveGroupElement divide(IGroupElement b) {
 		return mult(b.inverse());
 	}
 
+	/**
+	 * 
+	 * @param b
+	 *            a large integer which is the exponent.
+	 * @return our element in the b'th power.
+	 */
 	public ECurveGroupElement power(LargeInteger b) {
-	
-	
-			ECurveGroupElement base = this;
-		    ECurveGroupElement result = this.getGroup().one();
-		    
-		    String str = b.toString(2);
-		    
-		    for (int i = str.length()-1; i>-1; i--)
-		    {
-		        if (str.charAt(i)=='1')
-		            result = result.mult(base);
-		        base =  base.mult(base);
-		    }
 
-		    return result;
+		ECurveGroupElement base = this;
+		ECurveGroupElement result = this.getGroup().one();
+
+		String str = b.toString(2);
+
+		for (int i = str.length() - 1; i > -1; i--) {
+			if (str.charAt(i) == '1')
+				result = result.mult(base);
+			base = base.mult(base);
 		}
-	
 
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param b
+	 *            another elliptic curve element
+	 * @return true if and only if our element and b are equal. That means,
+	 *         represent the same point and belong to the same curve.
+	 */
 	public boolean equals(IGroupElement b) {
 		if (getElement().getX().equals(
 				(((ECurveGroupElement) b).getElement()).getX())
@@ -132,6 +175,9 @@ public class ECurveGroupElement implements IGroupElement {
 			return false;
 	}
 
+	/**
+	 * returns the byte array representation (as a byte tree) of this elliptic curve element.
+	 */
 	@Override
 	public byte[] toByteArray() {
 		Node pointNode = new Node();
