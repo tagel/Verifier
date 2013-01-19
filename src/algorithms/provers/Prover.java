@@ -16,6 +16,8 @@ import cryptographic.primitives.RandomOracle;
 
 public abstract class Prover {
 
+	protected static final String GENERATORS = "generators";
+
 	/**
 	 * This function decrypts a given ciphertext back to its plaintext. Input
 	 * description is as follows: x - Additive inverse of the exponent by which

@@ -23,8 +23,7 @@ import cryptographic.primitives.RandomOracle;
  */
 public class ProveShuffling extends Prover {
 
-	private static final String GENERATORS = "generators";
-
+	
 	/**
 	 * This is the main function of this class which executes the shuffling
 	 * algorithm.
@@ -126,8 +125,6 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
 					independentSeed, Nr);
 
-			// TODO: verify that g = generator and not pk=(g,y) - IGroupElement
-			// g = pk.getElements().getAt(0);
 			IGroupElement g = Gq.getGenerator();
 
 			ByteTree[] input = new ByteTree[6];
