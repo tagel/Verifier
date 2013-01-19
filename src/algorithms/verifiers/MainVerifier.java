@@ -97,12 +97,15 @@ public class MainVerifier {
 		if (!ReadLists()) {
 			return false;
 		}
+		
+		//Create the random array to send to the verifiers
+		createRandomArray();
 
 		// *******Section 7 in the Algorithm*********
 		// Call the subroutines of the verifier
 		// 7a - Verify Shuffling
-		if ((Type.MIXING.equals(params.getType()) || Type.SHUFFLING.equals(
-				params.getType()))
+		if ((Type.MIXING.equals(params.getType()) || Type.SHUFFLING
+				.equals(params.getType()))
 				&& (params.isPosc() || params.isCcpos())) {
 
 			if (!runVerShuffling()) {
@@ -113,7 +116,7 @@ public class MainVerifier {
 		// 7b - Verify Decryption
 		// if isDec==true means we need to check the decryption.
 		if (params.isDec()) {
-			
+
 			if (Type.MIXING.equals(params.getType())) {
 				if (!runVerDec(Type.MIXING)) {
 					return false;
@@ -129,7 +132,18 @@ public class MainVerifier {
 		return true;
 	}
 
-	// expect type to be MIXING or DECRYPTION 
+	private void createRandomArray() throws Exception {
+		
+		StringLeaf stringLeaf = new StringLeaf("generators");
+		byte[] independentSeed = params.getROseed().getRandomOracleOutput(ArrayGenerators
+				.concatArrays(params.getPrefixToRO(), stringLeaf.toByteArray()));
+		ArrayOfElements<IGroupElement> h = params.getGq().createRandomArray(params.getN(), params.getPrg(),
+				independentSeed, params.getNr());
+		params.setRandArray(h);
+		
+	}
+
+	// expect type to be MIXING or DECRYPTION
 	private boolean runVerDec(Type type) throws Exception {
 		ArrayOfElements<ProductGroupElement> l;
 		if (Type.MIXING.equals(type)) {
@@ -145,7 +159,7 @@ public class MainVerifier {
 				params.getGq(), params.getFullPublicKey(), l,
 				params.getPlaintexts(), params.getZq(),
 				params.getMixPublicKey(), params.getMixSecretKey(),
-				params.getW());
+				params.getW(), params.getRandArray());
 	}
 
 	private boolean runVerShuffling() throws Exception {
@@ -156,7 +170,7 @@ public class MainVerifier {
 				params.getGq(), params.getFullPublicKey(),
 				params.getCiphertexts(), params.getShuffledCiphertexts(),
 				params.isPosc(), params.isCcpos(), params.getZq(),
-				params.getW());
+				params.getW(), params.getRandArray());
 	}
 
 	private boolean checkFilledParams() {
@@ -257,6 +271,8 @@ public class MainVerifier {
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
 				.seedlen()));
 		params.setROchallenge(new HashFuncPRGRandomOracle(H, params.getNv()));
+
+		
 	}
 
 	public boolean ReadKeys() {
@@ -399,8 +415,9 @@ public class MainVerifier {
 				return false;
 			}
 
-			ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators
-					.createArrayOfPlaintexts(file, params.getZq());
+			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
+					.createArrayOfPlaintexts(file, params.getGq(),
+							params.getW());
 			params.setPlaintexts(plaintexts);
 		}
 		return true;

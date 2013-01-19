@@ -4,7 +4,7 @@ import arithmetic.objects.ring.IRing;
 
 /**
  * This generic interface is used to represent a field over some kind of field
- * element. in our project we will use integer field elements.
+ * elements. in our project we will use integer field elements.
  * 
  * @author Itay
  * 

@@ -115,29 +115,29 @@ public class ArrayGenerators {
 	 * 
 	 * @param data
 	 *            = a byte array representation of an array of plaintexts
-	 * @param ring
-	 *            = the plaintexts in the array all contain product ring
-	 *            elements which contain ring elements belonging to the same
-	 *            ring. this ring is our input ring.
-	 * @return an array of product ring elements which is an array of
+	 * @param group
+	 *            = the plaintexts in the array all contain product group
+	 *            elements which contain group elements belonging to the same
+	 *            group. this group is our input group.
+	 * @return an array of product group elements which is an array of
 	 *         plaintexts.
 	 */
-	public static ArrayOfElements<ProductRingElement> createArrayOfPlaintexts(
-			byte[] data, IRing<IntegerRingElement> ring)
+	public static ArrayOfElements<ProductGroupElement> createArrayOfPlaintexts(
+			byte[] data, IGroup group, int w)
 			throws UnsupportedEncodingException {
-		ArrayOfElements<ProductRingElement> ret = new ArrayOfElements<ProductRingElement>();
+		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
 		int w = node.getChildrenSize();
 		int size = (new Node(node.getAt(0).toByteArray())).getChildrenSize();
 		for (int i = 0; i < size; i++) {
-			ArrayOfElements<IntegerRingElement> arr = new ArrayOfElements<IntegerRingElement>();
+			ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
 			for (int j = 0; j < w; j++) {
 				LargeInteger a = ElementsExtractor.leafToInt(new Node(node
 						.getAt(j).toByteArray()).getAt(i).toByteArray());
 				IntegerRingElement element = new IntegerRingElement(a, ring);
 				arr.add(element);
 			}
-			ret.add(new ProductRingElement(arr));
+			ret.add(new ProductGroupElement(arr));
 		}
 		return ret;
 	}
