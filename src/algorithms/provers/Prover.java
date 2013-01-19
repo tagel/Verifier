@@ -187,7 +187,7 @@ public abstract class Prover {
 	 *            Pseudo-random generator used to derive random vectors for
 	 *            batching
 	 * @param wInput
-	 *            - array of input ciphertexts
+	 *            Array of input ciphertexts
 	 * @return F, the multiplication of Wi^Ei N times
 	 */
 	protected static ProductGroupElement computeF(int N, int Ne, byte[] seed,
