@@ -45,8 +45,10 @@ public class ProveSoC extends Prover {
 			 */
 
 			// creating B,A',B',C',D'
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>) (PoSCommitment
 					.getAt(0));
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>) (PoSCommitment
 					.getAt(2));
 			IGroupElement Atag = (IGroupElement) PoSCommitment.getAt(1);
@@ -59,8 +61,10 @@ public class ProveSoC extends Prover {
 			IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
 			IntegerRingElement Kc = (IntegerRingElement) PoSReply.getAt(2);
 			IntegerRingElement Kd = (IntegerRingElement) PoSReply.getAt(3);
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IntegerRingElement> Kb = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(1));
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(4));
 
@@ -85,7 +89,7 @@ public class ProveSoC extends Prover {
 			/**
 			 * 3 - Computation of A
 			 */
-			IGroupElement A = computeA(N, Ne, seed, prg, u);
+			IGroupElement A = computeA(N, Ne, seed, prg, u, Gq);
 
 			/**
 			 * 4 - Computation of the challenge

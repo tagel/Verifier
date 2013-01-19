@@ -57,6 +57,7 @@ public class ProveCCPoS extends Prover{
 			 */
 			IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
 			ProductRingElement Kb = (ProductRingElement) PoSReply.getAt(1);
+			@SuppressWarnings("unchecked")
 			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(2));
 
@@ -83,7 +84,7 @@ public class ProveCCPoS extends Prover{
 			/**
 			 * 3 - Computation of A 
 			 */
-			IGroupElement A = computeA(N, Ne, seed, prg, u);
+			IGroupElement A = computeA(N, Ne, seed, prg, u, Gq);
 
 			/**
 			 * 4 - Computation of the challenge

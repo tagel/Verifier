@@ -1,7 +1,6 @@
 package algorithms.provers;
 
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -98,7 +97,7 @@ public class ProveShuffling extends Prover {
 			/**
 			 * 3 - Computation of A and F
 			 */
-			IGroupElement A = computeA(N, Ne, seed, prg, u);
+			IGroupElement A = computeA(N, Ne, seed, prg, u, Gq);
 			ProductGroupElement F = computeF(N, Ne, seed, prg, wInput);
 
 			/**
@@ -125,6 +124,7 @@ public class ProveShuffling extends Prover {
 			LargeInteger E = computeE(N, Ne, seed, prg);
 			IGroupElement C = computeC(u, h, N);
 			IGroupElement D = computeD(E, B, h, N);
+			//TODO: B-1 = ho - WTF??
 
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
