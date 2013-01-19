@@ -91,12 +91,11 @@ public class CommandLineParser {
 				return false;
 			}
 		}
-		return true;
+		return posc || ccpos || dec;
 	}
 
 	// parse which proof to verify
 	private void parseVerifier(String[] argv) {
-		// TODO Daniel - talk with sofi about the comments in the doc (MIX)
 		if (argv[1] == "-mix") { 
 			type = Type.MIXING;
 		} else if (argv[1] == "-shuffle") {
