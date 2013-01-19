@@ -31,7 +31,7 @@ public class ArrayGenerators {
 	 * @return an array of group elements which "b" represents.
 	 */
 	public static ArrayOfElements<IGroupElement> createGroupElementArray(
-			byte[] b, IGroup group) throws UnsupportedEncodingException {
+			byte[] b, IGroup group)  {
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
 		Node node = new Node(b);
 		for (int i = 0; i < node.getChildrenSize(); i++)
@@ -50,8 +50,7 @@ public class ArrayGenerators {
 	 * @return an array of ring elements which "b" represents.
 	 */
 	public static ArrayOfElements<IntegerRingElement> createRingElementArray(
-			byte[] b, IRing<IntegerRingElement> ring)
-			throws UnsupportedEncodingException {
+			byte[] b, IRing<IntegerRingElement> ring) {
 		ArrayOfElements<IntegerRingElement> ret = new ArrayOfElements<IntegerRingElement>();
 		Node node = new Node(b);
 		for (int i = 0; i < node.getChildrenSize(); i++)
@@ -75,8 +74,7 @@ public class ArrayGenerators {
 	 *         ciphertexts.
 	 */
 	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts(
-			byte[] data, IGroup group, int w)
-			throws UnsupportedEncodingException {
+			byte[] data, IGroup group, int w) {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
 		int arraySize = (new Node(node.getAt(0).toByteArray()))
@@ -123,8 +121,7 @@ public class ArrayGenerators {
 	 *         plaintexts.
 	 */
 	public static ArrayOfElements<ProductGroupElement> createArrayOfPlaintexts(
-			byte[] data, IGroup group, int w)
-			throws UnsupportedEncodingException {
+			byte[] data, IGroup group, int w) {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
 		int w = node.getChildrenSize();
