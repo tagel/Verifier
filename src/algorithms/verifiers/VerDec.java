@@ -64,7 +64,7 @@ public class VerDec {
 			ArrayOfElements<ProductGroupElement> m,
 			IRing<IntegerRingElement> Zq,
 			ArrayOfElements<IGroupElement> publicKeys,
-			ArrayOfElements<IntegerRingElement> secretKeys, int width)
+			ArrayOfElements<IntegerRingElement> secretKeys, int width, ArrayOfElements<IGroupElement> randArray)
 			throws Exception {
 
 		// ********Step 1 in the algorithm**********
