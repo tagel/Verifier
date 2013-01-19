@@ -93,7 +93,8 @@ public class IntegerFieldElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b a large integer which is the exponent.
+	 * @param b
+	 *            a large integer which is the exponent.
 	 * @return our element in the b'th power.
 	 */
 	public IntegerFieldElement power(LargeInteger b) {
@@ -113,8 +114,10 @@ public class IntegerFieldElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b another integer field element
-	 * @return the result of the multiplication of our element with the inverse of b (division).
+	 * @param b
+	 *            another integer field element
+	 * @return the result of the multiplication of our element with the inverse
+	 *         of b (division).
 	 */
 	public IntegerFieldElement divide(IntegerFieldElement b) {
 		IntegerFieldElement ret = new IntegerFieldElement(
@@ -136,12 +139,14 @@ public class IntegerFieldElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b another integer field element
-	 * @return true if and only if our element and b are equal. That means, represent the same large integer and belong to the same field.
+	 * @param b
+	 *            another integer field element
+	 * @return true if and only if our element and b are equal. That means,
+	 *         represent the same large integer and belong to the same field.
 	 */
 	public boolean equals(IntegerFieldElement b) {
 		if (this.getElement().mod(this.getField().getOrder())
-				.equals(b.getElement().mod(this.getField().getOrder())))
+				.compareTo(b.getElement().mod(this.getField().getOrder())) == 0)
 			return true;
 		else
 			return false;
