@@ -31,7 +31,7 @@ public class ArrayGenerators {
 	 * @return an array of group elements which "b" represents.
 	 */
 	public static ArrayOfElements<IGroupElement> createGroupElementArray(
-			byte[] b, IGroup group)  {
+			byte[] b, IGroup group) {
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
 		Node node = new Node(b);
 		for (int i = 0; i < node.getChildrenSize(); i++)
@@ -89,7 +89,9 @@ public class ArrayGenerators {
 				arr1.add(leftArr.getAt(i));
 				ArrayOfElements<IGroupElement> arr2 = new ArrayOfElements<IGroupElement>();
 				arr2.add(rightArr.getAt(i));
-				ProductGroupElement ciphertext = new ProductGroupElement(new ProductGroupElement(arr1), new ProductGroupElement(arr2));
+				ProductGroupElement ciphertext = new ProductGroupElement(
+						new ProductGroupElement(arr1), new ProductGroupElement(
+								arr2));
 				ret.add(ciphertext);
 			}
 		} else {
@@ -113,9 +115,9 @@ public class ArrayGenerators {
 	 * @param data
 	 *            = a byte array representation of an array of plaintexts
 	 * @param group
-	 *            = the plaintexts in the array are all product group
-	 *            elements which contain group elements belonging to the same
-	 *            group. this group is our input group.
+	 *            = the plaintexts in the array are all product group elements
+	 *            which contain group elements belonging to the same group. this
+	 *            group is our input group.
 	 * @return an array of product group elements which is an array of
 	 *         plaintexts.
 	 */
@@ -123,19 +125,23 @@ public class ArrayGenerators {
 			byte[] data, IGroup group, int w) {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
-		int w = node.getChildrenSize();
-		int size = (new Node(node.getAt(0).toByteArray())).getChildrenSize();
-		for (int i = 0; i < size; i++) {
-			ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
-			for (int j = 0; j < w; j++) {
-				LargeInteger a = ElementsExtractor.leafToInt(new Node(node
-						.getAt(j).toByteArray()).getAt(i).toByteArray());
-				IntegerRingElement element = new IntegerRingElement(a, ring);
-				arr.add(element);
+		if (w == 1) {
+			int size = node.getChildrenSize();
+			for (int i = 0; i < size; i++) {
+				ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
+				arr.add(ElementsExtractor.createGroupElement(node.getAt(i)
+						.toByteArray(), group));
+				// for (int j = 0; j < w; j++) {
+				// LargeInteger a = ElementsExtractor.leafToInt(new Node(node
+				// .getAt(j).toByteArray()).getAt(i).toByteArray());
+				// IntegerRingElement element = new IntegerRingElement(a, ring);
+				// arr.add(element);
+				// }
+				ret.add(new ProductGroupElement(arr));
 			}
-			ret.add(new ProductGroupElement(arr));
 		}
 		return ret;
+
 	}
 
 	/**
