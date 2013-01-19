@@ -64,8 +64,8 @@ public class VerDec {
 			ArrayOfElements<ProductGroupElement> m,
 			IRing<IntegerRingElement> Zq,
 			ArrayOfElements<IGroupElement> publicKeys,
-			ArrayOfElements<IntegerRingElement> secretKeys, int width, ArrayOfElements<IGroupElement> randArray)
-			throws Exception {
+			ArrayOfElements<IntegerRingElement> secretKeys, int width,
+			ArrayOfElements<IGroupElement> randArray) throws Exception {
 
 		// ********Step 1 in the algorithm**********
 		// First, we read the relevant arrays of proofs
@@ -84,15 +84,16 @@ public class VerDec {
 		// Now we try to do the combined proof
 		// If this return true, we skip to step 4
 		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv,
-				prg, Gq, g, publicKeys, secretKeys, L, m, DecryptionFactors,
+				prg, Gq, g, publicKeys, L, DecryptionFactors,
 				DecrFactCommitments, DecrFactReplies)) {
 
 			// ********Step 3 in the algorithm**********
 			for (int i = 1; i <= lambda; i++) {
-				boolean proveDec = ProveDec.prove(ROSeed, ROChallenge, i - 1,
-						prefixToRO, N, ne, nr, nv, prg, Gq, g, publicKeys,
-						secretKeys, L, m, DecryptionFactors,
-						DecrFactCommitments, DecrFactReplies);
+				boolean proveDec = ProveDec
+						.prove(ROSeed, ROChallenge, i - 1, prefixToRO, N, ne,
+								nr, nv, prg, Gq, g, publicKeys, L,
+								DecryptionFactors, DecrFactCommitments,
+								DecrFactReplies);
 				if (!proveDec
 						&& (secretKeys.getAt(i - 1) == null || !DecryptionFactors
 								.getAt(i - 1).equals(
@@ -106,26 +107,43 @@ public class VerDec {
 		// ********Step 4 in the algorithm**********
 		// Verify Plaintexts:
 		// TODO Sofi - MULTIPLY ARRAYS?!
-		ArrayOfElements<ProductRingElement> f = multiplyArays(DecryptionFactors);
+		ArrayOfElements<ProductGroupElement> f = multiplyArrays(DecryptionFactors);
 		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
 		}
 		return true;
 	}
 
-	private static ArrayOfElements<ProductRingElement> multiplyArays(
-			ArrayOfElements<ArrayOfElements<ProductRingElement>> arrays) {
-		
-		ArrayOfElements<ProductRingElement> retVal = new ArrayOfElements<ProductRingElement>();
-		//i== number of arrays
-		int i = arrays.getSize();
-		
-		//j== number of elements in the array
-		int j = arrays.getAt(0).getSize();
-		
-		
-		
-		return null;
+	private static ArrayOfElements<ProductGroupElement> multiplyArrays(
+			ArrayOfElements<ArrayOfElements<ProductGroupElement>> arrays) {
+
+		ArrayOfElements<ProductGroupElement> retVal = new ArrayOfElements<ProductGroupElement>();
+		int numOfArrays = arrays.getSize();
+
+		if (numOfArrays == 1) {
+			return arrays.getAt(0);
+		} else {
+			retVal = arrays.getAt(0);
+			ArrayOfElements<ProductGroupElement> two;
+			for (int i = 1; i < numOfArrays; i++) {
+				two = arrays.getAt(i);
+				retVal = multArrays(retVal, two);
+			}
+		}
+		return retVal;
+	}
+
+	private static ArrayOfElements<ProductGroupElement> multArrays(
+			ArrayOfElements<ProductGroupElement> one,
+			ArrayOfElements<ProductGroupElement> two) {
+		int N = one.getSize();
+		ArrayOfElements<ProductGroupElement> retVal = new ArrayOfElements<ProductGroupElement>();
+
+		for (int i = 0; i < N; i++) {
+			retVal.add(one.getAt(i).mult(two.getAt(i)));
+		}
+
+		return retVal;
 	}
 
 	private static boolean readDecrFactCommitment(int lambda, String directory,
