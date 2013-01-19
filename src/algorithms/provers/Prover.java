@@ -28,7 +28,7 @@ public abstract class Prover {
 			ProductGroupElement A)  {
 		return A.getLeft().power(x.neg().getElement());
 	}
-
+	
 	public static ArrayOfElements<ProductGroupElement> PDecrypt(
 			IntegerRingElement x, ArrayOfElements<ProductGroupElement> A)
 			 {
@@ -100,7 +100,7 @@ public abstract class Prover {
 	 * @throws UnsupportedEncodingException
 	 */
 	protected static byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed,
-			byte[] ro) throws UnsupportedEncodingException  {
+			byte[] ro) {
 		return ROSeed.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 				nodeForSeed.toByteArray()));
 	}
