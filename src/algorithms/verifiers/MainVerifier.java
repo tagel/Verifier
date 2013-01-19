@@ -234,7 +234,7 @@ public class MainVerifier {
 		return true;
 	}
 
-	public void createPrefixToRo() throws UnsupportedEncodingException {
+	public void createPrefixToRo() {
 		ByteTree btAuxid = new StringLeaf(params.getSessionID() + "."
 				+ params.getAuxsid());
 		ByteTree version_proof = new StringLeaf(params.getVersion());
@@ -274,13 +274,9 @@ public class MainVerifier {
 	public boolean ReadKeys() {
 		// read Public Key
 		ProductGroupElement pk;
-		try {
-			pk = ElementsExtractor.createSimplePGE(ElementsExtractor
-					.btFromFile(params.getDirectory(), FULL_PUBLIC_KEY_BT),
-					params.getGq());
-		} catch (UnsupportedEncodingException e) {
-			return false;
-		}
+
+		pk = ElementsExtractor.createSimplePGE(ElementsExtractor.btFromFile(
+				params.getDirectory(), FULL_PUBLIC_KEY_BT), params.getGq());
 
 		// extract y and g from the public key
 		IGroupElement y = pk.getElements().getAt(1);
