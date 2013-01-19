@@ -106,11 +106,26 @@ public class VerDec {
 		// ********Step 4 in the algorithm**********
 		// Verify Plaintexts:
 		// TODO Sofi - MULTIPLY ARRAYS?!
-		ProductRingElement f = null;
+		ArrayOfElements<ProductRingElement> f = multiplyArays(DecryptionFactors);
 		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
 		}
 		return true;
+	}
+
+	private static ArrayOfElements<ProductRingElement> multiplyArays(
+			ArrayOfElements<ArrayOfElements<ProductRingElement>> arrays) {
+		
+		ArrayOfElements<ProductRingElement> retVal = new ArrayOfElements<ProductRingElement>();
+		//i== number of arrays
+		int i = arrays.getSize();
+		
+		//j== number of elements in the array
+		int j = arrays.getAt(0).getSize();
+		
+		
+		
+		return null;
 	}
 
 	private static boolean readDecrFactCommitment(int lambda, String directory,
