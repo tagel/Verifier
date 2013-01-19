@@ -16,7 +16,6 @@ import arithmetic.objects.basicelements.StringLeaf;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFuncPRGRandomOracle;
@@ -358,7 +357,7 @@ public class MainVerifier {
 	}
 
 	// Part 6 of the algorithm
-	public boolean ReadLists() throws IOException {
+	public boolean ReadLists()  {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				CIPHERTEXTS_FILE_NAME + BT_EXT);
