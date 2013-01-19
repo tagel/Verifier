@@ -122,6 +122,7 @@ public class VerShuffling {
 							return false;
 						}
 					} else if (!Li.equals(Liminus1)) {
+						boolean one = checkOneElement(N);
 						return false;
 					}
 				}
@@ -236,6 +237,17 @@ public class VerShuffling {
 		}
 
 		return true;
+	}
+
+	private static boolean checkOneElement(int N) {
+	
+		ProductGroupElement elem = Li.getAt(0);
+		
+		for (int i = 0; i<N; i++) {
+			if (elem.equals(Liminus1.getAt(i)))
+					return true;
+		}
+		return false;
 	}
 
 	/*
