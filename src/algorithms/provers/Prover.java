@@ -2,7 +2,6 @@ package algorithms.provers;
 
 import java.io.UnsupportedEncodingException;
 
-import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -81,8 +80,8 @@ public abstract class Prover {
 			right.add((y.power(powers.getAt(i).getElement()).mult(ms.getAt(i))));
 		}
 
-		ProductGroupElement encryptedMsg = ElementsExtractor.createCiphertext(
-				left, right);
+		ProductGroupElement encryptedMsg = new ProductGroupElement(new ProductGroupElement(left),
+			new ProductGroupElement(right));
 		return encryptedMsg;
 	}
 
