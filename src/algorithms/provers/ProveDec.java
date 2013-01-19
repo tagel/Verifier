@@ -27,7 +27,7 @@ public class ProveDec extends Prover {
 	/**
 	 * @param ROChallenge
 	 * @param ROSeed
-	 * @param plaintexts
+	 * @param m
 	 * @param ciphertexts
 	 * @param secretKeys
 	 * @param publicKeys
@@ -60,8 +60,8 @@ public class ProveDec extends Prover {
 			ArrayOfElements<IGroupElement> y,
 			ArrayOfElements<IntegerRingElement> secretKeys,
 			ArrayOfElements<ProductGroupElement> wInput,
-			ArrayOfElements<ProductRingElement> plaintexts,
-			ArrayOfElements<ArrayOfElements<ProductRingElement>> f,
+			ArrayOfElements<ProductGroupElement> m,
+			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors,
 			ArrayOfElements<Node> decrFactCommitments,
 			ArrayOfElements<IntegerRingElement> decrFactReplies) {
 
@@ -95,7 +95,7 @@ public class ProveDec extends Prover {
 
 			Node rightNode = new Node();
 			Node a = new Node(y.toByteArray());
-			Node b = new Node(f.toByteArray());
+			Node b = new Node(decryptionFactors.toByteArray());
 			rightNode.add(a);
 			rightNode.add(b);
 
@@ -168,7 +168,7 @@ public class ProveDec extends Prover {
 				IGroupElement B = Gq.one();
 				for (int i = 0; i < N; i++) {
 					IGroupElement fl = Gq.one();
-					for (int l = 0; i < f.getSize(); i++) {
+					for (int l = 0; i < decryptionFactors.getSize(); i++) {
 						//fl = fl.mult(f.getAt(0).getAt(l));
 					}
 					B = B.mult(fl.power(e[i]));

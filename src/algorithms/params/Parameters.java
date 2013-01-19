@@ -18,7 +18,6 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 
 /**
  * This class describes an object that contains the parameters used by the
@@ -45,6 +44,7 @@ public class Parameters {
 	private IGroup Gq;
 	private IRing<IntegerRingElement> Zq;
 	private PseudoRandomGenerator prg;
+	private ArrayOfElements<IGroupElement> randArray;
 
 	// parameters from directory
 	private String protInfo;
@@ -81,7 +81,7 @@ public class Parameters {
 	// parameters from lists
 	private ArrayOfElements<ProductGroupElement> ciphertexts;// V
 	private ArrayOfElements<ProductGroupElement> ShuffledCiphertexts; // V
-	private ArrayOfElements<ProductRingElement> plaintexts;// V
+	private ArrayOfElements<ProductGroupElement> plaintexts;// V
 	private int N; // size of the arrays
 
 	// MIX -- The parameters of each party
@@ -98,6 +98,7 @@ public class Parameters {
 	private ArrayOfElements<Node> mixCcPosCommitment;
 	private ArrayOfElements<Node> mixCcPosReply;
 	private ArrayOfElements<BooleanArrayElement> mixKeepList;
+	
 
 	// type of verification
 	public enum Type {
@@ -499,7 +500,7 @@ public class Parameters {
 		ShuffledCiphertexts = shuffledCiphertexts;
 	}
 
-	public void setPlaintexts(ArrayOfElements<ProductRingElement> plaintexts2) {
+	public void setPlaintexts(ArrayOfElements<ProductGroupElement> plaintexts2) {
 		this.plaintexts = plaintexts2;
 	}
 
@@ -522,7 +523,7 @@ public class Parameters {
 	 * @return the output plaintext elements that has not been decoded in any
 	 *         way
 	 */
-	public ArrayOfElements<ProductRingElement> getPlaintexts() {
+	public ArrayOfElements<ProductGroupElement> getPlaintexts() {
 		return plaintexts;
 	}
 
@@ -654,6 +655,15 @@ public class Parameters {
 
 	public void setMixKeepList(ArrayOfElements<BooleanArrayElement> mixKeepList) {
 		this.mixKeepList = mixKeepList;
+	}
+
+	public void setRandArray(ArrayOfElements<IGroupElement> h) {
+		this.randArray = h;
+		
+	}
+	
+	public ArrayOfElements<IGroupElement> getRandArray() {
+		return randArray;
 	}
 
 }

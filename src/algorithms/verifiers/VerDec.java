@@ -31,7 +31,7 @@ public class VerDec {
 	private static final String DECR_FACT_COMMITMENT = "DecrFactCommitment";
 	private static final String DECR_FACT_REPLY = "DecrFactReply";
 
-	private static ArrayOfElements<ArrayOfElements<ProductRingElement>> DecryptionFactors;
+	private static ArrayOfElements<ArrayOfElements<ProductGroupElement>> DecryptionFactors;
 	private static ArrayOfElements<Node> DecrFactCommitments;
 	private static ArrayOfElements<IntegerRingElement> DecrFactReplies;
 
@@ -61,17 +61,17 @@ public class VerDec {
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,
 			int nr, int nv, PseudoRandomGenerator prg, IGroup Gq,
 			ProductGroupElement pk, ArrayOfElements<ProductGroupElement> L,
-			ArrayOfElements<ProductRingElement> m,
+			ArrayOfElements<ProductGroupElement> m,
 			IRing<IntegerRingElement> Zq,
 			ArrayOfElements<IGroupElement> publicKeys,
-			ArrayOfElements<IntegerRingElement> secretKeys, int width)
+			ArrayOfElements<IntegerRingElement> secretKeys, int width, ArrayOfElements<IGroupElement> randArray)
 			throws Exception {
 
 		// ********Step 1 in the algorithm**********
 		// First, we read the relevant arrays of proofs
 		for (int i = 1; i <= lambda; i++) {
 			// Create the arrays of the different factors
-			if (!readDecriptionFactors(lambda, directory, Zq, i, N)
+			if (!readDecriptionFactors(lambda, directory, Gq, i, N, width)
 					|| !readDecrFactCommitment(lambda, directory, Gq, i)
 					|| !readDecrFactReply(lambda, directory, Zq, i))
 				return false;
@@ -180,7 +180,7 @@ public class VerDec {
 	}
 
 	private static boolean readDecriptionFactors(int lambda, String directory,
-			IRing<IntegerRingElement> Zq, int i, int N)
+			IGroup Gq, int i, int N, int width)
 			throws UnsupportedEncodingException {
 
 		byte[] bDecrFact;
@@ -195,8 +195,8 @@ public class VerDec {
 			return false;
 		}
 
-		ArrayOfElements<ProductRingElement> factor = ArrayGenerators
-				.createArrayOfPlaintexts(bDecrFact, Zq);
+		ArrayOfElements<ProductGroupElement> factor = ArrayGenerators
+				.createArrayOfPlaintexts(bDecrFact, Gq, width);
 
 		if (factor.getSize() != N) {
 			return false;
