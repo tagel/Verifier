@@ -73,13 +73,13 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<IGroupElement> permutationCommitment,
 			Node PoSCommitment, Node PoSReply) {
 
-			/**
+			/*
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
 			 * Pedersen commitments in Gq
 			 */
 			ArrayOfElements<IGroupElement> u = permutationCommitment;
 
-			/**
+			/*
 			 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 			 */
 			
@@ -97,7 +97,7 @@ public class ProveShuffling extends Prover {
 			ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment
 					.getAt(5);
 
-			/**
+			/*
 			 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 			 */
 			IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
@@ -113,7 +113,7 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 					.getAt(4));
 
-			/**
+			/*
 			 * 2 - computing the seed
 			 */
 			StringLeaf stringLeaf = new StringLeaf(GENERATORS);
@@ -135,13 +135,13 @@ public class ProveShuffling extends Prover {
 			Node nodeForSeed = new Node(input);
 			byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
-			/**
+			/*
 			 * 3 - Computation of A and F
 			 */
 			IGroupElement A = computeA(N, Ne, seed, prg, u, Gq);
 			ProductGroupElement F = computeF(N, Ne, seed, prg, wInput);
 
-			/**
+			/*
 			 * 4 - Computation of the challenge
 			 */
 			ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
@@ -160,13 +160,13 @@ public class ProveShuffling extends Prover {
 			LargeInteger twoNv = (new LargeInteger("2")).power(Nv);
 			v = v.mod(twoNv);
 
-			/**
+			/*
 			 * 5 - Compute C,D and verify equalities
 			 */
 			LargeInteger E = computeE(N, Ne, seed, prg);
 			IGroupElement C = computeC(u, h, N);
 			IGroupElement D = computeD(E, B, h, N);
-			// TODO: B-1 = ho - WTF??
+			// TODO Tagel: B-1 = ho - WTF??
 
 			/*
 			 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])

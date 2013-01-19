@@ -12,6 +12,8 @@ import algorithms.params.Parameters.Type;
  * @author Daniel
  * 
  */
+
+// TODO Daniel - parse -v flag - verbose = true
 public class CommandLineParser {
 
 	private Type type = null;

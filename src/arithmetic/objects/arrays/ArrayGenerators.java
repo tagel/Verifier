@@ -1,16 +1,12 @@
 package arithmetic.objects.arrays;
 
-import java.io.UnsupportedEncodingException;
-
 import arithmetic.objects.ElementsExtractor;
-import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 
 /**
  * This class has functions that serve as helpers to the verifiers and provers
@@ -131,12 +127,18 @@ public class ArrayGenerators {
 				ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
 				arr.add(ElementsExtractor.createGroupElement(node.getAt(i)
 						.toByteArray(), group));
-				// for (int j = 0; j < w; j++) {
-				// LargeInteger a = ElementsExtractor.leafToInt(new Node(node
-				// .getAt(j).toByteArray()).getAt(i).toByteArray());
-				// IntegerRingElement element = new IntegerRingElement(a, ring);
-				// arr.add(element);
-				// }
+				ret.add(new ProductGroupElement(arr));
+			}
+		} else {
+			int size = new Node(node.getAt(0).toByteArray()).getChildrenSize();
+			for (int i = 0; i < size; i++) {
+				ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
+				for (int j = 0; j < w; j++) {
+					IGroupElement a = ElementsExtractor.createGroupElement(
+							new Node(node.getAt(j).toByteArray()).getAt(i)
+									.toByteArray(), group);
+					arr.add(a);
+				}
 				ret.add(new ProductGroupElement(arr));
 			}
 		}
