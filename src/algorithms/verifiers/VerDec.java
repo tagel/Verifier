@@ -14,7 +14,6 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -106,7 +105,6 @@ public class VerDec {
 
 		// ********Step 4 in the algorithm**********
 		// Verify Plaintexts:
-		// TODO Sofi - MULTIPLY ARRAYS?!
 		ArrayOfElements<ProductGroupElement> f = multiplyArrays(DecryptionFactors);
 		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
