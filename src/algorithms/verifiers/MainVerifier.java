@@ -1,7 +1,5 @@
 package algorithms.verifiers;
 
-import java.io.UnsupportedEncodingException;
-
 import algorithms.params.Parameters;
 import algorithms.params.Parameters.Type;
 import arithmetic.objects.ByteTree;
@@ -65,8 +63,7 @@ public class MainVerifier {
 	 * @throws Exception
 	 */
 	public boolean verify(String protInfo, String directory, Type type,
-			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
-			 {
+			String auxid, int w, boolean posc, boolean ccpos, boolean dec) {
 
 		// *****Section 1 and 2 in the algorithm*****
 		// create the Parameters object using the command line parameters and
@@ -217,12 +214,7 @@ public class MainVerifier {
 	 */
 	public boolean deriveSetsAndObjects() {
 		// unmarshall Gq
-		try {
-			params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
-		} catch (UnsupportedEncodingException e) {
-			System.out.println("Error unmarshalling Gq");
-			return false;
-		}
+		params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
 
 		// create the Ring
 		params.setZq(new Ring(params.getGq().getFieldOrder()));
