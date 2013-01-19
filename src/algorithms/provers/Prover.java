@@ -90,11 +90,11 @@ public abstract class Prover {
 	 * This function computes a seed.
 	 * 
 	 * @param ROSeed
-	 *            - the RandomOracle
+	 *            RandomOracle for computing the seed
 	 * @param nodeForSeed
-	 *            - a node includes the params needed for the seed
+	 *            a node includes the params needed for the seed
 	 * @param ro
-	 *            - prefix to random oracle
+	 *            prefix to random oracle
 	 * @return a seed represented as a byte[]
 	 * @throws UnsupportedEncodingException
 	 */
@@ -108,16 +108,16 @@ public abstract class Prover {
 	 * This function computes A, needed in the proof.
 	 * 
 	 * @param N
-	 *            - size of the arrays
+	 *            size of the arrays
 	 * @param Ne
-	 *            - num of bits in each component
+	 *            number of bits in each component
 	 * @param seed
-	 *            - the byte[] needed to initialize the prg
+	 *            byte[] needed to initialize the prg
 	 * @param prg
-	 *            - Pseudo-random generator used to derive random vectors for
+	 *            Pseudo-random generator used to derive random vectors for
 	 *            batching
 	 * @param u
-	 *            - the array of Pedersen Commitments
+	 *            Array of Pedersen Commitments
 	 * @return A - a multiplication of Ui^Ei N times
 	 */
 	protected static IGroupElement computeA(int N, int Ne, byte[] seed,
@@ -144,13 +144,13 @@ public abstract class Prover {
 	 * This function computes E, needed in the proof.
 	 * 
 	 * @param N
-	 *            - size of the arrays
+	 *            size of the arrays
 	 * @param Ne
-	 *            - num of bits in each component
+	 *            number of bits in each component
 	 * @param seed
-	 *            - the byte[] needed to initialize the prg
+	 *            byte[] needed to initialize the prg
 	 * @param prg
-	 *            - Pseudo-random generator used to derive random vectors for
+	 *            Pseudo-random generator used to derive random vectors for
 	 *            batching
 	 * @return E, the multiplication of Ei N times
 	 */
@@ -178,13 +178,13 @@ public abstract class Prover {
 	 * This function computes F, needed in the proof.
 	 * 
 	 * @param N
-	 *            - size of the arrays
+	 *            size of the arrays
 	 * @param Ne
-	 *            - num of bits in each component
+	 *            number of bits in each component
 	 * @param seed
-	 *            - the byte[] needed to initialize the prg
+	 *            the byte[] needed to initialize the prg
 	 * @param prg
-	 *            - Pseudo-random generator used to derive random vectors for
+	 *            Pseudo-random generator used to derive random vectors for
 	 *            batching
 	 * @param wInput
 	 *            - array of input ciphertexts
@@ -214,11 +214,11 @@ public abstract class Prover {
 	 * This function computes C, needed in the proof.
 	 * 
 	 * @param u
-	 *            - the array of Pedersen Commitments in Gq
+	 *            Array of Pedersen Commitments in Gq
 	 * @param h
-	 *            - Array of random elements used to compute the seed
+	 *            Array of random elements used to compute the seed
 	 * @param N
-	 *            - size of the arrays
+	 *            Size of the arrays
 	 * @return C, the multiplication of Ui N times divided by multiplication of
 	 *         hi N times
 	 */
@@ -239,13 +239,13 @@ public abstract class Prover {
 	 * This function computes D, needed in the proof.
 	 * 
 	 * @param E
-	 *            - the multiplication of Ei N times
+	 *            multiplication of Ei N times
 	 * @param B
-	 *            - an array of N elements on Gq
+	 *            array of N elements on Gq
 	 * @param h
-	 *            - Array of random elements used to compute the seed
+	 *            Array of random elements used to compute the seed
 	 * @param N
-	 *            - size of the arrays
+	 *            size of the arrays
 	 * @return D, the multiplication of Ui N times
 	 */
 	protected static IGroupElement computeD(LargeInteger E,
@@ -261,21 +261,21 @@ public abstract class Prover {
 	 * PI(h[i]^ke[i])
 	 * 
 	 * @param A
-	 *            - the multiplication of Ui^Ei N times
+	 *            the multiplication of Ui^Ei N times
 	 * @param Atag
-	 *            - an element in Gq
+	 *            element in Gq
 	 * @param v
-	 *            - the challenge computed by the Random Oracle
+	 *            challenge computed by the Random Oracle
 	 * @param Ke
-	 *            - an array on N elements in Zq
+	 *            array of N elements in Zq
 	 * @param g
-	 *            - the generator of Gq
+	 *            generator of Gq
 	 * @param N
-	 *            - size of the arrays
+	 *            size of the arrays
 	 * @param h
-	 *            - Array of random elements used to compute the seed
+	 *            Array of random elements used to compute the seed
 	 * @param Ka
-	 *            - an element in Zq
+	 *            element in Zq
 	 * @return true if the equation is correct and false otherwise.
 	 */
 	protected static boolean verifyAvAtag(IGroupElement A, IGroupElement Atag,
