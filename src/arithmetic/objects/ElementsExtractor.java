@@ -70,7 +70,6 @@ public class ElementsExtractor {
 		IntegerFieldElement x = new IntegerFieldElement(leafToInt(arrX), field);
 		IntegerFieldElement y = new IntegerFieldElement(leafToInt(arrY), field);
 		return new Point(x, y);
-
 	}
 
 	/**
@@ -184,7 +183,7 @@ public class ElementsExtractor {
 	 */
 
 	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group,
-			int w) throws UnsupportedEncodingException {
+			int w) {
 		Node node = new Node(bt);
 		if (w == 1) {
 			ArrayOfElements<IGroupElement> leftArr = new ArrayOfElements<IGroupElement>();

@@ -66,7 +66,7 @@ public class MainVerifier {
 	 */
 	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
-			throws Exception {
+			 {
 
 		// *****Section 1 and 2 in the algorithm*****
 		// create the Parameters object using the command line parameters and
@@ -130,7 +130,7 @@ public class MainVerifier {
 		return true;
 	}
 
-	private void createRandomArray() throws Exception {
+	private void createRandomArray() {
 		StringLeaf stringLeaf = new StringLeaf(GENERATORS);
 		byte[] independentSeed = params.getROseed().getRandomOracleOutput(
 				ArrayGenerators.concatArrays(params.getPrefixToRO(),
@@ -142,7 +142,7 @@ public class MainVerifier {
 	}
 
 	// expect type to be MIXING or DECRYPTION
-	private boolean runVerDec(Type type) throws Exception {
+	private boolean runVerDec(Type type) {
 		ArrayOfElements<ProductGroupElement> l;
 		if (Type.MIXING.equals(type)) {
 			l = params.getShuffledCiphertexts();
@@ -160,7 +160,7 @@ public class MainVerifier {
 				params.getW(), params.getRandArray());
 	}
 
-	private boolean runVerShuffling() throws Exception {
+	private boolean runVerShuffling() {
 		return VerShuffling.verify(params.getROseed(), params.getROchallenge(),
 				params.getDirectory(), params.getPrefixToRO(),
 				params.getThreshold(), params.getN(), params.getNe(),
