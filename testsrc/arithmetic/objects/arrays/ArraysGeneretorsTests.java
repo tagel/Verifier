@@ -70,6 +70,8 @@ public class ArraysGeneretorsTests {
 	@Test
 	public void createArrayOfPlaintextsTest()
 			throws UnsupportedEncodingException {
+		ModGroup Gq = new ModGroup(new LargeInteger("263"), new LargeInteger(
+				"131"), null);
 		node.add(ire1_ring4);
 		node.add(ire2_ring4);
 		ArrayOfElements<IntegerRingElement> ring = ArrayGenerators
@@ -79,8 +81,8 @@ public class ArraysGeneretorsTests {
 		ArrayOfElements<ProductRingElement> arr = new ArrayOfElements<ProductRingElement>();
 		arr.add(pge1);
 		arr.add(pge2);
-		ArrayOfElements<ProductRingElement> plaintexts = ArrayGenerators
-				.createArrayOfPlaintexts(arr.toByteArray(), ring_4);
+		ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
+				.createArrayOfPlaintexts(arr.toByteArray(), Gq, 1);
 		Assert.assertEquals(
 				"000000000200000000020100000001010100000001010000000002010000000102010000000102",
 				CryptoUtils.bytesToHexString(plaintexts.toByteArray()));
