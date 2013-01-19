@@ -11,7 +11,7 @@ import org.junit.Test;
  * 
  */
 public class NodeTests {
-	// TODO Sofi - finish tests
+	
 	private Node node1;
 
 	// private Node node2;
