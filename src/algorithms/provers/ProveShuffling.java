@@ -84,14 +84,17 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<IGroupElement> h = Gq.createRandomArray(N, prg,
 					independentSeed, Nr);
 
+			//TODO: verify that g = generator and not pk=(g,y) - IGroupElement g = pk.getElements().getAt(0);
 			IGroupElement g = Gq.getGenerator();
-			Node nodeForSeed = new Node();
-			nodeForSeed.add(g); // TODO Daniel - think how to move to func
-			nodeForSeed.add(h);
-			nodeForSeed.add(u);
-			nodeForSeed.add(pk);
-			nodeForSeed.add(wInput);
-			nodeForSeed.add(wOutput);
+
+			ByteTree[] input = new ByteTree[6];
+			input[0] = g;
+			input[1] = h;
+			input[2] = u;
+			input[3] = pk;
+			input[4] = wInput;
+			input[5] = wOutput;
+			Node nodeForSeed = new Node(input);
 			byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
 			/**
@@ -105,9 +108,10 @@ public class ProveShuffling extends Prover {
 			 */
 			ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
 
-			Node nodeForChallenge = new Node();
-			nodeForChallenge.add(leaf);
-			nodeForChallenge.add(PoSCommitment);
+			ByteTree[] inputChallenge = new ByteTree[2];
+			inputChallenge[0] = leaf;
+			inputChallenge[1] = PoSCommitment;
+			Node nodeForChallenge = new Node(inputChallenge);
 
 			byte[] challenge = ROChallenge
 					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
@@ -115,7 +119,7 @@ public class ProveShuffling extends Prover {
 
 			/* Computation of v: */
 			LargeInteger v = new LargeInteger(challenge);
-			LargeInteger twoNv = new LargeInteger("2").power(Nv);
+			LargeInteger twoNv = (new LargeInteger("2")).power(Nv);
 			v = v.mod(twoNv);
 
 			/**
@@ -160,7 +164,7 @@ public class ProveShuffling extends Prover {
 
 			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
 			ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
-			if (!leftF.equal(rigthF)) {
+			if (!leftF.equals(rigthF)) {
 				return false;
 			}
 

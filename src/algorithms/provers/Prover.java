@@ -23,27 +23,36 @@ public abstract class Prover {
 	 * the standard generator in the public key is raised u - First part of
 	 * ciphertext to be decrypted
 	 */
-	public static ArrayOfElements<ProductRingElement> PDecrypt(IntegerRingElement x,
+	public static ProductGroupElement PDecrypt(IntegerRingElement x,
 			ProductGroupElement A) throws Exception {
-		//return A.getLeft().power(x.getElement());
-		return null;
-	}
-	
-	//TODO Check how we do this for an array
-	public static ArrayOfElements<ProductRingElement> PDecrypt(IntegerRingElement x,
-			ArrayOfElements<ProductGroupElement> A) throws Exception {
-		//return A.getAt(0);
-		return null;
+		return A.getLeft().power(x.neg().getElement());
 	}
 
-	public static ProductGroupElement TDecrypt(ProductGroupElement v,
-			ProductGroupElement f) {
-		ProductGroupElement result = f.mult(v);
-		return result;
+	public static ArrayOfElements<ProductGroupElement> PDecrypt(
+			ArrayOfElements<IntegerRingElement> x,
+			ArrayOfElements<ProductGroupElement> A) throws Exception {
+
+		ArrayOfElements<ProductGroupElement> res = new ArrayOfElements<ProductGroupElement>();
+		for (int i = 0; i < A.getSize(); i++) {
+			res.add(PDecrypt(x.getAt(i), A.getAt(i)));
+		}
+		return res;
 	}
-	
-	public static ArrayOfElements<ProductRingElement> TDecrypt(ArrayOfElements<ProductGroupElement> L, ProductRingElement f) {
-		return null;
+
+	public static ProductGroupElement TDecrypt(ProductGroupElement A,
+			ProductGroupElement f) {
+		return A.getRight().mult(f);
+	}
+
+	public static ArrayOfElements<ProductGroupElement> TDecrypt(
+			ArrayOfElements<ProductGroupElement> L,
+			ArrayOfElements<ProductGroupElement> f) {
+
+		ArrayOfElements<ProductGroupElement> res = new ArrayOfElements<ProductGroupElement>();
+		for (int i = 0; i < L.getSize(); i++) {
+			res.add(TDecrypt(L.getAt(i), f.getAt(i)));
+		}
+		return res;
 	}
 
 	/**
@@ -91,8 +100,8 @@ public abstract class Prover {
 	 */
 	protected static byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed,
 			byte[] ro) throws UnsupportedEncodingException {
-		return ROSeed.getRandomOracleOutput(ArrayGenerators
-				.concatArrays(ro, nodeForSeed.toByteArray()));
+		return ROSeed.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
+				nodeForSeed.toByteArray()));
 	}
 
 	/**
@@ -112,10 +121,11 @@ public abstract class Prover {
 	 * @return A - a multiplication of Ui^Ei N times
 	 */
 	protected static IGroupElement computeA(int N, int Ne, byte[] seed,
-			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u, IGroup Gq) {
+			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u,
+			IGroup Gq) {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
-		
+
 		byte[] ByteArrToBigInt;
 		LargeInteger t;
 		LargeInteger e;
@@ -146,7 +156,7 @@ public abstract class Prover {
 	 */
 	protected static LargeInteger computeE(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg) {
-		
+
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
 		byte[] ByteArrToBigInt;
@@ -160,7 +170,7 @@ public abstract class Prover {
 			LargeInteger a = t.mod(pow);
 			E = E.multiply(a);
 		}
-		
+
 		return E;
 	}
 
@@ -209,11 +219,12 @@ public abstract class Prover {
 	 *            - Array of random elements used to compute the seed
 	 * @param N
 	 *            - size of the arrays
-	 * @return C, the multiplication of Ui N times divided by multiplication of hi N times 
+	 * @return C, the multiplication of Ui N times divided by multiplication of
+	 *         hi N times
 	 */
 	protected static IGroupElement computeC(ArrayOfElements<IGroupElement> u,
 			ArrayOfElements<IGroupElement> h, int N) {
-		
+
 		IGroupElement CNumerator = u.getAt(0);
 		IGroupElement CDenominator = h.getAt(0);
 		for (int i = 1; i < N; i++) {
@@ -240,7 +251,7 @@ public abstract class Prover {
 	protected static IGroupElement computeD(LargeInteger E,
 			ArrayOfElements<IGroupElement> B, ArrayOfElements<IGroupElement> h,
 			int N) {
-		
+
 		IGroupElement D = B.getAt(N - 1).divide(h.getAt(0).power(E));
 		return D;
 	}

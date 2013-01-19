@@ -135,7 +135,7 @@ public class ProveCCPoS extends Prover{
 
 			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
 			ProductGroupElement rigthB = encrypt(ones, Kb, pk, Gq);
-			if (!leftB.equal(rigthB)) {
+			if (!leftB.equals(rigthB)) {
 				return false;
 			}
 
