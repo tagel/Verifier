@@ -22,7 +22,7 @@ public class IntegerFieldElement implements ByteTree {
 	/**
 	 * Constructor
 	 * @param element - the large integer
-	 * @param f - the field 
+	 * @param f - the field which the large integer belongs to.
 	 */
 	public IntegerFieldElement(LargeInteger element,
 			IField<IntegerFieldElement> f) {
@@ -39,6 +39,10 @@ public class IntegerFieldElement implements ByteTree {
 		return field;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public IntegerFieldElement neg() {
 		return new IntegerFieldElement(this.getField().getOrder()
 				.subtract(this.getElement().mod(this.getField().getOrder())),
