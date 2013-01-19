@@ -33,10 +33,7 @@ public class ModGroup implements IGroup {
 	 *  g = generator
 	 */
 	private LargeInteger g;
-	/**
-	 * group type: either modular or elliptic curve. (in this case, modular).
-	 */
-	private String groupType = "Modular";
+
 
 	/**
 	 * @param p
@@ -77,9 +74,6 @@ public class ModGroup implements IGroup {
 		return new ModGroupElement(g, this);
 	}
 
-	public String getGroupType() {
-		return groupType;
-	}
 
 	@Override
 	public ModGroupElement one() {
@@ -112,7 +106,7 @@ public class ModGroup implements IGroup {
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = new LargeInteger(arr);
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(Np+Nr));
-			LargeInteger hi = ttag.power((p.subtract(LargeInteger.ONE)).divide(q)).mod(p);
+			LargeInteger hi = LargeInteger.power(ttag,((p.subtract(LargeInteger.ONE)).divide(q))).mod(p);
 			IGroupElement ge = new ModGroupElement(hi, this);
 			h.add(ge);
 		}

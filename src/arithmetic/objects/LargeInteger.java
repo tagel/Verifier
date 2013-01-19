@@ -1,5 +1,7 @@
 package arithmetic.objects;
 
+
+
 import java.math.BigInteger;
 
 
@@ -52,13 +54,14 @@ public class LargeInteger extends BigInteger {
 		return new LargeInteger(super.remainder(b));
 	}
 
-	public LargeInteger power(LargeInteger b) {
-//		BigInteger ret = LargeInteger.ONE;
-//		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b)<0; i.add(LargeInteger.ONE)) {
-//			ret = super.multiply(ret);
-//		}
-//		return new LargeInteger(ret);
-		return new LargeInteger(super.pow(b.intValue()));
+	public static LargeInteger power(LargeInteger a, LargeInteger b) {
+		LargeInteger ret = LargeInteger.ONE;
+		
+		for (BigInteger bi = b; bi.compareTo(BigInteger.ZERO) > 0; bi = bi.subtract(BigInteger.ONE)) {
+			ret = ret.multiply(a);
+		}
+		return ret;
+		
 	}
 
 		

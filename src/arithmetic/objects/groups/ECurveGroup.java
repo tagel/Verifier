@@ -43,10 +43,7 @@ public class ECurveGroup implements IGroup {
 	 * g = standard generator
 	 */
 	private Point g;
-	/**
-	 * group type: either modular or elliptic curve. (in this case, elliptic curve).
-	 */
-	private String groupType = "Elliptic Curve";
+	
 
 	/**
 	 * @param p
@@ -106,10 +103,7 @@ public class ECurveGroup implements IGroup {
 		return new ECurveGroupElement(g, this);
 	}
 
-	@Override
-	public String getGroupType() {
-		return groupType;
-	}
+
 	
 	@Override
 	public ECurveGroupElement one() {

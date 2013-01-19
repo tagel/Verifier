@@ -25,7 +25,6 @@ public interface IGroup extends ByteTree {
 	
 	public IGroupElement getGenerator();
 
-	public String getGroupType();
 
 	/**
 	 * @return the 1 of the Group.
