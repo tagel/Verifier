@@ -29,12 +29,12 @@ public abstract class Prover {
 	}
 
 	public static ArrayOfElements<ProductGroupElement> PDecrypt(
-			ArrayOfElements<IntegerRingElement> x,
-			ArrayOfElements<ProductGroupElement> A) throws Exception {
+			IntegerRingElement x, ArrayOfElements<ProductGroupElement> A)
+			throws Exception {
 
 		ArrayOfElements<ProductGroupElement> res = new ArrayOfElements<ProductGroupElement>();
 		for (int i = 0; i < A.getSize(); i++) {
-			res.add(PDecrypt(x.getAt(i), A.getAt(i)));
+			res.add(PDecrypt(x, A.getAt(i)));
 		}
 		return res;
 	}
