@@ -1,8 +1,10 @@
 package main;
 
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+
 import algorithms.params.Parameters.Type;
 
-// TODO Daniel - Test
 /**
  * Parser that can be used to parse command lines and determine if its legal
  * command and whether it is needed to run the MainVerifier.
@@ -21,6 +23,8 @@ public class CommandLineParser {
 	private boolean posc = true;
 	private boolean ccpos = true;
 	private boolean dec = true;
+	private CharsetEncoder asciiEncoder = 
+		      Charset.forName("US-ASCII").newEncoder();
 
 	/**
 	 * Parse the given command line, make sure it is in the right format and the
@@ -62,12 +66,12 @@ public class CommandLineParser {
 		fillXmlAndDir(argv);
 		for (int i = 4; i < argv.length; i++) {
 			if ("-auxsid".equals(argv[i])) {
-				if (!auxsidFalge(argv[i + 1])) {
+				if ((i + 1) == argv.length || !auxsidFalge(argv[i + 1])) {
 					return false;
 				}
 				i++;
 			} else if ("-width".equals(argv[i])) {
-				if (!widthFalge(argv[i + 1])) {
+				if ((i + 1) == argv.length || !widthFalge(argv[i + 1])) {
 					return false;
 				}
 				i++;
@@ -152,7 +156,10 @@ public class CommandLineParser {
 	}
 
 	private boolean auxsidFalge(String auxsid) {
-		// TODO Daniel - add check (talk to Sofi)
+		if (!asciiEncoder.canEncode(auxsid)) {
+			return false; 
+		}
+		
 		this.auxsid = auxsid;
 		return true;
 	}

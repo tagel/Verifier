@@ -94,8 +94,12 @@ public class VerShuffling {
 			// We read lists of ciphertexts until i=lambda.
 			boolean retValue; // We check it later
 
+			
 			for (int i = 1; i <= lambda; i++) {
 				retValue = true;
+				if (!readFilesPoS(i, directory, Gq, Zq, N, width)){
+					retValue = false;
+				}
 				if (i == lambda) {
 					// Here we send the Llambda to the prover.
 					retValue = retValue
@@ -104,8 +108,6 @@ public class VerShuffling {
 									Llambda, width, PermutationCommitment,
 									PoSCommitment, PoSReply);
 				} else {
-					if (!readFilesPoS(i, directory, Gq, Zq, N, width))
-						retValue = false;
 					retValue = retValue
 							&& ProveShuffling.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
@@ -202,6 +204,10 @@ public class VerShuffling {
 				// We read lists of ciphertexts until i=lambda.
 				retValue = true; // We check it later
 
+				if (!readFilesCCPos(i, directory, Gq, Zq, N, width)){
+					retValue = false;
+				}
+				
 				if (i == lambda) {
 					// TODO change the parameters we send to the prover
 					// Here we send the Llambda to the prover.
@@ -211,8 +217,7 @@ public class VerShuffling {
 									Llambda, width, PermutationCommitment,
 									PoSCommitment, PoSReply);
 				} else {
-					if (!readFilesCCPos(i, directory, Gq, Zq, N, width))
-						retValue = false;
+					
 					retValue = retValue
 							&& ProveCCPoS.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk,

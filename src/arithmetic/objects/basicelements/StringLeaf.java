@@ -5,11 +5,19 @@ import java.nio.ByteOrder;
 
 import arithmetic.objects.ByteTree;
 
+/**
+ * This class represent a leaf of an ASCII string.
+ * @author Itay
+ *
+ */
 public class StringLeaf  implements ByteTree{
 
 
 	private String str;
-
+	/**
+	 * 
+	 * @param str the string this leaf represents.
+	 */
 	public StringLeaf (String str) {
 		this.str = str;
 	}
@@ -18,6 +26,9 @@ public class StringLeaf  implements ByteTree{
 		return str;
 	}
 	
+	/**
+	 * returns the byte array representation (as a byte tree) of the string.
+	 */
 	public byte[] toByteArray() throws UnsupportedEncodingException {
 		byte[] b = str.getBytes("ASCII");
 		int numOfBytes = b.length;

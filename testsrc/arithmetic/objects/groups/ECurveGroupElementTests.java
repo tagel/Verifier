@@ -78,7 +78,7 @@ public class ECurveGroupElementTests {
 		LargeInteger s = LargeInteger.ZERO.subtract(p).divide(
 				new LargeInteger("2"));
 		IntegerFieldElement xr = new IntegerFieldElement(
-				s.power(new LargeInteger("2")), f192);
+				LargeInteger.power(s, new LargeInteger("2")), f192);
 		IntegerFieldElement yr = new IntegerFieldElement(
 				LargeInteger.ZERO.subtract(LargeInteger.ONE.add(s.multiply(xr
 						.getElement()))), f192);
