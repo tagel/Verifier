@@ -1,7 +1,5 @@
 package algorithms.verifiers;
 
-import java.io.UnsupportedEncodingException;
-
 import algorithms.provers.ProveDec;
 import algorithms.provers.Prover;
 import arithmetic.objects.ElementsExtractor;
@@ -64,7 +62,7 @@ public class VerDec {
 			IRing<IntegerRingElement> Zq,
 			ArrayOfElements<IGroupElement> publicKeys,
 			ArrayOfElements<IntegerRingElement> secretKeys, int width,
-			ArrayOfElements<IGroupElement> randArray) throws Exception {
+			ArrayOfElements<IGroupElement> randArray) {
 
 		// ********Step 1 in the algorithm**********
 		// read the relevant arrays of proofs
@@ -144,7 +142,7 @@ public class VerDec {
 	}
 
 	private static boolean readDecrFactCommitment(int lambda, String directory,
-			IGroup Gq, int i) throws UnsupportedEncodingException {
+			IGroup Gq, int i) {
 
 		byte[] bDecrFactCommitment = ElementsExtractor.btFromFile(directory,
 				PROOFS, DECR_FACT_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING)
@@ -184,8 +182,7 @@ public class VerDec {
 	}
 
 	private static boolean readDecriptionFactors(int lambda, String directory,
-			IGroup Gq, int i, int N, int width)
-			throws UnsupportedEncodingException {
+			IGroup Gq, int i, int N, int width) {
 
 		byte[] bDecrFact = ElementsExtractor.btFromFile(directory, PROOFS,
 				DECRIPTION_FACTORS + (i < 10 ? "0" : EMPTY_STRING) + i
