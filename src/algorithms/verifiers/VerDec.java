@@ -19,7 +19,6 @@ import cryptographic.primitives.RandomOracle;
  * 
  * @author Sofi
  */
-
 public class VerDec {
 	private static final String EMPTY_STRING = "";
 	private static final String BT_FILE_EXT = ".bt";
@@ -113,14 +112,12 @@ public class VerDec {
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> arrays) {
 
 		ArrayOfElements<ProductGroupElement> retVal = new ArrayOfElements<ProductGroupElement>();
-		int numOfArrays = arrays.getSize();
-
-		if (numOfArrays == 1) {
+		if (arrays.getSize() == 1) {
 			return arrays.getAt(0);
 		} else {
 			retVal = arrays.getAt(0);
 			ArrayOfElements<ProductGroupElement> two;
-			for (int i = 1; i < numOfArrays; i++) {
+			for (int i = 1; i < arrays.getSize(); i++) {
 				two = arrays.getAt(i);
 				retVal = multArrays(retVal, two);
 			}
@@ -131,13 +128,11 @@ public class VerDec {
 	private static ArrayOfElements<ProductGroupElement> multArrays(
 			ArrayOfElements<ProductGroupElement> one,
 			ArrayOfElements<ProductGroupElement> two) {
-		int N = one.getSize();
+		
 		ArrayOfElements<ProductGroupElement> retVal = new ArrayOfElements<ProductGroupElement>();
-
-		for (int i = 0; i < N; i++) {
+		for (int i = 0; i < one.getSize(); i++) {
 			retVal.add(one.getAt(i).mult(two.getAt(i)));
 		}
-
 		return retVal;
 	}
 

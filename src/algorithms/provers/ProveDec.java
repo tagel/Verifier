@@ -80,21 +80,18 @@ public class ProveDec extends Prover {
 			ArrayOfElements<Node> decrFactCommitments,
 			ArrayOfElements<IntegerRingElement> decrFactReplies) {
 
-		try {
-
 			/**
 			 * 1(a) - interpret Tdec as Node(yl',B')
 			 */
 			Node decCommitment = decrFactCommitments.getAt(j);
-
 			IGroupElement yltag = (IGroupElement) decCommitment.getAt(0);
-			ProductGroupElement Bltag = (ProductGroupElement) decCommitment
+			ProductGroupElement Btag = (ProductGroupElement) decCommitment
 					.getAt(1);
 
 			/**
 			 * 1(b) - interpret Odec as ByteTree(Klx)
 			 */
-			IntegerRingElement klx = decrFactReplies.getAt(j);
+			ArrayOfElements<IntegerRingElement> klx = decrFactReplies;
 
 			/**
 			 * 2 - computing the seed
@@ -121,7 +118,6 @@ public class ProveDec extends Prover {
 			/**
 			 * 3 - Setting the PRG and computing e
 			 */
-
 			LargeInteger[] e = new LargeInteger[N];
 			int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 			prg.setSeed(seed);
@@ -137,13 +133,13 @@ public class ProveDec extends Prover {
 			/**
 			 * 4 - Computation of the challenge
 			 */
-			// creating leaf(s)
+			/* creating leaf(s) */
 			ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
 
-			// creating node(T1Dec,...,TlambdaDec)
+			/* creating node(T1Dec,...,TlambdaDec) */
 			Node decCommitmentsNode = new Node(decCommitment.toByteArray());
 
-			// creating node(leaf(s),node(T1Dec,...,TlambdaDec))
+			/* creating node(leaf(s),node(T1Dec,...,TlambdaDec)) */
 			Node nodeForChallenge = new Node();
 			nodeForChallenge.add(leaf);
 			nodeForChallenge.add(decCommitmentsNode);
@@ -167,36 +163,112 @@ public class ProveDec extends Prover {
 				u.add(wInput.getAt(i).getLeft());
 			}
 
-			// compute A = (PI(ui ^ ei),1) . marking "left" = PI(ui ^ ei),
-			// "ones" = ProductGroupElement of 1's
+			// compute A = (PI(ui ^ ei),1). marking "left" = PI(ui ^ ei),
+			// the right side isn't used in the computation thus null.
 			ProductGroupElement left = u.getAt(0).power(e[0]);
 			for (int i = 1; i < N; i++) {
 				left = left.mult(u.getAt(i).power(e[i]));
 			}
-
-			ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
-			for (int i = 0; i < wInput.getSize(); i++) {
-				arrOfOnes.add(Gq.one());
-			}
-			ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
-			ProductGroupElement A = new ProductGroupElement(left, ones);
+			ProductGroupElement A = new ProductGroupElement(left, null);
 
 			/*
 			 * if j==0 then compute B = PI((PI(fli)^ei) and accept if
 			 * PI(yl)^v*PI(yltag) == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
 			 */
 			if (j == 0) {
-				// TODO fl is an array, so we need to multiply fj's elements
-				IGroupElement B = Gq.one();
+
+				ProductGroupElement ret;
+				ProductGroupElement B = null;
 				for (int i = 0; i < N; i++) {
-					IGroupElement fl = Gq.one();
-					for (int l = 0; i < decryptionFactors.getSize(); i++) {
-						// fl = fl.mult(f.getAt(0).getAt(l));
+					ret = decryptionFactors.getAt(0).getAt(i);
+					for (int l = 1; l < decryptionFactors.getSize(); l++) {
+						ret = ret.mult(decryptionFactors.getAt(l).getAt(i));
 					}
-					B = B.mult(fl.power(e[i]));
+					if (i == 0) {
+						B = ret.power(e[0]);
+					} else {
+						B = B.mult(ret.power(e[i]));
+					}
 				}
 
+				// compute PI(Yl)
+				IGroupElement piYl = Gq.one();
+				for (int i = 0; i < y.getSize(); i++) {
+					piYl = piYl.mult(y.getAt(i));
+				}
+
+				// creating the arrays for verifying the equations
+				ArrayOfElements<IGroupElement> yltagArr = new ArrayOfElements<IGroupElement>();
+				ArrayOfElements<ProductGroupElement> BtagArr = new ArrayOfElements<ProductGroupElement>();
+
+				for (int i = 0; i < decrFactCommitments.getSize(); i++) {
+					decCommitment = decrFactCommitments.getAt(i);
+
+					yltag = (IGroupElement) decCommitment.getAt(0);
+					yltagArr.add(yltag);
+					ProductGroupElement Bltag = (ProductGroupElement) decCommitment
+							.getAt(1);
+					BtagArr.add(Bltag);
+				}
+
+				// compute piYltag
+				IGroupElement piYltag = Gq.one();
+				for (int i = 0; i < yltagArr.getSize(); i++) {
+					piYltag = piYltag.mult(yltagArr.getAt(i));
+				}
+
+				// compute g^SUM(klx)
+				IntegerRingElement sumklx = klx.getAt(0).getRing().zero();
+				for (int i = 0; i < klx.getSize(); i++) {
+					sumklx = sumklx.add(klx.getAt(i));
+				}
+
+				ProductGroupElement piBltag = BtagArr.getAt(0);
+				for (int i = 1; i < BtagArr.getSize(); i++) {
+					piBltag = piBltag.mult(BtagArr.getAt(i));
+				}
+
+				/*
+				 * verify PI(yl)^v * PI(yl') = g^(SUM(klx))
+				 */
+				boolean firstEq = true;
+				if (!(piYl.power(v)).mult(piYltag).equals(
+						g.power(sumklx.getElement()))) {
+					firstEq = false;
+				}
+
+				/*
+				 * verify B^v * PI(Bltag) = PDEC(SUM(klx),A)
+				 */
+				boolean secondEq = true;
+				if (!(B.power(v)).mult(piBltag).equals(PDecrypt(sumklx, A))) {
+					secondEq = false;
+				}
+
+				return (firstEq && secondEq);
+
 			} else if (j > 0) {
+				ProductGroupElement Bj = decryptionFactors.getAt(j).getAt(0);
+				for (int i = 1; i < decryptionFactors.getAt(j).getSize(); i++) {
+					Bj = Bj.mult((decryptionFactors.getAt(j).getAt(i))
+							.power(e[i]));
+				}
+
+				/*
+				 * verify yj^v*ytagj == g^kjx
+				 */
+				IntegerRingElement kjx = decrFactReplies.getAt(j);
+				if (!(y.getAt(j).power(v)).mult(yltag).equals(
+						g.power(kjx.getElement()))) {
+					return false;
+				}
+
+				/*
+				 * verify Bj^v*Bj' = PDEC(kjx,A)
+				 */
+				if (!((Bj.power(v)).mult(Btag)).equals(PDecrypt(kjx, A))) {
+					return false;
+				}
 
 			} else {
 				return false;
@@ -205,9 +277,5 @@ public class ProveDec extends Prover {
 			/* All equalities exist. */
 			return true;
 
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
 	}
 }

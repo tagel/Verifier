@@ -1,7 +1,5 @@
 package algorithms.provers;
 
-import java.io.UnsupportedEncodingException;
-
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -28,7 +26,7 @@ public abstract class Prover {
 			ProductGroupElement A)  {
 		return A.getLeft().power(x.neg().getElement());
 	}
-
+	
 	public static ArrayOfElements<ProductGroupElement> PDecrypt(
 			IntegerRingElement x, ArrayOfElements<ProductGroupElement> A)
 			 {
@@ -66,7 +64,6 @@ public abstract class Prover {
 	 * @param Gq
 	 * @param m
 	 * @return
-	 * @throws Exception
 	 */
 	public static ProductGroupElement encrypt(ProductGroupElement m,
 			ProductRingElement s, ProductGroupElement pk, IGroup Gq) {
@@ -97,10 +94,9 @@ public abstract class Prover {
 	 * @param ro
 	 *            prefix to random oracle
 	 * @return a seed represented as a byte[]
-	 * @throws UnsupportedEncodingException
 	 */
 	protected static byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed,
-			byte[] ro) throws UnsupportedEncodingException  {
+			byte[] ro) {
 		return ROSeed.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 				nodeForSeed.toByteArray()));
 	}
