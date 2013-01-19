@@ -80,7 +80,7 @@ public class VerDec {
 		// try to do the combined proof if this return true, we skip to step 4
 		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv,
 				prg, Gq, g, publicKeys, L, DecryptionFactors,
-				DecrFactCommitments, DecrFactReplies, randArray)) {
+				DecrFactCommitments, DecrFactReplies)) {
 
 			// ********Step 3 in the algorithm**********
 			for (int i = 1; i <= lambda; i++) {
@@ -88,7 +88,7 @@ public class VerDec {
 						.prove(ROSeed, ROChallenge, i - 1, prefixToRO, N, ne,
 								nr, nv, prg, Gq, g, publicKeys, L,
 								DecryptionFactors, DecrFactCommitments,
-								DecrFactReplies, randArray);
+								DecrFactReplies);
 				if (!proveDec
 						&& (secretKeys.getAt(i - 1) == null || !DecryptionFactors
 								.getAt(i - 1).equals(
@@ -125,7 +125,7 @@ public class VerDec {
 			ArrayOfElements<ProductGroupElement> two;
 			for (int i = 1; i < arrays.getSize(); i++) {
 				two = arrays.getAt(i);
-				retVal = multArrays(retVal, two);
+				retVal = multTwoArrays(retVal, two);
 			}
 		}
 		return retVal;
@@ -137,7 +137,7 @@ public class VerDec {
 	 * @param two
 	 * @return
 	 */
-	public static ArrayOfElements<ProductGroupElement> multArrays(
+	public static ArrayOfElements<ProductGroupElement> multTwoArrays(
 			ArrayOfElements<ProductGroupElement> one,
 			ArrayOfElements<ProductGroupElement> two) {
 		

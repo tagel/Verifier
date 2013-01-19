@@ -35,14 +35,21 @@ public class VerDecTests {
 		Assert.assertNotNull(factor1);
 		Assert.assertNotNull(factor2);
 		
-		ArrayOfElements<ProductGroupElement> mult = VerDec.multArrays(factor1, factor2);
+		ArrayOfElements<ProductGroupElement> mult = VerDec.multTwoArrays(factor1, factor2);
 		Assert.assertNotNull(mult);
 		Assert.assertEquals(100, mult.getSize());
 		ProductGroupElement temp = factor1.getAt(0).mult(factor2.getAt(0));
-		Assert.assertEquals(temp, mult.getAt(0));
+		Assert.assertTrue(temp.equals(mult.getAt(0)));
 		
+		ArrayOfElements<ArrayOfElements<ProductGroupElement>> arr = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
+		arr.add(factor1);
+		arr.add(factor2);
 		
-		
+		ArrayOfElements<ProductGroupElement> tempArr = VerDec.multiplyArrays(arr);
+		for (int i = 0; i<tempArr.getSize(); i++) {
+			Assert.assertTrue(mult.getAt(i).equals(tempArr.getAt(i)));
+		}
+			
 		
 		
 	}
