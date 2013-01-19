@@ -1,6 +1,5 @@
 package algorithms.verifiers;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import algorithms.provers.ProveDec;
@@ -24,6 +23,7 @@ import cryptographic.primitives.RandomOracle;
  */
 
 public class VerDec {
+	private static final String EMPTY_STRING = "";
 	private static final String BT_FILE_EXT = ".bt";
 	private static final String PROOFS = "proofs";
 	private static final String DECRIPTION_FACTORS = "DecriptionFactors";
@@ -67,21 +67,20 @@ public class VerDec {
 			ArrayOfElements<IGroupElement> randArray) throws Exception {
 
 		// ********Step 1 in the algorithm**********
-		// First, we read the relevant arrays of proofs
+		// read the relevant arrays of proofs
 		for (int i = 1; i <= lambda; i++) {
-			// Create the arrays of the different factors
+			// create the arrays of the different factors
 			if (!readDecriptionFactors(lambda, directory, Gq, i, N, width)
 					|| !readDecrFactCommitment(lambda, directory, Gq, i)
 					|| !readDecrFactReply(lambda, directory, Zq, i))
 				return false;
 		}
 
-		// Extract g from the public key to send to the verifier:
+		// extract g from the public key to send to the verifier:
 		IGroupElement g = pk.getElements().getAt(0);
 
 		// ********Step 2 in the algorithm**********
-		// Now we try to do the combined proof
-		// If this return true, we skip to step 4
+		// try to do the combined proof if this return true, we skip to step 4
 		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv,
 				prg, Gq, g, publicKeys, L, DecryptionFactors,
 				DecrFactCommitments, DecrFactReplies)) {
@@ -104,7 +103,7 @@ public class VerDec {
 		}
 
 		// ********Step 4 in the algorithm**********
-		// Verify Plaintexts:
+		// verify Plaintexts:
 		ArrayOfElements<ProductGroupElement> f = multiplyArrays(DecryptionFactors);
 		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
@@ -147,27 +146,21 @@ public class VerDec {
 	private static boolean readDecrFactCommitment(int lambda, String directory,
 			IGroup Gq, int i) throws UnsupportedEncodingException {
 
-		byte[] bDecrFactCommitment;
-		try {
-			bDecrFactCommitment = ElementsExtractor.btFromFile(directory,
-					PROOFS, DECR_FACT_COMMITMENT + (i < 10 ? "0" : "") + i
-							+ BT_FILE_EXT);
-		} catch (IOException e) {
-			return false;
-		}
-
+		byte[] bDecrFactCommitment = ElementsExtractor.btFromFile(directory,
+				PROOFS, DECR_FACT_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING)
+						+ i + BT_FILE_EXT);
 		if (bDecrFactCommitment == null) {
 			return false;
 		}
 
-		// Now interpret the DecrFactCommitment as a Node with two children:
+		// interpret the DecrFactCommitment as a Node with two children:
 		Node DecrFactCommitment = new Node(bDecrFactCommitment);
 
-		// Read ytag as GroupElement
+		// read ytag as GroupElement
 		DecrFactCommitment.setAt(0, ElementsExtractor.createGroupElement(
 				DecrFactCommitment.getAt(0).toByteArray(), Gq));
 
-		// Read Btag as plaintext
+		// read Btag as plaintext
 		DecrFactCommitment.setAt(1, ElementsExtractor.createSimplePGE(
 				DecrFactCommitment.getAt(0).toByteArray(), Gq));
 		DecrFactCommitments.add(DecrFactCommitment);
@@ -178,14 +171,9 @@ public class VerDec {
 	private static boolean readDecrFactReply(int lambda, String directory,
 			IRing<IntegerRingElement> Zq, int i) {
 
-		byte[] bDecrFactReply;
-		try {
-			bDecrFactReply = ElementsExtractor.btFromFile(directory, PROOFS,
-					DECR_FACT_REPLY + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
-		} catch (IOException e) {
-			return false;
-		}
-
+		byte[] bDecrFactReply = ElementsExtractor.btFromFile(directory, PROOFS,
+				DECR_FACT_REPLY + (i < 10 ? "0" : EMPTY_STRING) + i
+						+ BT_FILE_EXT);
 		if (bDecrFactReply == null) {
 			return false;
 		}
@@ -199,14 +187,9 @@ public class VerDec {
 			IGroup Gq, int i, int N, int width)
 			throws UnsupportedEncodingException {
 
-		byte[] bDecrFact;
-		try {
-			bDecrFact = ElementsExtractor.btFromFile(directory, PROOFS,
-					DECRIPTION_FACTORS + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
-		} catch (IOException e) {
-			return false;
-		}
-
+		byte[] bDecrFact = ElementsExtractor.btFromFile(directory, PROOFS,
+				DECRIPTION_FACTORS + (i < 10 ? "0" : EMPTY_STRING) + i
+						+ BT_FILE_EXT);
 		if (bDecrFact == null) {
 			return false;
 		}
