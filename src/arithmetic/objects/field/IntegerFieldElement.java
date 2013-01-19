@@ -126,7 +126,7 @@ public class IntegerFieldElement implements ByteTree {
 
 	/**
 	 * 
-	 * @return the multiplication inverse of our element.
+	 * @return the multiplicative inverse of our element.
 	 */
 	public IntegerFieldElement inverse() {
 		IntegerFieldElement ret = new IntegerFieldElement(this.getElement()

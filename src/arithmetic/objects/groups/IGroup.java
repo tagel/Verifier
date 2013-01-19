@@ -50,6 +50,6 @@ public interface IGroup extends ByteTree {
 	 * @return an array of size N containing random group elements.
 	 */
 	public ArrayOfElements<IGroupElement> createRandomArray(int N,
-			PseudoRandomGenerator prg, byte[] seed, int nr) throws Exception;
+			PseudoRandomGenerator prg, byte[] seed, int nr);
 
 }

@@ -116,7 +116,7 @@ public class ModGroup implements IGroup {
 	 */
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N,
-			PseudoRandomGenerator prg, byte[] seed, int Nr) throws Exception {
+			PseudoRandomGenerator prg, byte[] seed, int Nr)  {
 		ArrayOfElements<IGroupElement> h = new ArrayOfElements<IGroupElement>();
 		int Np = this.p.bitLength();
 		int length = 8 * ((int) Math.ceil((double) ((Np + Nr) / 8)));
