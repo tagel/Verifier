@@ -12,7 +12,6 @@ import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -23,17 +22,6 @@ import cryptographic.primitives.RandomOracle;
  * @author Tagel
  */
 public class ProveDec extends Prover {
-
-	/**
-	 * @param pk
-	 *            The public key
-	 * @param wInput
-	 *            Array of input ciphertexts
-	 * @param wOutput
-	 *            Array of output ciphertexts
-	 * @param width
-	 *            width of plaintexts and ciphertexts
-	 */
 
 	/**
 	 * This is the main function of this class which executes the decryption
@@ -66,10 +54,13 @@ public class ProveDec extends Prover {
 	 * @param y
 	 *            Partial public keys
 	 * @param wInput
-	 * @param m
+	 *            Array of input ciphertexts
 	 * @param decryptionFactors
+	 *            Arrays fi = (fi0,fi1,...fiN-1) of decryption factors in Mw
 	 * @param decrFactCommitments
+	 *            commitments of Fiat-Shamir proofs
 	 * @param decrFactReplies
+	 *            Replies of Fiat-Shamir proofs
 	 * @return true if we accept the proof and false otherwise
 	 */
 	public static boolean prove(
@@ -86,7 +77,6 @@ public class ProveDec extends Prover {
 			IGroupElement g,
 			ArrayOfElements<IGroupElement> y,
 			ArrayOfElements<ProductGroupElement> wInput,
-			ArrayOfElements<ProductGroupElement> m,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors,
 			ArrayOfElements<Node> decrFactCommitments,
 			ArrayOfElements<IntegerRingElement> decrFactReplies) {
@@ -99,7 +89,7 @@ public class ProveDec extends Prover {
 			Node decCommitment = decrFactCommitments.getAt(j);
 
 			IGroupElement yltag = (IGroupElement) decCommitment.getAt(0);
-			ProductRingElement Bltag = (ProductRingElement) decCommitment
+			ProductGroupElement Bltag = (ProductGroupElement) decCommitment
 					.getAt(1);
 
 			/**
@@ -110,7 +100,7 @@ public class ProveDec extends Prover {
 			/**
 			 * 2 - computing the seed
 			 */
-			StringLeaf stringLeaf = new StringLeaf("generators");
+			StringLeaf stringLeaf = new StringLeaf(GENERATORS);
 			byte[] independentSeed = ROSeed
 					.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 							stringLeaf.toByteArray()));

@@ -23,8 +23,7 @@ import cryptographic.primitives.RandomOracle;
  */
 public class ProveShuffling extends Prover {
 
-	private static final String GENERATORS = "generators";
-
+	
 	/**
 	 * This is the main function of this class which executes the shuffling
 	 * algorithm.
