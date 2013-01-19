@@ -36,8 +36,6 @@ public class ProveCCPoS extends Prover{
 			ArrayOfElements<IGroupElement> permutationCommitment,
 			Node PoSCommitment, Node PoSReply) {
 
-		try {
-
 			/**
 			 * 1(a) - interpret permutationCommitment (miu) as an array of
 			 * Pedersen commitments in Gq
@@ -142,9 +140,5 @@ public class ProveCCPoS extends Prover{
 			/* All equalities exist. */
 			return true;
 
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
 	}
 }
