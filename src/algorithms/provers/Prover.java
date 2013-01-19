@@ -25,13 +25,13 @@ public abstract class Prover {
 	 * ciphertext to be decrypted
 	 */
 	public static ProductGroupElement PDecrypt(IntegerRingElement x,
-			ProductGroupElement A) throws Exception {
+			ProductGroupElement A)  {
 		return A.getLeft().power(x.neg().getElement());
 	}
 
 	public static ArrayOfElements<ProductGroupElement> PDecrypt(
 			IntegerRingElement x, ArrayOfElements<ProductGroupElement> A)
-			throws Exception {
+			 {
 
 		ArrayOfElements<ProductGroupElement> res = new ArrayOfElements<ProductGroupElement>();
 		for (int i = 0; i < A.getSize(); i++) {
@@ -100,7 +100,7 @@ public abstract class Prover {
 	 * @throws UnsupportedEncodingException
 	 */
 	protected static byte[] ComputeSeed(RandomOracle ROSeed, Node nodeForSeed,
-			byte[] ro) throws UnsupportedEncodingException {
+			byte[] ro) throws UnsupportedEncodingException  {
 		return ROSeed.getRandomOracleOutput(ArrayGenerators.concatArrays(ro,
 				nodeForSeed.toByteArray()));
 	}
