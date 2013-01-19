@@ -26,6 +26,5 @@ public class Main {
 		verifier.verify(parser.getXml(), parser.getDir(), parser.getType(),
 				parser.getAuxsid(), parser.getWidth(), parser.getPosc(),
 				parser.getCcpos(), parser.getDec());
-
 	}
 }
