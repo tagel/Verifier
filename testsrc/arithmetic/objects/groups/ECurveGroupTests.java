@@ -83,15 +83,13 @@ public class ECurveGroupTests {
 				.getGenerator()));
 	}
 
-
-
 	@Test
 	public void oneTest() {
 		IntegerFieldElement minusOne = new IntegerFieldElement(
 				new LargeInteger("-1"), new PrimeOrderField(
 						eCurve.getFieldOrder()));
 		Point infinity = new Point(minusOne, minusOne);
-		Assert.assertTrue(new ECurveGroupElement(infinity, eCurve).equals(eCurve
-				.one()));
+		Assert.assertTrue(new ECurveGroupElement(infinity, eCurve)
+				.equals(eCurve.one()));
 	}
 }

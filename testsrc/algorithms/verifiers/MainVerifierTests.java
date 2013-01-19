@@ -14,6 +14,11 @@ import algorithms.params.Parameters;
 import algorithms.params.Parameters.Type;
 import algorithms.verifiers.MainVerifier;
 
+/**
+ * Tests for the MainVerifier class.
+ * @author Sofi & Tagel & Itay & Daniel
+ *
+ */
 public class MainVerifierTests {
 
 	@Test

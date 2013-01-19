@@ -31,7 +31,7 @@ public class ArrayGenerators {
 	 * @return an array of group elements which "b" represents.
 	 */
 	public static ArrayOfElements<IGroupElement> createGroupElementArray(
-			byte[] b, IGroup group) throws UnsupportedEncodingException {
+			byte[] b, IGroup group)  {
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
 		Node node = new Node(b);
 		for (int i = 0; i < node.getChildrenSize(); i++)
@@ -50,8 +50,7 @@ public class ArrayGenerators {
 	 * @return an array of ring elements which "b" represents.
 	 */
 	public static ArrayOfElements<IntegerRingElement> createRingElementArray(
-			byte[] b, IRing<IntegerRingElement> ring)
-			throws UnsupportedEncodingException {
+			byte[] b, IRing<IntegerRingElement> ring) {
 		ArrayOfElements<IntegerRingElement> ret = new ArrayOfElements<IntegerRingElement>();
 		Node node = new Node(b);
 		for (int i = 0; i < node.getChildrenSize(); i++)
@@ -75,8 +74,7 @@ public class ArrayGenerators {
 	 *         ciphertexts.
 	 */
 	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts(
-			byte[] data, IGroup group, int w)
-			throws UnsupportedEncodingException {
+			byte[] data, IGroup group, int w) {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
 		int arraySize = (new Node(node.getAt(0).toByteArray()))
@@ -91,8 +89,7 @@ public class ArrayGenerators {
 				arr1.add(leftArr.getAt(i));
 				ArrayOfElements<IGroupElement> arr2 = new ArrayOfElements<IGroupElement>();
 				arr2.add(rightArr.getAt(i));
-				ProductGroupElement ciphertext = ElementsExtractor
-						.createCiphertext(arr1, arr2);
+				ProductGroupElement ciphertext = new ProductGroupElement(new ProductGroupElement(arr1), new ProductGroupElement(arr2));
 				ret.add(ciphertext);
 			}
 		} else {
@@ -123,8 +120,7 @@ public class ArrayGenerators {
 	 *         plaintexts.
 	 */
 	public static ArrayOfElements<ProductGroupElement> createArrayOfPlaintexts(
-			byte[] data, IGroup group, int w)
-			throws UnsupportedEncodingException {
+			byte[] data, IGroup group, int w) {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
 		int w = node.getChildrenSize();

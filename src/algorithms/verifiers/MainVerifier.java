@@ -1,8 +1,5 @@
 package algorithms.verifiers;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
 import algorithms.params.Parameters;
 import algorithms.params.Parameters.Type;
 import arithmetic.objects.ByteTree;
@@ -16,7 +13,6 @@ import arithmetic.objects.basicelements.StringLeaf;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.HashFuncPRG;
 import cryptographic.primitives.HashFuncPRGRandomOracle;
@@ -30,6 +26,9 @@ import cryptographic.primitives.SHA2HashFunction;
  */
 public class MainVerifier {
 
+	private static final String PUBLIC_KEY = "PublicKey";
+	private static final String GENERATORS = "generators";
+	private static final String EMPTY_STRING = "";
 	private static final String SECRET_KEY = "SecretKey";
 	private static final String PROOFS = "proofs";
 	private static final String BT_EXT = ".bt";
@@ -64,12 +63,11 @@ public class MainVerifier {
 	 * @throws Exception
 	 */
 	public boolean verify(String protInfo, String directory, Type type,
-			String auxid, int w, boolean posc, boolean ccpos, boolean dec)
-			throws Exception {
+			String auxid, int w, boolean posc, boolean ccpos, boolean dec) {
 
 		// *****Section 1 and 2 in the algorithm*****
 		// create the Parameters object using the command line parameters and
-		// fill params from aml and dir
+		// fill parameters from xml and directory
 		params = new Parameters(protInfo, directory, type, auxid, w, posc,
 				ccpos, dec);
 		if (!fillParamsFromXmlAndDir(params) || !checkFilledParams()) {
@@ -77,19 +75,18 @@ public class MainVerifier {
 		}
 
 		// *******Section 3 in the Algorithm*********
-		// Derives the objects: IGroup Gq, Ring Zq, Hashfunction H, and PRG.
+		// derive the objects: IGroup Gq, Ring Zq, Hashfunction H, and PRG.
 		if (!deriveSetsAndObjects()) {
 			return false;
 		}
 
 		// *******Section 4 in the Algorithm*********
-		// Creates the random oracles used in the provers using prg and
-		// hashfunction
+		// create the random oracles used in the provers using prg and
+		// hash function
 		createPrefixToRo();
 
 		// *******Section 5 in the Algorithm*********
 		if (!ReadKeys()) {
-			// Attempt to read was unsuccessful
 			return false;
 		}
 
@@ -97,12 +94,12 @@ public class MainVerifier {
 		if (!ReadLists()) {
 			return false;
 		}
-		
-		//Create the random array to send to the verifiers
+
+		// create random array to send to the verifiers
 		createRandomArray();
 
 		// *******Section 7 in the Algorithm*********
-		// Call the subroutines of the verifier
+		// call the subroutines of the verifier
 		// 7a - Verify Shuffling
 		if ((Type.MIXING.equals(params.getType()) || Type.SHUFFLING
 				.equals(params.getType()))
@@ -116,13 +113,11 @@ public class MainVerifier {
 		// 7b - Verify Decryption
 		// if isDec==true means we need to check the decryption.
 		if (params.isDec()) {
-
 			if (Type.MIXING.equals(params.getType())) {
 				if (!runVerDec(Type.MIXING)) {
 					return false;
 				}
 			}
-
 			if (Type.DECRYPTION.equals(params.getType())) {
 				if (!runVerDec(Type.DECRYPTION)) {
 					return false;
@@ -132,19 +127,19 @@ public class MainVerifier {
 		return true;
 	}
 
-	private void createRandomArray() throws Exception {
-		
-		StringLeaf stringLeaf = new StringLeaf("generators");
-		byte[] independentSeed = params.getROseed().getRandomOracleOutput(ArrayGenerators
-				.concatArrays(params.getPrefixToRO(), stringLeaf.toByteArray()));
-		ArrayOfElements<IGroupElement> h = params.getGq().createRandomArray(params.getN(), params.getPrg(),
-				independentSeed, params.getNr());
+	private void createRandomArray() {
+		StringLeaf stringLeaf = new StringLeaf(GENERATORS);
+		byte[] independentSeed = params.getROseed().getRandomOracleOutput(
+				ArrayGenerators.concatArrays(params.getPrefixToRO(),
+						stringLeaf.toByteArray()));
+		ArrayOfElements<IGroupElement> h = params.getGq()
+				.createRandomArray(params.getN(), params.getPrg(),
+						independentSeed, params.getNr());
 		params.setRandArray(h);
-		
 	}
 
 	// expect type to be MIXING or DECRYPTION
-	private boolean runVerDec(Type type) throws Exception {
+	private boolean runVerDec(Type type) {
 		ArrayOfElements<ProductGroupElement> l;
 		if (Type.MIXING.equals(type)) {
 			l = params.getShuffledCiphertexts();
@@ -162,7 +157,7 @@ public class MainVerifier {
 				params.getW(), params.getRandArray());
 	}
 
-	private boolean runVerShuffling() throws Exception {
+	private boolean runVerShuffling() {
 		return VerShuffling.verify(params.getROseed(), params.getROchallenge(),
 				params.getDirectory(), params.getPrefixToRO(),
 				params.getThreshold(), params.getN(), params.getNe(),
@@ -210,7 +205,6 @@ public class MainVerifier {
 		if (!params.fillFromDirectory()) {
 			return false;
 		}
-
 		return true;
 	}
 
@@ -219,25 +213,20 @@ public class MainVerifier {
 	 *         function H and the PRG and false otherwise.
 	 */
 	public boolean deriveSetsAndObjects() {
-		// Unmarshall Gq
-		try {
-			params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
-		} catch (UnsupportedEncodingException e) {
-			System.out.println("Error unmarshalling Gq");
-			return false;
-		}
+		// unmarshall Gq
+		params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
 
 		// create the Ring
 		params.setZq(new Ring(params.getGq().getFieldOrder()));
 
-		// Set the Hashfunction and the pseudo random generator
+		// set the Hashfunction and the pseudo random generator
 		H = new SHA2HashFunction(params.getSh());
 		params.setPrg(new HashFuncPRG(new SHA2HashFunction(params.getsPRG())));
 
 		return true;
 	}
 
-	public void createPrefixToRo() throws UnsupportedEncodingException {
+	public void createPrefixToRo() {
 		ByteTree btAuxid = new StringLeaf(params.getSessionID() + "."
 				+ params.getAuxsid());
 		ByteTree version_proof = new StringLeaf(params.getVersion());
@@ -267,52 +256,40 @@ public class MainVerifier {
 		byte[] Seed = new Node(input).toByteArray();
 		params.setPrefixToRO(H.digest((Seed)));
 
-		// Set random oracles:
+		// set random oracles:
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
 				.seedlen()));
 		params.setROchallenge(new HashFuncPRGRandomOracle(H, params.getNv()));
 
-		
 	}
 
 	public boolean ReadKeys() {
-		// Read Public Key
+		// read Public Key
 		ProductGroupElement pk;
-		try {
-			pk = ElementsExtractor.createSimplePGE(ElementsExtractor
-					.btFromFile(params.getDirectory(), FULL_PUBLIC_KEY_BT),
-					params.getGq());
-		} catch (UnsupportedEncodingException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
-		}
 
-		// Extract y and g from the public key
+		pk = ElementsExtractor.createSimplePGE(ElementsExtractor.btFromFile(
+				params.getDirectory(), FULL_PUBLIC_KEY_BT), params.getGq());
+
+		// extract y and g from the public key
 		IGroupElement y = pk.getElements().getAt(1);
 		IGroupElement g = pk.getElements().getAt(0);
 
 		params.setFullPublicKey(pk);
 
-		// Initialize the elements
 		IGroupElement yi;
 		IntegerRingElement xi;
 		int i;
 
-		// Here we get the Identity element and multiply all of the yi's
+		// get the Identity element and multiply all of the yi's
 		IGroupElement res = params.getGq().one();
 
 		for (i = 0; i < params.getThreshold(); i++) {
-			// Here we assume that the file exists
-			try {
-				yi = ElementsExtractor.createGroupElement(ElementsExtractor
-						.btFromFile(params.getDirectory(), PROOFS, "PublicKey"
-								+ (i < 10 ? "0" : "") + (i + 1) + ".bt"),
-						params.getGq());
-			} catch (IOException e) {
-				return false;
-			}
-			// Check if yi exists
+			// assume that the file exists
+			yi = ElementsExtractor.createGroupElement(
+					ElementsExtractor.btFromFile(params.getDirectory(), PROOFS,
+							PUBLIC_KEY + (i < 10 ? "0" : EMPTY_STRING)
+									+ (i + 1) + BT_EXT), params.getGq());
+
 			if (yi == null) {
 				return false;
 			}
@@ -325,18 +302,11 @@ public class MainVerifier {
 			return false;
 		}
 
-		// Here we check the secret keys - xi:
-		// The file can be null
+		// check the secret keys - xi: the file can be null
 		for (i = 0; i < params.getThreshold(); i++) {
-
-			byte[] xFile;
-			try {
-				xFile = ElementsExtractor.btFromFile(params.getDirectory(),
-						PROOFS, SECRET_KEY + (i < 10 ? "0" : "") + (i + 1)
-								+ BT_EXT);
-			} catch (IOException e) {
-				return false;
-			}
+			byte[] xFile = ElementsExtractor.btFromFile(params.getDirectory(),
+					PROOFS, SECRET_KEY + (i < 10 ? "0" : EMPTY_STRING)
+							+ (i + 1) + BT_EXT);
 
 			// xi = null if the file doesn't exist
 			xi = (xFile == null) ? null : new IntegerRingElement(
@@ -344,7 +314,7 @@ public class MainVerifier {
 			params.getMixSecretKey().add(xi);
 		}
 
-		// Check the 3.b part of keys verifier
+		// check the 3.b part of keys verifier
 		for (i = 0; i < params.getThreshold(); i++) {
 			xi = params.getMixSecretKey().getAt(i);
 			yi = params.getMixPublicKey().getAt(i);
@@ -353,12 +323,11 @@ public class MainVerifier {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
 	// Part 6 of the algorithm
-	public boolean ReadLists() throws IOException {
+	public boolean ReadLists() {
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				CIPHERTEXTS_FILE_NAME + BT_EXT);
@@ -372,18 +341,16 @@ public class MainVerifier {
 		params.setCiphertexts(ciphertexts);
 		params.setN(ciphertexts.getSize());
 
-		// section 6b of the Algorithm -- read shuffled ciphertexts
-		// if the type==mixing, read the file Ciphertexts_threshold from
+		// section 6b of the Algorithm - read shuffled ciphertexts
+		// if the type == mixing, read the file Ciphertexts_threshold from
 		// Directory/proofs
 		// if the type==shuffling, read the file ShuffledCiphertexts.bt from
 		// Directory
 
 		if (params.getType().equals(Type.MIXING)) {
-			file = ElementsExtractor.btFromFile(
-					params.getDirectory(),
-					PROOFS,
+			file = ElementsExtractor.btFromFile(params.getDirectory(), PROOFS,
 					CIPHERTEXTS_FILE_NAME
-							+ (params.getThreshold() < 10 ? "0" : "")
+							+ (params.getThreshold() < 10 ? "0" : EMPTY_STRING)
 							+ params.getThreshold() + BT_EXT);
 			if (file == null) {
 				return false;

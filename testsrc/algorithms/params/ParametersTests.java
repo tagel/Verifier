@@ -3,12 +3,17 @@ package algorithms.params;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests for the Parameters class.
+ * 
+ * @author Sofi
+ */
 public class ParametersTests {
 
 	private Parameters params = new Parameters(getClass().getClassLoader()
 			.getResource("protInfo.xml").getFile(), getClass().getClassLoader()
-			.getResource("export/default").getFile(), null, "auxsid", 1,
-			false, false, false);
+			.getResource("export/default").getFile(), null, "auxsid", 1, false,
+			false, false);
 
 	@Test
 	public void fillFromXMLTest() {
@@ -31,4 +36,3 @@ public class ParametersTests {
 		Assert.assertEquals(1, params.getW());
 	}
 }
-

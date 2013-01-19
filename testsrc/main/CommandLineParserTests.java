@@ -9,6 +9,11 @@ import org.junit.Test;
 
 import algorithms.params.Parameters.Type;
 
+/**
+ * Tests for the CommandLineParser class.
+ * @author Daniel
+ *
+ */
 public class CommandLineParserTests {
 	private CommandLineParser parser = new CommandLineParser();
 	private CharsetEncoder asciiEncoder = Charset.forName("US-ASCII")
