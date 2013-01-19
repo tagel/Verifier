@@ -249,4 +249,25 @@ public class CommandLineParserTests {
 		Assert.assertTrue(Type.DECRYPTION.equals(parser.getType()));
 		Assert.assertFalse(parser.shouldVerify());
 	}
+	
+	@Test
+	public void allFlagsFalse_MixingTest() {
+		String[] argv = new String[6];
+		argv[0] = "verifier";
+		argv[1] = "-mix";
+		argv[2] = "protInfo.xml";
+		argv[3] = "directory";
+		argv[4] = "-nopos";
+		argv[5] = "-nodec";
+		parser.parseCommand(argv);
+
+		Assert.assertEquals("default", parser.getAuxsid());
+		Assert.assertFalse(parser.getPosc());
+		Assert.assertFalse(parser.getCcpos());
+		Assert.assertTrue(parser.getDec());
+		Assert.assertEquals(0, parser.getWidth());
+
+		Assert.assertTrue(Type.MIXING.equals(parser.getType()));
+		Assert.assertFalse(parser.shouldVerify());
+	}
 }
