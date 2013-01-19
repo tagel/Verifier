@@ -62,7 +62,7 @@ public class ECurveGroupElementTests {
 				.mult(eCurveElement2)));
 	}
 
-	@Test 
+	@Test
 	public void mult_caseXequalsYequalTest() throws Exception {
 		Point point1 = new Point(new IntegerFieldElement(new LargeInteger("0"),
 				f192), new IntegerFieldElement(new LargeInteger("1"), f192));
@@ -77,8 +77,8 @@ public class ECurveGroupElementTests {
 		LargeInteger p = eCurveGroup192.getXCoefficient();
 		LargeInteger s = LargeInteger.ZERO.subtract(p).divide(
 				new LargeInteger("2"));
-		IntegerFieldElement xr = new IntegerFieldElement(
-				LargeInteger.power(s, new LargeInteger("2")), f192);
+		IntegerFieldElement xr = new IntegerFieldElement(LargeInteger.power(s,
+				new LargeInteger("2")), f192);
 		IntegerFieldElement yr = new IntegerFieldElement(
 				LargeInteger.ZERO.subtract(LargeInteger.ONE.add(s.multiply(xr
 						.getElement()))), f192);
@@ -216,10 +216,11 @@ public class ECurveGroupElementTests {
 				f192), new IntegerFieldElement(new LargeInteger("0"), f192));
 		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
 				eCurveGroup192);
-		 Assert.assertEquals("0000000002" + 
-					"010000001900000000000000000000000000000000000000000000000000" +
-					"010000001900000000000000000000000000000000000000000000000000",
-		 CryptoUtils.bytesToHexString(eCurveElement1.toByteArray()));
+		Assert.assertEquals(
+				"0000000002"
+						+ "010000001900000000000000000000000000000000000000000000000000"
+						+ "010000001900000000000000000000000000000000000000000000000000",
+				CryptoUtils.bytesToHexString(eCurveElement1.toByteArray()));
 
 	}
 

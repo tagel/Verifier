@@ -108,8 +108,8 @@ public class IntegerFieldElementTests {
 
 	@Test
 	public void powerTest() {
-		Assert.assertTrue(ife3_field4.equals(ife3_field4.power(new LargeInteger(
-				"3"))));
+		Assert.assertTrue(ife3_field4.equals(ife3_field4
+				.power(new LargeInteger("3"))));
 		Assert.assertTrue(ife2_field4.getField().zero()
 				.equals(ife2_field4.power(new LargeInteger("5"))));
 	}
