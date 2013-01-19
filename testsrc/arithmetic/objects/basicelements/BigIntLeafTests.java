@@ -12,7 +12,6 @@ import cryptographic.primitives.CryptoUtils;
  * Tests for class BigIntLeaf.
  * 
  * @author Daniel
- * 
  */
 public class BigIntLeafTests {
 

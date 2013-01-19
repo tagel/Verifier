@@ -12,11 +12,11 @@ import cryptographic.primitives.CryptoUtils;
  * Tests for StringLeaf class.
  * 
  * @author Daniel
- *
+ * 
  */
 public class StringLeafTest {
 
-	private String str = "ABCD";
+	private final String str = "ABCD";
 	private StringLeaf strLeaf = new StringLeaf(str);
 
 	@Test
