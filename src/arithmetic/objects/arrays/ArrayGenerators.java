@@ -89,8 +89,7 @@ public class ArrayGenerators {
 				arr1.add(leftArr.getAt(i));
 				ArrayOfElements<IGroupElement> arr2 = new ArrayOfElements<IGroupElement>();
 				arr2.add(rightArr.getAt(i));
-				ProductGroupElement ciphertext = ElementsExtractor
-						.createCiphertext(arr1, arr2);
+				ProductGroupElement ciphertext = new ProductGroupElement(new ProductGroupElement(arr1), new ProductGroupElement(arr2));
 				ret.add(ciphertext);
 			}
 		} else {
