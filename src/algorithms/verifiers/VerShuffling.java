@@ -26,25 +26,30 @@ import cryptographic.primitives.RandomOracle;
 /**
  * This class provides the functionality of verifying the shuffling.
  * 
- * @author Tagel & Sofi
+ * @author Sofi
  */
 
 public class VerShuffling {
 
+	private static final String MAXCIPH = "maxciph";
+	private static final String CCPOS_REPLY = "CCPoSReply";
+	private static final String CCPOS_COMMITMENT = "CCPoSCommitment";
+	private static final String CIPHERTEXTS = "Ciphertexts";
+	private static final String BT_FILE_EXT = ".bt";
+	private static final String KEEP_LIST = "KeepList";
+	private static final String PROOFS = "proofs";
+	
 	private static ArrayOfElements<ProductGroupElement> Liminus1;
 	private static ArrayOfElements<ProductGroupElement> Li;
-
 	private static ArrayOfElements<IGroupElement> PermutationCommitment;
 
 	private static Node PoSCommitment;
 	private static Node PoSReply;
-
 	private static Node PoSCCommitment;
 	private static Node PoSCReply;
-	private static BooleanArrayElement keepList;
-
 	private static Node CCPoSCommitment;
 	private static Node CCPoSReply;
+	private static BooleanArrayElement keepList;
 
 	/**
 	 * @param prefixToRO
@@ -80,26 +85,24 @@ public class VerShuffling {
 		 */
 		int maxciph = readMaxciph(directory);
 
-		if (maxciph == 0) {
+		if (maxciph == -1) {
 			/*
 			 * The file maxciph doesn't exist, so we need to loop over the
 			 * different shuffling mix-servers (from 1 to lambda), read the
 			 * following files: proof of commitment, proof of reply and
 			 * permutation commitments, and send them to the shuffling prover.
 			 */
-
-			// First we set Li-1 = L0:
 			Liminus1 = L0;
 
-			// We read lists of ciphertexts until i=lambda.
-			boolean retValue; // We check it later
-
-			
+			// read lists of ciphertexts until i=lambda.
+			boolean retValue;
 			for (int i = 1; i <= lambda; i++) {
 				retValue = true;
-				if (!readFilesPoS(i, directory, Gq, Zq, N, width)){
+
+				if (!readFilesPoS(i, directory, Gq, Zq, N, width)) {
 					retValue = false;
 				}
+
 				if (i == lambda) {
 					// Here we send the Llambda to the prover.
 					retValue = retValue
@@ -118,21 +121,18 @@ public class VerShuffling {
 				 * If retValue is false, it means that reading of elements
 				 * failed or the prover rejected
 				 */
-				if (!retValue) { // we need to check if Liminus1 == Li
-					if (i == lambda) {
+				if (!retValue) {
+					if (i == lambda) { // check if Liminus1 == Li
 						if (!Llambda.equals(Li)) {
 							return false;
 						}
 					} else if (!Li.equals(Liminus1)) {
-						boolean one = checkOneElement(N);
 						return false;
 					}
 				}
 
 			}
-
 			return true;
-
 		} else {
 			/*
 			 * Here maxciph exists, so we have the N0 - size of pre-computed
@@ -140,8 +140,9 @@ public class VerShuffling {
 			 * shrink the permutation commitments and verify commitment-
 			 * consistent proof of a shuffle.
 			 */
-			if (N > maxciph)
+			if (N > maxciph) {
 				return false;
+			}
 
 			for (int i = 1; i <= lambda; i++) {
 				// Step 1 in the algorithm
@@ -167,34 +168,39 @@ public class VerShuffling {
 				}
 
 				// Step 2: potential early abort
-				if (!ccpos)
+				if (!ccpos) {
 					return true;
+				}
 
 				// Step 3: Shrink permutation commitment.
 				// First, try to read the KeepList Array:
 				byte[] keepListFile = ElementsExtractor.btFromFile(directory,
-						"proofs", "KeepList" + (i < 10 ? "0" : "") + i + ".bt");
-
-				if (keepListFile == null) {// if the file doesn't exist - we
-											// fill the array to be N truths and
-											// the rest falses.
+						PROOFS, KEEP_LIST + (i < 10 ? "0" : "") + i
+								+ BT_FILE_EXT);
+				// if the file doesn't exist - fill the array with N truths and
+				// the rest are false.
+				if (keepListFile == null) {
 					boolean[] tempArr = new boolean[maxciph];
-					for (int j = 0; i < maxciph; j++)
-						if (j < N)
+					for (int j = 0; i < maxciph; j++) {
+						if (j < N) {
 							tempArr[j] = true;
-						else
+						} else {
 							tempArr[j] = false;
-					keepList = new BooleanArrayElement(tempArr);
+						}
+					}
 
+					keepList = new BooleanArrayElement(tempArr);
 				} else { // The file does exist, we read it.
 					keepList = new BooleanArrayElement(keepListFile);
 				}
 				// Now we shrink the permutation commitment according to keep
 				// list
 				ArrayOfElements<IGroupElement> tempArray = new ArrayOfElements<IGroupElement>();
+
 				for (int j = 0; i < maxciph; j++) {
-					if (keepList.getAt(j))
+					if (keepList.getAt(j)) {
 						tempArray.add(PermutationCommitment.getAt(j));
+					}
 				}
 				PermutationCommitment = tempArray;
 
@@ -204,10 +210,10 @@ public class VerShuffling {
 				// We read lists of ciphertexts until i=lambda.
 				retValue = true; // We check it later
 
-				if (!readFilesCCPos(i, directory, Gq, Zq, N, width)){
+				if (!readFilesCCPos(i, directory, Gq, Zq, N, width)) {
 					retValue = false;
 				}
-				
+
 				if (i == lambda) {
 					// TODO change the parameters we send to the prover
 					// Here we send the Llambda to the prover.
@@ -217,7 +223,6 @@ public class VerShuffling {
 									Llambda, width, PermutationCommitment,
 									PoSCommitment, PoSReply);
 				} else {
-					
 					retValue = retValue
 							&& ProveCCPoS.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
@@ -229,30 +234,18 @@ public class VerShuffling {
 				 * If retValue is false, it means that reading of elements
 				 * failed or the prover rejected
 				 */
-				if (!retValue) // we need to check if Liminus1 == Li
-					if (i == lambda)
-						if (!Llambda.equals(Li))
+				if (!retValue) {
+					if (i == lambda) { // check if Liminus1 == Li
+						if (!Llambda.equals(Li)) {
 							return false;
-						else if (!Li.equals(Liminus1))
-							return false;
-				retValue = true;
-
+						}
+					} else if (!Li.equals(Liminus1)) {
+						return false;
+					}
+				}
 			}
-
 		}
-
 		return true;
-	}
-
-	private static boolean checkOneElement(int N) {
-	
-		ProductGroupElement elem = Li.getAt(0);
-		
-		for (int i = 0; i<N; i++) {
-			if (elem.equals(Liminus1.getAt(i)))
-					return true;
-		}
-		return false;
 	}
 
 	/*
@@ -263,12 +256,13 @@ public class VerShuffling {
 	/**
 	 * 
 	 * @param i
-	 *            - the mix server
+	 *            the mix server
 	 * @param directory
+	 *            the directory
 	 * @param Gq
-	 *            - the IGroup
+	 *            the IGroup
 	 * @param Zq
-	 *            - the IRing
+	 *            the IRing
 	 * @param width
 	 * @return true if the reading and extraction of variables succeded
 	 * @throws IOException
@@ -283,20 +277,24 @@ public class VerShuffling {
 		 * provers.
 		 */
 		byte[] bPoSCCommitment = ElementsExtractor.btFromFile(directory,
-				"proofs", "PoSCCommitment" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bPoSCCommitment == null)
+				PROOFS, "PoSCCommitment" + (i < 10 ? "0" : "") + i
+						+ BT_FILE_EXT);
+		if (bPoSCCommitment == null) {
 			return false;
+		}
 
-		byte[] bPoSCReply = ElementsExtractor.btFromFile(directory, "proofs",
-				"PoSCReply" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bPoSCReply == null)
+		byte[] bPoSCReply = ElementsExtractor.btFromFile(directory, PROOFS,
+				"PoSCReply" + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+		if (bPoSCReply == null) {
 			return false;
+		}
 
 		byte[] bPermutationCommitment = ElementsExtractor.btFromFile(directory,
-				"proofs", "PermutationCommitment" + (i < 10 ? "0" : "") + i
-						+ ".bt");
-		if (bPermutationCommitment == null)
+				PROOFS, "PermutationCommitment" + (i < 10 ? "0" : "") + i
+						+ BT_FILE_EXT);
+		if (bPermutationCommitment == null) {
 			return false;
+		}
 
 		/*
 		 * The following steps create the objects from the byte[] and set the
@@ -334,15 +332,17 @@ public class VerShuffling {
 		ArrayOfElements<IGroupElement> tempB = ArrayGenerators
 				.createGroupElementArray(PoSCCommitment.getAt(0).toByteArray(),
 						Gq);
-		if (tempB.getSize() != N)
+		if (tempB.getSize() != N) {
 			return false;
+		}
 		PoSCCommitment.setAt(0, tempB);
 
 		// B'
 		tempB = ArrayGenerators.createGroupElementArray(PoSCCommitment.getAt(2)
 				.toByteArray(), Gq);
-		if (tempB.getSize() != N)
+		if (tempB.getSize() != N) {
 			return false;
+		}
 		PoSCCommitment.setAt(2, tempB);
 
 		// Create the PoSCReply in the same way
@@ -370,15 +370,17 @@ public class VerShuffling {
 		// Kb
 		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
 				.createRingElementArray(PoSCReply.getAt(1).toByteArray(), Zq);
-		if (tempK.getSize() != N)
+		if (tempK.getSize() != N) {
 			return false;
+		}
 		PoSCReply.setAt(1, tempK);
 
 		// Ke
 		tempK = ArrayGenerators.createRingElementArray(PoSCReply.getAt(4)
 				.toByteArray(), Zq);
-		if (tempK.getSize() != N)
+		if (tempK.getSize() != N) {
 			return false;
+		}
 		PoSCReply.setAt(4, tempK);
 
 		return true;
@@ -410,20 +412,24 @@ public class VerShuffling {
 		 * ciphertexts, array of commitment...) that will be sent to the
 		 * provers.
 		 */
-		byte[] bLi = ElementsExtractor.btFromFile(directory, "proofs",
-				"Ciphertexts" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bLi == null)
+		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
+				CIPHERTEXTS + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+		if (bLi == null) {
 			return false;
+		}
 
 		byte[] bCCPoSCommitment = ElementsExtractor.btFromFile(directory,
-				"proofs", "CCPoSCommitment" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bCCPoSCommitment == null)
+				PROOFS, CCPOS_COMMITMENT + (i < 10 ? "0" : "") + i
+						+ BT_FILE_EXT);
+		if (bCCPoSCommitment == null) {
 			return false;
+		}
 
-		byte[] bCCPoSReply = ElementsExtractor.btFromFile(directory, "proofs",
-				"CCPoSReply" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bCCPoSReply == null)
+		byte[] bCCPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
+				CCPOS_REPLY + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+		if (bCCPoSReply == null) {
 			return false;
+		}
 
 		/*
 		 * The following steps create the objects from the byte[] and set the
@@ -431,11 +437,13 @@ public class VerShuffling {
 		 */
 
 		// If i==1 it means that Liminus1 = L0, as we did in the main loop
-		if (i != 1)
+		if (i != 1) {
 			Liminus1 = Li;
+		}
 		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq, width);
-		if (Li.getSize() != N)
+		if (Li.getSize() != N) {
 			return false;
+		}
 
 		/*
 		 * each NODE needs to know which type are his children - First we create
@@ -472,8 +480,9 @@ public class VerShuffling {
 		// Read Ke as arrays of Ring Elements, and verify if they are of size N
 		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
 				.createRingElementArray(CCPoSReply.getAt(2).toByteArray(), Zq);
-		if (tempK.getSize() != N)
+		if (tempK.getSize() != N) {
 			return false;
+		}
 		CCPoSReply.setAt(2, tempK);
 
 		return true;
@@ -501,26 +510,30 @@ public class VerShuffling {
 		 * ciphertexts, array of commitment...) that will be sent to the
 		 * provers.
 		 */
-		byte[] bLi = ElementsExtractor.btFromFile(directory, "proofs",
-				"Ciphertexts" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bLi == null)
+		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
+				CIPHERTEXTS + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+		if (bLi == null) {
 			return false;
+		}
 
-		byte[] bPoSCommitment = ElementsExtractor.btFromFile(directory,
-				"proofs", "PoSCommitment" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bPoSCommitment == null)
+		byte[] bPoSCommitment = ElementsExtractor.btFromFile(directory, PROOFS,
+				"PoSCommitment" + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+		if (bPoSCommitment == null) {
 			return false;
+		}
 
-		byte[] bPoSReply = ElementsExtractor.btFromFile(directory, "proofs",
-				"PoSReply" + (i < 10 ? "0" : "") + i + ".bt");
-		if (bPoSReply == null)
+		byte[] bPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
+				"PoSReply" + (i < 10 ? "0" : "") + i + BT_FILE_EXT);
+		if (bPoSReply == null) {
 			return false;
+		}
 
 		byte[] bPermutationCommitment = ElementsExtractor.btFromFile(directory,
-				"proofs", "PermutationCommitment" + (i < 10 ? "0" : "") + i
-						+ ".bt");
-		if (bPermutationCommitment == null)
+				PROOFS, "PermutationCommitment" + (i < 10 ? "0" : "") + i
+						+ BT_FILE_EXT);
+		if (bPermutationCommitment == null) {
 			return false;
+		}
 
 		/*
 		 * The following steps create the objects from the byte[] and set the
@@ -530,11 +543,14 @@ public class VerShuffling {
 				bPermutationCommitment, Gq);
 
 		// If i==1 it means that Liminus1 = L0, as we did in the main loop
-		if (i != 1)
+		if (i != 1) {
 			Liminus1 = Li;
+		}
+
 		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq, width);
-		if (Li.getSize() != N)
+		if (Li.getSize() != N) {
 			return false;
+		}
 
 		/*
 		 * each NODE needs to know which type are his children - First we create
@@ -570,15 +586,17 @@ public class VerShuffling {
 				.createGroupElementArray(PoSCommitment.getAt(0).toByteArray(),
 						Gq);
 		// This array should be of size N
-		if (tempB.getSize() != N)
+		if (tempB.getSize() != N) {
 			return false;
+		}
 		PoSCommitment.setAt(0, tempB);
 
 		// B'
 		tempB = ArrayGenerators.createGroupElementArray(PoSCommitment.getAt(2)
 				.toByteArray(), Gq);
-		if (tempB.getSize() != N)
+		if (tempB.getSize() != N) {
 			return false;
+		}
 		PoSCommitment.setAt(2, tempB);
 
 		// Create the PoSReply in the same way
@@ -610,24 +628,24 @@ public class VerShuffling {
 		// Kb
 		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
 				.createRingElementArray(PoSReply.getAt(1).toByteArray(), Zq);
-		if (tempK.getSize() != N)
+		if (tempK.getSize() != N) {
 			return false;
+		}
 		PoSReply.setAt(1, tempK);
 
 		// Ke
 		tempK = ArrayGenerators.createRingElementArray(PoSReply.getAt(4)
 				.toByteArray(), Zq);
-		if (tempK.getSize() != N)
+		if (tempK.getSize() != N) {
 			return false;
-		PoSReply.setAt(4, tempK);
+		}
 
+		PoSReply.setAt(4, tempK);
 		return true;
 	}
 
 	/**
-	 * This method tries to read maxciph - if the file doesn't exist it catches
-	 * the exception and returns "0". If the file exists, returns the relevant
-	 * integer.
+	 * Returns the maxciph read from file or -1 if the file doesn't exists.
 	 * 
 	 * @param directory
 	 *            - the directory where the file should be.
@@ -635,13 +653,11 @@ public class VerShuffling {
 	private static int readMaxciph(String directory) {
 		Scanner text = null;
 		try {
-			text = new Scanner(new File(directory, "maxciph"));
+			text = new Scanner(new File(directory, MAXCIPH));
 		} catch (FileNotFoundException e) {
-			return 0;
+			return -1;
 		}
 
 		return text.nextInt();
-
 	}
-
 }
