@@ -1,18 +1,31 @@
 package arithmetic.objects.field;
 
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
 
+/**
+ * This class represents an integer field element. since some integers may be
+ * very large, we will use the LargeInteger class to store them. for every such
+ * element, we will store both the integer and the field that it belongs to.
+ * 
+ * @author Itay
+ * 
+ */
 public class IntegerFieldElement implements ByteTree {
 
 	protected LargeInteger element;
 	protected IField<IntegerFieldElement> field;
 
-	public IntegerFieldElement(LargeInteger element, IField<IntegerFieldElement> f) {
+	/**
+	 * Constructor
+	 * @param element - the large integer
+	 * @param f - the field 
+	 */
+	public IntegerFieldElement(LargeInteger element,
+			IField<IntegerFieldElement> f) {
 		this.field = f;
 		this.element = element.mod(field.getOrder());
 
@@ -27,7 +40,8 @@ public class IntegerFieldElement implements ByteTree {
 	}
 
 	public IntegerFieldElement neg() {
-		return new IntegerFieldElement(this.getField().getOrder().subtract(this.getElement().mod(this.getField().getOrder())),
+		return new IntegerFieldElement(this.getField().getOrder()
+				.subtract(this.getElement().mod(this.getField().getOrder())),
 				this.getField());
 	}
 
@@ -38,9 +52,9 @@ public class IntegerFieldElement implements ByteTree {
 	}
 
 	public IntegerFieldElement subtract(IntegerFieldElement b) {
-		return new IntegerFieldElement(
-(this.getElement().subtract((b.getElement())).mod(this.getField()
-						.getOrder())), this.getField());
+		return new IntegerFieldElement((this.getElement().subtract(
+				(b.getElement())).mod(this.getField().getOrder())),
+				this.getField());
 	}
 
 	public IntegerFieldElement mult(IntegerFieldElement b) {
@@ -53,23 +67,23 @@ public class IntegerFieldElement implements ByteTree {
 	public IntegerFieldElement power(LargeInteger b) {
 		IntegerFieldElement base = this;
 		IntegerFieldElement result = this.getField().one();
-	    
-	    String str = b.toString(2);
-	    
-	    for (int i = str.length()-1; i>-1; i--)
-	    {
-	        if (str.charAt(i)=='1')
-	            result = result.mult(base);
-	        base =  base.mult(base);
-	    }
 
-	    return result;
+		String str = b.toString(2);
+
+		for (int i = str.length() - 1; i > -1; i--) {
+			if (str.charAt(i) == '1')
+				result = result.mult(base);
+			base = base.mult(base);
+		}
+
+		return result;
 	}
 
 	public IntegerFieldElement divide(IntegerFieldElement b) {
 		IntegerFieldElement ret = new IntegerFieldElement(
-				(this.getElement().multiply(b.getElement().modInverse(this.getField().getOrder()))).mod(this
-						.getField().getOrder()), this.getField());
+				(this.getElement().multiply(b.getElement().modInverse(
+						this.getField().getOrder()))).mod(this.getField()
+						.getOrder()), this.getField());
 		return ret;
 	}
 

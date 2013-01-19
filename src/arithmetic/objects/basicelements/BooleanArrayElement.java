@@ -6,14 +6,35 @@ import java.util.Arrays;
 
 import arithmetic.objects.ByteTree;
 
+/**
+ * This class represents an array of boolean values. we chose to implement a
+ * stand-alone class for this element because its representation as a byte tree
+ * is unique compared to arrays of other types of elements.
+ * 
+ * @author Itay
+ * 
+ */
 public class BooleanArrayElement implements ByteTree {
 
 	private boolean[] arr;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param arr
+	 *            the array of booleans we wish to represent.
+	 */
 	public BooleanArrayElement(boolean[] arr) {
 		this.arr = arr;
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param arr
+	 *            - the byte array representation (as a byte tree) of the
+	 *            boolean array we wish to represent.
+	 */
 	public BooleanArrayElement(byte[] arr) {
 		arr = Arrays.copyOfRange(arr, 5, arr.length);
 		boolean[] b = new boolean[arr.length];
@@ -28,11 +49,21 @@ public class BooleanArrayElement implements ByteTree {
 	public boolean[] getBooleanArray() {
 		return arr;
 	}
-	
+
+	/**
+	 * 
+	 * @param i
+	 *            the index in the array
+	 * @return the boolean value in the i'th index in the array.
+	 */
 	public boolean getAt(int i) {
 		return arr[i];
 	}
 
+	/**
+	 * returns the byte array representation (as a byte tree) of the boolean
+	 * array.
+	 */
 	@Override
 	public byte[] toByteArray() {
 		byte[] b = new byte[arr.length + 5];

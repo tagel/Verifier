@@ -83,10 +83,7 @@ public class ECurveGroupTests {
 				.getGenerator()));
 	}
 
-	@Test
-	public void getGroupTypeTest() {
-		Assert.assertEquals("Elliptic Curve", eCurve.getGroupType());
-	}
+
 
 	@Test
 	public void oneTest() {

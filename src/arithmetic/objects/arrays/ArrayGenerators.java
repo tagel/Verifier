@@ -12,8 +12,24 @@ import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.ProductRingElement;
 
+/**
+ * This class has functions that serve as helpers to the verifiers and provers
+ * by creating arrays of different kinds.
+ * 
+ * @author Itay
+ * 
+ */
 public class ArrayGenerators {
 
+	/**
+	 * 
+	 * @param b
+	 *            = a byte array representation of an array of group elements
+	 *            all belonging to the same group.
+	 * @param group
+	 *            = the group which the elements in the array belong to.
+	 * @return an array of group elements which "b" represents.
+	 */
 	public static ArrayOfElements<IGroupElement> createGroupElementArray(
 			byte[] b, IGroup group) throws UnsupportedEncodingException {
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
@@ -24,6 +40,15 @@ public class ArrayGenerators {
 		return ret;
 	}
 
+	/**
+	 * 
+	 * @param b
+	 *            = a byte array representation of an array of ring elements all
+	 *            belonging to the same ring.
+	 * @param ring
+	 *            = the ring which the elements in the array belong to.
+	 * @return an array of ring elements which "b" represents.
+	 */
 	public static ArrayOfElements<IntegerRingElement> createRingElementArray(
 			byte[] b, IRing<IntegerRingElement> ring)
 			throws UnsupportedEncodingException {
@@ -35,6 +60,20 @@ public class ArrayGenerators {
 		return ret;
 	}
 
+	/**
+	 * 
+	 * @param data
+	 *            = a byte array representation of an array of ciphertexts.
+	 * @param group
+	 *            = the ciphertexts in the array all contain product group
+	 *            elements which contain group elements belonging to the same
+	 *            group. this group is our input group.
+	 * @param w
+	 *            = the width of each product group element in the ciphertexts
+	 *            of the array.
+	 * @return an array of product group elements which is an array of
+	 *         ciphertexts.
+	 */
 	public static ArrayOfElements<ProductGroupElement> createArrayOfCiphertexts(
 			byte[] data, IGroup group, int w)
 			throws UnsupportedEncodingException {
@@ -72,6 +111,17 @@ public class ArrayGenerators {
 		return ret;
 	}
 
+	/**
+	 * 
+	 * @param data
+	 *            = a byte array representation of an array of plaintexts
+	 * @param ring
+	 *            = the plaintexts in the array all contain product ring
+	 *            elements which contain ring elements belonging to the same
+	 *            ring. this ring is our input ring.
+	 * @return an array of product ring elements which is an array of
+	 *         plaintexts.
+	 */
 	public static ArrayOfElements<ProductRingElement> createArrayOfPlaintexts(
 			byte[] data, IRing<IntegerRingElement> ring)
 			throws UnsupportedEncodingException {
@@ -92,6 +142,14 @@ public class ArrayGenerators {
 		return ret;
 	}
 
+	/**
+	 * 
+	 * @param A
+	 *            byte array
+	 * @param B
+	 *            byte array
+	 * @return one byte array which is a concatenation of A and B.
+	 */
 	public static byte[] concatArrays(byte[] A, byte[] B) {
 		byte[] C = new byte[A.length + B.length];
 		System.arraycopy(A, 0, C, 0, A.length);
