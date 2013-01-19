@@ -83,7 +83,7 @@ public class ModGroup implements IGroup {
 
 
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public byte[] toByteArray() {
 		BigIntLeaf P = new BigIntLeaf(p);
 		BigIntLeaf Q = new BigIntLeaf(q);
 		BigIntLeaf G = new BigIntLeaf(g);

@@ -142,7 +142,7 @@ public class Node implements ByteTree {
 /**
  * returns the byte array representation (as a byte tree) of the node.
  */
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public byte[] toByteArray() {
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(children.size()).array();
 		byte[] b = new byte[a.length + 1];

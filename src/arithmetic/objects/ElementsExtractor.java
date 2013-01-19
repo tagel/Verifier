@@ -82,8 +82,7 @@ public class ElementsExtractor {
 	 * @return the byte array written in the file. If the file is not found,
 	 *         returns null.
 	 */
-	public static byte[] btFromFile(String path, String filename)
-			throws IOException {
+	public static byte[] btFromFile(String path, String filename) {
 		try {
 			File file = new File(path, filename);
 			InputStream stream = new FileInputStream(file);
@@ -93,8 +92,9 @@ public class ElementsExtractor {
 			return b;
 		} catch (FileNotFoundException e) {
 			return null;
+		} catch (IOException e) {
+			return null;
 		}
-
 	}
 
 	/**
@@ -102,8 +102,7 @@ public class ElementsExtractor {
 	 * the same function as the above, only here the input is a path and a
 	 * subpath.
 	 */
-	public static byte[] btFromFile(String path, String subpath, String filename)
-			throws IOException {
+	public static byte[] btFromFile(String path, String subpath, String filename) {
 		try {
 			File f1 = new File(path, subpath);
 			File file = new File(f1, filename);
@@ -113,6 +112,8 @@ public class ElementsExtractor {
 			stream.close();
 			return b;
 		} catch (FileNotFoundException e) {
+			return null;
+		} catch (IOException e) {
 			return null;
 		}
 
@@ -169,10 +170,16 @@ public class ElementsExtractor {
 	 * coordinates is a product group element itself containing an equal number
 	 * (w) of group elements, all belong to the same group.
 	 * 
-	 * @param bt a byte array representing a ciphertext (as a byte tree)
-	 * @param group the group which all the group elements inside the ciphertext belong to.
-	 * @param w the width, the number of coordinates the "left" and "right" product elements have.
-	 * @return the ciphertext which bt represents (which is a profuct group element).
+	 * @param bt
+	 *            a byte array representing a ciphertext (as a byte tree)
+	 * @param group
+	 *            the group which all the group elements inside the ciphertext
+	 *            belong to.
+	 * @param w
+	 *            the width, the number of coordinates the "left" and "right"
+	 *            product elements have.
+	 * @return the ciphertext which bt represents (which is a profuct group
+	 *         element).
 	 * 
 	 */
 

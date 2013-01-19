@@ -23,7 +23,7 @@ public class RawElement implements ByteTree {
 	}
 
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public byte[] toByteArray() {
 		return byteArr;
 	}
 

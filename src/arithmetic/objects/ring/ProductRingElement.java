@@ -174,7 +174,7 @@ public class ProductRingElement implements ByteTree {
 	 * ring element.
 	 */
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
+	public byte[] toByteArray() {
 		return arr.toByteArray();
 	}
 }

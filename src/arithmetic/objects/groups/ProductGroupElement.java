@@ -1,6 +1,5 @@
 package arithmetic.objects.groups;
 
-
 import java.io.UnsupportedEncodingException;
 
 import arithmetic.objects.LargeInteger;
@@ -9,115 +8,122 @@ import arithmetic.objects.ByteTree;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 
-
-
+/**
+ * This class represents a product group element. In our project, our verifiers and provers only use two kinds of product group elements: a "simple" product element, where all of his coordinates are group elements (meaning it's not recursive
+ * @author Itay
+ *
+ */
 public class ProductGroupElement implements ByteTree {
 
 	/**
-	 * arr contains the internal elements of the Product Group Element. left and right are null if this is a simple product element. if it is complex, then arr is null.
+	 * arr contains the internal elements of the Product Group Element. left and
+	 * right are null if this is a simple product element. if it is complex,
+	 * then arr is null.
 	 */
 	private ArrayOfElements<IGroupElement> arr;
 	private ProductGroupElement left;
 	private ProductGroupElement right;
-	
+
 	/**
-	 * @param arr
 	 * Constructor
+	 * @param arr
 	 */
 	public ProductGroupElement(ArrayOfElements<IGroupElement> arr) {
 		this.arr = arr;
 		left = null;
 		right = null;
 	}
-	
-	public ProductGroupElement(ProductGroupElement left, ProductGroupElement right) {
+
+	public ProductGroupElement(ProductGroupElement left,
+			ProductGroupElement right) {
 		this.arr = null;
 		this.left = left;
 		this.right = right;
 	}
-	
-	
+
 	public ArrayOfElements<IGroupElement> getElements() {
 		return arr;
 	}
 
-
 	public ProductGroupElement getLeft() {
 		return left;
 	}
-
 
 	public ProductGroupElement getRight() {
 		return right;
 	}
 
 	public int getSize() {
-		if (arr==null) return 2;
-		else return arr.getSize();
+		if (arr == null)
+			return 2;
+		else
+			return arr.getSize();
 	}
-	
 
 	/**
 	 * @param b
 	 * @return the result of the multiplication of the 2 product elements.
 	 */
 	public ProductGroupElement mult(ProductGroupElement b) {
-		if (arr!=null) {
+		if (arr != null) {
 			ArrayOfElements<IGroupElement> a = new ArrayOfElements<IGroupElement>();
-			for (int i=0; i<arr.getSize(); i++)
+			for (int i = 0; i < arr.getSize(); i++)
 				a.add(arr.getAt(i).mult(b.getElements().getAt(i)));
 			return new ProductGroupElement(a);
-		}
-		else return new ProductGroupElement(left.mult(b.left), right.mult(b.right));
+		} else
+			return new ProductGroupElement(left.mult(b.left),
+					right.mult(b.right));
 	}
-	
+
 	/**
-	 * @param integer b
+	 * @param integer
+	 *            b
 	 * @return the result of product element in the b'th power.
 	 */
 	public ProductGroupElement power(LargeInteger b) {
-		if (arr!=null) {
+		if (arr != null) {
 			ArrayOfElements<IGroupElement> a = new ArrayOfElements<IGroupElement>();
-			for (int i=0; i<arr.getSize(); i++)
+			for (int i = 0; i < arr.getSize(); i++)
 				a.add(arr.getAt(i).power(b));
 			return new ProductGroupElement(a);
-		}
-		else return new ProductGroupElement(left.power(b), right.power(b));
+		} else
+			return new ProductGroupElement(left.power(b), right.power(b));
 	}
-	
+
 	public ProductGroupElement inverse() {
-		if (arr!=null) {
+		if (arr != null) {
 			ArrayOfElements<IGroupElement> a = new ArrayOfElements<IGroupElement>();
-			for (int i=0; i<arr.getSize(); i++)
+			for (int i = 0; i < arr.getSize(); i++)
 				a.add(arr.getAt(i).inverse());
 			return new ProductGroupElement(a);
-		}
-		else return new ProductGroupElement(left.inverse(), right.inverse());
+		} else
+			return new ProductGroupElement(left.inverse(), right.inverse());
 	}
 
 	public boolean equals(ProductGroupElement b) {
-		if (arr!=null) {
+		if (arr != null) {
 			ArrayOfElements<IGroupElement> a = arr;
-			for (int i=0; i<arr.getSize(); i++)
-				if (!(a.getAt(i).equals(b.getElements().getAt(i)))) return false;
+			for (int i = 0; i < arr.getSize(); i++)
+				if (!(a.getAt(i).equals(b.getElements().getAt(i))))
+					return false;
 			return true;
-		}
-		else return (left.equals(b.left) && right.equals(b.right));
+		} else
+			return (left.equals(b.left) && right.equals(b.right));
 	}
-	
+
 	@Override
-	public byte[] toByteArray() throws UnsupportedEncodingException {
-		if (arr!=null) return arr.toByteArray();
+	public byte[] toByteArray() {
+		if (arr != null)
+			return arr.toByteArray();
 		else {
 			byte[] b = new byte[5];
-			b[0]=0; b[1]=0; b[2]=0; b[3]=0; b[4]=2;
+			b[0] = 0;
+			b[1] = 0;
+			b[2] = 0;
+			b[3] = 0;
+			b[4] = 2;
 			b = ArrayGenerators.concatArrays(b, left.toByteArray());
 			return ArrayGenerators.concatArrays(b, right.toByteArray());
 		}
 	}
 }
-
-
-
-	
-
