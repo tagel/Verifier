@@ -100,17 +100,7 @@ public class ProveDec extends Prover {
 		/*
 		 * 3 - Setting the PRG and computing e
 		 */
-		LargeInteger[] e = new LargeInteger[N];
-		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
-		prg.setSeed(seed);
-		byte[] ByteArrToBigInt;
-		LargeInteger t;
-
-		for (int i = 0; i < N; i++) {
-			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = ElementsExtractor.leafToInt(ByteArrToBigInt);
-			e[i] = t.mod(new LargeInteger("2").power(Ne));
-		}
+		LargeInteger[] e = computeArrE(N, Ne, prg, seed);
 
 		/*
 		 * 4 - Computation of the challenge
@@ -121,11 +111,11 @@ public class ProveDec extends Prover {
 		/* creating node(T1Dec,...,TlambdaDec) */
 		Node decCommitmentsNode = new Node(decCommitment.toByteArray());
 
-		byte[] challenge = computeChallenge(ROChallenge, ro, decCommitmentsNode,
-				leaf);
+		byte[] challenge = computeChallenge(ROChallenge, ro,
+				decCommitmentsNode, leaf);
 
 		LargeInteger v = computeV(Nv, challenge);
-		
+
 		/*
 		 * 5 - Compute A and B
 		 */
@@ -171,12 +161,28 @@ public class ProveDec extends Prover {
 		return true;
 	}
 
+	private static LargeInteger[] computeArrE(int N, int Ne,
+			PseudoRandomGenerator prg, byte[] seed) {
+		LargeInteger[] e = new LargeInteger[N];
+		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
+		prg.setSeed(seed);
+		byte[] ByteArrToBigInt;
+		LargeInteger t;
+
+		for (int i = 0; i < N; i++) {
+			ByteArrToBigInt = prg.getNextPRGOutput(length);
+			t = ElementsExtractor.leafToInt(ByteArrToBigInt);
+			e[i] = t.mod(new LargeInteger("2").power(Ne));
+		}
+		return e;
+	}
+
 	private static Node computeNodeForSeed(
 			IGroupElement g,
 			ArrayOfElements<IGroupElement> y,
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors) {
-		
+
 		// creating node(g,w)
 		Node leftNode = new Node();
 		leftNode.add(g);
@@ -229,8 +235,10 @@ public class ProveDec extends Prover {
 
 		ProductGroupElement ret;
 		ProductGroupElement B = null;
+
 		for (int i = 0; i < N; i++) {
 			ret = decryptionFactors.getAt(0).getAt(i);
+
 			for (int l = 1; l < decryptionFactors.getSize(); l++) {
 				ret = ret.mult(decryptionFactors.getAt(l).getAt(i));
 			}

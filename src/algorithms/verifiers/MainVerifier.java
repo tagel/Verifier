@@ -1,5 +1,6 @@
 package algorithms.verifiers;
 
+import main.Logger;
 import algorithms.params.Parameters;
 import algorithms.params.Parameters.Type;
 import arithmetic.objects.ByteTree;
@@ -40,6 +41,7 @@ public class MainVerifier {
 
 	private Parameters params;
 	private HashFunction H;
+	private Logger logger;
 
 	/**
 	 * Constructor for tests
@@ -55,7 +57,8 @@ public class MainVerifier {
 	/**
 	 * Empty constructor for the cmd line
 	 */
-	public MainVerifier() {
+	public MainVerifier(Logger logger) {
+		this.logger = logger;
 	}
 
 	/**
@@ -65,11 +68,23 @@ public class MainVerifier {
 	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec) {
 
+		logger.sendLog("Start verifing prove of " + type + " with:",
+				Logger.Severity.NORMAL);
+		logger.sendLog("	Proof of shuffling commitment: " + getOnOrOff(posc),
+				Logger.Severity.NORMAL);
+		logger.sendLog("	Commitment consistent proof of shuffling: "
+				+ getOnOrOff(ccpos), Logger.Severity.NORMAL);
+		logger.sendLog("	Proof of correct dycreption: " + getOnOrOff(dec),
+				Logger.Severity.NORMAL);
+
 		// *****Section 1 and 2 in the algorithm*****
 		// create the Parameters object using the command line parameters and
 		// fill parameters from xml and directory
+
+		logger.sendLog("Getting parameters from xml and directory",
+				Logger.Severity.NORMAL);
 		params = new Parameters(protInfo, directory, type, auxid, w, posc,
-				ccpos, dec);
+				ccpos, dec, logger);
 		if (!fillParamsFromXmlAndDir(params) || !checkFilledParams()) {
 			return false;
 		}
@@ -89,6 +104,7 @@ public class MainVerifier {
 		if (!ReadKeys()) {
 			return false;
 		}
+		logger.sendLog("Verification of keys succeeded.", Logger.Severity.NORMAL);
 
 		// *******Section 6 in the Algorithm*********
 		if (!ReadLists()) {
@@ -127,6 +143,10 @@ public class MainVerifier {
 		return true;
 	}
 
+	private String getOnOrOff(boolean b) {
+		return (b ? "ON" : "OFF");
+	}
+
 	private void createRandomArray() {
 		StringLeaf stringLeaf = new StringLeaf(GENERATORS);
 		byte[] independentSeed = params.getROseed().getRandomOracleOutput(
@@ -154,7 +174,7 @@ public class MainVerifier {
 				params.getGq(), params.getFullPublicKey(), l,
 				params.getPlaintexts(), params.getZq(),
 				params.getMixPublicKey(), params.getMixSecretKey(),
-				params.getW(), params.getRandArray());
+				params.getW(), params.getRandArray(), logger);
 	}
 
 	private boolean runVerShuffling() {
@@ -165,7 +185,7 @@ public class MainVerifier {
 				params.getGq(), params.getFullPublicKey(),
 				params.getCiphertexts(), params.getShuffledCiphertexts(),
 				params.isPosc(), params.isCcpos(), params.getZq(),
-				params.getW(), params.getRandArray());
+				params.getW(), params.getRandArray(), logger);
 	}
 
 	private boolean checkFilledParams() {
@@ -215,12 +235,18 @@ public class MainVerifier {
 	public boolean deriveSetsAndObjects() {
 		// unmarshall Gq
 		params.setGq(ElementsExtractor.unmarshal(params.getsGq()));
+		if (params.getGq() == null) {
+			logger.sendLog(
+					"Name of Java class is not recognized by the system. Failed to derive Gq.",
+					Logger.Severity.ERROR);
+			return false;
+		}
 
 		// create the Ring
 		params.setZq(new Ring(params.getGq().getFieldOrder()));
 
 		// set the Hashfunction and the pseudo random generator
-		H = new SHA2HashFunction(params.getSh());
+		H = new SHA2HashFunction(params.getSh()); // TODO Daniel - try and catch
 		params.setPrg(new HashFuncPRG(new SHA2HashFunction(params.getsPRG())));
 
 		return true;
@@ -267,8 +293,15 @@ public class MainVerifier {
 		// read Public Key
 		ProductGroupElement pk;
 
-		pk = ElementsExtractor.createSimplePGE(ElementsExtractor.btFromFile(
-				params.getDirectory(), FULL_PUBLIC_KEY_BT), params.getGq(), 2);
+		byte[] bpk = ElementsExtractor.btFromFile(params.getDirectory(),
+				FULL_PUBLIC_KEY_BT);
+		if (bpk == null) {
+			logger.sendLog("Problem while reading FullPublicKey.bt",
+					Logger.Severity.ERROR);
+			return false;
+		}
+
+		pk = ElementsExtractor.createSimplePGE(bpk, params.getGq(), 2);
 
 		// extract y and g from the public key
 		IGroupElement y = pk.getElements().getAt(1);
@@ -285,20 +318,26 @@ public class MainVerifier {
 
 		for (i = 0; i < params.getThreshold(); i++) {
 			// assume that the file exists
-			yi = ElementsExtractor.createGroupElement(
-					ElementsExtractor.btFromFile(params.getDirectory(), PROOFS,
-							PUBLIC_KEY + (i < 10 ? "0" : EMPTY_STRING)
-									+ (i + 1) + BT_EXT), params.getGq());
-
-			if (yi == null) {
+			byte[] byi = ElementsExtractor.btFromFile(params.getDirectory(),
+					PROOFS, PUBLIC_KEY + (i < 10 ? "0" : EMPTY_STRING)
+							+ (i + 1) + BT_EXT);
+			if (byi == null) {
+				logger.sendLog("Problem while reading " + PUBLIC_KEY
+						+ (i < 10 ? "0" : EMPTY_STRING) + (i + 1) + BT_EXT,
+						Logger.Severity.ERROR);
 				return false;
 			}
+
+			yi = ElementsExtractor.createGroupElement(byi, params.getGq());
 
 			params.getMixPublicKey().add(yi);
 			res = res.mult(yi);
 		}
 
 		if (!res.equals(y)) {
+			logger.sendLog(
+					"Public keys of mix servers are not consistent with the full public key.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -320,6 +359,9 @@ public class MainVerifier {
 			yi = params.getMixPublicKey().getAt(i);
 
 			if ((xi != null) && !(yi.equals(g.power(xi.getElement())))) {
+				logger.sendLog(
+						"Verification of keys failed.",
+						Logger.Severity.ERROR);
 				return false;
 			}
 		}
@@ -332,6 +374,7 @@ public class MainVerifier {
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				CIPHERTEXTS_FILE_NAME + BT_EXT);
 		if (file == null) {
+			logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -353,6 +396,7 @@ public class MainVerifier {
 							+ (params.getThreshold() < 10 ? "0" : EMPTY_STRING)
 							+ params.getThreshold() + BT_EXT);
 			if (file == null) {
+				logger.sendLog("Shuffled ciphertexts file not found.", Logger.Severity.ERROR);
 				return false;
 			}
 		}
@@ -361,6 +405,7 @@ public class MainVerifier {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
 					SHUFFCT_FILE_PATH);
 			if (file == null) {
+				logger.sendLog("Shuffled ciphertexts file not found.", Logger.Severity.ERROR);
 				return false;
 			}
 		}
@@ -368,6 +413,7 @@ public class MainVerifier {
 		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 		if (ShuffledCiphertexts.getSize() != params.getN()) {
+			logger.sendLog("Shuffled ciphertexts array is in the wrong size.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -379,12 +425,17 @@ public class MainVerifier {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
 					PLAIN_TEXTS_FILE_PATH);
 			if (file == null) {
+				logger.sendLog("Plaintexts file not found.", Logger.Severity.ERROR);
 				return false;
 			}
 
 			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
 					.createArrayOfPlaintexts(file, params.getGq(),
 							params.getW());
+			if (plaintexts.getSize() != params.getN()) {
+				logger.sendLog("Plaintexts array is in the wrong size.", Logger.Severity.ERROR);
+				return false;
+			}
 			params.setPlaintexts(plaintexts);
 		}
 		return true;
