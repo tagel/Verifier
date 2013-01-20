@@ -13,6 +13,7 @@ import algorithms.verifiers.MainVerifier;
 public class Main {
 
 	public static void main(String[] argv) {
+		// parse the command line
 		CommandLineParser parser = new CommandLineParser();
 		parser.parseCommand(argv);
 

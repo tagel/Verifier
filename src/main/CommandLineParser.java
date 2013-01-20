@@ -13,7 +13,6 @@ import algorithms.params.Parameters.Type;
  * 
  */
 
-// TODO Daniel - parse -v flag - verbose = true
 public class CommandLineParser {
 
 	private Type type = null;
@@ -25,8 +24,10 @@ public class CommandLineParser {
 	private boolean posc = true;
 	private boolean ccpos = true;
 	private boolean dec = true;
-	private CharsetEncoder asciiEncoder = 
-		      Charset.forName("US-ASCII").newEncoder();
+	private boolean verbose = false;
+
+	private CharsetEncoder asciiEncoder = Charset.forName("US-ASCII")
+			.newEncoder();
 
 	/**
 	 * Parse the given command line, make sure it is in the right format and the
@@ -60,7 +61,6 @@ public class CommandLineParser {
 			printCommandLineUsage();
 			return;
 		}
-
 		verify = true;
 	}
 
@@ -89,16 +89,18 @@ public class CommandLineParser {
 				if (!setFalgNoccpos()) {
 					return false;
 				}
+			} else if ("-v".equals(argv[i])) {
+				this.verbose = true;
 			} else {
 				return false;
 			}
 		}
-		return posc || ccpos || dec;
+		return posc || ccpos || dec; // case all false is not legal
 	}
 
-	// parse which proof to verify
+	// parse type of prove to verify
 	private void parseVerifier(String[] argv) {
-		if (argv[1] == "-mix") { 
+		if (argv[1] == "-mix") {
 			type = Type.MIXING;
 		} else if (argv[1] == "-shuffle") {
 			setFalgNodec();
@@ -158,9 +160,9 @@ public class CommandLineParser {
 
 	private boolean auxsidFalge(String auxsid) {
 		if (!asciiEncoder.canEncode(auxsid)) {
-			return false; 
+			return false;
 		}
-		
+
 		this.auxsid = auxsid;
 		return true;
 	}
@@ -245,4 +247,10 @@ public class CommandLineParser {
 		return type;
 	}
 
+	/**
+	 * @return true if the -v flag was set
+	 */
+	public boolean getVerbose() {
+		return verbose;
+	}
 }
