@@ -23,6 +23,10 @@ public class Logger {
 		ERROR, NORMAL;
 	}
 
+	public Logger(boolean verbose) {
+		this.verbose = verbose;
+	}
+	
 	/**
 	 * Writes messaged to the out stream or error stream according to the
 	 * message severity.
