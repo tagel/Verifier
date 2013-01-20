@@ -59,6 +59,8 @@ public class ProveShuffling extends Prover {
 	 *            “Proof commitment” of the proof of a shuffle
 	 * @param PoSReply
 	 *            “Proof reply” of the proof of a shuffle
+	 * @param h
+	 *            Random array
 	 * @return true if we accept the proof and false otherwise
 	 */
 
@@ -79,16 +81,13 @@ public class ProveShuffling extends Prover {
 		/*
 		 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 		 */
-
-		// creating B,A',B',C',D',F'
 		@SuppressWarnings("unchecked")
 		ArrayOfElements<IGroupElement> B = (ArrayOfElements<IGroupElement>) (PoSCommitment
 				.getAt(0));
+		IGroupElement Atag = (IGroupElement) PoSCommitment.getAt(1);
 		@SuppressWarnings("unchecked")
 		ArrayOfElements<IGroupElement> Btag = (ArrayOfElements<IGroupElement>) (PoSCommitment
 				.getAt(2));
-
-		IGroupElement Atag = (IGroupElement) PoSCommitment.getAt(1);
 		IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
 		IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 		ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
@@ -97,17 +96,16 @@ public class ProveShuffling extends Prover {
 		 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 		 */
 		IntegerRingElement Ka = (IntegerRingElement) PoSReply.getAt(0);
-		IntegerRingElement Kc = (IntegerRingElement) PoSReply.getAt(2);
-		IntegerRingElement Kd = (IntegerRingElement) PoSReply.getAt(3);
-		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
-
 		@SuppressWarnings("unchecked")
 		ArrayOfElements<IntegerRingElement> Kb = (ArrayOfElements<IntegerRingElement>) (PoSReply
 				.getAt(1));
-
+		IntegerRingElement Kc = (IntegerRingElement) PoSReply.getAt(2);
+		IntegerRingElement Kd = (IntegerRingElement) PoSReply.getAt(3);
 		@SuppressWarnings("unchecked")
 		ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 				.getAt(4));
+		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
+		
 
 		/*
 		 * 2 - computing the seed
@@ -183,34 +181,6 @@ public class ProveShuffling extends Prover {
 		}
 
 		/* All equalities exist. */
-		return true;
-	}
-
-	protected static boolean verifyFFtag(int N, IGroup Gq,
-			ProductGroupElement pk,
-			ArrayOfElements<ProductGroupElement> wOutput, int width,
-			ProductGroupElement Ftag, ProductRingElement Kf,
-			ArrayOfElements<IntegerRingElement> Ke, ProductGroupElement F,
-			LargeInteger v) {
-		ProductGroupElement leftF = F.power(v).mult(Ftag);
-
-		ProductGroupElement W = wOutput.getAt(0)
-				.power(Ke.getAt(0).getElement());
-		for (int i = 1; i < N; i++) {
-			W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
-		}
-
-		// create ProductGroupElement of 1s
-		ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
-		for (int i = 0; i < width; i++) {
-			arrOfOnes.add(Gq.one());
-		}
-
-		ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
-		ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
-		if (!leftF.equals(rigthF)) {
-			return false;
-		}
 		return true;
 	}
 }
