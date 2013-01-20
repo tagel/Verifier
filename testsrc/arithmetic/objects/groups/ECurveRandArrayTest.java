@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import algorithms.params.Parameters;
+import algorithms.verifiers.MainVerifierTests;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
@@ -112,7 +113,7 @@ public class ECurveRandArrayTest {
 		Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
-				null, "auxsid", 1, false, false, false);
+				null, "auxsid", 1, false, false, false, new MainVerifierTests.MockedLogger());
 		Assert.assertNotNull("res is not in the classpath - ask Daniel",
 				getClass().getClassLoader()
 						.getResource("export/default/proofs"));
