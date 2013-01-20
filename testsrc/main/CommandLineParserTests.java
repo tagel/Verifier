@@ -11,8 +11,9 @@ import algorithms.params.Parameters.Type;
 
 /**
  * Tests for the CommandLineParser class.
+ * 
  * @author Daniel
- *
+ * 
  */
 public class CommandLineParserTests {
 	private CommandLineParser parser = new CommandLineParser();
@@ -254,7 +255,28 @@ public class CommandLineParserTests {
 		Assert.assertTrue(Type.DECRYPTION.equals(parser.getType()));
 		Assert.assertFalse(parser.shouldVerify());
 	}
-	
+
+	@Test
+	public void verboseTrue_MixingTest() {
+		String[] argv = new String[5];
+		argv[0] = "verifier";
+		argv[1] = "-mix";
+		argv[2] = "protInfo.xml";
+		argv[3] = "directory";
+		argv[4] = "-v";
+		parser.parseCommand(argv);
+
+		Assert.assertEquals("default", parser.getAuxsid());
+		Assert.assertTrue(parser.getPosc());
+		Assert.assertTrue(parser.getCcpos());
+		Assert.assertTrue(parser.getDec());
+		Assert.assertEquals(0, parser.getWidth());
+		Assert.assertTrue(parser.getVerbose());
+
+		Assert.assertTrue(Type.MIXING.equals(parser.getType()));
+		Assert.assertTrue(parser.shouldVerify());
+	}
+
 	@Test
 	public void allFlagsFalse_MixingTest() {
 		String[] argv = new String[6];
@@ -271,6 +293,7 @@ public class CommandLineParserTests {
 		Assert.assertFalse(parser.getCcpos());
 		Assert.assertTrue(parser.getDec());
 		Assert.assertEquals(0, parser.getWidth());
+		Assert.assertFalse(parser.getVerbose());
 
 		Assert.assertTrue(Type.MIXING.equals(parser.getType()));
 		Assert.assertFalse(parser.shouldVerify());
