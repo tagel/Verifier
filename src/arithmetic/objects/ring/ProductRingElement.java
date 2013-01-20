@@ -44,8 +44,9 @@ public class ProductRingElement implements ByteTree {
 			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
 			a.add(new IntegerRingElement(ElementsExtractor.leafToInt(bt), ring));
 			arr = a;
-		} else
+		} else {
 			arr = ArrayGenerators.createRingElementArray(bt, ring);
+		}
 	}
 
 	/**

@@ -1,6 +1,5 @@
 package arithmetic.objects.groups;
 
-
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.field.IField;
@@ -30,8 +29,8 @@ public class ECurveRandArray {
 	LargeInteger b;
 
 	IField<IntegerFieldElement> field;
-	
-	//Constructor for tests
+
+	// Constructor for tests
 	public ECurveRandArray(LargeInteger q, LargeInteger a, LargeInteger b) {
 		this.q = q;
 		this.a = a;
@@ -42,13 +41,19 @@ public class ECurveRandArray {
 
 	/**
 	 * 
-	 * @param q - prime field order
-	 * @param N - size of the array
-	 * @param prg - PseudoRandomGenerator to generate random numbers
-	 * @param seed - for the PRG
+	 * @param q
+	 *            - prime field order
+	 * @param N
+	 *            - size of the array
+	 * @param prg
+	 *            - PseudoRandomGenerator to generate random numbers
+	 * @param seed
+	 *            - for the PRG
 	 * @param nr
-	 * @param a,b - parameters of the elliptic curve
-	 * @param G - the group
+	 * @param a
+	 *            ,b - parameters of the elliptic curve
+	 * @param G
+	 *            - the group
 	 */
 	public ECurveRandArray(LargeInteger q, int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr, LargeInteger a, LargeInteger b, ECurveGroup G) {
@@ -90,7 +95,7 @@ public class ECurveRandArray {
 
 		ECurveGroupElement element;
 		Point point;
-		
+
 		// We run until q (this is the maximum, but we break when we have N
 		// elements
 		for (LargeInteger i = LargeInteger.ZERO; !i.equals(q
@@ -100,22 +105,22 @@ public class ECurveRandArray {
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
 			// xi is the x coordinate we want to check
 			LargeInteger xValue = ttag.mod(q);
-			
+
 			// check f(xi) is a quadratic residue (mod q) and we need to find
 			// the roots.
 			LargeInteger zValue = f(xValue);
 			if (Legendre(zValue) == 1) {
 				// find the smallest root
 				LargeInteger yValue = shanksTonelli(zValue);
-				
-				//Create coordinate xi
+
+				// Create coordinate xi
 				IntegerFieldElement xi = new IntegerFieldElement(xValue, field);
 
-				//Create coordinate yi
-				IntegerFieldElement yi =  new IntegerFieldElement(yValue, field);
+				// Create coordinate yi
+				IntegerFieldElement yi = new IntegerFieldElement(yValue, field);
 
 				// Add the point to the array:
-				point = new Point(xi,yi);
+				point = new Point(xi, yi);
 
 				element = new ECurveGroupElement(point, G);
 				RandArray.add(element);
@@ -127,9 +132,7 @@ public class ECurveRandArray {
 
 			i = i.add(LargeInteger.ONE);
 		}
-
 		Rand = RandArray;
-
 	}
 
 	/**
@@ -192,7 +195,6 @@ public class ECurveRandArray {
 				c = c.modPow(new LargeInteger("2"), q);
 
 				i = i.add(LargeInteger.ONE);
-
 			}
 
 			retVal[0] = r;
@@ -200,7 +202,6 @@ public class ECurveRandArray {
 
 			// return the smallest root
 			return retVal[0].min(retVal[1]);
-
 		} else {
 			return privateCase;
 		}
@@ -219,7 +220,8 @@ public class ECurveRandArray {
 			LargeInteger root1;
 			LargeInteger root2;
 
-			LargeInteger exponent = (q.add(LargeInteger.ONE)).divide(new LargeInteger("4"));
+			LargeInteger exponent = (q.add(LargeInteger.ONE))
+					.divide(new LargeInteger("4"));
 			root1 = num.modPow(exponent, q);
 			root2 = q.subtract(root1);
 			return root1.min(root2);
@@ -300,7 +302,6 @@ public class ECurveRandArray {
 		}
 		this.s = s;
 		this.Q = Q;
-
 	}
 
 	public ArrayOfElements<IGroupElement> getRand() {
@@ -334,5 +335,4 @@ public class ECurveRandArray {
 	public void setRand(ArrayOfElements<IGroupElement> rand) {
 		Rand = rand;
 	}
-
 }

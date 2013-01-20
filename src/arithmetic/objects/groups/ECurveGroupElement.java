@@ -46,7 +46,7 @@ public class ECurveGroupElement implements IGroupElement {
 	public ECurveGroup getGroup() {
 		return group;
 	}
-	
+
 	/**
 	 * @param b
 	 *            another elliptic curve element
@@ -57,9 +57,9 @@ public class ECurveGroupElement implements IGroupElement {
 		if (b.equals(group.one())) {
 			return this;
 		}
-		if (this.equals(group.one()))
+		if (this.equals(group.one())) {
 			return (ECurveGroupElement) b;
-
+		}
 		IntegerFieldElement xp = this.getElement().getX();
 		IntegerFieldElement xq = ((ECurveGroupElement) b).getElement().getX();
 		IntegerFieldElement yp = this.getElement().getY();
@@ -105,10 +105,9 @@ public class ECurveGroupElement implements IGroupElement {
 		}
 
 		// Not supposed to get here!
-		System.out.println("Error.");
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @return the multiplicative inverse of our element.
@@ -154,7 +153,6 @@ public class ECurveGroupElement implements IGroupElement {
 				result = result.mult(base);
 			base = base.mult(base);
 		}
-
 		return result;
 	}
 
@@ -169,14 +167,15 @@ public class ECurveGroupElement implements IGroupElement {
 		if (getElement().getX().equals(
 				(((ECurveGroupElement) b).getElement()).getX())
 				&& (getElement()).getY().equals(
-						(((ECurveGroupElement) b).getElement()).getY()))
+						(((ECurveGroupElement) b).getElement()).getY())) {
 			return true;
-		else
-			return false;
+		}
+		return false;
 	}
 
 	/**
-	 * returns the byte array representation (as a byte tree) of this elliptic curve element.
+	 * returns the byte array representation (as a byte tree) of this elliptic
+	 * curve element.
 	 */
 	@Override
 	public byte[] toByteArray() {
@@ -185,5 +184,4 @@ public class ECurveGroupElement implements IGroupElement {
 		pointNode.add(element.getY());
 		return pointNode.toByteArray();
 	}
-
 }

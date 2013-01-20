@@ -32,27 +32,30 @@ public class VerDec {
 	private static ArrayOfElements<Node> DecrFactCommitments;
 	private static ArrayOfElements<IntegerRingElement> DecrFactReplies;
 
-	// TODO Sofi - change the comment
 	/**
-	 * @param arrayOfElements2
+	 * 
+	 * @param ROSeed
+	 * @param ROChallenge
+	 * @param directory
+	 * @param prefixToRO
+	 * @param lambda
+	 * @param N
+	 * @param ne
+	 * @param nr
+	 * @param nv
+	 * @param prg
+	 * @param Gq
+	 * @param pk
+	 * @param L
+	 * @param m
+	 * @param Zq
 	 * @param publicKeys
+	 * @param secretKeys
 	 * @param width
-	 * @param randomOracle2
-	 * @param randomOracle
-	 * @param arrayOfElements2
-	 * @param arrayOfElements
-	 * @param productGroupElement
-	 * @param iGroup
-	 * @param pseudoRandomGenerator
-	 * @param l
-	 * @param k
-	 * @param j
-	 * @param i
-	 * @param bs
-	 * @param iRing
+	 * @param randArray
+	 * @param logger
 	 * @return true if verification of decryption was successful and false
 	 *         otherwise.
-	 * @throws Exception
 	 */
 	static public boolean verify(RandomOracle ROSeed, RandomOracle ROChallenge,
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,

@@ -55,7 +55,6 @@ public class ElementsExtractor {
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
-
 	}
 
 	/**
@@ -119,7 +118,6 @@ public class ElementsExtractor {
 		} catch (IOException e) {
 			return null;
 		}
-
 	}
 
 	/**
@@ -245,5 +243,4 @@ public class ElementsExtractor {
 			return null;
 		}
 	}
-
 }

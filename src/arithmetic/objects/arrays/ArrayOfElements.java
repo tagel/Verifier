@@ -21,8 +21,8 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	private List<E> elements = new ArrayList<E>();
 
 	/**
-	 * Constructor: a new empty array is created and now elements can now be added
-	 * to it using the add function.
+	 * Constructor: a new empty array is created and now elements can now be
+	 * added to it using the add function.
 	 */
 	public ArrayOfElements() {
 	}

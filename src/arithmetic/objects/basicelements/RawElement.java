@@ -24,5 +24,4 @@ public class RawElement implements ByteTree {
 	public byte[] toByteArray() {
 		return byteArr;
 	}
-
 }

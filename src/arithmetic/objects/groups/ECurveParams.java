@@ -12,12 +12,10 @@ import arithmetic.objects.LargeInteger;
 public class ECurveParams {
 
 	/**
-	 * p = underlying field order. 
-	 * q = elliptic curve group order. 
-	 * a = the coefficient of x in the curve equation. (y^2 = x^3 + ax + b) 
-	 * b = the "b" in the curve equation. 
-	 * gx = the x coordinate of the elliptic curve group generator. 
-	 * gy = the y coordinate of the elliptic curve group generator.
+	 * p = underlying field order. q = elliptic curve group order. a = the
+	 * coefficient of x in the curve equation. (y^2 = x^3 + ax + b) b = the "b"
+	 * in the curve equation. gx = the x coordinate of the elliptic curve group
+	 * generator. gy = the y coordinate of the elliptic curve group generator.
 	 */
 	private LargeInteger p, q, a, b, gx, gy;
 
@@ -551,5 +549,4 @@ public class ECurveParams {
 	public LargeInteger getGy() {
 		return gy;
 	}
-
 }

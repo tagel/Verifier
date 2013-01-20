@@ -50,7 +50,6 @@ public class Node implements ByteTree {
 			numOfChildren = 0;
 			data = bt;
 		}
-
 	}
 
 	/**
@@ -58,7 +57,6 @@ public class Node implements ByteTree {
 	 * using the add function.
 	 */
 	public Node() {
-
 	}
 
 	/**
@@ -99,48 +97,59 @@ public class Node implements ByteTree {
 			return i;
 		}
 	}
-/**
- * 
- * @param a a byte array
- * @return the integer this byte array represents. 
- */
+
+	/**
+	 * 
+	 * @param a
+	 *            a byte array
+	 * @return the integer this byte array represents.
+	 */
 	private int intFromByteArray(byte[] a) {
 		ByteBuffer b = ByteBuffer.wrap(a);
 		return b.getInt();
 	}
-/**
- * 
- * @param index an index in the list of children of the node.
- * @return the node's child in the appropriate index.
- */
+
+	/**
+	 * 
+	 * @param index
+	 *            an index in the list of children of the node.
+	 * @return the node's child in the appropriate index.
+	 */
 	public ByteTree getAt(int index) {
 		return children.get(index);
 	}
-/**
- * 
- * @param index an index in the list of children we want to reset.
- * @param newValue the new children we want to put in that index
- */
+
+	/**
+	 * 
+	 * @param index
+	 *            an index in the list of children we want to reset.
+	 * @param newValue
+	 *            the new children we want to put in that index
+	 */
 	public void setAt(int index, ByteTree newValue) {
 		children.set(index, newValue);
 	}
-/**
- * 
- * @param element an element we want to add to the children list
- */
+
+	/**
+	 * 
+	 * @param element
+	 *            an element we want to add to the children list
+	 */
 	public void add(ByteTree element) {
 		children.add(element);
 	}
-/**
- * 
- * @return the number of children this node has.
- */
+
+	/**
+	 * 
+	 * @return the number of children this node has.
+	 */
 	public int getChildrenSize() {
 		return children.size();
 	}
-/**
- * returns the byte array representation (as a byte tree) of the node.
- */
+
+	/**
+	 * returns the byte array representation (as a byte tree) of the node.
+	 */
 	public byte[] toByteArray() {
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(children.size()).array();
@@ -153,5 +162,4 @@ public class Node implements ByteTree {
 		}
 		return b;
 	}
-
 }

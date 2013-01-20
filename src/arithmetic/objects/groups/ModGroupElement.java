@@ -39,6 +39,7 @@ public class ModGroupElement implements IGroupElement {
 	public LargeInteger getElement() {
 		return element;
 	}
+
 	/**
 	 * @return the group which this element belongs to.
 	 */
@@ -46,7 +47,7 @@ public class ModGroupElement implements IGroupElement {
 	public ModGroup getGroup() {
 		return group;
 	}
-	
+
 	/**
 	 * @param b
 	 *            another group element
@@ -54,22 +55,20 @@ public class ModGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ModGroupElement mult(IGroupElement b) {
-		ModGroupElement ret = new ModGroupElement(
+		return new ModGroupElement(
 				(this.getElement().multiply((LargeInteger) ((ModGroupElement) b)
 						.getElement())).mod(this.getGroup().getFieldOrder()),
 				getGroup());
-		return ret;
 	}
-	
+
 	/**
 	 * 
 	 * @return the multiplicative inverse of our element.
 	 */
 	@Override
 	public ModGroupElement inverse() {
-		ModGroupElement ret = new ModGroupElement(getElement().modInverse(
+		return new ModGroupElement(getElement().modInverse(
 				getGroup().getFieldOrder()), getGroup());
-		return ret;
 	}
 
 	/**
@@ -83,7 +82,7 @@ public class ModGroupElement implements IGroupElement {
 	public ModGroupElement divide(IGroupElement b) {
 		return mult(b.inverse());
 	}
-	
+
 	/**
 	 * 
 	 * @param b
@@ -102,7 +101,6 @@ public class ModGroupElement implements IGroupElement {
 				result = result.mult(base);
 			base = base.mult(base);
 		}
-
 		return result;
 	}
 
@@ -117,14 +115,15 @@ public class ModGroupElement implements IGroupElement {
 	public boolean equals(IGroupElement b) {
 		if (getElement().mod(getGroup().getFieldOrder()).equals(
 				((LargeInteger) ((ModGroupElement) b).getElement())
-						.mod(((ModGroupElement) b).getGroup().getFieldOrder())))
+						.mod(((ModGroupElement) b).getGroup().getFieldOrder()))) {
 			return true;
-		else
-			return false;
+		}
+		return false;
 	}
 
 	/**
-	 * returns the byte array representation (as a byte tree) of the modular group element.
+	 * returns the byte array representation (as a byte tree) of the modular
+	 * group element.
 	 */
 	@Override
 	public byte[] toByteArray() {
@@ -146,5 +145,4 @@ public class ModGroupElement implements IGroupElement {
 		ret[0] = 1;
 		return ret;
 	}
-
 }

@@ -47,5 +47,4 @@ public class BigIntLeaf implements ByteTree {
 		ret[0] = 1;
 		return ret;
 	}
-
 }

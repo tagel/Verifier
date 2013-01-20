@@ -16,13 +16,14 @@ public interface IRing<E> {
 	public LargeInteger getOrder();
 
 	/**
-	 * @return the 0 of the ring. (the element which is indifferent to the addition operation).
+	 * @return the 0 of the ring. (the element which is indifferent to the
+	 *         addition operation).
 	 */
 	public E zero();
 
 	/**
-	 * @return the 1 of the Ring. (the element which is indifferent to the multiplication operation).
+	 * @return the 1 of the Ring. (the element which is indifferent to the
+	 *         multiplication operation).
 	 */
 	public E one();
-
 }

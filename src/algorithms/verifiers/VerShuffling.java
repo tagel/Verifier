@@ -56,6 +56,10 @@ public class VerShuffling {
 	private static BooleanArrayElement keepList;
 
 	/**
+	 * 
+	 * @param ROSeed
+	 * @param ROChallenge
+	 * @param directory
 	 * @param prefixToRO
 	 * @param lambda
 	 * @param N
@@ -70,6 +74,9 @@ public class VerShuffling {
 	 * @param posc
 	 * @param ccpos
 	 * @param Zq
+	 * @param width
+	 * @param h
+	 * @param logger
 	 * @return true if verification of shuffling was successful, false
 	 *         otherwise.
 	 */

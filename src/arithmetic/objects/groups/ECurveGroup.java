@@ -127,8 +127,7 @@ public class ECurveGroup implements IGroup {
 		IntegerFieldElement minusOne = new IntegerFieldElement(
 				new LargeInteger("-1"), f);
 		Point infinity = new Point(minusOne, minusOne);
-		ECurveGroupElement ret = new ECurveGroupElement(infinity, this);
-		return ret;
+		return new ECurveGroupElement(infinity, this);
 	}
 
 	/**
@@ -159,5 +158,4 @@ public class ECurveGroup implements IGroup {
 				b, this);
 		return arr.getRand();
 	}
-
 }

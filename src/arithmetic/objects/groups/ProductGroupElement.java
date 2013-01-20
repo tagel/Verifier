@@ -66,29 +66,34 @@ public class ProductGroupElement implements ByteTree {
 	public ArrayOfElements<IGroupElement> getElements() {
 		return arr;
 	}
+
 	/**
 	 * 
-	 * @return the first coordinate of this complex product element. if it is a simple one, null will be returned.
+	 * @return the first coordinate of this complex product element. if it is a
+	 *         simple one, null will be returned.
 	 */
 	public ProductGroupElement getLeft() {
 		return left;
 	}
+
 	/**
 	 * 
-	 * @return the scond coordinate of this complex product element. if it is a simple one, null will be returned.
+	 * @return the scond coordinate of this complex product element. if it is a
+	 *         simple one, null will be returned.
 	 */
 	public ProductGroupElement getRight() {
 		return right;
 	}
+
 	/**
 	 * 
 	 * @return the number of coordinates in this product element.
 	 */
 	public int getSize() {
-		if (arr == null)
+		if (arr == null) {
 			return 2;
-		else
-			return arr.getSize();
+		}
+		return arr.getSize();
 	}
 
 	/**
@@ -104,9 +109,8 @@ public class ProductGroupElement implements ByteTree {
 			for (int i = 0; i < arr.getSize(); i++)
 				a.add(arr.getAt(i).mult(b.getElements().getAt(i)));
 			return new ProductGroupElement(a);
-		} else
-			return new ProductGroupElement(left.mult(b.left),
-					right.mult(b.right));
+		}
+		return new ProductGroupElement(left.mult(b.left), right.mult(b.right));
 	}
 
 	/**
@@ -122,14 +126,15 @@ public class ProductGroupElement implements ByteTree {
 			for (int i = 0; i < arr.getSize(); i++)
 				a.add(arr.getAt(i).power(b));
 			return new ProductGroupElement(a);
-		} else
-			return new ProductGroupElement(left.power(b), right.power(b));
+		}
+		return new ProductGroupElement(left.power(b), right.power(b));
 	}
+
 	/**
 	 * 
 	 * @return the inverse of this product group element. That is, a new product
-	 *         group element composed of the inverse of the coordinates of the original
-	 *         element.
+	 *         group element composed of the inverse of the coordinates of the
+	 *         original element.
 	 */
 	public ProductGroupElement inverse() {
 		if (arr != null) {
@@ -137,9 +142,10 @@ public class ProductGroupElement implements ByteTree {
 			for (int i = 0; i < arr.getSize(); i++)
 				a.add(arr.getAt(i).inverse());
 			return new ProductGroupElement(a);
-		} else
-			return new ProductGroupElement(left.inverse(), right.inverse());
+		}
+		return new ProductGroupElement(left.inverse(), right.inverse());
 	}
+
 	/**
 	 * 
 	 * @param b
@@ -154,9 +160,10 @@ public class ProductGroupElement implements ByteTree {
 				if (!(a.getAt(i).equals(b.getElements().getAt(i))))
 					return false;
 			return true;
-		} else
-			return (left.equals(b.left) && right.equals(b.right));
+		}
+		return (left.equals(b.left) && right.equals(b.right));
 	}
+
 	/**
 	 * returns the byte array representation (as a byte tree) of the product
 	 * group element.

@@ -4,6 +4,7 @@ import arithmetic.objects.LargeInteger;
 
 /**
  * This class represents a Ring.
+ * 
  * @author Itay
  * 
  */
@@ -21,9 +22,10 @@ public class Ring implements IRing<IntegerRingElement> {
 	public LargeInteger getOrder() {
 		return q;
 	}
-	
+
 	/**
-	 * @return the 0 of the ring. (the element which is indifferent to the addition operation).
+	 * @return the 0 of the ring. (the element which is indifferent to the
+	 *         addition operation).
 	 */
 	@Override
 	public IntegerRingElement zero() {
@@ -31,7 +33,8 @@ public class Ring implements IRing<IntegerRingElement> {
 	}
 
 	/**
-	 * @return the 1 of the Ring. (the element which is indifferent to the multiplication operation).
+	 * @return the 1 of the Ring. (the element which is indifferent to the
+	 *         multiplication operation).
 	 */
 	@Override
 	public IntegerRingElement one() {

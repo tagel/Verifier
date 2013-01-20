@@ -11,6 +11,7 @@ import cryptographic.primitives.PseudoRandomGenerator;
 
 /**
  * This class represents a multiplicative modulo prime group.
+ * 
  * @author Itay
  */
 public class ModGroup implements IGroup {
@@ -47,7 +48,6 @@ public class ModGroup implements IGroup {
 			q = ElementsExtractor.leafToInt(node.getAt(1).toByteArray());
 			g = ElementsExtractor.leafToInt(node.getAt(2).toByteArray());
 		}
-
 	}
 
 	/**
@@ -84,9 +84,9 @@ public class ModGroup implements IGroup {
 		return ret;
 	}
 
-
 	/**
-	 * @return the byte array representation (as a byte tree) of this modular group.
+	 * @return the byte array representation (as a byte tree) of this modular
+	 *         group.
 	 */
 	@Override
 	public byte[] toByteArray() {
@@ -114,7 +114,7 @@ public class ModGroup implements IGroup {
 	 */
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N,
-			PseudoRandomGenerator prg, byte[] seed, int Nr)  {
+			PseudoRandomGenerator prg, byte[] seed, int Nr) {
 		ArrayOfElements<IGroupElement> h = new ArrayOfElements<IGroupElement>();
 		int Np = this.p.bitLength();
 		int length = 8 * ((int) Math.ceil((double) ((Np + Nr) / 8)));
@@ -131,5 +131,4 @@ public class ModGroup implements IGroup {
 		}
 		return h;
 	}
-
 }

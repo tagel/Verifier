@@ -9,6 +9,7 @@ import cryptographic.primitives.PseudoRandomGenerator;
 
 /**
  * This interface is used to represent a Group.
+ * 
  * @author Itay
  */
 public interface IGroup extends ByteTree {
@@ -51,5 +52,4 @@ public interface IGroup extends ByteTree {
 	 */
 	public ArrayOfElements<IGroupElement> createRandomArray(int N,
 			PseudoRandomGenerator prg, byte[] seed, int nr);
-
 }

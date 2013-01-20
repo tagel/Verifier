@@ -14,5 +14,4 @@ public interface ByteTree {
 	 * @return the byte array representation (as a byte tree) of the object.
 	 */
 	public byte[] toByteArray();
-
 }

@@ -50,7 +50,7 @@ public class IntegerRingElement implements ByteTree {
 		return new IntegerRingElement(getRing().getOrder().subtract(
 				this.getElement().mod(getRing().getOrder())), this.getRing());
 	}
-	
+
 	/**
 	 * 
 	 * @param b
@@ -59,10 +59,10 @@ public class IntegerRingElement implements ByteTree {
 	 */
 	public IntegerRingElement add(IntegerRingElement b) {
 		return new IntegerRingElement(
-				(this.getElement().add(b.getElement())).mod(getRing().getOrder()),
-				this.getRing());
+				(this.getElement().add(b.getElement())).mod(getRing()
+						.getOrder()), this.getRing());
 	}
-	
+
 	/**
 	 * @param b
 	 *            another integer ring element
@@ -75,30 +75,30 @@ public class IntegerRingElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b a large integer which is the exponent.
+	 * @param b
+	 *            a large integer which is the exponent.
 	 * @return our element in the b'th power.
 	 */
 	public IntegerRingElement power(LargeInteger b) {
 		IntegerRingElement base = this;
 		IntegerRingElement result = this.getRing().one();
-	    
-	    String str = b.toString(2);
-	    
-	    for (int i = str.length()-1; i>-1; i--)
-	    {
-	        if (str.charAt(i)=='1')
-	            result = result.mult(base);
-	        base =  base.mult(base);
-	    }
 
-	    return result;
+		String str = b.toString(2);
+
+		for (int i = str.length() - 1; i > -1; i--) {
+			if (str.charAt(i) == '1')
+				result = result.mult(base);
+			base = base.mult(base);
+		}
+		return result;
 	}
-	
 
 	/**
 	 * 
-	 * @param b another integer ring element
-	 * @return true if and only if our element and b are equal. That means, represent the same large integer and belong to the same ring.
+	 * @param b
+	 *            another integer ring element
+	 * @return true if and only if our element and b are equal. That means,
+	 *         represent the same large integer and belong to the same ring.
 	 */
 	public boolean equals(IntegerRingElement b) {
 		if (this.getElement().mod(getRing().getOrder())
@@ -107,9 +107,10 @@ public class IntegerRingElement implements ByteTree {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * returns the byte array representation (as a byte tree) of the integer ring element.
+	 * returns the byte array representation (as a byte tree) of the integer
+	 * ring element.
 	 */
 	@Override
 	public byte[] toByteArray() {
