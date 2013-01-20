@@ -105,7 +105,7 @@ public class MainVerifierTests {
 	@Test
 	public void VerifyDecTest() throws Exception {
 		
-		MainVerifier mainVer = new MainVerifier();
+		MainVerifier mainVer = new MainVerifier(new MainVerifierTests.MockedLogger());
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
