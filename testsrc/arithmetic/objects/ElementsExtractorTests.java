@@ -141,7 +141,7 @@ public class ElementsExtractorTests {
 		node.add(ige0);
 		node.add(ige1);
 		ProductGroupElement arr = ElementsExtractor.createSimplePGE(
-				node.toByteArray(), modGroup);
+				node.toByteArray(), modGroup, 10);
 		Assert.assertEquals(CryptoUtils.bytesToHexString(arr.toByteArray()),
 				"00000000020100000002000001000000020001");
 
@@ -156,7 +156,7 @@ public class ElementsExtractorTests {
 		ellipticNode.add(eCurveElement1);
 		ellipticNode.add(eCurveElement2);
 		ProductGroupElement ellipticArr = ElementsExtractor.createSimplePGE(
-				ellipticNode.toByteArray(), eCurveGroup192);
+				ellipticNode.toByteArray(), eCurveGroup192, 10);
 		Assert.assertEquals(
 				CryptoUtils.bytesToHexString(ellipticArr.toByteArray()),
 				"000000000200000000020100000019000000000000000000000000000000000000000000000000000100000019000000000000000000000000000000000000000000000000010000000002010000001900000000000000000000000000000000000000000000000000010000001900000000000000000000000000000000000000000000000001");
@@ -175,9 +175,9 @@ public class ElementsExtractorTests {
 		rightNode.add(ige1);
 		rightNode.add(ige1);
 		ProductGroupElement leftChild = ElementsExtractor.createSimplePGE(
-				leftNode.toByteArray(), modGroup);
+				leftNode.toByteArray(), modGroup, 678);
 		ProductGroupElement rightChild = ElementsExtractor.createSimplePGE(
-				rightNode.toByteArray(), modGroup);
+				rightNode.toByteArray(), modGroup, 56);
 		ProductGroupElement pge = new ProductGroupElement(leftChild, rightChild);
 		ProductGroupElement cipher = ElementsExtractor.createCiphertext(
 				pge.toByteArray(), modGroup, 2);
@@ -196,13 +196,13 @@ public class ElementsExtractorTests {
 		leftEllipticNode.add(eCurveElement1);
 		leftEllipticNode.add(eCurveElement2);
 		ProductGroupElement leftEllipticChild = ElementsExtractor
-				.createSimplePGE(leftEllipticNode.toByteArray(), eCurveGroup192);
+				.createSimplePGE(leftEllipticNode.toByteArray(), eCurveGroup192, 45);
 		ArrayOfElements<IGroupElement> rightEllipticNode = new ArrayOfElements<IGroupElement>();
 		rightEllipticNode.add(eCurveElement1);
 		rightEllipticNode.add(eCurveElement2);
 		ProductGroupElement rightEllipticChild = ElementsExtractor
 				.createSimplePGE(rightEllipticNode.toByteArray(),
-						eCurveGroup192);
+						eCurveGroup192, 45);
 
 		pge = new ProductGroupElement(leftEllipticChild, rightEllipticChild);
 		cipher = ElementsExtractor.createCiphertext(pge.toByteArray(),

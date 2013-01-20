@@ -158,6 +158,13 @@ public class ElementsExtractor {
 	 *            a byte array representing a "simple" product group element.
 	 * @param group
 	 *            the group which all the group elements belong to.
+	 * @param w
+	 *            the width = the number of coordinates in the product group
+	 *            element. we need this parameter only to check whether it is 1,
+	 *            because then its byte array representation is different than
+	 *            the representation specified in the document. it does not
+	 *            start with 0 0 0 0 1 to state that it has one coordinate, but
+	 *            begins straight with the presentation of its coordinate.
 	 * @return the product group element which bt represents.
 	 * 
 	 */
@@ -235,8 +242,6 @@ public class ElementsExtractor {
 		if (type.equals("verificatum.arithm.ECqPGroup"))
 			return new ECurveGroup(leafToString(node.getAt(1).toByteArray()));
 		else {
-			System.out
-					.println("ERROR: name of java class is unrecognized by the system");
 			return null;
 		}
 	}
