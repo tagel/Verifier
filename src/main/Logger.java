@@ -14,6 +14,8 @@ import java.util.Date;
 public class Logger {
 
 	private static final String SPACE_STRING = " ";
+	private static final String ERROR_STRING = "ERROR: ";
+
 	private static final SimpleDateFormat formatter = new SimpleDateFormat(
 			"yyyyMMdd-hhmmss");
 
@@ -26,7 +28,7 @@ public class Logger {
 	public Logger(boolean verbose) {
 		this.verbose = verbose;
 	}
-	
+
 	/**
 	 * Writes messaged to the out stream or error stream according to the
 	 * message severity.
@@ -38,7 +40,8 @@ public class Logger {
 	 */
 	public void sendLog(String message, Severity severity) {
 		if (severity.equals(Severity.ERROR)) {
-			System.err.println(getDate() + SPACE_STRING + message);
+			System.err.println(ERROR_STRING + getDate() + SPACE_STRING
+					+ message);
 		} else if (verbose) {
 			System.out.println(getDate() + SPACE_STRING + message);
 		}

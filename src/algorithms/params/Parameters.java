@@ -7,17 +7,15 @@ import java.util.Scanner;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import cryptographic.primitives.PseudoRandomGenerator;
-import cryptographic.primitives.RandomOracle;
-
+import main.Logger;
 import arithmetic.objects.arrays.ArrayOfElements;
-import arithmetic.objects.basicelements.BooleanArrayElement;
-import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IRing;
 import arithmetic.objects.ring.IntegerRingElement;
+import cryptographic.primitives.PseudoRandomGenerator;
+import cryptographic.primitives.RandomOracle;
 
 /**
  * This class describes an object that contains the parameters used by the
@@ -35,6 +33,9 @@ public class Parameters {
 	private static final String TYPE_FILE_NAME = "type";
 	private static final String VERSION_FILE_NAME = "version";
 	private static final String AUXSID_FILE_NAME = "auxsid";
+
+	private final Logger logger;
+
 	// Random Oracles
 	private RandomOracle ROseed;
 	private RandomOracle ROchallenge;
@@ -54,8 +55,6 @@ public class Parameters {
 	private String auxsid;
 	private int w;
 	private ProductGroupElement fullPublicKey;
-	private int maxciph;// we don't read it in the main
-	// TODO Sofi - check the maxciph
 
 	// parameters from the XML
 	private String protVersion;
@@ -89,17 +88,6 @@ public class Parameters {
 	private ArrayOfElements<IntegerRingElement> mixSecretKey;// Used in Keys
 																// Verifier
 
-	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts;
-	private ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment;
-	private ArrayOfElements<Node> mixPoSCommitment;
-	private ArrayOfElements<Node> mixPoSReply;
-	private ArrayOfElements<Node> mixPoSCCommitment;
-	private ArrayOfElements<Node> mixPoSCReply;
-	private ArrayOfElements<Node> mixCcPosCommitment;
-	private ArrayOfElements<Node> mixCcPosReply;
-	private ArrayOfElements<BooleanArrayElement> mixKeepList;
-	
-
 	// type of verification
 	public enum Type {
 		MIXING, SHUFFLING, DECRYPTION;
@@ -111,7 +99,7 @@ public class Parameters {
 	 */
 	public Parameters(String protInfo, String directory, Type type,
 			java.lang.String auxsid, int w, boolean posc, boolean ccpos,
-			boolean dec) {
+			boolean dec, Logger logger) {
 
 		this.auxidExp = auxsid;
 		this.protInfo = protInfo;
@@ -121,6 +109,7 @@ public class Parameters {
 		this.posc = posc;
 		this.ccpos = ccpos;
 		this.dec = dec;
+		this.logger = logger;
 
 		initializeParams();
 		initializeMix();
@@ -134,7 +123,6 @@ public class Parameters {
 		this.Nr = 0;
 		this.Nv = 0;
 		this.wDefault = 0;
-		this.maxciph = 0;
 		this.prefixToRO = null;
 		this.Gq = null;
 		this.prg = null;
@@ -151,19 +139,9 @@ public class Parameters {
 		this.ROchallenge = null;
 	}
 
-	// TODO Sofi - Should we really need all of these mix-params?
 	private void initializeMix() {
 		mixPublicKey = new ArrayOfElements<IGroupElement>();
 		mixSecretKey = new ArrayOfElements<IntegerRingElement>();
-		mixCiphertexts = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
-		mixPermutationCommitment = new ArrayOfElements<ArrayOfElements<IGroupElement>>();
-		mixPoSCommitment = new ArrayOfElements<Node>();
-		mixPoSReply = new ArrayOfElements<Node>();
-		mixPoSCCommitment = new ArrayOfElements<Node>();
-		mixPoSCReply = new ArrayOfElements<Node>();
-		mixCcPosCommitment = new ArrayOfElements<Node>();
-		mixCcPosReply = new ArrayOfElements<Node>();
-		mixKeepList = new ArrayOfElements<BooleanArrayElement>();
 	}
 
 	/**
@@ -177,16 +155,17 @@ public class Parameters {
 		try {
 			protXML = new XMLProtocolInfo(protInfo);
 		} catch (FileNotFoundException e) {
-			System.out.println("XML ProtInfo not found");
+			logger.sendLog("XML ProtInfo not found", Logger.Severity.ERROR);
 			return false;
 		} catch (XMLStreamException e) {
-			System.out.println("Error reading XML");
+			logger.sendLog("Error reading XML file", Logger.Severity.ERROR);
 			return false;
 		} catch (FactoryConfigurationError e) {
-			System.out.println("Error reading XML");
+			logger.sendLog("Error reading XML file", Logger.Severity.ERROR);
 			return false;
 		} catch (IllegalXmlFormatException e) {
-			System.out.println("Error reading XML");
+			logger.sendLog("Error reading XML file - not in XML format",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -216,7 +195,8 @@ public class Parameters {
 		try {
 			text = new Scanner(new File(directory, AUXSID_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + AUXSID_FILE_NAME);
+			logger.sendLog("Cannot find file " + AUXSID_FILE_NAME,
+					Logger.Severity.ERROR);
 			return false;
 		}
 		auxsid = text.next().trim();
@@ -224,7 +204,8 @@ public class Parameters {
 		try {
 			text = new Scanner(new File(directory, VERSION_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + VERSION_FILE_NAME);
+			logger.sendLog("Cannot find file " + VERSION_FILE_NAME,
+					Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -237,7 +218,8 @@ public class Parameters {
 		try {
 			text = new Scanner(new File(directory, TYPE_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + TYPE_FILE_NAME);
+			logger.sendLog("Cannot find file " + TYPE_FILE_NAME,
+					Logger.Severity.ERROR);
 			return false;
 		}
 		type = stringToType(text.next().trim());
@@ -245,7 +227,8 @@ public class Parameters {
 		try {
 			text = new Scanner(new File(directory, WIDTH_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Cannot find file " + WIDTH_FILE_NAME);
+			logger.sendLog("Cannot find file " + WIDTH_FILE_NAME,
+					Logger.Severity.ERROR);
 			return false;
 		}
 		w = text.nextInt();
@@ -263,7 +246,6 @@ public class Parameters {
 			return Type.SHUFFLING;
 		if (next.equals(DECRYPTION))
 			return Type.DECRYPTION;
-
 		return null;
 	}
 
@@ -333,14 +315,6 @@ public class Parameters {
 	 */
 	public ProductGroupElement getFullPublicKey() {
 		return fullPublicKey;
-	}
-
-	/**
-	 * @return the number N0 of ciphertexts for which pre-computation was
-	 *         performed
-	 */
-	public int getMaxciph() {
-		return maxciph;
 	}
 
 	// ***FROM CMD***
@@ -583,87 +557,11 @@ public class Parameters {
 		this.mixSecretKey = mixSecretKey;
 	}
 
-	public ArrayOfElements<ArrayOfElements<ProductGroupElement>> getMixCiphertexts() {
-		return mixCiphertexts;
-	}
-
-	public void setMixCiphertexts(
-			ArrayOfElements<ArrayOfElements<ProductGroupElement>> mixCiphertexts) {
-		this.mixCiphertexts = mixCiphertexts;
-	}
-
-	public ArrayOfElements<ArrayOfElements<IGroupElement>> getMixPermutationCommitment() {
-		return mixPermutationCommitment;
-	}
-
-	public void setMixPermutationCommitment(
-			ArrayOfElements<ArrayOfElements<IGroupElement>> mixPermutationCommitment) {
-		this.mixPermutationCommitment = mixPermutationCommitment;
-	}
-
-	public ArrayOfElements<Node> getMixPoSCommitment() {
-		return mixPoSCommitment;
-	}
-
-	public void setMixPoSCommitment(ArrayOfElements<Node> mixPoSCommitment) {
-		this.mixPoSCommitment = mixPoSCommitment;
-	}
-
-	public ArrayOfElements<Node> getMixPoSReply() {
-		return mixPoSReply;
-	}
-
-	public void setMixPoSReply(ArrayOfElements<Node> mixPoSReply) {
-		this.mixPoSReply = mixPoSReply;
-	}
-
-	public ArrayOfElements<Node> getMixPoSCCommitment() {
-		return mixPoSCCommitment;
-	}
-
-	public void setMixPoSCCommitment(ArrayOfElements<Node> mixPoSCCommitment) {
-		this.mixPoSCCommitment = mixPoSCCommitment;
-	}
-
-	public ArrayOfElements<Node> getMixPoSCReply() {
-		return mixPoSCReply;
-	}
-
-	public void setMixPoSCReply(ArrayOfElements<Node> mixPoSCReply) {
-		this.mixPoSCReply = mixPoSCReply;
-	}
-
-	public ArrayOfElements<Node> getMixCcPosCommitment() {
-		return mixCcPosCommitment;
-	}
-
-	public void setMixCcPosCommitment(ArrayOfElements<Node> mixCcPosCommitment) {
-		this.mixCcPosCommitment = mixCcPosCommitment;
-	}
-
-	public ArrayOfElements<Node> getMixCcPosReply() {
-		return mixCcPosReply;
-	}
-
-	public void setMixCcPosReply(ArrayOfElements<Node> mixCcPosReply) {
-		this.mixCcPosReply = mixCcPosReply;
-	}
-
-	public ArrayOfElements<BooleanArrayElement> getMixKeepList() {
-		return mixKeepList;
-	}
-
-	public void setMixKeepList(ArrayOfElements<BooleanArrayElement> mixKeepList) {
-		this.mixKeepList = mixKeepList;
-	}
-
 	public void setRandArray(ArrayOfElements<IGroupElement> h) {
 		this.randArray = h;
-		
 	}
-	
+
 	public ArrayOfElements<IGroupElement> getRandArray() {
 		return randArray;
 	}
-
 }

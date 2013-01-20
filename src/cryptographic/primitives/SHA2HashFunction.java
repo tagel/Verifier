@@ -29,7 +29,7 @@ public class SHA2HashFunction implements HashFunction {
 			if (SHA2_FAMILY_ALGORITHMS.contains(algorithm)) {
 				this.md = MessageDigest.getInstance(algorithm);
 			} else {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException(); // TODO Daniel - fix throw ex must catch
 			}
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalArgumentException();

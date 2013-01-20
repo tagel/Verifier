@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import main.Logger;
+
 import algorithms.provers.ProveCCPoS;
 import algorithms.provers.ProveShuffling;
 import algorithms.provers.ProveSoC;
@@ -77,7 +79,7 @@ public class VerShuffling {
 			ProductGroupElement pk, ArrayOfElements<ProductGroupElement> L0,
 			ArrayOfElements<ProductGroupElement> Llambda, boolean posc,
 			boolean ccpos, IRing<IntegerRingElement> Zq, int width,
-			ArrayOfElements<IGroupElement> h) {
+			ArrayOfElements<IGroupElement> h, Logger logger) {
 
 		// set maxciph (indicates if there was pre-computation)
 		int maxciph = readMaxciph(directory);
