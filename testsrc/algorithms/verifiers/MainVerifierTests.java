@@ -99,6 +99,16 @@ public class MainVerifierTests {
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void VerifyDecTest() throws Exception {
+		
+		MainVerifier mainVer = new MainVerifier();
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("export/default").getFile(),
 				Type.MIXING, "default", 1, false, false, true));
 	}
 
