@@ -96,7 +96,7 @@ public class MainVerifierTests {
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
-				Type.MIXING, "default", 1, true, false, false));
+				Type.MIXING, "default", 1, false, false, true));
 	}
 	
 
