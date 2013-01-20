@@ -161,10 +161,18 @@ public class ElementsExtractor {
 	 * @return the product group element which bt represents.
 	 * 
 	 */
-	public static ProductGroupElement createSimplePGE(byte[] bt, IGroup group) {
-		ArrayOfElements<IGroupElement> arr = ArrayGenerators
-				.createGroupElementArray(bt, group);
-		return new ProductGroupElement(arr);
+	public static ProductGroupElement createSimplePGE(byte[] bt, IGroup group,
+			int w) {
+		if (w == 1) {
+			IGroupElement e = createGroupElement(bt, group);
+			ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
+			arr.add(e);
+			return new ProductGroupElement(arr);
+		} else {
+			ArrayOfElements<IGroupElement> arr = ArrayGenerators
+					.createGroupElementArray(bt, group);
+			return new ProductGroupElement(arr);
+		}
 	}
 
 	/**
@@ -198,9 +206,9 @@ public class ElementsExtractor {
 					new ProductGroupElement(rightArr));
 		} else {
 			ProductGroupElement left = createSimplePGE(node.getAt(0)
-					.toByteArray(), group);
+					.toByteArray(), group, w);
 			ProductGroupElement right = createSimplePGE(node.getAt(1)
-					.toByteArray(), group);
+					.toByteArray(), group, w);
 			return new ProductGroupElement(left, right);
 		}
 	}

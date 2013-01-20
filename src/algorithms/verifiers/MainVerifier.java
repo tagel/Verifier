@@ -268,7 +268,7 @@ public class MainVerifier {
 		ProductGroupElement pk;
 
 		pk = ElementsExtractor.createSimplePGE(ElementsExtractor.btFromFile(
-				params.getDirectory(), FULL_PUBLIC_KEY_BT), params.getGq());
+				params.getDirectory(), FULL_PUBLIC_KEY_BT), params.getGq(), 2);
 
 		// extract y and g from the public key
 		IGroupElement y = pk.getElements().getAt(1);

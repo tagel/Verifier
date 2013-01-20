@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import junit.framework.Assert;
-
 import algorithms.provers.ProveCCPoS;
 import algorithms.provers.ProveShuffling;
 import algorithms.provers.ProveSoC;
@@ -226,18 +224,16 @@ public class VerShuffling {
 	private static boolean compareLs(int lambda,
 			ArrayOfElements<ProductGroupElement> Llambda, int i) {
 		if (i == lambda) {
-			if (!Llambda.equals(Li)) {
+			if (!compareCiphertextsArrays(Llambda,Li)) {
 				return false;
 			}
-		} else if (!Li.equals(Liminus1)) {
+		} else if (!compareCiphertextsArrays(Li, Liminus1)) {
 			return false;
 		}
 		return true;
 	}
 
-	// TODO Sofi - reject if the interpretation fails - in: readFilesPoSC
-	// readFilesCCPos readFilesPoS
-
+	
 	/**
 	 * Read the files as byte[]. These byte[] objects will be sent to the
 	 * relevant constructors to make the objects (Node, cipher-texts, array of

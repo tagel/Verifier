@@ -94,10 +94,10 @@ public class ArrayGenerators {
 			for (int i = 0; i < arraySize; i++) {
 				ProductGroupElement simplePGEleft = ElementsExtractor
 						.createSimplePGE(new Node(node.getAt(0).toByteArray())
-								.getAt(i).toByteArray(), group);
+								.getAt(i).toByteArray(), group, w);
 				ProductGroupElement simplePGEright = ElementsExtractor
 						.createSimplePGE(new Node(node.getAt(1).toByteArray())
-								.getAt(i).toByteArray(), group);
+								.getAt(i).toByteArray(), group, w);
 				ProductGroupElement ciphertext = new ProductGroupElement(
 						simplePGEleft, simplePGEright);
 				ret.add(ciphertext);

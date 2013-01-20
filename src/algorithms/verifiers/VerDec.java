@@ -65,10 +65,15 @@ public class VerDec {
 
 		// ********Step 1 in the algorithm**********
 		// read the relevant arrays of proofs
+		DecryptionFactors = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
+		DecrFactCommitments = new ArrayOfElements<Node>();
+		DecrFactReplies = new ArrayOfElements<IntegerRingElement>();
+		
+		
 		for (int i = 1; i <= lambda; i++) {
 			// create the arrays of the different factors
 			if (!readDecriptionFactors(lambda, directory, Gq, i, N, width)
-					|| !readDecrFactCommitment(lambda, directory, Gq, i)
+					|| !readDecrFactCommitment(lambda, directory, Gq, i, width)
 					|| !readDecrFactReply(lambda, directory, Zq, i))
 				return false;
 		}
@@ -149,7 +154,7 @@ public class VerDec {
 	}
 
 	private static boolean readDecrFactCommitment(int lambda, String directory,
-			IGroup Gq, int i) {
+			IGroup Gq, int i, int width) {
 
 		byte[] bDecrFactCommitment = ElementsExtractor.btFromFile(directory,
 				PROOFS, DECR_FACT_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING)
@@ -167,7 +172,7 @@ public class VerDec {
 
 		// read Btag as plaintext
 		DecrFactCommitment.setAt(1, ElementsExtractor.createSimplePGE(
-				DecrFactCommitment.getAt(0).toByteArray(), Gq));
+				DecrFactCommitment.getAt(1).toByteArray(), Gq, width));
 		DecrFactCommitments.add(DecrFactCommitment);
 
 		return true;
