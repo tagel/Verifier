@@ -1,5 +1,6 @@
 package algorithms.verifiers;
 
+import main.Logger;
 import algorithms.provers.ProveDec;
 import algorithms.provers.Prover;
 import arithmetic.objects.ElementsExtractor;
@@ -61,7 +62,7 @@ public class VerDec {
 			IRing<IntegerRingElement> Zq,
 			ArrayOfElements<IGroupElement> publicKeys,
 			ArrayOfElements<IntegerRingElement> secretKeys, int width,
-			ArrayOfElements<IGroupElement> randArray) {
+			ArrayOfElements<IGroupElement> randArray, Logger logger) {
 
 		// ********Step 1 in the algorithm**********
 		// read the relevant arrays of proofs

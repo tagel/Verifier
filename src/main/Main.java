@@ -18,13 +18,18 @@ public class Main {
 		parser.parseCommand(argv);
 
 		if (parser.shouldVerify()) {
-			callMainVerifier(parser);
+			Logger logger = new Logger(parser.getVerbose());
+			if (!callMainVerifier(parser, logger)) {				
+				logger.sendLog("Exiting", Logger.Severity.NORMAL);
+			} else {
+				logger.sendLog("Finished verifing successfully", Logger.Severity.NORMAL);
+			}
 		}
 	}
 
-	private static void callMainVerifier(CommandLineParser parser) {
-		MainVerifier verifier = new MainVerifier();
-		verifier.verify(parser.getXml(), parser.getDir(), parser.getType(),
+	private static boolean callMainVerifier(CommandLineParser parser, Logger logger) {
+		MainVerifier verifier = new MainVerifier(logger);
+		return verifier.verify(parser.getXml(), parser.getDir(), parser.getType(),
 				parser.getAuxsid(), parser.getWidth(), parser.getPosc(),
 				parser.getCcpos(), parser.getDec());
 	}

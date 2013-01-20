@@ -3,6 +3,8 @@ package algorithms.params;
 import org.junit.Assert;
 import org.junit.Test;
 
+import algorithms.verifiers.MainVerifierTests;
+
 /**
  * Tests for the Parameters class.
  * 
@@ -13,7 +15,7 @@ public class ParametersTests {
 	private Parameters params = new Parameters(getClass().getClassLoader()
 			.getResource("protInfo.xml").getFile(), getClass().getClassLoader()
 			.getResource("export/default").getFile(), null, "auxsid", 1, false,
-			false, false);
+			false, false, new MainVerifierTests.MockedLogger());
 
 	@Test
 	public void fillFromXMLTest() {
