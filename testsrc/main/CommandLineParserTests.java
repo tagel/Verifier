@@ -24,26 +24,24 @@ public class CommandLineParserTests {
 	// not legal - should print the command usage
 	public void caseOneArgs_notEnoughtTest() {
 		String[] argv = new String[1];
-		argv[0] = "verifier";
+		argv[0] = "-mix";
 		parser.parseCommand(argv);
 	}
 
 	@Test
 	// not legal - should print the command usage
-	public void caseThreeArgs_notEnoughtTest() {
-		String[] argv = new String[3];
+	public void caseTwoArgs_notEnoughtTest() {
+		String[] argv = new String[2];
 		argv[0] = "verifier";
-		argv[1] = "-test";
 		argv[1] = "-test";
 		parser.parseCommand(argv);
 	}
 
 	@Test
 	// should print the versions that we support
-	public void caseTwoArgs_compatTest() {
-		String[] argv = new String[2];
-		argv[0] = "verifier";
-		argv[1] = "-compat";
+	public void caseOneArgs_compatTest() {
+		String[] argv = new String[1];
+		argv[0] = "-compat";
 		parser.parseCommand(argv);
 	}
 
@@ -58,11 +56,10 @@ public class CommandLineParserTests {
 
 	@Test
 	public void defaultMixingTest() {
-		String[] argv = new String[4];
-		argv[0] = "verifier";
-		argv[1] = "-mix";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
+		String[] argv = new String[3];
+		argv[0] = "-mix";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -77,11 +74,10 @@ public class CommandLineParserTests {
 
 	@Test
 	public void wrongArgMixingTest() {
-		String[] argv = new String[5];
-		argv[0] = "verifier";
-		argv[1] = "-mix";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
+		String[] argv = new String[4];
+		argv[0] = "-mix";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
 		argv[3] = "list";
 		parser.parseCommand(argv);
 
@@ -97,11 +93,10 @@ public class CommandLineParserTests {
 
 	@Test
 	public void defaultShufflingTest() {
-		String[] argv = new String[4];
-		argv[0] = "verifier";
-		argv[1] = "-shuffle";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
+		String[] argv = new String[3];
+		argv[0] = "-shuffle";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -116,11 +111,10 @@ public class CommandLineParserTests {
 
 	@Test
 	public void defaultDecryptionTest() {
-		String[] argv = new String[4];
-		argv[0] = "verifier";
-		argv[1] = "-decrypt";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
+		String[] argv = new String[3];
+		argv[0] = "-decrypt";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -135,12 +129,11 @@ public class CommandLineParserTests {
 
 	@Test
 	public void nodecFlag_DecryptionTest() {
-		String[] argv = new String[5];
-		argv[0] = "verifier";
-		argv[1] = "-decrypt";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-nodec";
+		String[] argv = new String[4];
+		argv[0] = "-decrypt";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-nodec";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -155,12 +148,11 @@ public class CommandLineParserTests {
 
 	@Test
 	public void noposFlag_DecryptionTest() {
-		String[] argv = new String[5];
-		argv[0] = "verifier";
-		argv[1] = "-decrypt";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-nopos";
+		String[] argv = new String[4];
+		argv[0] = "-decrypt";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-nopos";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -175,13 +167,12 @@ public class CommandLineParserTests {
 
 	@Test
 	public void auxsidLegal_DecryptionTest() {
-		String[] argv = new String[6];
-		argv[0] = "verifier";
-		argv[1] = "-decrypt";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-auxsid";
-		argv[5] = "legal";
+		String[] argv = new String[5];
+		argv[0] = "-decrypt";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-auxsid";
+		argv[4] = "legal";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("legal", parser.getAuxsid());
@@ -197,13 +188,12 @@ public class CommandLineParserTests {
 	@Test
 	public void auxsidNotLegal_DecryptionTest() {
 		Assert.assertFalse(asciiEncoder.canEncode("Réal"));
-		String[] argv = new String[6];
-		argv[0] = "verifier";
-		argv[1] = "-decrypt";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-auxsid";
-		argv[5] = "Réal";
+		String[] argv = new String[5];
+		argv[0] = "-decrypt";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-auxsid";
+		argv[4] = "Réal";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -218,12 +208,11 @@ public class CommandLineParserTests {
 
 	@Test
 	public void auxsidMissingValue_DecryptionTest() {
-		String[] argv = new String[5];
-		argv[0] = "verifier";
-		argv[1] = "-decrypt";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-auxsid";
+		String[] argv = new String[4];
+		argv[0] = "-decrypt";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-auxsid";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -238,12 +227,11 @@ public class CommandLineParserTests {
 
 	@Test
 	public void widthMissingValue_DecryptionTest() {
-		String[] argv = new String[5];
-		argv[0] = "verifier";
-		argv[1] = "-decrypt";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-width";
+		String[] argv = new String[4];
+		argv[0] = "-decrypt";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-width";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -258,12 +246,11 @@ public class CommandLineParserTests {
 
 	@Test
 	public void verboseTrue_MixingTest() {
-		String[] argv = new String[5];
-		argv[0] = "verifier";
-		argv[1] = "-mix";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-v";
+		String[] argv = new String[4];
+		argv[0] = "-mix";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-v";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());
@@ -279,13 +266,12 @@ public class CommandLineParserTests {
 
 	@Test
 	public void allFlagsFalse_MixingTest() {
-		String[] argv = new String[6];
-		argv[0] = "verifier";
-		argv[1] = "-mix";
-		argv[2] = "protInfo.xml";
-		argv[3] = "directory";
-		argv[4] = "-nopos";
-		argv[5] = "-nodec";
+		String[] argv = new String[5];
+		argv[0] = "-mix";
+		argv[1] = "protInfo.xml";
+		argv[2] = "directory";
+		argv[3] = "-nopos";
+		argv[4] = "-nodec";
 		parser.parseCommand(argv);
 
 		Assert.assertEquals("default", parser.getAuxsid());

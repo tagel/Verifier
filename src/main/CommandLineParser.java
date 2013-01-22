@@ -38,14 +38,14 @@ public class CommandLineParser {
 	 */
 	public void parseCommand(String[] argv) {
 		// missing arguments - print command line usage
-		if (argv.length == 1 || argv.length == 3) {
+		if (argv.length == 0 || argv.length == 2) {
 			printCommandLineUsage();
 			return;
 		}
 
 		// case there are only 2 words in the command
-		if (argv.length == 2) {
-			if (argv[1] == "-compat") {
+		if (argv.length == 1) {
+			if (argv[0] == "-compat") {
 				printCompat();
 				return;
 			}
@@ -66,7 +66,7 @@ public class CommandLineParser {
 
 	private boolean parseFlags(String[] argv) {
 		fillXmlAndDir(argv);
-		for (int i = 4; i < argv.length; i++) {
+		for (int i = 3; i < argv.length; i++) {
 			if ("-auxsid".equals(argv[i])) {
 				if ((i + 1) == argv.length || !auxsidFalge(argv[i + 1])) {
 					return false;
@@ -100,20 +100,20 @@ public class CommandLineParser {
 
 	// parse type of prove to verify
 	private void parseVerifier(String[] argv) {
-		if (argv[1] == "-mix") {
+		if (argv[0] == "-mix") {
 			type = Type.MIXING;
-		} else if (argv[1] == "-shuffle") {
+		} else if (argv[0] == "-shuffle") {
 			setFalgNodec();
 			type = Type.SHUFFLING;
-		} else if (argv[1] == "-decrypt") {
+		} else if (argv[0] == "-decrypt") {
 			setFalgNopos();
 			type = Type.DECRYPTION;
 		}
 	}
 
 	private void fillXmlAndDir(String[] argv) {
-		xml = argv[2];
-		dir = argv[3];
+		xml = argv[1];
+		dir = argv[2];
 	}
 
 	private boolean setFalgNopos() {
