@@ -39,7 +39,7 @@ public class CommandLineParserTests {
 
 	@Test
 	// should print the versions that we support
-	public void caseOneArgs_compatTest() {
+	public void caseOneArgs_compatTest() { // TODO Daniel: check why dont work in command line
 		String[] argv = new String[1];
 		argv[0] = "-compat";
 		parser.parseCommand(argv);
