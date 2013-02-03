@@ -16,7 +16,6 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.CryptoUtils;
 
@@ -72,20 +71,28 @@ public class ArraysGeneretorsTests {
 			throws UnsupportedEncodingException {
 		ModGroup Gq = new ModGroup(new LargeInteger("263"), new LargeInteger(
 				"131"), null);
-		node.add(ire1_ring4);
-		node.add(ire2_ring4);
-		ArrayOfElements<IntegerRingElement> ring = ArrayGenerators
-				.createRingElementArray(node.toByteArray(), ring_4);
-		ProductRingElement pge1 = new ProductRingElement(ring);
-		ProductRingElement pge2 = new ProductRingElement(ring);
-		ArrayOfElements<ProductRingElement> arr = new ArrayOfElements<ProductRingElement>();
-		arr.add(pge1);
-		arr.add(pge2);
-		ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
-				.createArrayOfPlaintexts(arr.toByteArray(), Gq, 1);
+		BigIntLeaf b0 = new BigIntLeaf(new LargeInteger("0"));
+		BigIntLeaf b1 = new BigIntLeaf(new LargeInteger("1"));
+		IGroupElement ige0 = ElementsExtractor.createGroupElement(
+				b0.toByteArray(), Gq);
+		IGroupElement ige1 = ElementsExtractor.createGroupElement(
+				b1.toByteArray(), Gq);
+		Node node = new Node();
+		node.add(ige0);
+		node.add(ige1);
+		ArrayOfElements<IGroupElement> arr = ArrayGenerators
+				.createGroupElementArray(node.toByteArray(), Gq);
+		ProductGroupElement pge1 = new ProductGroupElement(arr);
+		ProductGroupElement pge2 = new ProductGroupElement(arr);
+		Node node2 = new Node();
+		node2.add(pge1);
+		node2.add(pge2);
+		ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators.createArrayOfPlaintexts(node2.toByteArray(), Gq, 2);
+	
+		byte[] b = {0,0,0,0,2,0,0,0,0,2,1,0,0,0,2,0,0,1,0,0,0,2,0,0,0,0,0,0,2,1,0,0,0,2,0,1,1,0,0,0,2,0,1};
 		Assert.assertEquals(
-				"000000000200000000020100000001010100000001010000000002010000000102010000000102",
-				CryptoUtils.bytesToHexString(plaintexts.toByteArray()));
+				Arrays.toString(b),
+				Arrays.toString(plaintexts.toByteArray()));
 	}
 
 	@Test
