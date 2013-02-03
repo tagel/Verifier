@@ -114,6 +114,12 @@ public class ECurveGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ECurveGroupElement inverse() {
+        if (element.equals(group.one())) {
+            return this;
+        }
+        if (element.getY().equals(LargeInteger.ZERO)) {
+            return this;
+        }
 		IField<IntegerFieldElement> field = new PrimeOrderField(getGroup()
 				.getFieldOrder());
 		IntegerFieldElement y = new IntegerFieldElement(LargeInteger.ZERO
