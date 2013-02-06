@@ -280,7 +280,7 @@ public class MainVerifier {
 		input[8] = sH;
 
 		byte[] Seed = new Node(input).toByteArray();
-		params.setPrefixToRO(H.digest((Seed)));
+		params.setPrefixToRO(H.digest(Seed));
 
 		// set random oracles:
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
