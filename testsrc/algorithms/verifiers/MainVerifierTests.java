@@ -93,22 +93,32 @@ public class MainVerifierTests {
 	}
 
 	@Test
-	public void VerifyShuffleTest() throws Exception {
+	public void VerifyShuffleModGroupTest() throws Exception {
 
 		MainVerifier mainVer = new MainVerifier(logger);
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
-				.getResource("protInfo.xml").getFile(), getClass()
+				.getResource("exportModGroup/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportModGroup/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+
+	@Test
+	public void VerifyShuffleECurveTest() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("export/protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
 				Type.MIXING, "default", 1, true, true, false));
 	}
 	
 	@Test
-	public void VerifyDecTest() throws Exception {
+	public void VerifyDecEcurveTest() throws Exception {
 		
 		MainVerifier mainVer = new MainVerifier(new MainVerifierTests.MockedLogger());
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
-				.getResource("protInfo.xml").getFile(), getClass()
-				.getClassLoader().getResource("export/default").getFile(),
+				.getResource("exportDec/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportDec/default").getFile(),
 				Type.MIXING, "default", 1, false, false, true));
 	}
 
