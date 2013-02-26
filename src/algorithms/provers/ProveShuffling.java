@@ -1,5 +1,6 @@
 package algorithms.provers;
 
+import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -70,8 +71,10 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput, int width,
 			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h) {
+			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h, Logger logger) {
 
+		logger.sendLog("Starting to prove the shuffling",Logger.Severity.NORMAL);
+		
 		/*
 		 * 1(a) - interpret permutationCommitment (miu) as an array of Pedersen
 		 * commitments in Gq
@@ -181,6 +184,8 @@ public class ProveShuffling extends Prover {
 		}
 
 		/* All equalities exist. */
+		logger.sendLog("Proof of shuffling succeeded",
+				Logger.Severity.NORMAL);
 		return true;
 	}
 }

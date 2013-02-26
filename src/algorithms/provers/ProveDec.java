@@ -1,5 +1,6 @@
 package algorithms.provers;
 
+import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
@@ -77,7 +78,9 @@ public class ProveDec extends Prover {
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors,
 			ArrayOfElements<Node> decrFactCommitments,
-			ArrayOfElements<IntegerRingElement> decrFactReplies) {
+			ArrayOfElements<IntegerRingElement> decrFactReplies, Logger logger) {
+		
+		logger.sendLog("Starting to prove the dectiption",Logger.Severity.NORMAL);
 
 		/*
 		 * 1(a) - interpret Tdec as Node(yl',B')
@@ -158,6 +161,9 @@ public class ProveDec extends Prover {
 		}
 
 		/* All equalities exist. */
+		logger.sendLog("Shuffle of commitments proof succeeded",
+				Logger.Severity.NORMAL);
+		
 		return true;
 	}
 
@@ -302,6 +308,7 @@ public class ProveDec extends Prover {
 			secondEq = false;
 		}
 
+				
 		return (firstEq && secondEq);
 	}
 }

@@ -1,5 +1,6 @@
 package algorithms.provers;
 
+import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
@@ -59,8 +60,10 @@ public class ProveSoC extends Prover {
 			byte[] ro, int N, int Ne, int Nr, int Nv,
 			PseudoRandomGenerator prg, IGroup Gq,
 			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h) {
+			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h, Logger logger) {
 
+		logger.sendLog("Starting to prove the shuffling of commitment",Logger.Severity.NORMAL);
+		
 		/*
 		 * 1(a) - interpret permutationCommitment (miu) as an array of Pedersen
 		 * commitments in Gq
@@ -156,6 +159,8 @@ public class ProveSoC extends Prover {
 		}
 
 		/* All equalities exist. */
+		logger.sendLog("Shuffle of commitments proof succeeded",
+				Logger.Severity.NORMAL);
 		return true;
 	}
 }

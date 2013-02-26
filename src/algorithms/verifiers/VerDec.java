@@ -31,6 +31,9 @@ public class VerDec {
 	private static ArrayOfElements<ArrayOfElements<ProductGroupElement>> DecryptionFactors;
 	private static ArrayOfElements<Node> DecrFactCommitments;
 	private static ArrayOfElements<IntegerRingElement> DecrFactReplies;
+	
+	private static Logger logger;
+
 
 	/**
 	 * 
@@ -65,7 +68,9 @@ public class VerDec {
 			IRing<IntegerRingElement> Zq,
 			ArrayOfElements<IGroupElement> publicKeys,
 			ArrayOfElements<IntegerRingElement> secretKeys, int width,
-			ArrayOfElements<IGroupElement> randArray, Logger logger) {
+			ArrayOfElements<IGroupElement> randArray, Logger logger1) {
+		
+		logger = logger1;
 
 		// ********Step 1 in the algorithm**********
 		// read the relevant arrays of proofs
@@ -89,7 +94,7 @@ public class VerDec {
 		// try to do the combined proof if this return true, we skip to step 4
 		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv,
 				prg, Gq, g, publicKeys, L, DecryptionFactors,
-				DecrFactCommitments, DecrFactReplies)) {
+				DecrFactCommitments, DecrFactReplies, logger)) {
 
 			// ********Step 3 in the algorithm**********
 			for (int i = 1; i <= lambda; i++) {
@@ -97,7 +102,7 @@ public class VerDec {
 						.prove(ROSeed, ROChallenge, i - 1, prefixToRO, N, ne,
 								nr, nv, prg, Gq, g, publicKeys, L,
 								DecryptionFactors, DecrFactCommitments,
-								DecrFactReplies);
+								DecrFactReplies, logger);
 				if (!proveDec
 						&& (secretKeys.getAt(i - 1) == null || !DecryptionFactors
 								.getAt(i - 1).equals(
@@ -164,6 +169,7 @@ public class VerDec {
 				PROOFS, DECR_FACT_COMMITMENT + (i < 10 ? "0" : EMPTY_STRING)
 						+ i + BT_FILE_EXT);
 		if (bDecrFactCommitment == null) {
+			logger.sendLog("DecrFact commitment file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -189,6 +195,7 @@ public class VerDec {
 				DECR_FACT_REPLY + (i < 10 ? "0" : EMPTY_STRING) + i
 						+ BT_FILE_EXT);
 		if (bDecrFactReply == null) {
+			logger.sendLog("DecrFact reply file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -204,6 +211,7 @@ public class VerDec {
 				DECRIPTION_FACTORS + (i < 10 ? "0" : EMPTY_STRING) + i
 						+ BT_FILE_EXT);
 		if (bDecrFact == null) {
+			logger.sendLog("Decription factors file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 

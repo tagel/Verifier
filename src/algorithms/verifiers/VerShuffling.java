@@ -55,6 +55,8 @@ public class VerShuffling {
 	private static Node CCPoSReply;
 	private static BooleanArrayElement keepList;
 
+	private static Logger logger;
+
 	/**
 	 * 
 	 * @param ROSeed
@@ -86,7 +88,9 @@ public class VerShuffling {
 			ProductGroupElement pk, ArrayOfElements<ProductGroupElement> L0,
 			ArrayOfElements<ProductGroupElement> Llambda, boolean posc,
 			boolean ccpos, IRing<IntegerRingElement> Zq, int width,
-			ArrayOfElements<IGroupElement> h, Logger logger) {
+			ArrayOfElements<IGroupElement> h, Logger logger1) {
+
+		logger = logger1;
 
 		// set maxciph (indicates if there was pre-computation)
 		int maxciph = readMaxciph(directory);
@@ -112,19 +116,22 @@ public class VerShuffling {
 							&& ProveShuffling.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk, Li,
 									Llambda, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h);
+									PoSCommitment, PoSReply, h, logger);
 				} else {
 					retValue = retValue
 							&& ProveShuffling.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
 									Liminus1, Li, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h);
+									PoSCommitment, PoSReply, h, logger);
 				}
 
 				// If !retValue, it means that reading the elements
 				// failed or the prover rejected
 				if (!retValue) {
 					if (!compareLs(lambda, Llambda, i)) {
+						logger.sendLog(
+								"Reading the elements failed, the prover rejected or L_i doesn't equal to L_i-1, exiting.",
+								Logger.Severity.ERROR);
 						return false;
 					}
 				}
@@ -145,7 +152,7 @@ public class VerShuffling {
 				if (!readFilesPoSC(i, directory, Gq, Zq, N, width)
 						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO, N,
 								ne, nr, nv, prg, Gq, PermutationCommitment,
-								PoSCCommitment, PoSCCommitment, h))) {
+								PoSCCommitment, PoSCCommitment, h, logger))) {
 					// if the algorithm rejects or reading failed set
 					// permutation commitment to be h
 					PermutationCommitment = h;
@@ -185,19 +192,22 @@ public class VerShuffling {
 							&& ProveCCPoS.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk, Li,
 									Llambda, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h);
+									PoSCommitment, PoSReply, h, logger);
 				} else {
 					retValue = retValue
 							&& ProveCCPoS.prove(ROSeed, ROChallenge,
 									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
 									Liminus1, Li, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h);
+									PoSCommitment, PoSReply, h, logger);
 				}
 
 				// If !retValue, it means that reading the elements
 				// failed or the prover rejected
 				if (!retValue) {
 					if (!compareLs(lambda, Llambda, i)) {
+						logger.sendLog(
+								"Reading the elements failed, the prover rejected or L_i doesn't equal to L_i-1, exiting.",
+								Logger.Severity.ERROR);
 						return false;
 					}
 				}
@@ -233,7 +243,7 @@ public class VerShuffling {
 	private static boolean compareLs(int lambda,
 			ArrayOfElements<ProductGroupElement> Llambda, int i) {
 		if (i == lambda) {
-			if (!compareCiphertextsArrays(Llambda,Li)) {
+			if (!compareCiphertextsArrays(Llambda, Li)) {
 				return false;
 			}
 		} else if (!compareCiphertextsArrays(Li, Liminus1)) {
@@ -242,7 +252,6 @@ public class VerShuffling {
 		return true;
 	}
 
-	
 	/**
 	 * Read the files as byte[]. These byte[] objects will be sent to the
 	 * relevant constructors to make the objects (Node, cipher-texts, array of
@@ -266,12 +275,15 @@ public class VerShuffling {
 				PROOFS, POSC_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bPoSCCommitment == null) {
+			logger.sendLog("POSC commitment file not found.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
 		byte[] bPoSCReply = ElementsExtractor.btFromFile(directory, PROOFS,
 				"PoSCReply" + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSCReply == null) {
+			logger.sendLog("POSC reply file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -279,6 +291,8 @@ public class VerShuffling {
 				PROOFS, PERMUTATION_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bPermutationCommitment == null) {
+			logger.sendLog("permutation commitment file not found.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -385,6 +399,7 @@ public class VerShuffling {
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
 				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bLi == null) {
+			logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -392,12 +407,15 @@ public class VerShuffling {
 				PROOFS, CCPOS_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bCCPoSCommitment == null) {
+			logger.sendLog("ccPOS commitment file not found.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
 		byte[] bCCPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
 				CCPOS_REPLY + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bCCPoSReply == null) {
+			logger.sendLog("ccPOS reply file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -466,18 +484,22 @@ public class VerShuffling {
 		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
 				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bLi == null) {
+			logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
 		byte[] bPoSCommitment = ElementsExtractor.btFromFile(directory, PROOFS,
 				POS_COMMITMENT + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSCommitment == null) {
+			logger.sendLog("POS commitment file not found.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
 		byte[] bPoSReply = ElementsExtractor.btFromFile(directory, PROOFS,
 				POS_REPLY + getNumStringForFileName(i) + BT_FILE_EXT);
 		if (bPoSReply == null) {
+			logger.sendLog("POS reply file not found.", Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -485,6 +507,8 @@ public class VerShuffling {
 				PROOFS, PERMUTATION_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
 		if (bPermutationCommitment == null) {
+			logger.sendLog("permutation commitment file not found.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -600,13 +624,13 @@ public class VerShuffling {
 	private static boolean compareCiphertextsArrays(
 			ArrayOfElements<ProductGroupElement> one,
 			ArrayOfElements<ProductGroupElement> two) {
-		
-		for (int i = 0; i<one.getSize(); i++) {
+
+		for (int i = 0; i < one.getSize(); i++) {
 			if (one.getAt(i).equals(two.getAt(i))) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 }

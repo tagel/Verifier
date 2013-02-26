@@ -1,5 +1,6 @@
 package algorithms.provers;
 
+import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
@@ -72,7 +73,9 @@ public class ProveCCPoS extends Prover {
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput, int width,
 			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h) {
+			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h, Logger logger) {
+		
+		logger.sendLog("Starting to prove the commitment consistent shuffling",Logger.Severity.NORMAL);
 
 		/*
 		 * 1(a) - interpret permutationCommitment (miu) as an array of Pedersen
@@ -135,6 +138,9 @@ public class ProveCCPoS extends Prover {
 		}
 
 		/* All equalities exist. */
+		logger.sendLog("Comitment consistent proof of a shuffle succeeded",
+				Logger.Severity.NORMAL);
+		
 		return true;
 	}
 
