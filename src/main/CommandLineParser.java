@@ -45,7 +45,7 @@ public class CommandLineParser {
 
 		// case there are only 2 words in the command
 		if (argv.length == 1) {
-			if (argv[0] == "-compat") {
+			if (argv[0].equals("-compat")) {
 				printCompat();
 				return;
 			}
@@ -100,12 +100,12 @@ public class CommandLineParser {
 
 	// parse type of prove to verify
 	private void parseVerifier(String[] argv) {
-		if (argv[0] == "-mix") {
+		if (argv[0].equals("-mix")) {
 			type = Type.MIXING;
-		} else if (argv[0] == "-shuffle") {
+		} else if (argv[0].equals("-shuffle")) {
 			setFalgNodec();
 			type = Type.SHUFFLING;
-		} else if (argv[0] == "-decrypt") {
+		} else if (argv[0].equals("-decrypt")) {
 			setFalgNopos();
 			type = Type.DECRYPTION;
 		}

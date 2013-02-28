@@ -112,7 +112,7 @@ public class CommandLineParserTests {
 	@Test
 	public void defaultDecryptionTest() {
 		String[] argv = new String[3];
-		argv[0] = "-decrypt";
+		argv[0] = new String("-decrypt");
 		argv[1] = "protInfo.xml";
 		argv[2] = "directory";
 		parser.parseCommand(argv);
