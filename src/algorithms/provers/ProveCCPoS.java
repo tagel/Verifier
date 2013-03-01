@@ -133,7 +133,7 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * Equation 2: B^v*Btag = Enc(1,-Kb) * PI(wOutput[i]^Ke[i])
 		 */
-		if (!verifyFFtag(N, Gq, pk, wOutput, width, Btag, Kb, Ke, B, v)) {
+		if (!verifyFFtag(N, Gq, pk, wOutput, width, Btag, Kb, Ke, B, v)) { // TODO maybe bug?
 			return false;
 		}
 

@@ -12,35 +12,6 @@ import arithmetic.objects.groups.ModGroupElement;
 
 public class ProverTests {
 	
-	@Test
-	public void PDecryptTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void TDecryptTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void encryptTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void ComputeSeedTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void computeATest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void computeFTest() {
-		// TODO Daniel
-	}
 
 	@Test
 	public void computeCTest() {
@@ -58,30 +29,5 @@ public class ProverTests {
 		array2.add(d);
 	
 		Assert.assertEquals(new LargeInteger("6"), ((ModGroupElement) Prover.computeC(array2, array1, 2)).getElement());
-	}
-
-	@Test
-	public void computeDTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void verifyAvAtagTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void verifyBvBtagTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void verifyCvCtagTest() {
-		// TODO Daniel
-	}
-
-	@Test
-	public void verifyDvDtagTest() {
-		// TODO Daniel
 	}
 }
