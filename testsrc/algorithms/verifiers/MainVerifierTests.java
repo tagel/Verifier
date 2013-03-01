@@ -39,10 +39,19 @@ public class MainVerifierTests {
 
 	@Test
 	public void createPrefixToRoTest() throws UnsupportedEncodingException {
+		//Elliptic Curve
 		Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
 				null, "auxsid", 1, false, false, false, logger);
+		
+		//Mod Group
+		/*
+		Parameters params = new Parameters(getClass().getClassLoader()
+				.getResource("exportModGroup/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportModGroup/default").getFile(),
+				null, "auxsid", 1, false, false, false, logger); */
+		
 		params.fillFromXML();
 		params.fillFromDirectory();
 		HashFunction H = new SHA2HashFunction(params.getSh());
@@ -57,10 +66,21 @@ public class MainVerifierTests {
 
 	@Test
 	public void readKeysTest() throws IOException {
+		// Elliptic curve
+		/*
+		 * Parameters params = new Parameters(getClass().getClassLoader()
+		 * .getResource("protInfo.xml").getFile(), getClass()
+		 * .getClassLoader().getResource("export/default").getFile(), null,
+		 * "auxsid", 1, false, false, false, logger);
+		 */
+
+		// Mod group
 		Parameters params = new Parameters(getClass().getClassLoader()
-				.getResource("protInfo.xml").getFile(), getClass()
-				.getClassLoader().getResource("export/default").getFile(),
-				null, "auxsid", 1, false, false, false, logger);
+				.getResource("exportModGroup/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportModGroup/default").getFile(), null,
+				"auxsid", 1, false, false, false, logger);
+
 		params.fillFromXML();
 		params.fillFromDirectory();
 		HashFunction H = new SHA2HashFunction(params.getSh());
@@ -78,10 +98,18 @@ public class MainVerifierTests {
 
 	@Test
 	public void readListsTest() throws IOException {
-		Parameters params = new Parameters(getClass().getClassLoader()
+		//Elliptc curve
+		/*Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
+				Type.MIXING, "auxsid", 1, false, false, false, logger);*/
+		
+		//Mod group
+		Parameters params = new Parameters(getClass().getClassLoader()
+				.getResource("exportModGroup/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportModGroup/default").getFile(),
 				Type.MIXING, "auxsid", 1, false, false, false, logger);
+		
 		params.fillFromXML();
 		params.fillFromDirectory();
 		HashFunction H = new SHA2HashFunction(params.getSh());
@@ -96,9 +124,11 @@ public class MainVerifierTests {
 	public void VerifyShuffleModGroupTest() throws Exception {
 
 		MainVerifier mainVer = new MainVerifier(logger);
-		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
-				.getResource("exportModGroup/protInfo.xml").getFile(), getClass()
-				.getClassLoader().getResource("exportModGroup/default").getFile(),
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportModGroup/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportModGroup/default").getFile(),
 				Type.MIXING, "default", 1, true, true, false));
 	}
 
@@ -111,11 +141,12 @@ public class MainVerifierTests {
 				.getClassLoader().getResource("export/default").getFile(),
 				Type.MIXING, "default", 1, true, true, false));
 	}
-	
+
 	@Test
 	public void VerifyDecEcurveTest() throws Exception {
-		
-		MainVerifier mainVer = new MainVerifier(new MainVerifierTests.MockedLogger());
+
+		MainVerifier mainVer = new MainVerifier(
+				new MainVerifierTests.MockedLogger());
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
 				.getResource("exportDec/protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("exportDec/default").getFile(),
