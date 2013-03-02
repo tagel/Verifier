@@ -402,6 +402,7 @@ public abstract class Prover {
 			ArrayOfElements<IntegerRingElement> Kb,
 			ArrayOfElements<IntegerRingElement> Ke, IGroupElement g,
 			LargeInteger v, ArrayOfElements<IGroupElement> h, int N) {
+
 		IGroupElement left = ((B.getAt(0)).power(v)).mult(Btag.getAt(0));
 		IGroupElement right = g.power(Kb.getAt(0).getElement()).mult(
 				h.getAt(0).power(Ke.getAt(0).getElement()));
@@ -410,13 +411,14 @@ public abstract class Prover {
 		}
 
 		for (int i = 1; i < N; i++) {
-			left = (B.getAt(i)).power(v).mult(Btag.getAt(i));
-			right = g.power(Kb.getAt(i).getElement()).mult(
+			left = ((B.getAt(i)).power(v)).mult(Btag.getAt(i));
+			right = (g.power(Kb.getAt(i).getElement())).mult(
 					B.getAt(i - 1).power(Ke.getAt(i).getElement()));
+			if (!left.equals(right)) {
+				return false;
+			}
 		}
-		if (!left.equals(right)) {
-			return false;
-		}
+
 		return true;
 	}
 
@@ -437,6 +439,7 @@ public abstract class Prover {
 	 */
 	protected static boolean verifyCvCtag(IGroupElement C, IGroupElement Ctag,
 			LargeInteger v, IntegerRingElement Kc, IGroupElement g) {
+		
 		IGroupElement left = (C.power(v)).mult(Ctag);
 		IGroupElement right = g.power(Kc.getElement());
 		if (!left.equals(right)) {
@@ -462,6 +465,7 @@ public abstract class Prover {
 	 */
 	protected static boolean verifyDvDtag(IGroupElement D, IGroupElement Dtag,
 			LargeInteger v, IntegerRingElement Kd, IGroupElement g) {
+		
 		IGroupElement left = (D.power(v)).mult(Dtag);
 		IGroupElement right = g.power(Kd.getElement());
 		if (!left.equals(right)) {
