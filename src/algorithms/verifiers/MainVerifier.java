@@ -265,20 +265,34 @@ public class MainVerifier {
 				.getNr())));
 		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params
 				.getNv())));
-		ByteTree btW = new BigIntLeaf(new LargeInteger(Integer.toString(params
-				.getW())));
+		
+		// TODO : fixed from Douglas code
+//		ByteTree btW = new BigIntLeaf(new LargeInteger(Integer.toString(params
+//				.getW())));
+//
+//		ByteTree[] input = new ByteTree[9];
+//		
+//		input[0] = version_proof;
+//		input[1] = btAuxid;
+//		input[2] = btW;
+//		input[3] = Ne;
+//		input[4] = Nr;
+//		input[5] = Nv;
+//		input[6] = sGq;
+//		input[7] = sPRG;
+//		input[8] = sH;
 
-		ByteTree[] input = new ByteTree[9];
+		ByteTree[] input = new ByteTree[8];
+		
 		input[0] = version_proof;
 		input[1] = btAuxid;
-		input[2] = btW;
-		input[3] = Ne;
-		input[4] = Nr;
-		input[5] = Nv;
+		input[2] = Nr;
+		input[3] = Nv;
+		input[4] = Ne;
+		input[5] = sPRG;
 		input[6] = sGq;
-		input[7] = sPRG;
-		input[8] = sH;
-
+		input[7] = sH;
+		
 		byte[] Seed = new Node(input).toByteArray();
 		params.setPrefixToRO(H.digest(Seed));
 
