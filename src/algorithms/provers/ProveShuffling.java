@@ -145,22 +145,23 @@ public class ProveShuffling extends Prover {
 		LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(E, B, h, N);
-		// TODO Tagel: B-1 = ho - WTF??
+		
 
 		/*
-		 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
-		 */
-		if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
-			return false;
-		}
-
-		/*
-		 * Equation 2: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
+		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
 		 * B[-1] = h[0]
 		 */
 		if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
 			return false;
 		}
+		
+		/*
+		 * Equation 2: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
+		 */
+		if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
+			return false;
+		}
+
 
 		/*
 		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])

@@ -105,7 +105,7 @@ public class MainVerifier {
 			return false;
 		}
 		logger.sendLog("Verification of keys succeeded.", Logger.Severity.NORMAL);
-
+		
 		// *******Section 6 in the Algorithm*********
 		if (!ReadLists()) {
 			return false;
@@ -320,6 +320,7 @@ public class MainVerifier {
 		// extract y and g from the public key
 		IGroupElement y = pk.getElements().getAt(1);
 		IGroupElement g = pk.getElements().getAt(0);
+		
 
 		params.setFullPublicKey(pk);
 
