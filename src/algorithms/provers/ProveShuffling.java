@@ -128,7 +128,7 @@ public class ProveShuffling extends Prover {
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 		
 		//TODO debugging
-
+		
 		System.out.println("output of ro seed: "+Arrays.toString(seed));
 		
 		/*
