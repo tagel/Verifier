@@ -21,7 +21,7 @@ import cryptographic.primitives.RandomOracle;
  */
 public abstract class Prover {
 
-	//protected static final String GENERATORS = "generators";
+	// protected static final String GENERATORS = "generators";
 
 	/**
 	 * This function decrypts a given ciphertext back to its decryption factor
@@ -154,7 +154,8 @@ public abstract class Prover {
 	 */
 	protected static LargeInteger computeV(int Nv, byte[] challenge) {
 		/* Computation of v: */
-		LargeInteger v = new LargeInteger(challenge);
+//		LargeInteger v = new LargeInteger(challenge); TODO remove
+		LargeInteger v = byteArrayToPosLargeInteger(challenge);
 		LargeInteger twoNv = new LargeInteger("2").power(Nv);
 		v = v.mod(twoNv);
 		return v;
@@ -207,19 +208,26 @@ public abstract class Prover {
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
 
-		byte[] ByteArrToBigInt;
+		byte[] byteArrToBigInt;
+		// byte[] byteArrToBigIntPos;
 		LargeInteger t;
 		LargeInteger e;
 		IGroupElement A = Gq.one();
 
 		for (int i = 0; i < N; i++) {
-			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = new LargeInteger(ByteArrToBigInt);
-			
-			//TODO debugging
-			if ((i==0) || (i==1))
-				System.out.println("t"+i+": "+t);
-			
+			// TODO fix everywhere and remove comments
+			byteArrToBigInt = prg.getNextPRGOutput(length);
+			// byteArrToBigIntPos = new byte[byteArrToBigInt.length + 1];
+			// System.arraycopy(byteArrToBigInt,0, byteArrToBigIntPos, 1,
+			// byteArrToBigInt.length);
+			// byteArrToBigIntPos[0] = 0x00;
+			// t = new LargeInteger(byteArrToBigInt);
+			t = byteArrayToPosLargeInteger(byteArrToBigInt);
+
+			// TODO debugging
+			if ((i == 0) || (i == 1))
+				System.out.println("t" + i + ": " + t);
+
 			e = t.mod(new LargeInteger("2").power(Ne));
 			A = A.mult(u.getAt(i).power(e));
 		}
@@ -289,12 +297,12 @@ public abstract class Prover {
 
 		for (int i = 1; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = new LargeInteger(ByteArrToBigInt);
-			
-			//TODO debugging
-			if ((i==0) || (i==1))
-				System.out.println("t"+i+": "+t);
-			
+			t = byteArrayToPosLargeInteger(ByteArrToBigInt); // TODO fixed make sure is good
+
+			// TODO debugging
+			if ((i == 0) || (i == 1))
+				System.out.println("t" + i + ": " + t);
+
 			e = t.mod(new LargeInteger("2").power(Ne));
 			F = F.mult(wInput.getAt(i).power(e));
 		}
@@ -422,8 +430,8 @@ public abstract class Prover {
 
 		for (int i = 1; i < N; i++) {
 			left = ((B.getAt(i)).power(v)).mult(Btag.getAt(i));
-			right = (g.power(Kb.getAt(i).getElement())).mult(
-					B.getAt(i - 1).power(Ke.getAt(i).getElement()));
+			right = (g.power(Kb.getAt(i).getElement())).mult(B.getAt(i - 1)
+					.power(Ke.getAt(i).getElement()));
 			if (!left.equals(right)) {
 				return false;
 			}
@@ -449,7 +457,7 @@ public abstract class Prover {
 	 */
 	protected static boolean verifyCvCtag(IGroupElement C, IGroupElement Ctag,
 			LargeInteger v, IntegerRingElement Kc, IGroupElement g) {
-		
+
 		IGroupElement left = (C.power(v)).mult(Ctag);
 		IGroupElement right = g.power(Kc.getElement());
 		if (!left.equals(right)) {
@@ -475,7 +483,7 @@ public abstract class Prover {
 	 */
 	protected static boolean verifyDvDtag(IGroupElement D, IGroupElement Dtag,
 			LargeInteger v, IntegerRingElement Kd, IGroupElement g) {
-		
+
 		IGroupElement left = (D.power(v)).mult(Dtag);
 		IGroupElement right = g.power(Kd.getElement());
 		if (!left.equals(right)) {
@@ -536,5 +544,13 @@ public abstract class Prover {
 			return false;
 		}
 		return true;
+	}
+
+	public static LargeInteger byteArrayToPosLargeInteger(byte[] bytes) {
+		byte[] byteArrToBigIntPos = new byte[bytes.length + 1];
+		byteArrToBigIntPos[0] = 0x00;
+		System.arraycopy(bytes, 0, byteArrToBigIntPos, 1, bytes.length);
+
+		return new LargeInteger(byteArrToBigIntPos);
 	}
 }
