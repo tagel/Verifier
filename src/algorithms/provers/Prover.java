@@ -215,6 +215,11 @@ public abstract class Prover {
 		for (int i = 0; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
 			t = new LargeInteger(ByteArrToBigInt);
+			
+			//TODO debugging
+			if ((i==0) || (i==1))
+				System.out.println("t"+i+": "+t);
+			
 			e = t.mod(new LargeInteger("2").power(Ne));
 			A = A.mult(u.getAt(i).power(e));
 		}

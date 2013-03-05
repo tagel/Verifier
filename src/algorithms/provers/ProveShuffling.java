@@ -1,5 +1,7 @@
 package algorithms.provers;
 
+import java.util.Arrays;
+
 import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
@@ -124,7 +126,11 @@ public class ProveShuffling extends Prover {
 		input[5] = wOutput;
 		Node nodeForSeed = new Node(input);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
+		
+		//TODO debugging
 
+		System.out.println("output of ro seed: "+Arrays.toString(seed));
+		
 		/*
 		 * 3 - Computation of A and F
 		 */

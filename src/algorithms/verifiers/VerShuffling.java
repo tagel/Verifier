@@ -626,7 +626,7 @@ public class VerShuffling {
 			ArrayOfElements<ProductGroupElement> two) {
 
 		for (int i = 0; i < one.getSize(); i++) {
-			if (one.getAt(i).equals(two.getAt(i))) {
+			if (!one.getAt(i).equals(two.getAt(i))) {
 				return false;
 			}
 		}

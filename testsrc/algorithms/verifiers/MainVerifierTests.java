@@ -133,6 +133,18 @@ public class MainVerifierTests {
 						.getResource("exportModGroup/default").getFile(),
 				Type.MIXING, "default", 1, true, true, false));
 	}
+	
+	@Test
+	public void VerifyShuffleModGroupSmallTest() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportSmall/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportSmall/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
 
 	@Test
 	public void VerifyShuffleECurveTest() throws Exception {

@@ -1,5 +1,7 @@
 package algorithms.verifiers;
 
+import java.util.Arrays;
+
 import main.Logger;
 import algorithms.params.Parameters;
 import algorithms.params.Parameters.Type;
@@ -296,6 +298,9 @@ public class MainVerifier {
 		byte[] Seed = new Node(input).toByteArray();
 		params.setPrefixToRO(H.digest(Seed));
 
+		//TODO: debugging
+		System.out.println("prefix: "+Arrays.toString(params.getPrefixToRO()));
+		
 		// set random oracles:
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
 				.seedlen()));
