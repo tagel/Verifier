@@ -268,6 +268,7 @@ public class MainVerifier {
 		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params
 				.getNv())));
 		
+				
 		// TODO : fixed from Douglas code
 //		ByteTree btW = new BigIntLeaf(new LargeInteger(Integer.toString(params
 //				.getW())));
@@ -298,9 +299,6 @@ public class MainVerifier {
 		byte[] Seed = new Node(input).toByteArray();
 		params.setPrefixToRO(H.digest(Seed));
 
-		//TODO: debugging
-		System.out.println("prefix: "+Arrays.toString(params.getPrefixToRO()));
-		
 		// set random oracles:
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
 				.seedlen()));
