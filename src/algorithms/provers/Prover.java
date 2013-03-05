@@ -21,7 +21,7 @@ import cryptographic.primitives.RandomOracle;
  */
 public abstract class Prover {
 
-	protected static final String GENERATORS = "generators";
+	//protected static final String GENERATORS = "generators";
 
 	/**
 	 * This function decrypts a given ciphertext back to its decryption factor
@@ -290,6 +290,11 @@ public abstract class Prover {
 		for (int i = 1; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
 			t = new LargeInteger(ByteArrToBigInt);
+			
+			//TODO debugging
+			if ((i==0) || (i==1))
+				System.out.println("t"+i+": "+t);
+			
 			e = t.mod(new LargeInteger("2").power(Ne));
 			F = F.mult(wInput.getAt(i).power(e));
 		}

@@ -113,7 +113,7 @@ public class ProveShuffling extends Prover {
 		
 
 		/*
-		 * 2 - computing the seed
+		 * 2 - computing the seed s=ROseed(...)
 		 */
 		IGroupElement g = Gq.getGenerator();
 
