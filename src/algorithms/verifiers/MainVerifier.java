@@ -69,7 +69,7 @@ public class MainVerifier {
 	 */
 	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec) {
-
+		
 		logger.sendLog("Start verifing prove of " + type + " with:",
 				Logger.Severity.NORMAL);
 		logger.sendLog("	Proof of shuffling commitment: " + getOnOrOff(posc),
@@ -82,7 +82,6 @@ public class MainVerifier {
 		// *****Section 1 and 2 in the algorithm*****
 		// create the Parameters object using the command line parameters and
 		// fill parameters from xml and directory
-
 		logger.sendLog("Getting parameters from xml and directory",
 				Logger.Severity.NORMAL);
 		params = new Parameters(protInfo, directory, type, auxid, w, posc,
@@ -90,7 +89,7 @@ public class MainVerifier {
 		if (!fillParamsFromXmlAndDir(params) || !checkFilledParams()) {
 			return false;
 		}
-
+		
 		// *******Section 3 in the Algorithm*********
 		// derive the objects: IGroup Gq, Ring Zq, Hashfunction H, and PRG.
 		if (!deriveSetsAndObjects()) {
@@ -221,7 +220,7 @@ public class MainVerifier {
 		if (!params.fillFromXML()) {
 			return false;
 		}
-
+		
 		// *****Section 2 in the algorithm*****
 		// fill parameters from proof directory
 		if (!params.fillFromDirectory()) {
