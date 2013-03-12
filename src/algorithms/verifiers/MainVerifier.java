@@ -290,7 +290,7 @@ public class MainVerifier {
 		input[0] = version_proof;
 		input[1] = btAuxid;
 		input[2] = Nr;
-		input[3] = Nv;
+		input[3] = Nv;//TODO CHECK ORDER
 		input[4] = Ne;
 		input[5] = sPRG;
 		input[6] = sGq;
@@ -298,6 +298,8 @@ public class MainVerifier {
 		
 		byte[] Seed = new Node(input).toByteArray();
 		params.setPrefixToRO(H.digest(Seed));
+		
+		System.out.println(Arrays.toString(Seed)); //TODO ERASE
 
 		// set random oracles:
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
