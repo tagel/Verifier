@@ -23,8 +23,8 @@ public interface PseudoRandomGenerator {
 	public void setSeed(byte[] seed);
 
 	/**
-	 * @param numOfBytes
-	 *            the number of bytes should be in the output.
+	 * @param numOfBits
+	 *            the number of bits should be in the output.
 	 * @return the next numOfBits bits of the output of the prg running on the
 	 *         seed given. Before running this method seed must be initialized
 	 *         with setSeet() otherwise throws IllegalStateException.
