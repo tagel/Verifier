@@ -155,6 +155,7 @@ public class Parameters {
 		try {
 			protXML = new XMLProtocolInfo(protInfo);
 		} catch (FileNotFoundException e) {
+			System.out.println("xml not found");
 			logger.sendLog("XML ProtInfo not found", Logger.Severity.ERROR);
 			return false;
 		} catch (XMLStreamException e) {

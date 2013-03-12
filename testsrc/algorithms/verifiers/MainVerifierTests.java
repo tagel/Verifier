@@ -152,9 +152,9 @@ public class MainVerifierTests {
 		MainVerifier mainVer = new MainVerifier(logger);
 		Assert.assertTrue(mainVer.verify(
 				getClass().getClassLoader()
-						.getResource("mod3/protInfo.xml").getFile(),
+						.getResource("exportMod3/protInfo.xml").getFile(),
 				getClass().getClassLoader()
-						.getResource("mod3/default").getFile(),
+						.getResource("exportMod3/default").getFile(),
 				Type.MIXING, "default", 1, true, true, false));
 	}
 
