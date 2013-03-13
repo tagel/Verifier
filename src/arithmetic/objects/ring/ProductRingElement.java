@@ -175,4 +175,14 @@ public class ProductRingElement implements ByteTree {
 	public byte[] toByteArray() {
 		return arr.toByteArray();
 	}
+
+	@Override
+	public String toString() {
+		String temp = "";
+		for (int i = 0; i < arr.getSize(); i++) {
+			temp = temp + "(" + arr.getAt(i).toString() + ")";
+		}
+		return temp;
+
+	}
 }

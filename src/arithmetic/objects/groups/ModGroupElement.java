@@ -145,4 +145,9 @@ public class ModGroupElement implements IGroupElement {
 		ret[0] = 1;
 		return ret;
 	}
+	
+	@Override
+	public String toString(){
+		return element.toString();
+		}
 }

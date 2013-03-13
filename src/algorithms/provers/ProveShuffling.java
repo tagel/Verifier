@@ -84,7 +84,6 @@ public class ProveShuffling extends Prover {
 		ArrayOfElements<IGroupElement> u = permutationCommitment;
 
 		
-		//TODO ERASE PRINTOUTS
 		/*
 		 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 		 */
@@ -99,12 +98,13 @@ public class ProveShuffling extends Prover {
 		IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 		ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
 
+		//TODO ERASE PRINTOUTS
 		System.out.println("B:"+B);
 		System.out.println("A':"+Atag);
 		System.out.println("B':"+Btag);
 		System.out.println("C':"+Ctag);
 		System.out.println("D':"+Dtag);
-		System.out.println("F:"+Ftag);
+		System.out.println("F':"+Ftag);
 		
 		/*
 		 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
@@ -120,7 +120,16 @@ public class ProveShuffling extends Prover {
 				.getAt(4));
 		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 		
-
+		
+		//TODO ERASE PRINTOUTS
+		System.out.println("Ka:"+Ka);
+		System.out.println("Kb:"+Kb);
+		System.out.println("Kc:"+Kc);
+		System.out.println("Kd:"+Kd);
+		System.out.println("Ke:"+Ke);
+		System.out.println("Kf:"+Kf);
+		System.out.println("h"+h);
+		
 		/*
 		 * 2 - computing the seed s=ROseed(...)
 		 */
@@ -137,8 +146,10 @@ public class ProveShuffling extends Prover {
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 		
 		//TODO debugging
-		
-		System.out.println("output of ro seed: "+Arrays.toString(seed));
+		System.out.print("the seed:");
+		for (int i =0; i<seed.length;i++)
+			System.out.printf("%02X",seed[i]);
+		System.out.println();
 		
 		/*
 		 * 3 - Computation of A and F
@@ -153,6 +164,9 @@ public class ProveShuffling extends Prover {
 		byte[] challenge = computeChallenge(ROChallenge, ro, PoSCommitment,
 				leaf);
 		LargeInteger v = computeV(Nv, challenge);
+		
+		//TODO erase
+		System.out.println("v:"+v);
 
 		/*
 		 * 5 - Compute C,D and verify equalities

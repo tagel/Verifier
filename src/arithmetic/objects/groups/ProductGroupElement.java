@@ -183,4 +183,17 @@ public class ProductGroupElement implements ByteTree {
 			return ArrayGenerators.concatArrays(b, right.toByteArray());
 		}
 	}
+	
+	@Override
+	public String toString() {
+		String temp = "";
+		if (arr != null) {
+			for (int i=0; i<arr.getSize(); i++) {
+					temp = temp + "("+arr.getAt(i).toString()+")";
+					}
+			return temp;
+		} else {
+			return left.toString()+right.toString();
+		}
+	}
 }

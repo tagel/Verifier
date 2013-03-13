@@ -132,4 +132,9 @@ public class IntegerRingElement implements ByteTree {
 		ret[0] = 1;
 		return ret;
 	}
+	
+	@Override
+	public String toString() {
+		return element.toString();
+	}
 }

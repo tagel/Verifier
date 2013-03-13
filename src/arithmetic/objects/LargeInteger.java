@@ -95,4 +95,9 @@ public class LargeInteger extends BigInteger {
 	public byte[] toByteArray() {
 		return super.toByteArray();
 	}
+	
+	@Override
+	public String toString(){
+		return String.format("%x", this);
+		}
 }

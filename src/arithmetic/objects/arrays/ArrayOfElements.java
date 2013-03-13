@@ -100,5 +100,15 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		return b;
 	}
 	
+	//TODO DELETE PRINTOUTS
+	@Override
+	public String toString(){
+		String temp = "[";
+		for (E elem : elements)
+			temp = temp + elem.toString() + ",";
+		
+		return temp+"]";
+	}
+	
 
 }
