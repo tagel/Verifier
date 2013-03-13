@@ -88,6 +88,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		if (getSize()==1) return getAt(0).toByteArray();
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(elements.size()).array();
 		byte[] b = new byte[a.length + 1];
