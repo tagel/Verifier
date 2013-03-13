@@ -261,11 +261,11 @@ public class MainVerifier {
 		ByteTree sPRG = new StringLeaf(params.getsPRG());
 		ByteTree sH = new StringLeaf(params.getSh());
 		ByteTree Ne = new BigIntLeaf(new LargeInteger(Integer.toString(params
-				.getNe())));
+				.getNe())),4);
 		ByteTree Nr = new BigIntLeaf(new LargeInteger(Integer.toString(params
-				.getNr())));
+				.getNr())),4);
 		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params
-				.getNv())));
+				.getNv())),4);
 		
 				
 		// TODO : fixed from Douglas code
