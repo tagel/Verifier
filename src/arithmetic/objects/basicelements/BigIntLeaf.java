@@ -16,6 +16,7 @@ import arithmetic.objects.ByteTree;
 public class BigIntLeaf implements ByteTree {
 
 	private LargeInteger num;
+	private int numOfBytes = -1;
 
 	/**
 	 * 
@@ -24,6 +25,11 @@ public class BigIntLeaf implements ByteTree {
 	 */
 	public BigIntLeaf(LargeInteger num) {
 		this.num = num;
+	}
+
+	public BigIntLeaf(LargeInteger num, int numOfBytes) {
+		this.num = num;
+		this.numOfBytes = numOfBytes;
 	}
 
 	public LargeInteger getNum() {
@@ -36,9 +42,16 @@ public class BigIntLeaf implements ByteTree {
 	 */
 	public byte[] toByteArray() {
 		byte[] b = num.toByteArray();
-		int numOfBytes = b.length;
+		if (numOfBytes==-1)
+			numOfBytes = b.length;
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(numOfBytes).array();
+		while (b.length < numOfBytes) {
+			byte[] d = new byte[b.length + 1];
+			System.arraycopy(b, 0, d, 1, b.length);
+			d[0] = 0;
+			b = d;
+		}
 		byte[] c = new byte[a.length + b.length];
 		System.arraycopy(a, 0, c, 0, a.length);
 		System.arraycopy(b, 0, c, a.length, b.length);
