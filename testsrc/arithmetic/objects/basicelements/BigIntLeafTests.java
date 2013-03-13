@@ -24,6 +24,11 @@ public class BigIntLeafTests {
 		bil = new BigIntLeaf(new LargeInteger("-263"));
 		Assert.assertEquals("0100000002fef9",
 				CryptoUtils.bytesToHexString(bil.toByteArray()));
+		
+		bil = new BigIntLeaf(new LargeInteger("100"), 4);
+		Assert.assertEquals("010000000400000064",
+				CryptoUtils.bytesToHexString(bil.toByteArray()));
+		
 	}
 
 	@Test
@@ -37,3 +42,4 @@ public class BigIntLeafTests {
 		Assert.assertEquals(bi, bil.getNum());
 	}
 }
+
