@@ -83,6 +83,8 @@ public class ProveShuffling extends Prover {
 		 */
 		ArrayOfElements<IGroupElement> u = permutationCommitment;
 
+		
+		//TODO ERASE PRINTOUTS
 		/*
 		 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 		 */
@@ -97,6 +99,13 @@ public class ProveShuffling extends Prover {
 		IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 		ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
 
+		System.out.println("B:"+B);
+		System.out.println("A':"+Atag);
+		System.out.println("B':"+Btag);
+		System.out.println("C':"+Ctag);
+		System.out.println("D':"+Dtag);
+		System.out.println("F:"+Ftag);
+		
 		/*
 		 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 		 */

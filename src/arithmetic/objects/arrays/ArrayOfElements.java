@@ -99,5 +99,6 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		}
 		return b;
 	}
+	
 
 }

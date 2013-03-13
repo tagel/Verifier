@@ -303,7 +303,7 @@ public class MainVerifier {
 			System.out.printf("%02X",Seed[i]);
 		System.out.println();
 		
-		for (int i =0; i<Seed.length;i++)
+		for (int i =0; i<params.getPrefixToRO().length;i++)
 			System.out.printf("%02X",params.getPrefixToRO()[i]);
 		System.out.println();
 		
