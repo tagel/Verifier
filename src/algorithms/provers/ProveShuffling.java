@@ -99,12 +99,12 @@ public class ProveShuffling extends Prover {
 		ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
 
 		//TODO ERASE PRINTOUTS
-		System.out.println("B:"+B);
+		/*System.out.println("B:"+B);
 		System.out.println("A':"+Atag);
 		System.out.println("B':"+Btag);
 		System.out.println("C':"+Ctag);
 		System.out.println("D':"+Dtag);
-		System.out.println("F':"+Ftag);
+		System.out.println("F':"+Ftag);*/
 		
 		/*
 		 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
@@ -122,13 +122,13 @@ public class ProveShuffling extends Prover {
 		
 		
 		//TODO ERASE PRINTOUTS
-		System.out.println("Ka:"+Ka);
+		/*System.out.println("Ka:"+Ka);
 		System.out.println("Kb:"+Kb);
 		System.out.println("Kc:"+Kc);
 		System.out.println("Kd:"+Kd);
 		System.out.println("Ke:"+Ke);
 		System.out.println("Kf:"+Kf);
-		System.out.println("h"+h);
+		System.out.println("h"+h);*/
 		
 		/*
 		 * 2 - computing the seed s=ROseed(...)
@@ -146,6 +146,16 @@ public class ProveShuffling extends Prover {
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 		
 		//TODO debugging
+		System.out.println("g: "+Arrays.toString(g.toByteArray()));
+		System.out.println("h: "+Arrays.toString(h.toByteArray()));
+		System.out.println("u: "+Arrays.toString(u.toByteArray()));
+		System.out.println("pk: "+Arrays.toString(pk.toByteArray()));
+		System.out.println("wInput: "+Arrays.toString(wInput.toByteArray()));
+		System.out.println("wOutput: "+Arrays.toString(wOutput.toByteArray()));
+		
+		System.out.print("the seed to byte array:");
+		System.out.println(Arrays.toString(nodeForSeed.toByteArray()));
+		
 		System.out.print("the seed:");
 		for (int i =0; i<seed.length;i++)
 			System.out.printf("%02X",seed[i]);
