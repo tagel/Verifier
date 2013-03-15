@@ -11,6 +11,9 @@ import cryptographic.primitives.CryptoUtils;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.field.PrimeOrderField;
+import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
+import arithmetic.objects.ring.Ring;
 
 /**
  * Tests for ArrayOfElements class.
@@ -74,5 +77,35 @@ public class ArrayOfElementsTests {
 		array.add(element4);
 		Assert.assertEquals("0000000002" + "010000000103" + "010000000100",
 				CryptoUtils.bytesToHexString(array.toByteArray()));
+		
+		
+		Ring ring = new Ring(new LargeInteger("263"));
+		IntegerRingElement one = new IntegerRingElement(
+				new LargeInteger("1"), ring);
+		IntegerRingElement two = new IntegerRingElement(
+				new LargeInteger("2"), ring);
+		IntegerRingElement three = new IntegerRingElement(
+				new LargeInteger("3"), ring);
+		IntegerRingElement four = new IntegerRingElement(
+				new LargeInteger("4"), ring);
+		IntegerRingElement five = new IntegerRingElement(
+				new LargeInteger("5"), ring);
+		IntegerRingElement six = new IntegerRingElement(
+				new LargeInteger("6"), ring);
+		ArrayOfElements<IntegerRingElement> arr1 = new ArrayOfElements<IntegerRingElement>();
+		ArrayOfElements<IntegerRingElement> arr2 = new ArrayOfElements<IntegerRingElement>();
+		ArrayOfElements<IntegerRingElement> arr3 = new ArrayOfElements<IntegerRingElement>();
+		arr1.add(one); arr1.add(four);
+		arr2.add(two); arr2.add(five);
+		arr3.add(three); arr3.add(six);
+		
+		ProductRingElement pre1 = new ProductRingElement(arr1);
+		ProductRingElement pre2 = new ProductRingElement(arr2);
+		ProductRingElement pre3 = new ProductRingElement(arr3);
+		
+		ArrayOfElements<ProductRingElement> arr = new ArrayOfElements<ProductRingElement>();
+		arr.add(pre1); arr.add(pre2); arr.add(pre3);
+		Assert.assertEquals("000000000200000000030100000002000101000000020002010000000200030000000003010000000200040100000002000501000000020006",
+				CryptoUtils.bytesToHexString(arr.toByteArray()));
 	}
 }
