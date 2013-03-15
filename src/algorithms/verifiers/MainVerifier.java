@@ -268,22 +268,6 @@ public class MainVerifier {
 				.getNv())),4);
 		
 				
-		// TODO : fixed from Douglas code
-//		ByteTree btW = new BigIntLeaf(new LargeInteger(Integer.toString(params
-//				.getW())));
-//
-//		ByteTree[] input = new ByteTree[9];
-//		
-//		input[0] = version_proof;
-//		input[1] = btAuxid;
-//		input[2] = btW;
-//		input[3] = Ne;
-//		input[4] = Nr;
-//		input[5] = Nv;
-//		input[6] = sGq;
-//		input[7] = sPRG;
-//		input[8] = sH;
-
 		ByteTree[] input = new ByteTree[8];
 		
 		input[0] = version_proof;
@@ -298,16 +282,6 @@ public class MainVerifier {
 		byte[] Seed = new Node(input).toByteArray();
 		params.setPrefixToRO(H.digest(Seed));
 		
-		//TODO ERASE PRINTOUTS
-		for (int i =0; i<Seed.length;i++)
-			System.out.printf("%02X",Seed[i]);
-		System.out.println();
-		
-		for (int i =0; i<params.getPrefixToRO().length;i++)
-			System.out.printf("%02X",params.getPrefixToRO()[i]);
-		System.out.println();
-		
-
 		// set random oracles:
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
 				.seedlen()));

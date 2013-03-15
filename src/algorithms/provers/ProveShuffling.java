@@ -146,12 +146,44 @@ public class ProveShuffling extends Prover {
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 		
 		//TODO debugging
-		System.out.println("g: "+Arrays.toString(g.toByteArray()));
-		System.out.println("h: "+Arrays.toString(h.toByteArray()));
-		System.out.println("u: "+Arrays.toString(u.toByteArray()));
-		System.out.println("pk: "+Arrays.toString(pk.toByteArray()));
-		System.out.println("wInput: "+Arrays.toString(wInput.toByteArray()));
-		System.out.println("wOutput: "+Arrays.toString(wOutput.toByteArray()));
+		byte[] temp0 = input[0].toByteArray();
+		byte[] temp1 = input[1].toByteArray();
+		byte[] temp2 = input[2].toByteArray();
+		byte[] temp3 = input[3].toByteArray();
+		byte[] temp4 = input[4].toByteArray();
+		byte[] temp5 = input[5].toByteArray();
+		
+		System.out.print("bt(g):");
+		for (int i =0; i<temp0.length;i++)
+			System.out.printf("%02X",temp0[i]);
+		System.out.println();
+		
+		System.out.print("bt(h):");
+		for (int i =0; i<temp1.length;i++)
+			System.out.printf("%02X",temp1[i]);
+		System.out.println();
+		
+		System.out.print("bt(u):");
+		for (int i =0; i<temp2.length;i++)
+			System.out.printf("%02X",temp2[i]);
+		System.out.println();
+		
+		System.out.print("bt(pk):");
+		for (int i =0; i<temp3.length;i++)
+			System.out.printf("%02X",temp3[i]);
+		System.out.println();
+		
+		System.out.print("bt(wInput):");
+		for (int i =0; i<temp4.length;i++)
+			System.out.printf("%02X",temp4[i]);
+		System.out.println();
+		
+		System.out.print("bt(wOutput):");
+		for (int i =0; i<temp5.length;i++)
+			System.out.printf("%02X",temp5[i]);
+		System.out.println();
+		
+		
 		
 		System.out.print("the seed to byte array:");
 		System.out.println(Arrays.toString(nodeForSeed.toByteArray()));
