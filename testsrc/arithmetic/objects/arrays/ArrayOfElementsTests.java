@@ -127,6 +127,8 @@ public class ArrayOfElementsTests {
 		ArrayOfElements<ProductGroupElement> arrr = new ArrayOfElements<ProductGroupElement>();
 		arrr.add(pre5);
 		arrr.add(pre6);
+		Assert.assertEquals("00000000020000000002000000000201000000020001010000000200040000000002010000000200030100000002000600000000020000000002010000000200020100000002000500000000020100000002000701000000020008",
+				CryptoUtils.bytesToHexString(arrr.toByteArray()));
 		System.out.println(Arrays.toString(arrr.toByteArray()));
 	}
 }

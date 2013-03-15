@@ -121,7 +121,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 
 		Node node = new Node();
 		for (int i=0; i<productsSize; i++) {
-			ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
+			Node arr = new Node();
 			for (int j=0; j<getSize(); j++) {
 				if (((ProductGroupElement) getAt(j)).getElements()==null && i==0)
 					arr.add(((ProductGroupElement) getAt(j)).getLeft());
