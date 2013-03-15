@@ -286,6 +286,12 @@ public class MainVerifier {
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
 				.seedlen()));
 		params.setROchallenge(new HashFuncPRGRandomOracle(H, params.getNv()));
+		
+		//TODO printouts
+		System.out.print("prefix to RO:");
+		for (int i =0; i<Seed.length;i++)
+			System.out.printf("%02X",Seed[i]);
+		System.out.println();
 
 	}
 
