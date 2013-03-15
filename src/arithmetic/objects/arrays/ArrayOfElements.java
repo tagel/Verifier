@@ -112,6 +112,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 
 	private byte[] ProductGroupArrayToByteArray() {
 		int productsSize = ((ProductGroupElement) getAt(0)).getSize();
+		System.out.println(productsSize);
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(productsSize).array();
 		byte[] b = new byte[a.length + 1];
@@ -122,7 +123,11 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		for (int i=0; i<productsSize; i++) {
 			ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
 			for (int j=0; j<getSize(); j++) {
-				arr.add(((ProductGroupElement) getAt(j)).getElements().getAt(i));
+				if (((ProductGroupElement) getAt(j)).getElements()==null && i==0)
+					arr.add(((ProductGroupElement) getAt(j)).getLeft());
+				else if (((ProductGroupElement) getAt(j)).getElements()==null && i==1)
+					arr.add(((ProductGroupElement) getAt(j)).getRight());
+				else arr.add(((ProductGroupElement) getAt(j)).getElements().getAt(i));
 			}
 			node.add(arr);
 		}

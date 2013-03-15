@@ -66,6 +66,8 @@ public class ProductGroupElement implements ByteTree {
 	public ArrayOfElements<IGroupElement> getElements() {
 		return arr;
 	}
+	
+	
 
 	/**
 	 * 
