@@ -172,9 +172,9 @@ public class ProveShuffling extends Prover {
 		/*
 		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 		 */
-		if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
+	/*	if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
 			return false;
-		}
+		}*/
 
 		/*
 		 * Equation 4: (C^v)*Ctag = g^Kc
