@@ -157,7 +157,43 @@ public class MainVerifierTests {
 						.getResource("exportMod3/default").getFile(),
 				Type.MIXING, "default", 1, true, true, false));
 	}
+	
+	@Test
+	public void VerifyDecModGroup3Test() throws Exception {
 
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportMod3/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportMod3/default").getFile(),
+				Type.MIXING, "default", 1, false, false, true));
+	}
+
+
+	@Test
+	public void VerifyShuffleECurveSmallTest() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("exportEcurveSmall/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportEcurveSmall/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+
+	@Test
+	public void VerifyDecEcurveSmallTest() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(
+				new MainVerifierTests.MockedLogger());
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("exportEcurveSmall/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportEcurveSmall/default").getFile(),
+				Type.MIXING, "default", 1, false, false, true));
+	}
+
+	
+	
 	@Test
 	public void VerifyShuffleECurveTest() throws Exception {
 

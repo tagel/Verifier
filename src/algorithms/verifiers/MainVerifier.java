@@ -1,7 +1,5 @@
 package algorithms.verifiers;
 
-import java.util.Arrays;
-
 import main.Logger;
 import algorithms.params.Parameters;
 import algorithms.params.Parameters.Type;
@@ -287,12 +285,7 @@ public class MainVerifier {
 				.seedlen()));
 		params.setROchallenge(new HashFuncPRGRandomOracle(H, params.getNv()));
 		
-		//TODO printouts
-		System.out.print("prefix to RO:");
-		for (int i =0; i<Seed.length;i++)
-			System.out.printf("%02X",Seed[i]);
-		System.out.println();
-
+		
 	}
 
 	public boolean ReadKeys() {

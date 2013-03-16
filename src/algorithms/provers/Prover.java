@@ -116,6 +116,7 @@ public abstract class Prover {
 		ArrayOfElements<IGroupElement> ms = m.getElements();
 		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
 		ArrayOfElements<IGroupElement> right = new ArrayOfElements<IGroupElement>();
+		
 		for (int i = 0; i < powers.getSize(); i++) {
 			left.add(g.power(powers.getAt(i).getElement()));
 			right.add((y.power(powers.getAt(i).getElement()).mult(ms.getAt(i))));
@@ -124,6 +125,72 @@ public abstract class Prover {
 		ProductGroupElement encryptedMsg = new ProductGroupElement(
 				new ProductGroupElement(left), new ProductGroupElement(right));
 		return encryptedMsg;
+	}
+
+	/**
+	 * This function verifies the equation: F^v * Ftag == ENCpk(1,-Kf) *
+	 * PI((wi)^Ke)
+	 * 
+	 * @param N
+	 *            size of the arrays
+	 * @param Gq
+	 *            The group
+	 * @param pk
+	 *            The public key
+	 * @param wOutput
+	 *            Array of output ciphertexts
+	 * @param width
+	 *            width of plaintexts and ciphertexts
+	 * @param Ftag
+	 *            ciphertext
+	 * @param Kf
+	 *            ciphertext
+	 * @param Ke
+	 *            array of N elements in Zq
+	 * @param F
+	 *            the multiplication of WInput^ei N times
+	 * @param v
+	 *            challenge computed by the Random Oracle
+	 * @return true if the equation is correct and false otherwise.
+	 */
+	protected static boolean verifyFFtag(int N, IGroup Gq,
+			ProductGroupElement pk,
+			ArrayOfElements<ProductGroupElement> wOutput, int width,
+			ProductGroupElement Ftag, ProductRingElement Kf,
+			ArrayOfElements<IntegerRingElement> Ke, ProductGroupElement F,
+			LargeInteger v) {
+		
+		ProductGroupElement leftF = (F.power(v)).mult(Ftag);
+		
+		//TODO remove
+		System.out.println("F'Fv: "+leftF);
+	
+		ProductGroupElement W = wOutput.getAt(0)
+				.power(Ke.getAt(0).getElement());
+		
+		for (int i = 1; i < N; i++) {
+			W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
+		}
+	
+		
+		// create ProductGroupElement of 1s
+		ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
+		for (int i = 0; i < width; i++) {
+			arrOfOnes.add(Gq.one());
+		}
+	
+		ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
+		
+		ProductGroupElement rigthF = encrypt(ones, Kf.neg(), pk, Gq).mult(W);
+		
+		//TODO remove
+		System.out.println("right side: "+rigthF);
+				
+		
+		if (!leftF.equals(rigthF)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -154,7 +221,6 @@ public abstract class Prover {
 	 */
 	protected static LargeInteger computeV(int Nv, byte[] challenge) {
 		/* Computation of v: */
-//		LargeInteger v = new LargeInteger(challenge); TODO remove
 		LargeInteger v = byteArrayToPosLargeInteger(challenge);
 		LargeInteger twoNv = new LargeInteger("2").power(Nv);
 		v = v.mod(twoNv);
@@ -215,19 +281,8 @@ public abstract class Prover {
 		IGroupElement A = Gq.one();
 
 		for (int i = 0; i < N; i++) {
-			// TODO fix everywhere and remove comments
 			byteArrToBigInt = prg.getNextPRGOutput(length);
-			// byteArrToBigIntPos = new byte[byteArrToBigInt.length + 1];
-			// System.arraycopy(byteArrToBigInt,0, byteArrToBigIntPos, 1,
-			// byteArrToBigInt.length);
-			// byteArrToBigIntPos[0] = 0x00;
-			// t = new LargeInteger(byteArrToBigInt);
 			t = byteArrayToPosLargeInteger(byteArrToBigInt);
-
-			// TODO debugging
-			if ((i == 0) || (i == 1))
-				System.out.println("t" + i + ": " + t);
-
 			e = t.mod(new LargeInteger("2").power(Ne));
 			A = A.mult(u.getAt(i).power(e));
 		}
@@ -253,13 +308,13 @@ public abstract class Prover {
 
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8)));
 		prg.setSeed(seed);
-		byte[] ByteArrToBigInt;
+		byte[] byteArrToBigInt;
 		LargeInteger t;
 		LargeInteger E = LargeInteger.ONE;
 
 		for (int i = 0; i < N; i++) {
-			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = new LargeInteger(ByteArrToBigInt);
+			byteArrToBigInt = prg.getNextPRGOutput(length);
+			t = byteArrayToPosLargeInteger(byteArrToBigInt);
 			LargeInteger pow = new LargeInteger("2").power(Ne);
 			LargeInteger a = t.mod(pow);
 			E = E.multiply(a);
@@ -297,12 +352,7 @@ public abstract class Prover {
 
 		for (int i = 1; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = byteArrayToPosLargeInteger(ByteArrToBigInt); // TODO fixed make sure is good
-
-			// TODO debugging
-			if ((i == 0) || (i == 1))
-				System.out.println("t" + i + ": " + t);
-
+			t = byteArrayToPosLargeInteger(ByteArrToBigInt); 
 			e = t.mod(new LargeInteger("2").power(Ne));
 			F = F.mult(wInput.getAt(i).power(e));
 		}
@@ -487,60 +537,6 @@ public abstract class Prover {
 		IGroupElement left = (D.power(v)).mult(Dtag);
 		IGroupElement right = g.power(Kd.getElement());
 		if (!left.equals(right)) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * This function verifies the equation: F^v * Ftag == ENCpk(1,-Kf) *
-	 * PI((wi)^Ke)
-	 * 
-	 * @param N
-	 *            size of the arrays
-	 * @param Gq
-	 *            The group
-	 * @param pk
-	 *            The public key
-	 * @param wOutput
-	 *            Array of output ciphertexts
-	 * @param width
-	 *            width of plaintexts and ciphertexts
-	 * @param Ftag
-	 *            ciphertext
-	 * @param Kf
-	 *            ciphertext
-	 * @param Ke
-	 *            array of N elements in Zq
-	 * @param F
-	 *            the multiplication of WInput^ei N times
-	 * @param v
-	 *            challenge computed by the Random Oracle
-	 * @return true if the equation is correct and false otherwise.
-	 */
-	protected static boolean verifyFFtag(int N, IGroup Gq,
-			ProductGroupElement pk,
-			ArrayOfElements<ProductGroupElement> wOutput, int width,
-			ProductGroupElement Ftag, ProductRingElement Kf,
-			ArrayOfElements<IntegerRingElement> Ke, ProductGroupElement F,
-			LargeInteger v) {
-		ProductGroupElement leftF = F.power(v).mult(Ftag);
-
-		ProductGroupElement W = wOutput.getAt(0)
-				.power(Ke.getAt(0).getElement());
-		for (int i = 1; i < N; i++) {
-			W = W.mult(wOutput.getAt(i).power(Ke.getAt(i).getElement()));
-		}
-
-		// create ProductGroupElement of 1s
-		ArrayOfElements<IGroupElement> arrOfOnes = new ArrayOfElements<IGroupElement>();
-		for (int i = 0; i < width; i++) {
-			arrOfOnes.add(Gq.one());
-		}
-
-		ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
-		ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq);
-		if (!leftF.equals(rigthF)) {
 			return false;
 		}
 		return true;

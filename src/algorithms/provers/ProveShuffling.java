@@ -1,6 +1,5 @@
 package algorithms.provers;
 
-import java.util.Arrays;
 
 import main.Logger;
 import arithmetic.objects.ByteTree;
@@ -152,16 +151,6 @@ public class ProveShuffling extends Prover {
 		IGroupElement D = computeD(E, B, h, N);
 		
 		
-		//TODO debugging a,f,v,e,c,d
-		
-		System.out.println("a: "+A);	
-		System.out.println("f: "+F);
-		System.out.println("v: "+v);
-		System.out.println("e: "+E);
-		System.out.println("c: "+C);
-		System.out.println("d: "+D);
-		
-
 		/*
 		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
 		 * B[-1] = h[0]
@@ -178,6 +167,8 @@ public class ProveShuffling extends Prover {
 		}
 
 
+		
+		//TODO this equality fails! fix.
 		/*
 		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 		 */
