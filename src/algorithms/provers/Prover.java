@@ -21,7 +21,6 @@ import cryptographic.primitives.RandomOracle;
  */
 public abstract class Prover {
 
-	// protected static final String GENERATORS = "generators";
 
 	/**
 	 * This function decrypts a given ciphertext back to its decryption factor
