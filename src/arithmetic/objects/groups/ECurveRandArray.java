@@ -102,7 +102,6 @@ public class ECurveRandArray {
 		for (LargeInteger i = LargeInteger.ZERO; !i.equals(q
 				.subtract(LargeInteger.ONE));) {
 			byte[] arr = prg.getNextPRGOutput(length);
-//			LargeInteger t = new LargeInteger(arr); TODO remove
 			LargeInteger t = Prover.byteArrayToPosLargeInteger(arr);
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
 			// xi is the x coordinate we want to check

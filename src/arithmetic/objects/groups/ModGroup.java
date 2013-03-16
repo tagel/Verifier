@@ -123,7 +123,6 @@ public class ModGroup implements IGroup {
 
 		for (int i = 0; i < N; i++) {
 			byte[] arr = prg.getNextPRGOutput(length);
-//			LargeInteger t = new LargeInteger(arr); TODO remove
 			LargeInteger t = Prover.byteArrayToPosLargeInteger(arr);
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(Np + Nr));
 			LargeInteger hi = LargeInteger.power(ttag,

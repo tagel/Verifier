@@ -275,7 +275,6 @@ public abstract class Prover {
 		prg.setSeed(seed);
 
 		byte[] byteArrToBigInt;
-		// byte[] byteArrToBigIntPos;
 		LargeInteger t;
 		LargeInteger e;
 		IGroupElement A = Gq.one();
