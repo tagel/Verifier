@@ -166,9 +166,7 @@ public class ProveShuffling extends Prover {
 			return false;
 		}
 
-
 		
-		//TODO this equality fails! fix.
 		/*
 		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 		 */

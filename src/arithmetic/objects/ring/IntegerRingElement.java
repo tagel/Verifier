@@ -49,6 +49,7 @@ public class IntegerRingElement implements ByteTree {
 	public IntegerRingElement neg() {
 		return new IntegerRingElement(getRing().getOrder().subtract(
 				this.getElement().mod(getRing().getOrder())), this.getRing());
+		//return new IntegerRingElement(this.getElement().negate().mod(getRing().getOrder()), this.getRing());
 	}
 
 	/**

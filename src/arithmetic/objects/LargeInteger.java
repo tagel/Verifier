@@ -97,6 +97,11 @@ public class LargeInteger extends BigInteger {
 	}
 	
 	@Override
+	public LargeInteger negate() {
+		return new LargeInteger(super.negate());
+	}
+	
+	@Override
 	public String toString(){
 		return String.format("%x", this);
 		}
