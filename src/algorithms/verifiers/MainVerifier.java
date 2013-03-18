@@ -67,7 +67,7 @@ public class MainVerifier {
 	 */
 	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec) {
-		
+
 		logger.sendLog("Start verifing prove of " + type + " with:",
 				Logger.Severity.NORMAL);
 		logger.sendLog("	Proof of shuffling commitment: " + getOnOrOff(posc),
@@ -87,7 +87,7 @@ public class MainVerifier {
 		if (!fillParamsFromXmlAndDir(params) || !checkFilledParams()) {
 			return false;
 		}
-		
+
 		// *******Section 3 in the Algorithm*********
 		// derive the objects: IGroup Gq, Ring Zq, Hashfunction H, and PRG.
 		if (!deriveSetsAndObjects()) {
@@ -103,8 +103,9 @@ public class MainVerifier {
 		if (!ReadKeys()) {
 			return false;
 		}
-		logger.sendLog("Verification of keys succeeded.", Logger.Severity.NORMAL);
-		
+		logger.sendLog("Verification of keys succeeded.",
+				Logger.Severity.NORMAL);
+
 		// *******Section 6 in the Algorithm*********
 		if (!ReadLists()) {
 			return false;
@@ -218,7 +219,7 @@ public class MainVerifier {
 		if (!params.fillFromXML()) {
 			return false;
 		}
-		
+
 		// *****Section 2 in the algorithm*****
 		// fill parameters from proof directory
 		if (!params.fillFromDirectory()) {
@@ -259,15 +260,14 @@ public class MainVerifier {
 		ByteTree sPRG = new StringLeaf(params.getsPRG());
 		ByteTree sH = new StringLeaf(params.getSh());
 		ByteTree Ne = new BigIntLeaf(new LargeInteger(Integer.toString(params
-				.getNe())),4);
+				.getNe())), 4);
 		ByteTree Nr = new BigIntLeaf(new LargeInteger(Integer.toString(params
-				.getNr())),4);
+				.getNr())), 4);
 		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params
-				.getNv())),4);
-		
-				
+				.getNv())), 4);
+
 		ByteTree[] input = new ByteTree[8];
-		
+
 		input[0] = version_proof;
 		input[1] = btAuxid;
 		input[2] = Nr;
@@ -276,16 +276,15 @@ public class MainVerifier {
 		input[5] = sPRG;
 		input[6] = sGq;
 		input[7] = sH;
-		
+
 		byte[] Seed = new Node(input).toByteArray();
 		params.setPrefixToRO(H.digest(Seed));
-		
+
 		// set random oracles:
 		params.setROseed(new HashFuncPRGRandomOracle(H, params.getPrg()
 				.seedlen()));
 		params.setROchallenge(new HashFuncPRGRandomOracle(H, params.getNv()));
-		
-		
+
 	}
 
 	public boolean ReadKeys() {
@@ -305,7 +304,6 @@ public class MainVerifier {
 		// extract y and g from the public key
 		IGroupElement y = pk.getElements().getAt(1);
 		IGroupElement g = pk.getElements().getAt(0);
-		
 
 		params.setFullPublicKey(pk);
 
@@ -359,8 +357,7 @@ public class MainVerifier {
 			yi = params.getMixPublicKey().getAt(i);
 
 			if ((xi != null) && !(yi.equals(g.power(xi.getElement())))) {
-				logger.sendLog(
-						"Verification of keys failed.",
+				logger.sendLog("Verification of keys failed.",
 						Logger.Severity.ERROR);
 				return false;
 			}
@@ -384,6 +381,7 @@ public class MainVerifier {
 		params.setCiphertexts(ciphertexts);
 		params.setN(ciphertexts.getSize());
 
+
 		// section 6b of the Algorithm - read shuffled ciphertexts
 		// if the type == mixing, read the file Ciphertexts_threshold from
 		// Directory/proofs
@@ -396,7 +394,8 @@ public class MainVerifier {
 							+ (params.getThreshold() < 10 ? "0" : EMPTY_STRING)
 							+ params.getThreshold() + BT_EXT);
 			if (file == null) {
-				logger.sendLog("Shuffled ciphertexts file not found.", Logger.Severity.ERROR);
+				logger.sendLog("Shuffled ciphertexts file not found.",
+						Logger.Severity.ERROR);
 				return false;
 			}
 		}
@@ -405,15 +404,18 @@ public class MainVerifier {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
 					SHUFFCT_FILE_PATH);
 			if (file == null) {
-				logger.sendLog("Shuffled ciphertexts file not found.", Logger.Severity.ERROR);
+				logger.sendLog("Shuffled ciphertexts file not found.",
+						Logger.Severity.ERROR);
 				return false;
 			}
 		}
 
+
 		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 		if (ShuffledCiphertexts.getSize() != params.getN()) {
-			logger.sendLog("Shuffled ciphertexts array is in the wrong size.", Logger.Severity.ERROR);
+			logger.sendLog("Shuffled ciphertexts array is in the wrong size.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -425,7 +427,8 @@ public class MainVerifier {
 			file = ElementsExtractor.btFromFile(params.getDirectory(),
 					PLAIN_TEXTS_FILE_PATH);
 			if (file == null) {
-				logger.sendLog("Plaintexts file not found.", Logger.Severity.ERROR);
+				logger.sendLog("Plaintexts file not found.",
+						Logger.Severity.ERROR);
 				return false;
 			}
 
@@ -433,7 +436,8 @@ public class MainVerifier {
 					.createArrayOfPlaintexts(file, params.getGq(),
 							params.getW());
 			if (plaintexts.getSize() != params.getN()) {
-				logger.sendLog("Plaintexts array is in the wrong size.", Logger.Severity.ERROR);
+				logger.sendLog("Plaintexts array is in the wrong size.",
+						Logger.Severity.ERROR);
 				return false;
 			}
 			params.setPlaintexts(plaintexts);
@@ -449,4 +453,13 @@ public class MainVerifier {
 	public Parameters getParams() {
 		return params;
 	}
+
+	// TODO printout method - delete?
+	String bytArrayToHex(byte[] a) {
+		StringBuilder sb = new StringBuilder();
+		for (byte b : a)
+			sb.append(String.format("%02x", b & 0xff));
+		return sb.toString();
+	}
+
 }

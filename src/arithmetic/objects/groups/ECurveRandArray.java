@@ -67,7 +67,7 @@ public class ECurveRandArray {
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = q.bitLength();
 
-		int length = 8 * ((int) Math.ceil((double) (nr + nq / 8)));
+		int length = 8 * ((int) Math.ceil((double) (nr + nq / 8.0)));
 		prg.setSeed(seed);
 
 		/*

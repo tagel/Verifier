@@ -96,6 +96,10 @@ public class ProveShuffling extends Prover {
 		IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
 		IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 		ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
+		
+		
+		//TODO printouts
+		System.out.println("h : "+h);
 
 		
 		/*
@@ -112,7 +116,6 @@ public class ProveShuffling extends Prover {
 				.getAt(4));
 		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 		
-		
 				
 		/*
 		 * 2 - computing the seed s=ROseed(...)
@@ -128,6 +131,16 @@ public class ProveShuffling extends Prover {
 		input[5] = wOutput;
 		Node nodeForSeed = new Node(input);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
+		
+		//TODO
+		System.out.println("bt(g) : "+bytArrayToHex(input[0].toByteArray()));
+		System.out.println("bt(h) : "+bytArrayToHex(input[1].toByteArray()));
+		System.out.println("bt(u) : "+bytArrayToHex(input[2].toByteArray()));
+		System.out.println("bt(pk) : "+bytArrayToHex(input[3].toByteArray()));
+		System.out.println("bt(w) : "+bytArrayToHex(input[4].toByteArray()));
+		System.out.println("bt(w') : "+bytArrayToHex(input[5].toByteArray()));
+		
+		
 		
 		/*
 		 * 3 - Computation of A and F
@@ -193,4 +206,14 @@ public class ProveShuffling extends Prover {
 				Logger.Severity.NORMAL);
 		return true;
 	}
+	
+	
+	static // TODO printout method - delete?
+		String bytArrayToHex(byte[] a) {
+			StringBuilder sb = new StringBuilder();
+			for (byte b : a)
+				sb.append(String.format("%02x", b & 0xff));
+			return sb.toString();
+		}
+
 }

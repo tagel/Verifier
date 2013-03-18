@@ -190,4 +190,9 @@ public class ECurveGroupElement implements IGroupElement {
 		pointNode.add(element.getY());
 		return pointNode.toByteArray();
 	}
+	
+	@Override
+	public String toString() {
+		return element.toString();
+	}
 }
