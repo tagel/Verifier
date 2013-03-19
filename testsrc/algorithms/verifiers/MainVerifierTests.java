@@ -177,7 +177,7 @@ public class MainVerifierTests {
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
 				.getResource("exportModWidth3/protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("exportModWidth3/default").getFile(),
-				Type.MIXING, "default", 1, true, true, false));
+				Type.MIXING, "default", 3, true, true, false));
 	}
 	
 	
