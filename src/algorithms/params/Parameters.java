@@ -82,6 +82,8 @@ public class Parameters {
 	private ArrayOfElements<ProductGroupElement> ShuffledCiphertexts; // V
 	private ArrayOfElements<ProductGroupElement> plaintexts;// V
 	private int N; // size of the arrays
+	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> arrOfCiphertexts;
+		
 
 	// MIX -- The parameters of each party
 	private ArrayOfElements<IGroupElement> mixPublicKey;// Used in Keys Verifier
@@ -248,6 +250,15 @@ public class Parameters {
 		if (next.equals(DECRYPTION))
 			return Type.DECRYPTION;
 		return null;
+	}
+	
+	public ArrayOfElements<ArrayOfElements<ProductGroupElement>> getArrOfCiphertexts() {
+		return arrOfCiphertexts;
+	}
+
+	public void setArrOfCiphertexts(
+			ArrayOfElements<ArrayOfElements<ProductGroupElement>> arrOfCiphertexts) {
+		this.arrOfCiphertexts = arrOfCiphertexts;
 	}
 
 	public RandomOracle getROseed() {

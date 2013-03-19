@@ -114,6 +114,21 @@ public class ProveShuffling extends Prover {
 				.getAt(4));
 		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 
+		//TODO printouts
+		System.out.println("B : "+B);
+		System.out.println("A' : "+Atag);
+		System.out.println("B' : "+Btag);
+		System.out.println("C': "+Ctag);
+		System.out.println("D' : "+Dtag);
+		System.out.println("F' : "+Ftag);
+		
+		System.out.println("Ka : "+Ka);
+		System.out.println("Kb : "+Kb);
+		System.out.println("Kc : "+Kc);
+		System.out.println("Kd : "+Kd);
+		System.out.println("Ke : "+Ke);
+		System.out.println("Kf : "+Kf);
+		
 		/*
 		 * 2 - computing the seed s=ROseed(...)
 		 */
@@ -152,6 +167,15 @@ public class ProveShuffling extends Prover {
 		LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(E, B, h, N);
+		
+		//TODO printouts
+		System.out.println("A : "+A);
+		System.out.println("F : "+F);
+		System.out.println("v : "+ v);
+		System.out.println("C : "+ C);
+		System.out.println("D : "+D);
+		System.out.println("w : "+wInput);
+		System.out.println("w' : "+wOutput);
 
 		/*
 		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
@@ -190,7 +214,6 @@ public class ProveShuffling extends Prover {
 		}
 
 		/* All equalities exist. */
-		logger.sendLog("Proof of shuffling succeeded", Logger.Severity.NORMAL);
 		return true;
 	}
 

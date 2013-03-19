@@ -117,9 +117,6 @@ public class ECurveRandArray {
 				element = new ECurveGroupElement(point, G);
 				RandArray.add(element);
 				
-				//TODO printouts
-				System.out.println("t"+counter+" : "+t);
-
 				counter++;
 				// We count how many elements we added to the array. We need N elements
 				if (counter == N)

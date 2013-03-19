@@ -135,6 +135,9 @@ public class VerShuffling {
 						return false;
 					}
 				}
+				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
+				//TODO remove printout
+				System.out.println("Proof of shuffling of party " + i +" succeeded");
 			}
 			return true;
 
@@ -211,8 +214,14 @@ public class VerShuffling {
 						return false;
 					}
 				}
+				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
+				//TODO remove printout
+				System.out.println("Proof of shuffling of party " + i +" succeeded");
 			}
 		}
+		logger.sendLog(
+				"Finished verifying shuffling",
+				Logger.Severity.NORMAL);
 		return true;
 	}
 
