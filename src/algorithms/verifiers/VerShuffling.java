@@ -39,14 +39,11 @@ public class VerShuffling {
 	private static final String MAXCIPH = "maxciph";
 	private static final String CCPOS_REPLY = "CCPoSReply";
 	private static final String CCPOS_COMMITMENT = "CCPoSCommitment";
-	private static final String CIPHERTEXTS = "Ciphertexts";
 	private static final String BT_FILE_EXT = ".bt";
 	private static final String KEEP_LIST = "KeepList";
 	private static final String PROOFS = "proofs";
-	private static ArrayOfElements<ProductGroupElement> Liminus1;
-	private static ArrayOfElements<ProductGroupElement> Li;
-	private static ArrayOfElements<IGroupElement> PermutationCommitment;
 
+	private static ArrayOfElements<IGroupElement> PermutationCommitment;
 	private static Node PoSCommitment;
 	private static Node PoSReply;
 	private static Node PoSCCommitment;
@@ -85,8 +82,11 @@ public class VerShuffling {
 	static public boolean verify(RandomOracle ROSeed, RandomOracle ROChallenge,
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,
 			int nr, int nv, PseudoRandomGenerator prg, IGroup Gq,
-			ProductGroupElement pk, ArrayOfElements<ProductGroupElement> L0,
-			ArrayOfElements<ProductGroupElement> Llambda, boolean posc,
+			ProductGroupElement pk, 
+			//ArrayOfElements<ProductGroupElement> L0,
+			//ArrayOfElements<ProductGroupElement> Llambda, 
+			ArrayOfElements<ArrayOfElements<ProductGroupElement>> L,
+			boolean posc,
 			boolean ccpos, IRing<IntegerRingElement> Zq, int width,
 			ArrayOfElements<IGroupElement> h, Logger logger1) {
 
@@ -99,8 +99,6 @@ public class VerShuffling {
 		// (otherwise, we use only the relevant ones).
 		if (maxciph == -1) {
 
-			Liminus1 = L0;
-
 			// read lists of ciphertexts from 1 to lambda.
 			boolean retValue;
 			for (int i = 1; i <= lambda; i++) {
@@ -110,30 +108,17 @@ public class VerShuffling {
 					retValue = false;
 				}
 
-				if (i == lambda) {
-					// Here we send the Llambda to the prover.
-					retValue = retValue
-							&& ProveShuffling.prove(ROSeed, ROChallenge,
-									prefixToRO, N, ne, nr, nv, prg, Gq, pk, Li,
-									Llambda, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h, logger);
-				} else {
-					retValue = retValue
-							&& ProveShuffling.prove(ROSeed, ROChallenge,
-									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
-									Liminus1, Li, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h, logger);
-				}
+				retValue = retValue
+						&& ProveShuffling.prove(ROSeed, ROChallenge,
+								prefixToRO, N, ne, nr, nv, prg, Gq, pk,
+								L.getAt(i-1), L.getAt(i), width, PermutationCommitment,
+								PoSCommitment, PoSReply, h, logger);
 
 				// If !retValue, it means that reading the elements
 				// failed or the prover rejected
 				if (!retValue) {
-					if (!compareLs(lambda, Llambda, i)) {
-						logger.sendLog(
-								"Reading the elements failed, the prover rejected or L_i doesn't equal to L_i-1, exiting.",
-								Logger.Severity.ERROR);
+					if (!compareCiphertextsArrays(L.getAt(i-1), L.getAt(i)))
 						return false;
-					}
 				}
 				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
 				//TODO remove printout
@@ -183,36 +168,21 @@ public class VerShuffling {
 				PermutationCommitment = shrinkPrmutatuonCommitment(maxciph);
 
 				// Step 4 and 5 of the algorithm
-				Liminus1 = L0; // initialize the list
-
-				// read lists of ciphertexts until i=lambda.
 				if (!readFilesCCPos(i, directory, Gq, Zq, N, width)) {
 					retValue = false;
 				}
 
-				if (i == lambda) { // then send the Llambda to the prover
-					retValue = retValue
-							&& ProveCCPoS.prove(ROSeed, ROChallenge,
-									prefixToRO, N, ne, nr, nv, prg, Gq, pk, Li,
-									Llambda, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h, logger);
-				} else {
-					retValue = retValue
-							&& ProveCCPoS.prove(ROSeed, ROChallenge,
-									prefixToRO, N, ne, nr, nv, prg, Gq, pk,
-									Liminus1, Li, width, PermutationCommitment,
-									PoSCommitment, PoSReply, h, logger);
-				}
+				retValue = retValue
+						&& ProveCCPoS.prove(ROSeed, ROChallenge,
+								prefixToRO, N, ne, nr, nv, prg, Gq, pk,
+								L.getAt(i-1), L.getAt(i), width, PermutationCommitment,
+								PoSCommitment, PoSReply, h, logger);
 
 				// If !retValue, it means that reading the elements
 				// failed or the prover rejected
 				if (!retValue) {
-					if (!compareLs(lambda, Llambda, i)) {
-						logger.sendLog(
-								"Reading the elements failed, the prover rejected or L_i doesn't equal to L_i-1, exiting.",
-								Logger.Severity.ERROR);
+					if (!compareCiphertextsArrays(L.getAt(i-1), L.getAt(i)))
 						return false;
-					}
 				}
 				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
 				//TODO remove printout
@@ -247,18 +217,6 @@ public class VerShuffling {
 			}
 		}
 		return tempArr;
-	}
-
-	private static boolean compareLs(int lambda,
-			ArrayOfElements<ProductGroupElement> Llambda, int i) {
-		if (i == lambda) {
-			if (!compareCiphertextsArrays(Llambda, Li)) {
-				return false;
-			}
-		} else if (!compareCiphertextsArrays(Li, Liminus1)) {
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -375,16 +333,7 @@ public class VerShuffling {
 		return true;
 	}
 
-	/**
-	 * @param i
-	 *            the number to change
-	 * @return the number as string, if i < 10, add "0" to the begining of the
-	 *         string
-	 */
-	private static String getNumStringForFileName(int i) {
-		return (i < 10 ? "0" : EMPTY_STRING) + i;
-	}
-
+	
 	/**
 	 * This method reads the relevant files for the i'th mix server. It sets the
 	 * global fields, and the main function will send them to the Shuffling of
@@ -405,13 +354,6 @@ public class VerShuffling {
 			IRing<IntegerRingElement> Zq, int N, int width) {
 
 		// read the files as byte[]
-		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
-				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
-		if (bLi == null) {
-			logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
-			return false;
-		}
-
 		byte[] bCCPoSCommitment = ElementsExtractor.btFromFile(directory,
 				PROOFS, CCPOS_COMMITMENT + getNumStringForFileName(i)
 						+ BT_FILE_EXT);
@@ -429,14 +371,6 @@ public class VerShuffling {
 		}
 
 		// create the objects from the byte[] and set the global fields
-
-		if (i != 1) { // If i == 1 then Liminus1 = L0, as in the main loop
-			Liminus1 = Li;
-		}
-		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq, width);
-		if (Li.getSize() != N) {
-			return false;
-		}
 
 		// first create generic nodes, then create the appropriate types from
 		// the byte[] data according to the prover Algorithm
@@ -490,13 +424,6 @@ public class VerShuffling {
 			IRing<IntegerRingElement> Zq, int N, int width) {
 
 		// read the files as byte[].
-		byte[] bLi = ElementsExtractor.btFromFile(directory, PROOFS,
-				CIPHERTEXTS + getNumStringForFileName(i) + BT_FILE_EXT);
-		if (bLi == null) {
-			logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
-			return false;
-		}
-		
 
 		byte[] bPoSCommitment = ElementsExtractor.btFromFile(directory, PROOFS,
 				POS_COMMITMENT + getNumStringForFileName(i) + BT_FILE_EXT);
@@ -528,16 +455,6 @@ public class VerShuffling {
 		 */
 		PermutationCommitment = ArrayGenerators.createGroupElementArray(
 				bPermutationCommitment, Gq);
-
-		// If i == 1 it means that Liminus1 = L0, as we did in the main loop
-		if (i != 1) {
-			Liminus1 = Li;
-		}
-
-		Li = ArrayGenerators.createArrayOfCiphertexts(bLi, Gq, width);
-		if (Li.getSize() != N) {
-			return false;
-		}
 
 		// first create the nodes like a generic one, and then create the
 		// appropriate types from the byte[] data, according to prover Algorithm
@@ -651,4 +568,15 @@ public class VerShuffling {
 				sb.append(String.format("%02x", b & 0xff));
 			return sb.toString();
 		}
+		
+		/**
+		 * @param i
+		 *            the number to change
+		 * @return the number as string, if i < 10, add "0" to the begining of the
+		 *         string
+		 */
+		private static String getNumStringForFileName(int i) {
+			return (i < 10 ? "0" : EMPTY_STRING) + i;
+		}
+
 }

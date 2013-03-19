@@ -78,8 +78,6 @@ public class Parameters {
 	private int widthExp;
 
 	// parameters from lists
-	private ArrayOfElements<ProductGroupElement> ciphertexts;// V
-	private ArrayOfElements<ProductGroupElement> ShuffledCiphertexts; // V
 	private ArrayOfElements<ProductGroupElement> plaintexts;// V
 	private int N; // size of the arrays
 	private ArrayOfElements<ArrayOfElements<ProductGroupElement>> arrOfCiphertexts;
@@ -477,32 +475,8 @@ public class Parameters {
 		this.fullPublicKey = fullPublicKey;
 	}
 
-	public void setCiphertexts(ArrayOfElements<ProductGroupElement> ciphertexts) {
-		this.ciphertexts = ciphertexts;
-	}
-
-	public void setShuffledCiphertexts(
-			ArrayOfElements<ProductGroupElement> shuffledCiphertexts) {
-		ShuffledCiphertexts = shuffledCiphertexts;
-	}
-
 	public void setPlaintexts(ArrayOfElements<ProductGroupElement> plaintexts2) {
 		this.plaintexts = plaintexts2;
-	}
-
-	/**
-	 * @return the input ciphertexts
-	 */
-	public ArrayOfElements<ProductGroupElement> getCiphertexts() {
-		return ciphertexts;
-	}
-
-	/**
-	 * @return the re-randomized and permuted ciphertexts (for the shuffling
-	 *         session)
-	 */
-	public ArrayOfElements<ProductGroupElement> getShuffledCiphertexts() {
-		return ShuffledCiphertexts;
 	}
 
 	/**

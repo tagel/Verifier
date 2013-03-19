@@ -61,7 +61,7 @@ public class MainVerifierTests {
 		mainVer.createPrefixToRo();
 		byte[] prefix = params.getPrefixToRO();
 		Assert.assertEquals(CryptoUtils.bytesToHexString(prefix),
-				"992c7e81390dbd441e9e86004521efbb03d90b1a63d66413ed3d0323ec334334");
+				"26c5c23d1cfb4d192b4d04fbb8171fc0e2a710cb4a28fbe3d0df06ff490507fb");
 	}
 
 	@Test
@@ -89,7 +89,6 @@ public class MainVerifierTests {
 		Assert.assertTrue(mainVer.ReadKeys());
 		Assert.assertNotNull(params.getMixPublicKey());
 		Assert.assertEquals(2, params.getMixPublicKey().getSize());
-		Assert.assertNull(params.getShuffledCiphertexts());
 		// TODO - test case secret key does exits
 		Assert.assertNull(params.getMixSecretKey().getAt(0));
 		Assert.assertTrue(params.getProtVersion().equals(params.getVersion()));

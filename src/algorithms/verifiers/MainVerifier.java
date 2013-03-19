@@ -162,9 +162,9 @@ public class MainVerifier {
 	private boolean runVerDec(Type type) {
 		ArrayOfElements<ProductGroupElement> l;
 		if (Type.MIXING.equals(type)) {
-			l = params.getShuffledCiphertexts();
+			l = params.getArrOfCiphertexts().getAt(params.getThreshold());
 		} else {
-			l = params.getCiphertexts();
+			l = params.getArrOfCiphertexts().getAt(0);
 		}
 
 		return VerDec.verify(params.getROseed(), params.getROchallenge(),
@@ -183,7 +183,8 @@ public class MainVerifier {
 				params.getThreshold(), params.getN(), params.getNe(),
 				params.getNr(), params.getNe(), params.getPrg(),
 				params.getGq(), params.getFullPublicKey(),
-				params.getCiphertexts(), params.getShuffledCiphertexts(),
+				//params.getCiphertexts(), params.getShuffledCiphertexts(),
+				params.getArrOfCiphertexts(),
 				params.isPosc(), params.isCcpos(), params.getZq(),
 				params.getW(), params.getRandArray(), logger);
 	}
@@ -367,6 +368,39 @@ public class MainVerifier {
 
 	// Part 6 of the algorithm
 	public boolean ReadLists() {
+		byte[] file;
+
+		if (!readArrayOfCiphertexts())
+			return false;
+
+		// Section 6c of the algorithm
+		if (params.getType().equals(Type.MIXING)
+				|| params.getType().equals(Type.DECRYPTION)) {
+			file = ElementsExtractor.btFromFile(params.getDirectory(),
+					PLAIN_TEXTS_FILE_PATH);
+			if (file == null) {
+				logger.sendLog("Plaintexts file not found.",
+						Logger.Severity.ERROR);
+				return false;
+			}
+
+			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
+					.createArrayOfPlaintexts(file, params.getGq(),
+							params.getW());
+			if (plaintexts.getSize() != params.getN()) {
+				logger.sendLog("Plaintexts array is in the wrong size.",
+						Logger.Severity.ERROR);
+				return false;
+			}
+			params.setPlaintexts(plaintexts);
+		}
+		return true;
+	}
+
+	private boolean readArrayOfCiphertexts() {
+		
+		ArrayOfElements<ArrayOfElements<ProductGroupElement>> Arr = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
+		
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				CIPHERTEXTS_FILE_NAME + BT_EXT);
@@ -378,10 +412,32 @@ public class MainVerifier {
 		ArrayOfElements<ProductGroupElement> ciphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 
-		params.setCiphertexts(ciphertexts);
+		//Puts the ciphertexts at Arr[0]
+		Arr.add(ciphertexts);
+		//params.setCiphertexts(ciphertexts);
 		params.setN(ciphertexts.getSize());
-
-
+		
+		ArrayOfElements<ProductGroupElement> Li;
+		
+		for (int i=1; i<params.getThreshold(); i++) {
+			
+			byte[] bLi = ElementsExtractor.btFromFile(params.getDirectory(), PROOFS,
+					CIPHERTEXTS_FILE_NAME + getNumStringForFileName(i) + BT_EXT);
+			if (bLi == null) {
+				logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
+				return false;
+			}
+			
+			Li = ArrayGenerators.createArrayOfCiphertexts(bLi, params.getGq(), params.getW());
+			if (Li.getSize() != params.getN()) {
+				return false;
+			}
+			
+			//put the ciphertexts at Arr[i]
+			Arr.add(Li);
+			
+		}
+		
 		// section 6b of the Algorithm - read shuffled ciphertexts
 		// if the type == mixing, read the file Ciphertexts_threshold from
 		// Directory/proofs
@@ -410,7 +466,6 @@ public class MainVerifier {
 			}
 		}
 
-
 		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 		if (ShuffledCiphertexts.getSize() != params.getN()) {
@@ -419,30 +474,11 @@ public class MainVerifier {
 			return false;
 		}
 
-		params.setShuffledCiphertexts(ShuffledCiphertexts);
-
-		// Section 6c of the algorithm
-		if (params.getType().equals(Type.MIXING)
-				|| params.getType().equals(Type.DECRYPTION)) {
-			file = ElementsExtractor.btFromFile(params.getDirectory(),
-					PLAIN_TEXTS_FILE_PATH);
-			if (file == null) {
-				logger.sendLog("Plaintexts file not found.",
-						Logger.Severity.ERROR);
-				return false;
-			}
-
-			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
-					.createArrayOfPlaintexts(file, params.getGq(),
-							params.getW());
-			if (plaintexts.getSize() != params.getN()) {
-				logger.sendLog("Plaintexts array is in the wrong size.",
-						Logger.Severity.ERROR);
-				return false;
-			}
-			params.setPlaintexts(plaintexts);
-		}
+		//Add L_lambda at Arr[lambda]
+		Arr.add(ShuffledCiphertexts);
+		params.setArrOfCiphertexts(Arr);
 		return true;
+
 	}
 
 	/**
@@ -461,5 +497,16 @@ public class MainVerifier {
 			sb.append(String.format("%02x", b & 0xff));
 		return sb.toString();
 	}
+	
+	/**
+	 * @param i
+	 *            the number to change
+	 * @return the number as string, if i < 10, add "0" to the begining of the
+	 *         string
+	 */
+	private static String getNumStringForFileName(int i) {
+		return (i < 10 ? "0" : EMPTY_STRING) + i;
+	}
+
 
 }
