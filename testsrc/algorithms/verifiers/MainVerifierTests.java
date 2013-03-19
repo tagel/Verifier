@@ -171,6 +171,18 @@ public class MainVerifierTests {
 
 
 	@Test
+	public void VerifyShuffleModWidth3lTest() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("exportModWidth3/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportModWidth3/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	
+	
+	@Test
 	public void VerifyShuffleECurveSmallTest() throws Exception {
 
 		MainVerifier mainVer = new MainVerifier(logger);
