@@ -56,13 +56,13 @@ public class ECurveRandArray {
 	 * @param G
 	 *            - the group
 	 */
-	public ECurveRandArray(LargeInteger q, int N, PseudoRandomGenerator prg,
+	public ECurveRandArray(int N, PseudoRandomGenerator prg,
 			byte[] seed, int nr, LargeInteger a, LargeInteger b, ECurveGroup G) {
 
 		this.a = a;
 		this.b = b;
-		this.q = q;
-
+		this.q = G.getFieldOrder();
+		
 		field = new PrimeOrderField(q);
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = q.bitLength();
@@ -70,17 +70,8 @@ public class ECurveRandArray {
 		int length = 8 * ((int) Math.ceil((double) (nr + nq / 8.0)));
 		prg.setSeed(seed);
 
-		/*
-		 * Prepare the ground for running ressol algorithm: We compute all of
-		 * the things we can compute only once, like the powers Q and s, the the
-		 * least quadratic non residue (mod q). We do this here because the
-		 * complexity of each function can be finally O(q).
-		 */
-		// Define Q and s to be p-1=Q2^s when Q is odd
-		findPowers();
-
-		// Define b as a the least quadratic non residual
-		findLeastQNR();
+		setEnv();
+		
 
 		/*
 		 * Create the random array - first we generate numbers using prg, and
@@ -101,9 +92,11 @@ public class ECurveRandArray {
 		// elements
 		for (LargeInteger i = LargeInteger.ZERO; !i.equals(q
 				.subtract(LargeInteger.ONE));) {
+			
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = Prover.byteArrayToPosLargeInteger(arr);
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
+			
 			// xi is the x coordinate we want to check
 			LargeInteger xValue = ttag.mod(q);
 
@@ -136,6 +129,21 @@ public class ECurveRandArray {
 		Rand = RandArray;
 	}
 
+	private void setEnv() {
+		/*
+		 * Prepare the ground for running ressol algorithm: We compute all of
+		 * the things we can compute only once, like the powers Q and s, the the
+		 * least quadratic non residue (mod q). We do this here because the
+		 * complexity of each function can be finally O(q).
+		 */
+		// Define Q and s to be p-1=Q2^s when Q is odd
+		findPowers();
+
+		// Define b as a the least quadratic non residual
+		findLeastQNR();
+		
+	}
+
 	/**
 	 * 
 	 * @param xi
@@ -146,7 +154,7 @@ public class ECurveRandArray {
 		LargeInteger first, second, third, retval;
 		first = xi.modPow(new LargeInteger("3"), q);
 		second = (xi.multiply(a)).mod(q);
-		third = b.add(first).add(second);
+		third = (b.mod(q)).add(first).add(second);
 		retval = third.mod(q);
 		return retval;
 	}
@@ -199,7 +207,7 @@ public class ECurveRandArray {
 			}
 
 			retVal[0] = r;
-			retVal[1] = LargeInteger.ZERO.subtract(r).add(q); // -r mod p
+			retVal[1] = q.subtract(r); // -r mod p
 
 			// return the smallest root
 			return retVal[0].min(retVal[1]);
@@ -232,9 +240,7 @@ public class ECurveRandArray {
 
 	/**
 	 * 
-	 * @param p
-	 *            - a prime number
-	 * @return the first quadratic non residue of p
+	 * @return the first quadratic non residue of q
 	 */
 	public void findLeastQNR() {
 		LargeInteger retVal = LargeInteger.ONE;

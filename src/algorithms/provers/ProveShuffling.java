@@ -133,12 +133,7 @@ public class ProveShuffling extends Prover {
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 		
 		//TODO
-		System.out.println("bt(g) : "+bytArrayToHex(input[0].toByteArray()));
 		System.out.println("bt(h) : "+bytArrayToHex(input[1].toByteArray()));
-		System.out.println("bt(u) : "+bytArrayToHex(input[2].toByteArray()));
-		System.out.println("bt(pk) : "+bytArrayToHex(input[3].toByteArray()));
-		System.out.println("bt(w) : "+bytArrayToHex(input[4].toByteArray()));
-		System.out.println("bt(w') : "+bytArrayToHex(input[5].toByteArray()));
 		
 		
 		

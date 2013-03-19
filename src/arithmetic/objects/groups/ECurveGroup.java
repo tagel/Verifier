@@ -154,7 +154,7 @@ public class ECurveGroup implements IGroup {
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N,
 			PseudoRandomGenerator prg, byte[] seed, int nr) {
-		ECurveRandArray arr = new ECurveRandArray(this.p, N, prg, seed, nr, a,
+		ECurveRandArray arr = new ECurveRandArray(N, prg, seed, nr, a,
 				b, this);
 		return arr.getRand();
 	}

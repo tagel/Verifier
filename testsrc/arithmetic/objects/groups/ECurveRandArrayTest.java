@@ -13,6 +13,7 @@ import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
+import arithmetic.objects.basicelements.BigIntLeaf;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.basicelements.StringLeaf;
 import cryptographic.primitives.HashFuncPRG;
@@ -24,8 +25,9 @@ import cryptographic.primitives.SHA2HashFunction;
 
 /**
  * Tests for the ECurveRandArray class.
+ * 
  * @author Sofi
- *
+ * 
  */
 public class ECurveRandArrayTest {
 
@@ -113,7 +115,8 @@ public class ECurveRandArrayTest {
 		Parameters params = new Parameters(getClass().getClassLoader()
 				.getResource("protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("export/default").getFile(),
-				null, "auxsid", 1, false, false, false, new MainVerifierTests.MockedLogger());
+				null, "auxsid", 1, false, false, false,
+				new MainVerifierTests.MockedLogger());
 		Assert.assertNotNull("res is not in the classpath - ask Daniel",
 				getClass().getClassLoader()
 						.getResource("export/default/proofs"));
@@ -180,6 +183,70 @@ public class ECurveRandArrayTest {
 
 		Assert.assertTrue(check1.mult(check1.mult(check1.mult(check1))).equals(
 				(check1.mult(check1)).mult(check1.mult(check1))));
+
+	}
+
+	@Test
+	public void TestSmallEcurve() {
+		int nr = 100;
+		IGroup Gq = ElementsExtractor
+				.unmarshal("ECqPGroup(P-256)::0000000002010000001c766572696669636174756d2e61726974686d2e4543715047726f75700100000005502d323536");
+		PseudoRandomGenerator prg = new HashFuncPRG(new SHA2HashFunction(
+				"SHA-256"));
+		HashFunction H = new SHA2HashFunction("SHA-256");
+
+		Parameters params = new Parameters(getClass().getClassLoader()
+				.getResource("exportEcurveSmall/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportEcurveSmall/default").getFile(),
+				null, "auxsid", 1, false, false, false,
+				new MainVerifierTests.MockedLogger());
+		Assert.assertNotNull("res is not in the classpath - ask Daniel",
+				getClass().getClassLoader()
+						.getResource("export/default/proofs"));
+
+		params.fillFromXML();
+		params.fillFromDirectory();
+
+		String s = params.getSessionID() + "." + params.getAuxsid();
+		ByteTree btAuxid = new StringLeaf(s);
+		ByteTree version_proof = new StringLeaf(params.getVersion());
+		ByteTree sGq = new StringLeaf(params.getsGq());
+		ByteTree sPRG = new StringLeaf(params.getsPRG());
+		ByteTree sH = new StringLeaf(params.getSh());
+		ByteTree Ne = new BigIntLeaf(new LargeInteger(Integer.toString(params
+				.getNe())), 4);
+		ByteTree Nr = new BigIntLeaf(new LargeInteger(Integer.toString(params
+				.getNr())), 4);
+		ByteTree Nv = new BigIntLeaf(new LargeInteger(Integer.toString(params
+				.getNv())), 4);
+
+		ByteTree[] input = new ByteTree[8];
+
+		input[0] = version_proof;
+		input[1] = btAuxid;
+		input[2] = Nr;
+		input[3] = Nv;
+		input[4] = Ne;
+		input[5] = sPRG;
+		input[6] = sGq;
+		input[7] = sH;
+
+		byte[] Seed = new Node(input).toByteArray();
+
+		RandomOracle ROseed = new HashFuncPRGRandomOracle(H, prg.seedlen());
+
+		StringLeaf stringLeaf = new StringLeaf("generators");
+		byte[] independentSeed = ROseed.getRandomOracleOutput(ArrayGenerators
+				.concatArrays(H.digest(Seed), stringLeaf.toByteArray()));
+
+		ArrayOfElements<IGroupElement> h = Gq.createRandomArray(2, prg,
+				independentSeed, nr);
+
+		//TODO fix the bug here so the test will work
+		Assert.assertEquals(
+				"[(1ced80e81adf679bb53a8937ff457f8d3d3f4fbd256c124551a0492731085fd3):(4af6a11bf749f19a8ba5d73d05ad0eeb091f29d05453f2b85b3667d2bea471b9),(f076ee161ee3ceb09308673f342c61997337ef3f54d895fbbcf9ffc65aabd398):(22fe7f47bd4e8bf29caad965837ff90c95193a436ff7b013b71e6d47c3a3b6ca),]",
+				h.toString());
 
 	}
 
