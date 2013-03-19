@@ -1,6 +1,5 @@
 package algorithms.provers;
 
-
 import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
@@ -72,17 +71,18 @@ public class ProveShuffling extends Prover {
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput, int width,
 			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h, Logger logger) {
+			Node PoSCommitment, Node PoSReply,
+			ArrayOfElements<IGroupElement> h, Logger logger) {
 
-		logger.sendLog("Starting to prove the shuffling",Logger.Severity.NORMAL);
-		
+		logger.sendLog("Starting to prove the shuffling",
+				Logger.Severity.NORMAL);
+
 		/*
 		 * 1(a) - interpret permutationCommitment (miu) as an array of Pedersen
 		 * commitments in Gq
 		 */
 		ArrayOfElements<IGroupElement> u = permutationCommitment;
 
-		
 		/*
 		 * 1(b) - interpret Tpos as Node(B,A',B',C',D',F')
 		 */
@@ -96,12 +96,10 @@ public class ProveShuffling extends Prover {
 		IGroupElement Ctag = (IGroupElement) PoSCommitment.getAt(3);
 		IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 		ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
-		
-		
-		//TODO printouts
-		System.out.println("h : "+h);
 
-		
+		// TODO printouts
+		System.out.println("h : " + h);
+
 		/*
 		 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 		 */
@@ -115,8 +113,7 @@ public class ProveShuffling extends Prover {
 		ArrayOfElements<IntegerRingElement> Ke = (ArrayOfElements<IntegerRingElement>) (PoSReply
 				.getAt(4));
 		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
-		
-				
+
 		/*
 		 * 2 - computing the seed s=ROseed(...)
 		 */
@@ -131,12 +128,10 @@ public class ProveShuffling extends Prover {
 		input[5] = wOutput;
 		Node nodeForSeed = new Node(input);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
-		
-		//TODO
-		System.out.println("bt(h) : "+bytArrayToHex(input[1].toByteArray()));
-		
-		
-		
+
+		// TODO
+		System.out.println("bt(h) : " + bytArrayToHex(input[1].toByteArray()));
+
 		/*
 		 * 3 - Computation of A and F
 		 */
@@ -150,15 +145,14 @@ public class ProveShuffling extends Prover {
 		byte[] challenge = computeChallenge(ROChallenge, ro, PoSCommitment,
 				leaf);
 		LargeInteger v = computeV(Nv, challenge);
-		
+
 		/*
 		 * 5 - Compute C,D and verify equalities
 		 */
 		LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(E, B, h, N);
-		
-		
+
 		/*
 		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
 		 * B[-1] = h[0]
@@ -166,7 +160,7 @@ public class ProveShuffling extends Prover {
 		if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
 			return false;
 		}
-		
+
 		/*
 		 * Equation 2: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 		 */
@@ -174,7 +168,6 @@ public class ProveShuffling extends Prover {
 			return false;
 		}
 
-		
 		/*
 		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 		 */
@@ -197,18 +190,16 @@ public class ProveShuffling extends Prover {
 		}
 
 		/* All equalities exist. */
-		logger.sendLog("Proof of shuffling succeeded",
-				Logger.Severity.NORMAL);
+		logger.sendLog("Proof of shuffling succeeded", Logger.Severity.NORMAL);
 		return true;
 	}
-	
-	
-	static // TODO printout method - delete?
-		String bytArrayToHex(byte[] a) {
-			StringBuilder sb = new StringBuilder();
-			for (byte b : a)
-				sb.append(String.format("%02x", b & 0xff));
-			return sb.toString();
-		}
+
+	// TODO printout method - delete?
+	static String bytArrayToHex(byte[] a) {
+		StringBuilder sb = new StringBuilder();
+		for (byte b : a)
+			sb.append(String.format("%02x", b & 0xff));
+		return sb.toString();
+	}
 
 }

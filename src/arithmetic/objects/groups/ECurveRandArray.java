@@ -1,6 +1,5 @@
 package arithmetic.objects.groups;
 
-import org.bouncycastle.pqc.math.linearalgebra.IntegerFunctions;
 
 import algorithms.provers.Prover;
 import arithmetic.objects.LargeInteger;
@@ -64,35 +63,25 @@ public class ECurveRandArray {
 		this.a = a;
 		this.b = b;
 		this.q = G.getFieldOrder();
-
-		// TODO printouts
-		System.out.println("a : " + a);
-		System.out.println("b : " + b);
-		System.out.println("q : " + q);
-
 		field = new PrimeOrderField(q);
-		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
-		int nq = q.bitLength();
-
-		int length = 8 * ((int) Math.ceil((double) (nr + nq / 8.0)));
-		prg.setSeed(seed);
-
 		setEnv();
-
+		
 		/*
 		 * Create the random array - first we generate numbers using prg, and
-		 * then we check if these numbers fit to the elliptic curve. We do this
-		 * by computing f(zi) and checking if f(zi) is a quadratic residue of p.
-		 * If it is - we find the roots using Shanks-Tonelli algorithm.
-		 */
-
-		// We count how many elements we added to the array. We need N so we
-		// will exit the loop
-		// the moment we have N elements. N<p
+		 * then we check if these numbers fit to the elliptic curve. 
+		*/
+		
 		int counter = 0;
 
 		ECurveGroupElement element;
 		Point point;
+		
+		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
+		int nq = this.q.bitLength();
+
+		//int length = 8 * ((int) Math.ceil((double) ((nq + nr) / 8.0)));
+		int length = 7 + nr + nq;
+		prg.setSeed(seed);
 
 		// We run until q (this is the maximum, but we break when we have N
 		// elements
@@ -101,7 +90,7 @@ public class ECurveRandArray {
 
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = Prover.byteArrayToPosLargeInteger(arr);
-			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
+			LargeInteger ttag = t.mod((new LargeInteger("2")).power(nq + nr));
 
 			// xi is the x coordinate we want to check
 			LargeInteger xValue = ttag.mod(q);
@@ -112,30 +101,33 @@ public class ECurveRandArray {
 			if (Legendre(zValue) == 1) {
 				// find the smallest root
 				// TODO check if our ressol gives the same result
-				//LargeInteger yValue = shanksTonelli(zValue);
-				LargeInteger yValue = new LargeInteger(IntegerFunctions.ressol(
-						zValue, q));
-				LargeInteger yValueRoot = q.subtract(yValue);
-				if (yValueRoot.compareTo(yValue) < 0)
-					yValue = yValueRoot;
-
-				// Create coordinate xi
+				LargeInteger yValue = shanksTonelli(zValue);
+			//try {
+//				LargeInteger yValue = new LargeInteger(IntegerFunctions.ressol(
+//						zValue, q));
+//				LargeInteger yValueRoot = q.subtract(yValue);
+//				if (yValueRoot.compareTo(yValue) < 0)
+//					yValue = yValueRoot;
+				
+				// Create coordinates
 				IntegerFieldElement xi = new IntegerFieldElement(xValue, field);
-
-				// Create coordinate yi
 				IntegerFieldElement yi = new IntegerFieldElement(yValue, field);
-
-				// Add the point to the array:
 				point = new Point(xi, yi);
 
 				element = new ECurveGroupElement(point, G);
 				RandArray.add(element);
+				
+				//TODO printouts
+				System.out.println("t"+counter+" : "+t);
 
 				counter++;
+				// We count how many elements we added to the array. We need N elements
 				if (counter == N)
 					break;
 
 				i = i.add(LargeInteger.ONE);
+//			} catch (Exception e) {
+//				continue;
 			}
 			Rand = RandArray;
 		}
