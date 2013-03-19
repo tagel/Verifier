@@ -1,5 +1,7 @@
 package algorithms.provers;
 
+import com.sun.org.apache.bcel.internal.generic.ATHROW;
+
 import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
@@ -97,9 +99,6 @@ public class ProveShuffling extends Prover {
 		IGroupElement Dtag = (IGroupElement) PoSCommitment.getAt(4);
 		ProductGroupElement Ftag = (ProductGroupElement) PoSCommitment.getAt(5);
 
-		// TODO printouts
-		System.out.println("h : " + h);
-
 		/*
 		 * 1(c) - interpret Opos as Node(Ka,Kb,Kc,Kd,Ke,Kf)
 		 */
@@ -114,21 +113,6 @@ public class ProveShuffling extends Prover {
 				.getAt(4));
 		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 
-		//TODO printouts
-		System.out.println("B : "+B);
-		System.out.println("A' : "+Atag);
-		System.out.println("B' : "+Btag);
-		System.out.println("C': "+Ctag);
-		System.out.println("D' : "+Dtag);
-		System.out.println("F' : "+Ftag);
-		
-		System.out.println("Ka : "+Ka);
-		System.out.println("Kb : "+Kb);
-		System.out.println("Kc : "+Kc);
-		System.out.println("Kd : "+Kd);
-		System.out.println("Ke : "+Ke);
-		System.out.println("Kf : "+Kf);
-		
 		/*
 		 * 2 - computing the seed s=ROseed(...)
 		 */
@@ -144,7 +128,30 @@ public class ProveShuffling extends Prover {
 		Node nodeForSeed = new Node(input);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
-
+		// TODO printouts
+		// System.out.println("g : " + input[0]);
+		 System.out.println("h : " + input[1]);
+		// System.out.println("u : " + input[2]);
+		// System.out.println("pk : " + input[3]);
+		// System.out.println("w : " + input[4]);
+		// System.out.println("w' : " + input[5]);
+		//
+		// System.out.println("bt(g) : " +
+		// bytArrayToHex(input[0].toByteArray()));
+		// System.out.println("bt(h) : " +
+		// bytArrayToHex(input[1].toByteArray()));
+		// System.out.println("bt(u) : " +
+		// bytArrayToHex(input[2].toByteArray()));
+		// System.out.println("bt(pk) : " +
+		// bytArrayToHex(input[3].toByteArray()));
+		// System.out.println("bt(w) : " +
+		// bytArrayToHex(input[4].toByteArray()));
+		// System.out.println("bt(w') : " +
+		// bytArrayToHex(input[5].toByteArray()));
+		//
+		// System.out.println("node(g,q,...) : "+bytArrayToHex(nodeForSeed.toByteArray()));
+		// System.out.println("Seed : "+bytArrayToHex(seed));
+		
 		/*
 		 * 3 - Computation of A and F
 		 */
@@ -165,51 +172,49 @@ public class ProveShuffling extends Prover {
 		LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(E, B, h, N);
-		
-		//TODO printouts
-		System.out.println("A : "+A);
-		System.out.println("F : "+F);
-		System.out.println("v : "+ v);
-		System.out.println("C : "+ C);
-		System.out.println("D : "+D);
-		System.out.println("w : "+wInput);
-		System.out.println("w' : "+wOutput);
 
-//		/*
-//		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
-//		 * B[-1] = h[0]
-//		 */
-//		if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
-//			return false;
-//		}
-//
-//		/*
-//		 * Equation 2: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
-//		 */
-//		if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
-//			return false;
-//		}
-//
-//		/*
-//		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
-//		 */
-//		if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
-//			return false;
-//		}
-//
-//		/*
-//		 * Equation 4: (C^v)*Ctag = g^Kc
-//		 */
-//		if (!verifyCvCtag(C, Ctag, v, Kc, g)) {
-//			return false;
-//		}
-//
-//		/*
-//		 * Equation 5: (D^v)*Dtag = g^Kd
-//		 */
-//		if (!verifyDvDtag(D, Dtag, v, Kd, g)) {
-//			return false;
-//		}
+		// TODO printouts
+		System.out.println("A : " + A);
+		System.out.println("F : " + F);
+		System.out.println("v : " + v);
+		System.out.println("C : " + C);
+		System.out.println("D : " + D);
+
+		// /*
+		// * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
+		// * B[-1] = h[0]
+		// */
+		// if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
+		// return false;
+		// }
+		//
+		// /*
+		// * Equation 2: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
+		// */
+		// if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
+		// return false;
+		// }
+		//
+		// /*
+		// * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
+		// */
+		// if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
+		// return false;
+		// }
+		//
+		// /*
+		// * Equation 4: (C^v)*Ctag = g^Kc
+		// */
+		// if (!verifyCvCtag(C, Ctag, v, Kc, g)) {
+		// return false;
+		// }
+		//
+		// /*
+		// * Equation 5: (D^v)*Dtag = g^Kd
+		// */
+		// if (!verifyDvDtag(D, Dtag, v, Kd, g)) {
+		// return false;
+		// }
 
 		/* All equalities exist. */
 		return true;

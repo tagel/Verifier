@@ -152,8 +152,9 @@ public class ECurveRandArray {
 	 * @return zValue = f(xi) = y^2 = x^3 + ax +b
 	 */
 	public LargeInteger f(LargeInteger xi) {
-		LargeInteger result = (LargeInteger.power(xi, new LargeInteger("3")))
-				.mod(q);
+		//LargeInteger result = (LargeInteger.power(xi, new LargeInteger("3")))
+				//.mod(q);
+		LargeInteger result = (xi.power(3)).mod(q);
 		result = (result.add(a.multiply(xi))).mod(q);
 		result = result.add(b.mod(q));
 		return result.mod(q);
