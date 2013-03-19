@@ -139,7 +139,7 @@ public class ECurveRandArray {
 	/**
 	 * 
 	 * @param xi
-	 *            - input for the ellipic curve
+	 *            - input for the elliptic curve
 	 * @return zValue = f(xi) = y^2 = x^3 + ax +b
 	 */
 	public LargeInteger f(LargeInteger xi) {
