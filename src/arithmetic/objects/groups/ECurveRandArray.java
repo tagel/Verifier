@@ -1,5 +1,7 @@
 package arithmetic.objects.groups;
 
+import org.bouncycastle.pqc.math.linearalgebra.IntegerFunctions;
+
 import algorithms.provers.Prover;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
@@ -56,13 +58,18 @@ public class ECurveRandArray {
 	 * @param G
 	 *            - the group
 	 */
-	public ECurveRandArray(int N, PseudoRandomGenerator prg,
-			byte[] seed, int nr, LargeInteger a, LargeInteger b, ECurveGroup G) {
+	public ECurveRandArray(int N, PseudoRandomGenerator prg, byte[] seed,
+			int nr, LargeInteger a, LargeInteger b, ECurveGroup G) {
 
 		this.a = a;
 		this.b = b;
 		this.q = G.getFieldOrder();
-		
+
+		// TODO printouts
+		System.out.println("a : " + a);
+		System.out.println("b : " + b);
+		System.out.println("q : " + q);
+
 		field = new PrimeOrderField(q);
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = q.bitLength();
@@ -71,7 +78,6 @@ public class ECurveRandArray {
 		prg.setSeed(seed);
 
 		setEnv();
-		
 
 		/*
 		 * Create the random array - first we generate numbers using prg, and
@@ -92,11 +98,11 @@ public class ECurveRandArray {
 		// elements
 		for (LargeInteger i = LargeInteger.ZERO; !i.equals(q
 				.subtract(LargeInteger.ONE));) {
-			
+
 			byte[] arr = prg.getNextPRGOutput(length);
 			LargeInteger t = Prover.byteArrayToPosLargeInteger(arr);
 			LargeInteger ttag = t.mod(new LargeInteger("2").power(nq + nr));
-			
+
 			// xi is the x coordinate we want to check
 			LargeInteger xValue = ttag.mod(q);
 
@@ -105,7 +111,13 @@ public class ECurveRandArray {
 			LargeInteger zValue = f(xValue);
 			if (Legendre(zValue) == 1) {
 				// find the smallest root
-				LargeInteger yValue = shanksTonelli(zValue);
+				// TODO check if our ressol gives the same result
+				//LargeInteger yValue = shanksTonelli(zValue);
+				LargeInteger yValue = new LargeInteger(IntegerFunctions.ressol(
+						zValue, q));
+				LargeInteger yValueRoot = q.subtract(yValue);
+				if (yValueRoot.compareTo(yValue) < 0)
+					yValue = yValueRoot;
 
 				// Create coordinate xi
 				IntegerFieldElement xi = new IntegerFieldElement(xValue, field);
@@ -122,11 +134,11 @@ public class ECurveRandArray {
 				counter++;
 				if (counter == N)
 					break;
-			}
 
-			i = i.add(LargeInteger.ONE);
+				i = i.add(LargeInteger.ONE);
+			}
+			Rand = RandArray;
 		}
-		Rand = RandArray;
 	}
 
 	private void setEnv() {
@@ -141,7 +153,7 @@ public class ECurveRandArray {
 
 		// Define b as a the least quadratic non residual
 		findLeastQNR();
-		
+
 	}
 
 	/**
@@ -151,12 +163,11 @@ public class ECurveRandArray {
 	 * @return zValue = f(xi) = y^2 = x^3 + ax +b
 	 */
 	public LargeInteger f(LargeInteger xi) {
-		LargeInteger first, second, third, retval;
-		first = xi.modPow(new LargeInteger("3"), q);
-		second = (xi.multiply(a)).mod(q);
-		third = (b.mod(q)).add(first).add(second);
-		retval = third.mod(q);
-		return retval;
+		LargeInteger result = (LargeInteger.power(xi, new LargeInteger("3")))
+				.mod(q);
+		result = (result.add(a.multiply(xi))).mod(q);
+		result = result.add(b.mod(q));
+		return result.mod(q);
 	}
 
 	/**

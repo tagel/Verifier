@@ -30,6 +30,7 @@ public class LargeInteger extends BigInteger {
 
 	}
 
+	
 	public LargeInteger(String s, int i) {
 		super(s, i);
 	}
@@ -103,6 +104,8 @@ public class LargeInteger extends BigInteger {
 	
 	@Override
 	public String toString(){
-		return String.format("%x", this);
+		//TODO hexa
+		//return String.format("%x", this);
+		return super.toString();
 		}
 }
