@@ -79,8 +79,9 @@ public class ECurveRandArray {
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = this.q.bitLength();
 
-		//int length = 8 * ((int) Math.ceil((double) ((nq + nr) / 8.0)));
-		int length = 7 + nr + nq;
+		//TODO check
+		int length = 8 * ((int) Math.ceil((double) ((nq + nr) / 8.0)));
+		//int length = 7 + nr + nq;
 		prg.setSeed(seed);
 
 		// We run until q (this is the maximum, but we break when we have N

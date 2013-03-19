@@ -169,9 +169,8 @@ public class ProveShuffling extends Prover {
 		/*
 		 * 5 - Compute C,D and verify equalities
 		 */
-		LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
-		IGroupElement D = computeD(E, B, h, N);
+		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
 
 		// TODO printouts
 		System.out.println("A : " + A);
@@ -180,41 +179,41 @@ public class ProveShuffling extends Prover {
 		System.out.println("C : " + C);
 		System.out.println("D : " + D);
 
-		// /*
-		// * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
-		// * B[-1] = h[0]
-		// */
-		// if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
-		// return false;
-		// }
-		//
-		// /*
-		// * Equation 2: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
-		// */
-		// if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
-		// return false;
-		// }
-		//
-		// /*
-		// * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
-		// */
-		// if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
-		// return false;
-		// }
-		//
-		// /*
-		// * Equation 4: (C^v)*Ctag = g^Kc
-		// */
-		// if (!verifyCvCtag(C, Ctag, v, Kc, g)) {
-		// return false;
-		// }
-		//
-		// /*
-		// * Equation 5: (D^v)*Dtag = g^Kd
-		// */
-		// if (!verifyDvDtag(D, Dtag, v, Kd, g)) {
-		// return false;
-		// }
+		 /*
+		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
+		 * B[-1] = h[0]
+		 */
+		 if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
+			 return false;
+		 }
+		
+		 /*
+		 * Equation 2: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
+		 */
+		 if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
+			 return false;
+		 }
+		
+		 /*
+		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
+		 */
+		 if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
+			 return false;
+		 }
+		
+		 /*
+		 * Equation 4: (C^v)*Ctag = g^Kc
+		 */
+		 if (!verifyCvCtag(C, Ctag, v, Kc, g)) {
+			 return false;
+		 }
+		
+		 /*
+		 * Equation 5: (D^v)*Dtag = g^Kd
+		 */
+		 if (!verifyDvDtag(D, Dtag, v, Kd, g)) {
+		 return false;
+		 }
 
 		/* All equalities exist. */
 		return true;

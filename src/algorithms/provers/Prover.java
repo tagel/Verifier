@@ -277,9 +277,9 @@ public abstract class Prover {
 	protected static IGroupElement computeA(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u,
 			IGroup Gq) {
-		//TODO check this
+		// TODO check this
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8.0)));
-		//int length = Ne + 7;
+		// int length = Ne + 7;
 		prg.setSeed(seed);
 
 		byte[] byteArrToBigInt;
@@ -312,8 +312,8 @@ public abstract class Prover {
 	 */
 	protected static LargeInteger computeE(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg) {
-		//TODO check this
-		//int length = Ne + 7;
+		// TODO check this
+		// int length = Ne + 7;
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8.0)));
 		prg.setSeed(seed);
 		byte[] byteArrToBigInt;
@@ -327,6 +327,9 @@ public abstract class Prover {
 			LargeInteger a = t.mod(pow);
 			E = E.multiply(a);
 		}
+
+		// TODO
+		System.out.println("E :" + E);
 
 		return E;
 	}
@@ -351,10 +354,10 @@ public abstract class Prover {
 			PseudoRandomGenerator prg,
 			ArrayOfElements<ProductGroupElement> wInput) {
 
-		//TODO check this
+		// TODO check this
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8.0)));
-		//int length = Ne + 7;
-		
+		// int length = Ne + 7;
+
 		prg.setSeed(seed);
 		byte[] ByteArrToBigInt = prg.getNextPRGOutput(length);
 		LargeInteger t = new LargeInteger(ByteArrToBigInt);
@@ -398,21 +401,40 @@ public abstract class Prover {
 	/**
 	 * This function computes D, needed in the proof.
 	 * 
-	 * @param E
-	 *            multiplication of Ei N times
 	 * @param B
 	 *            array of N elements on Gq
 	 * @param h
 	 *            Array of random elements used to compute the seed
 	 * @param N
 	 *            size of the arrays
+	 * @param prg
+	 * @param seed
+	 * @param Ne
 	 * @return D, B[n-1] divided by h0^(the multiplication of e's elements)
 	 */
-	protected static IGroupElement computeD(LargeInteger E,
-			ArrayOfElements<IGroupElement> B, ArrayOfElements<IGroupElement> h,
-			int N) {
+	protected static IGroupElement computeD(ArrayOfElements<IGroupElement> B,
+			ArrayOfElements<IGroupElement> h, int N, int Ne, byte[] seed,
+			PseudoRandomGenerator prg) {
 
-		IGroupElement D = B.getAt(N - 1).divide(h.getAt(0).power(E));
+		int length = 8 * ((int) Math.ceil((double) (Ne / 8.0)));
+		prg.setSeed(seed);
+		byte[] byteArrToBigInt;
+		LargeInteger t;
+		// LargeInteger E = LargeInteger.ONE;
+		LargeInteger e;
+		IGroupElement tempH = h.getAt(0);
+
+		for (int i = 0; i < N; i++) {
+			byteArrToBigInt = prg.getNextPRGOutput(length);
+			t = byteArrayToPosLargeInteger(byteArrToBigInt);
+			LargeInteger pow = (new LargeInteger("2")).power(Ne);
+			e = t.mod(pow);
+			tempH = tempH.power(e);
+		}
+
+		System.out.println("h0^pi(e) : " + tempH);
+
+		IGroupElement D = B.getAt(N - 1).divide(tempH);
 		return D;
 	}
 
@@ -449,6 +471,10 @@ public abstract class Prover {
 			hPi = hPi.mult(h.getAt(i).power(Ke.getAt(i).getElement()));
 		}
 		IGroupElement right = (g.power(Ka.getElement())).mult(hPi);
+		// TODO
+		System.out.println("A^v : " + A.power(v));
+		System.out.println("A^v A' : " + left);
+
 		if (!left.equals(right)) {
 			return false;
 		}
@@ -521,9 +547,14 @@ public abstract class Prover {
 
 		IGroupElement left = (C.power(v)).mult(Ctag);
 		IGroupElement right = g.power(Kc.getElement());
+
+		// TODO printout
+		System.out.println("C^v : " + C.power(v));
+		System.out.println("C^v C' : " + left);
 		if (!left.equals(right)) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -547,6 +578,10 @@ public abstract class Prover {
 
 		IGroupElement left = (D.power(v)).mult(Dtag);
 		IGroupElement right = g.power(Kd.getElement());
+
+		// TODO print
+		System.out.println("D^v: " + D.power(v));
+		System.out.println("D^v D' : " + left);
 		if (!left.equals(right)) {
 			return false;
 		}
@@ -560,7 +595,5 @@ public abstract class Prover {
 
 		return new LargeInteger(byteArrToBigIntPos);
 	}
-	
-	
-	
+
 }

@@ -127,7 +127,7 @@ public class ProveSoC extends Prover {
 		 */
 		LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
-		IGroupElement D = computeD(E, B, h, N);
+		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
 
 		/*
 		 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
