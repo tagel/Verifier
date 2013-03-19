@@ -147,8 +147,8 @@ public class ECurveGroupElement implements IGroupElement {
 	 *            a large integer which is the exponent.
 	 * @return our element in the b'th power.
 	 */
+	@Override
 	public ECurveGroupElement power(LargeInteger b) {
-
 		ECurveGroupElement base = this;
 		ECurveGroupElement result = this.getGroup().one();
 
