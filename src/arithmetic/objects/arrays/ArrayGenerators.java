@@ -73,9 +73,10 @@ public class ArrayGenerators {
 			byte[] data, IGroup group, int w) {
 		ArrayOfElements<ProductGroupElement> ret = new ArrayOfElements<ProductGroupElement>();
 		Node node = new Node(data);
-		int arraySize = (new Node(node.getAt(0).toByteArray()))
-				.getChildrenSize();
+		int arraySize;
 		if (w == 1) {
+			arraySize = (new Node(node.getAt(0).toByteArray()))
+					.getChildrenSize();
 			ArrayOfElements<IGroupElement> leftArr = createGroupElementArray(
 					node.getAt(0).toByteArray(), group);
 			ArrayOfElements<IGroupElement> rightArr = createGroupElementArray(
@@ -91,6 +92,8 @@ public class ArrayGenerators {
 				ret.add(ciphertext);
 			}
 		} else {
+			arraySize = (new Node(new Node(node.getAt(0).toByteArray()).getAt(0).toByteArray()))
+					.getChildrenSize();
 			for (int i = 0; i < arraySize; i++) {
 				ProductGroupElement simplePGEleft = ElementsExtractor
 						.createSimplePGE(new Node(node.getAt(0).toByteArray())

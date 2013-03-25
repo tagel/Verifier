@@ -184,7 +184,7 @@ public class ElementsExtractor {
 	 * A ciphertext is a product group element which has two coordinates
 	 * (referred to as "left" and "right" in our project), each of the two
 	 * coordinates is a product group element itself containing an equal number
-	 * (w) of group elements, all belong to the same group.
+	 * (w) of group elements, all belonging to the same group.
 	 * 
 	 * @param bt
 	 *            a byte array representing a ciphertext (as a byte tree)
