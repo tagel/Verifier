@@ -109,6 +109,7 @@ public class MainVerifier {
 		// *******Section 6 in the Algorithm*********
 		if (!ReadLists()) {
 			return false;
+			
 		}
 
 		// create random array to send to the verifiers

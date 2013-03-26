@@ -161,7 +161,7 @@ public class ElementsExtractor {
 	 *            element. we need this parameter only to check whether it is 1,
 	 *            because then its byte array representation is different than
 	 *            the representation specified in the document. it does not
-	 *            start with 0 0 0 0 1 to state that it has one coordinate, but
+	 *            start with 0 0 0 0 1 to state that it has one coordinate, but rather
 	 *            begins straight with the presentation of its coordinate.
 	 * @return the product group element which bt represents.
 	 * 

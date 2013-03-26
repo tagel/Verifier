@@ -14,8 +14,10 @@ import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
+import arithmetic.objects.groups.ModGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
+import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.CryptoUtils;
 
@@ -69,30 +71,35 @@ public class ArraysGeneretorsTests {
 	@Test
 	public void createArrayOfPlaintextsTest()
 			throws UnsupportedEncodingException {
-		ModGroup Gq = new ModGroup(new LargeInteger("263"), new LargeInteger(
-				"131"), null);
-		BigIntLeaf b0 = new BigIntLeaf(new LargeInteger("0"));
-		BigIntLeaf b1 = new BigIntLeaf(new LargeInteger("1"));
-		IGroupElement ige0 = ElementsExtractor.createGroupElement(
-				b0.toByteArray(), Gq);
-		IGroupElement ige1 = ElementsExtractor.createGroupElement(
-				b1.toByteArray(), Gq);
+		ModGroup group = new ModGroup(new LargeInteger("263"),
+				new LargeInteger("100"), new LargeInteger("2"));
+		LargeInteger b0 = new LargeInteger("6");
+		LargeInteger b1 = new LargeInteger("7");
+		LargeInteger b2 = new LargeInteger("8");
+		ModGroupElement ire0 = new ModGroupElement(b0, group);
+		ModGroupElement ire1 = new ModGroupElement(b1, group);
+		ModGroupElement ire2 = new ModGroupElement(b2, group);
 		Node node = new Node();
-		node.add(ige0);
-		node.add(ige1);
+		node.add(ire0);
+		node.add(ire1);
+		node.add(ire2);
 		ArrayOfElements<IGroupElement> arr = ArrayGenerators
-				.createGroupElementArray(node.toByteArray(), Gq);
-		ProductGroupElement pge1 = new ProductGroupElement(arr);
-		ProductGroupElement pge2 = new ProductGroupElement(arr);
-		Node node2 = new Node();
-		node2.add(pge1);
-		node2.add(pge2);
-		ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators.createArrayOfPlaintexts(node2.toByteArray(), Gq, 2);
-	
-		byte[] b = {0,0,0,0,2,0,0,0,0,2,1,0,0,0,2,0,0,1,0,0,0,2,0,0,0,0,0,0,2,1,0,0,0,2,0,1,1,0,0,0,2,0,1};
-		Assert.assertEquals(
-				Arrays.toString(b),
-				Arrays.toString(plaintexts.toByteArray()));
+				.createGroupElementArray(node.toByteArray(), group);
+		ProductGroupElement pre1 = new ProductGroupElement(arr);
+		ProductGroupElement pre2 = new ProductGroupElement(arr);
+		ArrayOfElements<ProductGroupElement> arr2 = new ArrayOfElements<ProductGroupElement>();
+		arr2.add(pre1);
+		arr2.add(pre2);
+		ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
+				.createArrayOfPlaintexts(arr2.toByteArray(), group, 3);
+
+		byte[] b = { 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 1, 0, 0, 0, 2, 0, 6, 1, 0,
+				0, 0, 2, 0, 6, 0, 0, 0, 0, 2, 1, 0, 0, 0, 2, 0, 7, 1, 0, 0, 0,
+				2, 0, 7, 0, 0, 0, 0, 2, 1, 0, 0, 0, 2, 0, 8, 1, 0, 0, 0, 2, 0,
+				8 };
+		Assert.assertEquals(Arrays.toString(b),
+				Arrays.toString(plaintexts.toByteArray()),
+				Arrays.toString(arr2.toByteArray()));
 	}
 
 	@Test
@@ -116,25 +123,26 @@ public class ArraysGeneretorsTests {
 		// HashFunction H = new SHA2HashFunction(params.getSh());
 		// MainVerifier mainVer = new MainVerifier(params,H);
 		// mainVer.deriveSetsAndObjects();
-		byte[] b = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 4, 1, 0, 0, 0,
-				1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 0,
-				0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1,
-				5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0,
-				0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 3, 0,
-				0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1,
-				5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 4, 1, 0, 0, 0, 1, 5, 1, 0, 0,
-				0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 0, 0, 0, 0, 4, 1,
-				0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0, 1, 5, 1, 0, 0, 0,
-				1, 5 };
+		byte[] b = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 5, 1, 0, 0, 0,
+				1, 7, 1, 0, 0, 0, 1, 7, 1, 0, 0, 0, 1, 7, 1, 0, 0, 0, 1, 7, 1,
+				0, 0, 0, 1, 7, 0, 0, 0, 0, 5, 1, 0, 0, 0, 1, 8, 1, 0, 0, 0, 1,
+				8, 1, 0, 0, 0, 1, 8, 1, 0, 0, 0, 1, 8, 1, 0, 0, 0, 1, 8, 0, 0,
+				0, 0, 5, 1, 0, 0, 0, 1, 9, 1, 0, 0, 0, 1, 9, 1, 0, 0, 0, 1, 9,
+				1, 0, 0, 0, 1, 9, 1, 0, 0, 0, 1, 9, 0, 0, 0, 0, 3, 0, 0, 0, 0,
+				5, 1, 0, 0, 0, 1, 7, 1, 0, 0, 0, 1, 7, 1, 0, 0, 0, 1, 7, 1, 0,
+				0, 0, 1, 7, 1, 0, 0, 0, 1, 7, 0, 0, 0, 0, 5, 1, 0, 0, 0, 1, 8,
+				1, 0, 0, 0, 1, 8, 1, 0, 0, 0, 1, 8, 1, 0, 0, 0, 1, 8, 1, 0, 0,
+				0, 1, 8, 0, 0, 0, 0, 5, 1, 0, 0, 0, 1, 9, 1, 0, 0, 0, 1, 9, 1,
+				0, 0, 0, 1, 9, 1, 0, 0, 0, 1, 9, 1, 0, 0, 0, 1, 9 };
 		IGroup group = new ModGroup(new LargeInteger("100"), new LargeInteger(
 				"100"), new LargeInteger("2"));
 		ArrayOfElements<ProductGroupElement> arr = ArrayGenerators
-				.createArrayOfCiphertexts(b, group, 2);
-		System.out.println(Arrays.toString(arr.toByteArray()));
+				.createArrayOfCiphertexts(b, group, 3);
+		System.out.println(arr.getSize());
 		for (int i = 0; i < arr.getSize(); i++) {
 			System.out.println("left:");
 			for (int j = 0; j < arr.getAt(i).getLeft().getSize(); j++)
-				System.out.println(ElementsExtractor.leafToInt(((arr.getAt(i)
+				System.out.println(Arrays.toString(((arr.getAt(i)
 						.getLeft().getElements().getAt(j)).toByteArray())));
 			System.out.println("right:");
 			for (int j = 0; j < arr.getAt(i).getLeft().getSize(); j++)
@@ -143,5 +151,8 @@ public class ArraysGeneretorsTests {
 
 		}
 		System.out.println(arr.getSize());
+		Assert.assertEquals(Arrays.toString(b),
+				Arrays.toString(arr.toByteArray()));
 	}
+	
 }

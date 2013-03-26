@@ -3,6 +3,7 @@ package arithmetic.objects.arrays;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import arithmetic.objects.ByteTree;
@@ -110,7 +111,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	}
 
 
-	private byte[] ProductGroupArrayToByteArray() {
+	public byte[] ProductGroupArrayToByteArray() {
 		int productsSize = ((ProductGroupElement) getAt(0)).getSize();
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(productsSize).array();
@@ -120,7 +121,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 
 		Node node = new Node();
 		for (int i=0; i<productsSize; i++) {
-			Node arr = new Node();
+			ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
 			for (int j=0; j<getSize(); j++) {
 				if (((ProductGroupElement) getAt(j)).getElements()==null && i==0)
 					arr.add(((ProductGroupElement) getAt(j)).getLeft());
@@ -135,7 +136,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		return node.toByteArray();
 	}
 
-	private byte[] ProductRingArrayToByteArray() {
+	public byte[] ProductRingArrayToByteArray() {
 		int productsSize = ((ProductRingElement) getAt(0)).getSize();
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
 				.putInt(productsSize).array();

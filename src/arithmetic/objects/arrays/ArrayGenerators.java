@@ -94,13 +94,21 @@ public class ArrayGenerators {
 		} else {
 			arraySize = (new Node(new Node(node.getAt(0).toByteArray()).getAt(0).toByteArray()))
 					.getChildrenSize();
+			Node node1 = new Node (node.getAt(0).toByteArray());
+			Node node2 = new Node (node.getAt(1).toByteArray()); 
 			for (int i = 0; i < arraySize; i++) {
-				ProductGroupElement simplePGEleft = ElementsExtractor
-						.createSimplePGE(new Node(node.getAt(0).toByteArray())
-								.getAt(i).toByteArray(), group, w);
-				ProductGroupElement simplePGEright = ElementsExtractor
-						.createSimplePGE(new Node(node.getAt(1).toByteArray())
-								.getAt(i).toByteArray(), group, w);
+				ArrayOfElements<IGroupElement> arrLeft = new ArrayOfElements<IGroupElement>();
+				for (int j = 0; j < w; j++) {
+					Node helperNode = new Node (node1.getAt(j).toByteArray());
+					arrLeft.add(ElementsExtractor.createGroupElement(helperNode.getAt(i).toByteArray(), group));
+				}
+				ProductGroupElement simplePGEleft = new ProductGroupElement(arrLeft);
+				ArrayOfElements<IGroupElement> arrRight = new ArrayOfElements<IGroupElement>();
+				for (int j = 0; j < w; j++) {
+					Node helperNode = new Node (node2.getAt(j).toByteArray());
+					arrRight.add(ElementsExtractor.createGroupElement(helperNode.getAt(i).toByteArray(), group));
+				}
+				ProductGroupElement simplePGEright = new ProductGroupElement(arrRight);
 				ProductGroupElement ciphertext = new ProductGroupElement(
 						simplePGEleft, simplePGEright);
 				ret.add(ciphertext);
