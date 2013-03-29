@@ -94,7 +94,7 @@ public class VerShuffling {
 
 		// set maxciph (indicates if there was pre-computation)
 		int maxciph = readMaxciph(directory);
-
+		
 		// If maxciph == -1, we use the whole permutation commitment array
 		// (otherwise, we use only the relevant ones).
 		if (maxciph == -1) {
@@ -195,6 +195,7 @@ public class VerShuffling {
 		return true;
 	}
 
+	
 	private static ArrayOfElements<IGroupElement> shrinkPrmutatuonCommitment(
 			int maxciph) {
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
