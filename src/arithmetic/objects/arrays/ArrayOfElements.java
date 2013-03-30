@@ -8,6 +8,7 @@ import java.util.List;
 
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.ProductRingElement;
 
@@ -118,9 +119,22 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		byte[] b = new byte[a.length + 1];
 		System.arraycopy(a, 0, b, 1, a.length);
 		b[0] = 0;
-
 		Node node = new Node();
-		for (int i=0; i<productsSize; i++) {
+		if (productsSize==2 && ((ProductGroupElement) getAt(0)).getLeft().getSize()==1) {
+			for (int i=0; i<productsSize; i++) {
+				ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
+				for (int j=0; j<getSize(); j++) {
+					if (((ProductGroupElement) getAt(j)).getElements()==null && i==0)
+						arr.add(((ProductGroupElement) getAt(j)).getLeft().getElements().getAt(0));
+					else if (((ProductGroupElement) getAt(j)).getElements()==null && i==1)
+						arr.add(((ProductGroupElement) getAt(j)).getRight().getElements().getAt(0));
+				}
+				node.add(arr);
+			}
+		}
+		
+		else {
+			for (int i=0; i<productsSize; i++) {
 			ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
 			for (int j=0; j<getSize(); j++) {
 				if (((ProductGroupElement) getAt(j)).getElements()==null && i==0)
@@ -131,7 +145,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 			}
 			node.add(arr);
 		}
-
+		}
 
 		return node.toByteArray();
 	}
