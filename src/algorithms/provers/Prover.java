@@ -432,6 +432,7 @@ public abstract class Prover {
 			tempH = tempH.power(e);
 		}
 
+		//TODO printouts
 		System.out.println("h0^pi(e) : " + tempH);
 
 		IGroupElement D = B.getAt(N - 1).divide(tempH);

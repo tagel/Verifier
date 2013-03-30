@@ -166,7 +166,7 @@ public class MainVerifierTests {
 						.getResource("exportsDecOutputs/w1/protInfo.xml").getFile(),
 				getClass().getClassLoader()
 						.getResource("exportsDecOutputs/w1/default").getFile(),
-				Type.MIXING, "default", 1, false, false, false));
+				Type.MIXING, "default", 1, false, false, true));
 	}
 	
 	@Test
