@@ -146,6 +146,54 @@ public class MainVerifierTests {
 	}
 	
 	@Test
+	public void VerifyShuffleExportDecTest1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void VerifyDecExportDecTest1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1/default").getFile(),
+				Type.MIXING, "default", 1, false, false, false));
+	}
+	
+	@Test
+	public void VerifyShuffleExportDecTest3() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void VerifyDecExportDecTest3() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3/default").getFile(),
+				Type.MIXING, "default", 1, false, false, false));
+	}
+	
+	@Test
 	public void VerifyShuffleModGroup3Test() throws Exception {
 
 		MainVerifier mainVer = new MainVerifier(logger);
