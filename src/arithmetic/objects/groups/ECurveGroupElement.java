@@ -151,7 +151,7 @@ public class ECurveGroupElement implements IGroupElement {
 	public ECurveGroupElement power(LargeInteger b) {
 		ECurveGroupElement base = this;
 		ECurveGroupElement res = this.getGroup().one();
-		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b)<0; i.add(LargeInteger.ONE))
+		for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b)<0; i=i.add(LargeInteger.ONE))
 			res = res.mult(base);
 		return res;
 	}
