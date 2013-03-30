@@ -113,6 +113,15 @@ public class ProveShuffling extends Prover {
 				.getAt(4));
 		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 
+		ProductGroupElement pkSeed;
+		//Here we check if width > 1 -> if so, 
+		//we interpret pk as pk = ((g,...,g),(y,...,y))
+		if (width>1) {
+			pkSeed = expandPk(pk, width);
+		} else {
+			pkSeed = pk;
+		}
+		
 		/*
 		 * 2 - computing the seed s=ROseed(...)
 		 */
@@ -122,35 +131,35 @@ public class ProveShuffling extends Prover {
 		input[0] = g;
 		input[1] = h;
 		input[2] = u;
-		input[3] = pk;
+		input[3] = pkSeed;
 		input[4] = wInput;
 		input[5] = wOutput;
 		Node nodeForSeed = new Node(input);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
 		// TODO printouts
-		// System.out.println("g : " + input[0]);
+		 System.out.println("g : " + input[0]);
 		 System.out.println("h : " + input[1]);
-		// System.out.println("u : " + input[2]);
-		// System.out.println("pk : " + input[3]);
-		// System.out.println("w : " + input[4]);
-		// System.out.println("w' : " + input[5]);
-		//
-		// System.out.println("bt(g) : " +
-		// bytArrayToHex(input[0].toByteArray()));
-		// System.out.println("bt(h) : " +
-		// bytArrayToHex(input[1].toByteArray()));
-		// System.out.println("bt(u) : " +
-		// bytArrayToHex(input[2].toByteArray()));
-		// System.out.println("bt(pk) : " +
-		// bytArrayToHex(input[3].toByteArray()));
-		// System.out.println("bt(w) : " +
-		// bytArrayToHex(input[4].toByteArray()));
-		// System.out.println("bt(w') : " +
-		// bytArrayToHex(input[5].toByteArray()));
-		//
-		// System.out.println("node(g,q,...) : "+bytArrayToHex(nodeForSeed.toByteArray()));
-		// System.out.println("Seed : "+bytArrayToHex(seed));
+		 System.out.println("u : " + input[2]);
+		 System.out.println("pk : " + input[3]);
+		 System.out.println("w : " + input[4]);
+		 System.out.println("w' : " + input[5]);
+		
+		 System.out.println("bt(g) : " +
+		 bytArrayToHex(input[0].toByteArray()));
+		 System.out.println("bt(h) : " +
+		 bytArrayToHex(input[1].toByteArray()));
+		 System.out.println("bt(u) : " +
+		 bytArrayToHex(input[2].toByteArray()));
+		 System.out.println("bt(pk) : " +
+		 bytArrayToHex(input[3].toByteArray()));
+		 System.out.println("bt(w) : " +
+		 bytArrayToHex(input[4].toByteArray()));
+		 System.out.println("bt(w') : " +
+		 bytArrayToHex(input[5].toByteArray()));
+		
+		 System.out.println("node(g,q,...) : "+bytArrayToHex(nodeForSeed.toByteArray()));
+		 System.out.println("Seed : "+bytArrayToHex(seed));
 		
 		/*
 		 * 3 - Computation of A and F
@@ -218,6 +227,31 @@ public class ProveShuffling extends Prover {
 		/* All equalities exist. */
 		return true;
 	}
+	
+	/**
+	 * 
+	 * @param pk=(g,y)
+	 * @param width
+	 * @return the expanded pk = ((g,...,g),(y,...,y))
+	 */
+	private static ProductGroupElement expandPk(ProductGroupElement pk, int width) {
+		
+		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
+		ArrayOfElements<IGroupElement> right = new ArrayOfElements<IGroupElement>();
+
+		IGroupElement y = pk.getElements().getAt(1);
+		IGroupElement g = pk.getElements().getAt(0);
+		
+		for (int i=0; i<width; i++) {
+			left.add(g);
+			right.add(y);
+		}
+		
+		ProductGroupElement expandedPk = new ProductGroupElement(
+				new ProductGroupElement(left), new ProductGroupElement(right));
+		return expandedPk;
+	}
+
 
 	// TODO printout method - delete?
 	static String bytArrayToHex(byte[] a) {
