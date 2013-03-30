@@ -138,28 +138,28 @@ public class ProveShuffling extends Prover {
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
 		// TODO printouts
-		// System.out.println("g : " + input[0]);
+		 System.out.println("g : " + input[0]);
 		 System.out.println("h : " + input[1]);
-		// System.out.println("u : " + input[2]);
-		// System.out.println("pk : " + input[3]);
-		// System.out.println("w : " + input[4]);
-		// System.out.println("w' : " + input[5]);
-		//
-		// System.out.println("bt(g) : " +
-		// bytArrayToHex(input[0].toByteArray()));
-		// System.out.println("bt(h) : " +
-		// bytArrayToHex(input[1].toByteArray()));
-		// System.out.println("bt(u) : " +
-		// bytArrayToHex(input[2].toByteArray()));
-		// System.out.println("bt(pk) : " +
-		// bytArrayToHex(input[3].toByteArray()));
-		// System.out.println("bt(w) : " +
-		// bytArrayToHex(input[4].toByteArray()));
-		// System.out.println("bt(w') : " +
-		// bytArrayToHex(input[5].toByteArray()));
-		//
-		// System.out.println("node(g,q,...) : "+bytArrayToHex(nodeForSeed.toByteArray()));
-		// System.out.println("Seed : "+bytArrayToHex(seed));
+		 System.out.println("u : " + input[2]);
+		 System.out.println("pk : " + input[3]);
+		 System.out.println("w : " + input[4]);
+		 System.out.println("w' : " + input[5]);
+		
+		 System.out.println("bt(g) : " +
+		 bytArrayToHex(input[0].toByteArray()));
+		 System.out.println("bt(h) : " +
+		 bytArrayToHex(input[1].toByteArray()));
+		 System.out.println("bt(u) : " +
+		 bytArrayToHex(input[2].toByteArray()));
+		 System.out.println("bt(pk) : " +
+		 bytArrayToHex(input[3].toByteArray()));
+		 System.out.println("bt(w) : " +
+		 bytArrayToHex(input[4].toByteArray()));
+		 System.out.println("bt(w') : " +
+		 bytArrayToHex(input[5].toByteArray()));
+		
+		 System.out.println("node(g,q,...) : "+bytArrayToHex(nodeForSeed.toByteArray()));
+		 System.out.println("Seed : "+bytArrayToHex(seed));
 		
 		/*
 		 * 3 - Computation of A and F
