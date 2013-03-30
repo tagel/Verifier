@@ -187,6 +187,8 @@ public class ProveShuffling extends Prover {
 		System.out.println("v : " + v);
 		System.out.println("C : " + C);
 		System.out.println("D : " + D);
+		
+		System.out.println("C^v : "+(C.power(v)).mult(Ctag));
 
 		 /*
 		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
