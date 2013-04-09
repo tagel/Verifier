@@ -176,7 +176,7 @@ public class ECurveGroupElement implements IGroupElement {
 	public ECurveGroupElement power(LargeInteger b) {
 		if (element.equals(group.one()))
 			return this;
-		
+
 		ECurveGroupElement base = this;
 		int bitLen = b.bitLength();
 		ECurveGroupElement result = this.getGroup().one();
