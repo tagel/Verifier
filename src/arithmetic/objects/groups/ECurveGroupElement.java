@@ -152,14 +152,15 @@ public class ECurveGroupElement implements IGroupElement {
 				.getFieldOrder());
 		LargeInteger x3 = (((((x1.multiply(x1)).multiply(new LargeInteger("3")))
 				.add(getGroup().getXCoefficient())).divide(y1
-				.multiply(new LargeInteger("2")))).min(x1
+				.multiply(new LargeInteger("2")))).power(2).subtract(x1
 				.multiply(new LargeInteger("2")))).mod(getGroup()
 				.getFieldOrder());
 		IntegerFieldElement X3 = new IntegerFieldElement(x3, field);
-		LargeInteger y3 = (LargeInteger.ZERO.min(y1))
-				.add(((((x1.multiply(x1)).multiply(new LargeInteger("3")))
-						.add(getGroup().getXCoefficient())).divide(y1
-						.multiply(new LargeInteger("2")))).multiply(x1.min(x3)));
+		LargeInteger y3 = ((((((x1.multiply(x1))
+				.multiply(new LargeInteger("3"))).add(getGroup()
+				.getXCoefficient())).divide(y1.multiply(new LargeInteger("2"))))
+				.multiply(x1.subtract(x3))).subtract(y1)).mod(getGroup()
+				.getFieldOrder());
 		IntegerFieldElement Y3 = new IntegerFieldElement(y3, field);
 		Point p = new Point(X3, Y3);
 		return new ECurveGroupElement(p, getGroup());
@@ -173,7 +174,9 @@ public class ECurveGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ECurveGroupElement power(LargeInteger b) {
-
+		if (element.equals(group.one()))
+			return this;
+		
 		ECurveGroupElement base = this;
 		int bitLen = b.bitLength();
 		ECurveGroupElement result = this.getGroup().one();
