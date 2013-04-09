@@ -140,6 +140,16 @@ public class ECurveGroupElement implements IGroupElement {
 	public ECurveGroupElement divide(IGroupElement b) {
 		return mult(b.inverse());
 	}
+	
+	
+	public ECurveGroupElement square() {
+		if (element.equals(group.one())) 
+            return this;
+		if (getElement().getY().getElement().compareTo(LargeInteger.ZERO)==0)
+			return group.one();
+		return null;
+		
+	}
 
 	/**
 	 * 
@@ -149,25 +159,17 @@ public class ECurveGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ECurveGroupElement power(LargeInteger b) {
-	//	ECurveGroupElement base = this;
-	//	ECurveGroupElement res = this.getGroup().one();
-	//	for (LargeInteger i = LargeInteger.ZERO; i.compareTo(b)<0; i=i.add(LargeInteger.ONE))
-	//		res = res.mult(base);
-	//	return res;
-	//}
-		
-		
+
 		ECurveGroupElement base = this;
+		int bitLen = b.bitLength();
 		ECurveGroupElement result = this.getGroup().one();
-
-		String str = b.toString(2);
-
-		for (int i = str.length() - 1; i > -1; i--) {
-			if (str.charAt(i) == '1')
+		for (int i=0; i<bitLen; i++) {
+			if (b.testBit(i))
 				result = result.mult(base);
 			base = base.mult(base);
 		}
 		return result;
+
 	}
 
 	/**

@@ -93,6 +93,9 @@ public class LargeInteger extends BigInteger {
 		return super.bitLength();
 	}
 
+	public boolean testBit(int n) {
+		return super.testBit(n);
+	}
 	public byte[] toByteArray() {
 		return super.toByteArray();
 	}
