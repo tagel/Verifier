@@ -33,8 +33,7 @@ public abstract class Prover {
 	 */
 	public static ProductGroupElement PDecrypt(IntegerRingElement x,
 			ProductGroupElement A) {
-		// TODO return A.getLeft().power(x.neg().getElement());
-		return null;
+		return (A.getLeft().power(x.getElement())).inverse();
 	}
 
 	/**

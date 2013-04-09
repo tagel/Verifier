@@ -7,8 +7,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import cryptographic.primitives.CryptoUtils;
-
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.field.IntegerFieldElement;
 import arithmetic.objects.field.PrimeOrderField;
@@ -16,9 +14,7 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ModGroup;
 import arithmetic.objects.groups.ModGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
-import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
-import arithmetic.objects.ring.Ring;
+import cryptographic.primitives.CryptoUtils;
 
 /**
  * Tests for ArrayOfElements class.

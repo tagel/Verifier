@@ -17,7 +17,6 @@ import arithmetic.objects.groups.ModGroup;
 import arithmetic.objects.groups.ModGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
-import arithmetic.objects.ring.ProductRingElement;
 import arithmetic.objects.ring.Ring;
 import cryptographic.primitives.CryptoUtils;
 

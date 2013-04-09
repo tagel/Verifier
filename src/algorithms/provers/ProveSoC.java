@@ -125,7 +125,7 @@ public class ProveSoC extends Prover {
 		/*
 		 * 5 - Compute C,D and verify equalities
 		 */
-		LargeInteger E = computeE(N, Ne, seed, prg);
+		// TODO : LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
 

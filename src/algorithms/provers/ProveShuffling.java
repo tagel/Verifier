@@ -1,7 +1,5 @@
 package algorithms.provers;
 
-import com.sun.org.apache.bcel.internal.generic.ATHROW;
-
 import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
