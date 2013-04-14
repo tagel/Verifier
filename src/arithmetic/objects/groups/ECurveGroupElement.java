@@ -170,23 +170,42 @@ public class ECurveGroupElement implements IGroupElement {
 	 * 
 	 * @param b
 	 *            a large integer which is the exponent.
+	 * precondition: b is not negative.
 	 * @return our element in the b'th power.
+	 * 
+	 * Some of the logic for this code was taken from bouncy castle open source code.
 	 */
 	@Override
 	public ECurveGroupElement power(LargeInteger b) {
-		if (element.equals(group.one()))
+		if (element.getX().getElement().equals(group.one().getElement().getX().getElement()) && 
+				element.getY().getElement().equals(group.one().getElement().getY().getElement()))
 			return this;
+		
+		if (b.signum()==0) return group.one();
+		
 
-		ECurveGroupElement base = this;
-		int bitLen = b.bitLength();
-		ECurveGroupElement result = this.getGroup().one();
-		for (int i = 0; i < bitLen; i++) {
-			if (b.testBit(i))
-				result = result.mult(base);
-			base = base.square();
+		/*
+		 * ECurveGroupElement base = this; int bitLen = b.bitLength();
+		 * ECurveGroupElement result = this.getGroup().one(); for (int i = 0; i
+		 * < bitLen; i++) { if (b.testBit(i)) result = result.mult(base); base =
+		 * base.square(); } return result;
+		 */
+
+		LargeInteger h = b.multiply(new LargeInteger("3"));
+		ECurveGroupElement inv = this.inverse();
+		ECurveGroupElement p = this;
+		ECurveGroupElement R = this;
+		for (int i = h.bitLength() - 2; i > 0; i--) {
+			R = R.square();
+			boolean hBit = h.testBit(i);
+			boolean bBit = b.testBit(i);
+
+			if (hBit != bBit) {
+				R = R.mult(hBit ? p : inv);
+			}
 		}
-		return result;
 
+		return R;
 	}
 
 	/**

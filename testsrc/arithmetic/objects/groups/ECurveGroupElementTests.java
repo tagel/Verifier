@@ -205,8 +205,6 @@ public class ECurveGroupElementTests {
 				new LargeInteger("-1"), f192));
 		ECurveGroupElement eCurveElement1 = new ECurveGroupElement(point1,
 				eCurveGroup192);
-		System.out.print(eCurveElement1
-				.power(new LargeInteger("5")));
 		Assert.assertTrue(eCurveElement1.equals(eCurveElement1
 				.power(new LargeInteger("5"))));
 
