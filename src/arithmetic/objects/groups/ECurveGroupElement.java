@@ -1,5 +1,14 @@
 package arithmetic.objects.groups;
 
+import java.math.BigInteger;
+
+import org.bouncycastle.math.ec.ECFieldElement;
+import org.bouncycastle.math.ec.ECFieldElement.Fp;
+import org.bouncycastle.math.ec.ECMultiplier;
+import org.bouncycastle.math.ec.ECPoint;
+import org.bouncycastle.math.ec.ECPoint.Fp1;
+import org.bouncycastle.math.ec.FpNafMultiplier;
+
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.field.IField;
@@ -177,19 +186,24 @@ public class ECurveGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ECurveGroupElement power(LargeInteger b) {
-		if (element.getX().getElement().equals(group.one().getElement().getX().getElement()) && 
+		
+		ECMultiplier multiplier = new FpNafMultiplier();
+		BigInteger B = new BigInteger(b.toString());
+		
+		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(), getElement().getX().getElement());
+		ECFieldElement Y = new Fp(getElement().getY().getField().getOrder(), getElement().getY().getElement());
+		ECPoint point = new Fp1(null, X, Y);
+		ECPoint result = multiplier.multiply(point, B, null);
+		return new ECurveGroupElement(new Point(new IntegerFieldElement(new LargeInteger(result.getX().toBigInteger().toString()), getElement().getX().getField()), new IntegerFieldElement(new LargeInteger(result.getY().toBigInteger().toString()), getElement().getY().getField())), getGroup());
+		
+		/*if (element.getX().getElement().equals(group.one().getElement().getX().getElement()) && 
 				element.getY().getElement().equals(group.one().getElement().getY().getElement()))
 			return this;
 		
 		if (b.signum()==0) return group.one();
 		
+		
 
-		/*
-		 * ECurveGroupElement base = this; int bitLen = b.bitLength();
-		 * ECurveGroupElement result = this.getGroup().one(); for (int i = 0; i
-		 * < bitLen; i++) { if (b.testBit(i)) result = result.mult(base); base =
-		 * base.square(); } return result;
-		 */
 
 		LargeInteger h = b.multiply(new LargeInteger("3"));
 		ECurveGroupElement inv = this.inverse();
@@ -205,7 +219,7 @@ public class ECurveGroupElement implements IGroupElement {
 			}
 		}
 
-		return R;
+		return R; */
 	}
 
 	/**

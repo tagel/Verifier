@@ -160,7 +160,7 @@ public abstract class ECPoint
     /**
      * Elliptic curve points over Fp
      */
-    public static class Fp extends ECPoint
+    public static class Fp1 extends ECPoint
     {
         
         /**
@@ -170,7 +170,7 @@ public abstract class ECPoint
          * @param x affine x co-ordinate
          * @param y affine y co-ordinate
          */
-        public Fp(ECCurve curve, ECFieldElement x, ECFieldElement y)
+        public Fp1(ECCurve curve, ECFieldElement x, ECFieldElement y)
         {
             this(curve, x, y, false);
         }
@@ -183,7 +183,7 @@ public abstract class ECPoint
          * @param y affine y co-ordinate
          * @param withCompression if true encode with point compression
          */
-        public Fp(ECCurve curve, ECFieldElement x, ECFieldElement y, boolean withCompression)
+        public Fp1(ECCurve curve, ECFieldElement x, ECFieldElement y, boolean withCompression)
         {
             super(curve, x, y);
 
@@ -273,7 +273,7 @@ public abstract class ECPoint
             ECFieldElement x3 = gamma.square().subtract(this.x).subtract(b.x);
             ECFieldElement y3 = gamma.multiply(this.x.subtract(x3)).subtract(this.y);
 
-            return new ECPoint.Fp(curve, x3, y3, withCompression);
+            return new ECPoint.Fp1(curve, x3, y3, withCompression);
         }
 
         // B.3 pg 62
@@ -299,7 +299,7 @@ public abstract class ECPoint
             ECFieldElement x3 = gamma.square().subtract(this.x.multiply(TWO));
             ECFieldElement y3 = gamma.multiply(this.x.subtract(x3)).subtract(this.y);
                 
-            return new ECPoint.Fp(curve, x3, y3, this.withCompression);
+            return new ECPoint.Fp1(curve, x3, y3, this.withCompression);
         }
 
         // D.3.2 pg 102 (see Note:)
@@ -316,7 +316,7 @@ public abstract class ECPoint
 
         public ECPoint negate()
         {
-            return new ECPoint.Fp(curve, this.x, this.y.negate(), this.withCompression);
+            return new ECPoint.Fp1(curve, this.x, this.y.negate(), this.withCompression);
         }
 
         /**

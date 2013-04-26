@@ -102,14 +102,14 @@ public abstract class ECCurve
     public static class Fp extends ECCurve
     {
         BigInteger q;
-        ECPoint.Fp infinity;
+        ECPoint.Fp1 infinity;
 
         public Fp(BigInteger q, BigInteger a, BigInteger b)
         {
             this.q = q;
             this.a = fromBigInteger(a);
             this.b = fromBigInteger(b);
-            this.infinity = new ECPoint.Fp(this, null, null);
+            this.infinity = new ECPoint.Fp1(this, null, null);
         }
 
         public BigInteger getQ()
@@ -129,7 +129,7 @@ public abstract class ECCurve
 
         public ECPoint createPoint(BigInteger x, BigInteger y, boolean withCompression)
         {
-            return new ECPoint.Fp(this, fromBigInteger(x), fromBigInteger(y), withCompression);
+            return new ECPoint.Fp1(this, fromBigInteger(x), fromBigInteger(y), withCompression);
         }
 
         protected ECPoint decompressPoint(int yTilde, BigInteger X1)
@@ -156,7 +156,7 @@ public abstract class ECCurve
                 beta = fromBigInteger(q.subtract(betaValue));
             }
 
-            return new ECPoint.Fp(this, x, beta, true);
+            return new ECPoint.Fp1(this, x, beta, true);
         }
 
         public ECPoint getInfinity()
