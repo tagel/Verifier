@@ -58,6 +58,31 @@ public class ModTests {
 				Type.MIXING, "default", 3, true, true, false));
 	}
 	
+	@Test
+	public void VerifyShuffleExportDecTest1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1ModGroup/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1ModGroup/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	
+	@Test
+	public void VerifyShuffleExportDecTest3() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3ModGroup/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3ModGroup/default").getFile(),
+				Type.MIXING, "default", 3, true, true, false));
+	}
+	
 	
 	//******************DECRYPTION*******************
 
