@@ -2,12 +2,14 @@ package arithmetic.objects.groups;
 
 import java.math.BigInteger;
 
+import org.bouncycastle.math.ec.ECCurve;
 import org.bouncycastle.math.ec.ECFieldElement;
 import org.bouncycastle.math.ec.ECFieldElement.Fp;
 import org.bouncycastle.math.ec.ECMultiplier;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.ECPoint.Fp1;
 import org.bouncycastle.math.ec.FpNafMultiplier;
+import org.bouncycastle.math.ec.ECCurve.Fp2;
 
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.Node;
@@ -197,6 +199,7 @@ public class ECurveGroupElement implements IGroupElement {
 		if (b.signum() == 0)
 			return group.one();
 
+		ECCurve curve = new Fp2(group.getFieldOrder(), group.getXCoefficient(), group.getB());
 		ECMultiplier multiplier = new FpNafMultiplier();
 		BigInteger B = new BigInteger(b.toString());
 
@@ -204,12 +207,12 @@ public class ECurveGroupElement implements IGroupElement {
 				getElement().getX().getElement());
 		ECFieldElement Y = new Fp(getElement().getY().getField().getOrder(),
 				getElement().getY().getElement());
-		ECPoint point = new Fp1(null, X, Y);
+		ECPoint point = new Fp1(curve, X, Y);
 		ECPoint result = multiplier.multiply(point, B, null);
 		return new ECurveGroupElement(new Point(new IntegerFieldElement(
-				new LargeInteger(result.getX().toBigInteger().toString()),
+				new LargeInteger(result.getX().toBigInteger().toByteArray()),
 				getElement().getX().getField()), new IntegerFieldElement(
-				new LargeInteger(result.getY().toBigInteger().toString()),
+				new LargeInteger(result.getY().toBigInteger().toByteArray()),
 				getElement().getY().getField())), getGroup());
 
 		/*

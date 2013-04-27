@@ -99,12 +99,12 @@ public abstract class ECCurve
     /**
      * Elliptic curve over Fp
      */
-    public static class Fp extends ECCurve
+    public static class Fp2 extends ECCurve
     {
         BigInteger q;
         ECPoint.Fp1 infinity;
 
-        public Fp(BigInteger q, BigInteger a, BigInteger b)
+        public Fp2(BigInteger q, BigInteger a, BigInteger b)
         {
             this.q = q;
             this.a = fromBigInteger(a);
@@ -172,12 +172,12 @@ public abstract class ECCurve
                 return true;
             }
 
-            if (!(anObject instanceof ECCurve.Fp)) 
+            if (!(anObject instanceof ECCurve.Fp2)) 
             {
                 return false;
             }
 
-            ECCurve.Fp other = (ECCurve.Fp) anObject;
+            ECCurve.Fp2 other = (ECCurve.Fp2) anObject;
 
             return this.q.equals(other.q) 
                     && a.equals(other.a) && b.equals(other.b);
