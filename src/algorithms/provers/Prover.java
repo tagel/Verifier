@@ -22,6 +22,32 @@ import cryptographic.primitives.RandomOracle;
 public abstract class Prover {
 
 	/**
+	 * 
+	 * @param pk=(g,y)
+	 * @param width
+	 * @return the expanded pk = ((g,...,g),(y,...,y))
+	 */
+	public static ProductGroupElement expandPk(ProductGroupElement pk, int width) {
+		
+		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
+		ArrayOfElements<IGroupElement> right = new ArrayOfElements<IGroupElement>();
+
+		IGroupElement y = pk.getElements().getAt(1);
+		IGroupElement g = pk.getElements().getAt(0);
+		
+		for (int i=0; i<width; i++) {
+			left.add(g);
+			right.add(y);
+		}
+		
+		ProductGroupElement expandedPk = new ProductGroupElement(
+				new ProductGroupElement(left), new ProductGroupElement(right));
+		return expandedPk;
+	}
+
+	
+	
+	/**
 	 * This function decrypts a given ciphertext back to its decryption factor
 	 * 
 	 * @param x

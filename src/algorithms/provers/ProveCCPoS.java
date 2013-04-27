@@ -101,7 +101,17 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 2 - computing the seed
 		 */
-		Node nodeForSeed = computeNodeForSeed(Gq, pk, wInput, wOutput, h, u);
+		
+		ProductGroupElement pkSeed;
+		//Here we check if width > 1 -> if so, 
+		//we interpret pk as pk = ((g,...,g),(y,...,y))
+		if (width>1) {
+			pkSeed = Prover.expandPk(pk, width);
+		} else {
+			pkSeed = pk;
+		}
+		
+		Node nodeForSeed = computeNodeForSeed(Gq, pkSeed, wInput, wOutput, h, u);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
 		/*

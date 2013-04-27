@@ -115,7 +115,7 @@ public class ProveShuffling extends Prover {
 		//Here we check if width > 1 -> if so, 
 		//we interpret pk as pk = ((g,...,g),(y,...,y))
 		if (width>1) {
-			pkSeed = expandPk(pk, width);
+			pkSeed = Prover.expandPk(pk, width);
 		} else {
 			pkSeed = pk;
 		}
@@ -228,31 +228,7 @@ public class ProveShuffling extends Prover {
 		return true;
 	}
 	
-	/**
-	 * 
-	 * @param pk=(g,y)
-	 * @param width
-	 * @return the expanded pk = ((g,...,g),(y,...,y))
-	 */
-	private static ProductGroupElement expandPk(ProductGroupElement pk, int width) {
-		
-		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
-		ArrayOfElements<IGroupElement> right = new ArrayOfElements<IGroupElement>();
-
-		IGroupElement y = pk.getElements().getAt(1);
-		IGroupElement g = pk.getElements().getAt(0);
-		
-		for (int i=0; i<width; i++) {
-			left.add(g);
-			right.add(y);
-		}
-		
-		ProductGroupElement expandedPk = new ProductGroupElement(
-				new ProductGroupElement(left), new ProductGroupElement(right));
-		return expandedPk;
-	}
-
-
+	
 	// TODO printout method - delete?
 	static String bytArrayToHex(byte[] a) {
 		StringBuilder sb = new StringBuilder();
