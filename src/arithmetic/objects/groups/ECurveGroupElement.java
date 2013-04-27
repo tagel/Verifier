@@ -65,6 +65,7 @@ public class ECurveGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ECurveGroupElement mult(IGroupElement b) {
+
 		if (b.equals(group.one())) {
 			return this;
 		}
@@ -223,24 +224,20 @@ public class ECurveGroupElement implements IGroupElement {
 				getElement().getY().getField())), getGroup());
 
 		/*
-		 * if
-		 * (element.getX().getElement().equals(group.one().getElement().getX()
-		 * .getElement()) &&
-		 * element.getY().getElement().equals(group.one().getElement
-		 * ().getY().getElement())) return this;
+		 * if (element.getX().getElement()
+		 * .equals(group.one().getElement().getX().getElement()) &&
+		 * element.getY().getElement()
+		 * .equals(group.one().getElement().getY().getElement())) return this;
 		 * 
-		 * if (b.signum()==0) return group.one();
+		 * if (b.signum() == 0) return group.one();
 		 * 
-		 * 
-		 * 
-		 * LargeInteger e = b;
-		 * LargeInteger h = e.multiply(new LargeInteger("3"));
-		 * ECurveGroupElement inv = this.inverse();
+		 * LargeInteger e = b; LargeInteger h = e.multiply(new
+		 * LargeInteger("3")); ECurveGroupElement inv = this.inverse();
 		 * ECurveGroupElement R = this; for (int i = h.bitLength() - 2; i > 0;
 		 * --i) { R = R.square(); boolean hBit = h.testBit(i); boolean eBit =
 		 * e.testBit(i);
 		 * 
-		 * if (hBit != eBit) { R = R.mult(hBit ? p : inv); } }
+		 * if (hBit != eBit) { R = R.mult(hBit ? this : inv); } }
 		 * 
 		 * return R;
 		 */

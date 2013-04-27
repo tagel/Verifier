@@ -214,8 +214,8 @@ public class ECurveGroupElementTests {
 				new LargeInteger("15"), f192));
 		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
 				eCurveGroup192);
-		ECurveGroupElement res = eCurveElement2.square();
-		System.out.println(res.getElement().getX().getElement().intValue());
+		ECurveGroupElement res = eCurveElement2.power(new LargeInteger("25"));
+		System.out.println(res.getElement().getX().getElement());
 		System.out.println(res.getElement().getY().getElement());
 	}
 
