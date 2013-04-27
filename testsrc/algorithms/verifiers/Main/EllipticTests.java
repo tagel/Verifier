@@ -110,7 +110,7 @@ public class EllipticTests {
 						.getResource("exportsDecOutputs/w3/protInfo.xml").getFile(),
 				getClass().getClassLoader()
 						.getResource("exportsDecOutputs/w3/default").getFile(),
-				Type.MIXING, "default", 1, false, false, false));
+				Type.MIXING, "default", 3, false, false, true));
 	}
 	
 	public static class MockedLogger extends Logger {
