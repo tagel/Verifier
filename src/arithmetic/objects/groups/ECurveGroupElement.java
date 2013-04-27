@@ -201,7 +201,7 @@ public class ECurveGroupElement implements IGroupElement {
 
 		ECCurve curve = new Fp2(group.getFieldOrder(), group.getXCoefficient(), group.getB());
 		ECMultiplier multiplier = new FpNafMultiplier();
-		BigInteger B = new BigInteger(b.toByteArray());
+		BigInteger B = new BigInteger(b.toByteArray()); 
 
 		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(),
 				getElement().getX().getElement());
