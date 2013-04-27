@@ -70,6 +70,31 @@ public class ModTests {
 				.getClassLoader().getResource("exportMod3/default").getFile(),
 				Type.MIXING, "default", 1, false, false, true));
 	}
+	
+	@Test
+	public void VerifyDecExportDecTest1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1ModGroup/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w1ModGroup/default").getFile(),
+				Type.MIXING, "default", 1, false, false, true));
+	}
+	
+	
+	@Test
+	public void VerifyDecExportDecTest3() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3ModGroup/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w3ModGroup/default").getFile(),
+				Type.MIXING, "default", 3, false, false, true));
+	}
 
 	
 

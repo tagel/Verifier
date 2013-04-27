@@ -94,9 +94,9 @@ public class EllipticTests {
 		MainVerifier mainVer = new MainVerifier(logger);
 		Assert.assertTrue(mainVer.verify(
 				getClass().getClassLoader()
-						.getResource("exportsDecOutputs/w1/protInfo.xml").getFile(),
+						.getResource("exportsDecOutputs/w1Elliptic/protInfo.xml").getFile(),
 				getClass().getClassLoader()
-						.getResource("exportsDecOutputs/w1/default").getFile(),
+						.getResource("exportsDecOutputs/w1Elliptic/default").getFile(),
 				Type.MIXING, "default", 1, false, false, true));
 	}
 	
@@ -107,9 +107,9 @@ public class EllipticTests {
 		MainVerifier mainVer = new MainVerifier(logger);
 		Assert.assertTrue(mainVer.verify(
 				getClass().getClassLoader()
-						.getResource("exportsDecOutputs/w3/protInfo.xml").getFile(),
+						.getResource("exportsDecOutputs/w3Elliptic/protInfo.xml").getFile(),
 				getClass().getClassLoader()
-						.getResource("exportsDecOutputs/w3/default").getFile(),
+						.getResource("exportsDecOutputs/w3Elliptic/default").getFile(),
 				Type.MIXING, "default", 3, false, false, true));
 	}
 	
