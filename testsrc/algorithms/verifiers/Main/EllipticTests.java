@@ -57,7 +57,7 @@ public class EllipticTests {
 						.getResource("exportsDecOutputs/w3/protInfo.xml").getFile(),
 				getClass().getClassLoader()
 						.getResource("exportsDecOutputs/w3/default").getFile(),
-				Type.MIXING, "default", 1, true, true, false));
+				Type.MIXING, "default", 3, true, true, false));
 	}
 	
 	
