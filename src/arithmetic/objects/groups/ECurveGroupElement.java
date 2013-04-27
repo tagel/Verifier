@@ -153,26 +153,32 @@ public class ECurveGroupElement implements IGroupElement {
 	}
 
 	public ECurveGroupElement square() {
-		if (element.equals(group.one()))
+		if (element.getX().getElement()
+				.equals(group.one().getElement().getX().getElement())
+				&& element.getY().getElement()
+						.equals(group.one().getElement().getY().getElement()))
 			return this;
-		if (getElement().getY().getElement().compareTo(LargeInteger.ZERO) == 0)
+
+		if (getElement().getY().getElement().signum() == 0)
 			return group.one();
+
 		LargeInteger x1 = this.getElement().getX().getElement();
 		LargeInteger y1 = this.getElement().getY().getElement();
-		IField<IntegerFieldElement> field = new PrimeOrderField(this.getGroup()
+		LargeInteger TWO = new LargeInteger("2");
+		LargeInteger THREE = new LargeInteger("3");
+
+		IField<IntegerFieldElement> field = new PrimeOrderField(getGroup()
 				.getFieldOrder());
-		LargeInteger x3 = (((((x1.multiply(x1)).multiply(new LargeInteger("3")))
-				.add(getGroup().getXCoefficient())).divide(y1
-				.multiply(new LargeInteger("2")))).power(2).subtract(x1
-				.multiply(new LargeInteger("2")))).mod(getGroup()
-				.getFieldOrder());
+
+		LargeInteger gamma = (((x1.power(2)).multiply(THREE)).add(getGroup()
+				.getXCoefficient())).divide(y1.multiply(TWO));
+
+		LargeInteger x3 = (gamma.power(2)).subtract(x1.multiply(TWO));
 		IntegerFieldElement X3 = new IntegerFieldElement(x3, field);
-		LargeInteger y3 = ((((((x1.multiply(x1))
-				.multiply(new LargeInteger("3"))).add(getGroup()
-				.getXCoefficient())).divide(y1.multiply(new LargeInteger("2"))))
-				.multiply(x1.subtract(x3))).subtract(y1)).mod(getGroup()
-				.getFieldOrder());
+
+		LargeInteger y3 = gamma.multiply(x1.subtract(x3)).subtract(y1);
 		IntegerFieldElement Y3 = new IntegerFieldElement(y3, field);
+
 		Point p = new Point(X3, Y3);
 		return new ECurveGroupElement(p, getGroup());
 	}
@@ -199,9 +205,10 @@ public class ECurveGroupElement implements IGroupElement {
 		if (b.signum() == 0)
 			return group.one();
 
-		ECCurve curve = new Fp2(group.getFieldOrder(), group.getXCoefficient(), group.getB());
+		ECCurve curve = new Fp2(group.getFieldOrder(), group.getXCoefficient(),
+				group.getB());
 		ECMultiplier multiplier = new FpNafMultiplier();
-		BigInteger B = new BigInteger(b.toByteArray()); 
+		BigInteger B = new BigInteger(b.toByteArray());
 
 		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(),
 				getElement().getX().getElement());
@@ -226,14 +233,14 @@ public class ECurveGroupElement implements IGroupElement {
 		 * 
 		 * 
 		 * 
-		 * 
-		 * LargeInteger h = b.multiply(new LargeInteger("3"));
-		 * ECurveGroupElement inv = this.inverse(); ECurveGroupElement p = this;
+		 * LargeInteger e = b;
+		 * LargeInteger h = e.multiply(new LargeInteger("3"));
+		 * ECurveGroupElement inv = this.inverse();
 		 * ECurveGroupElement R = this; for (int i = h.bitLength() - 2; i > 0;
-		 * i--) { R = R.square(); boolean hBit = h.testBit(i); boolean bBit =
-		 * b.testBit(i);
+		 * --i) { R = R.square(); boolean hBit = h.testBit(i); boolean eBit =
+		 * e.testBit(i);
 		 * 
-		 * if (hBit != bBit) { R = R.mult(hBit ? p : inv); } }
+		 * if (hBit != eBit) { R = R.mult(hBit ? p : inv); } }
 		 * 
 		 * return R;
 		 */
