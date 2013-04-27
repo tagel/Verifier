@@ -79,8 +79,9 @@ public class ProveDec extends Prover {
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors,
 			ArrayOfElements<Node> decrFactCommitments,
 			ArrayOfElements<IntegerRingElement> decrFactReplies, Logger logger) {
-		
-		logger.sendLog("Starting to prove the dectiption",Logger.Severity.NORMAL);
+
+		logger.sendLog("Starting to prove the dectiption",
+				Logger.Severity.NORMAL);
 
 		/*
 		 * 1(a) - interpret Tdec as Node(yl',B')
@@ -126,6 +127,19 @@ public class ProveDec extends Prover {
 		ArrayOfElements<ProductGroupElement> u = computeU(wInput);
 		ProductGroupElement A = computeDecA(N, e, u);
 
+		// TODO printouts
+		System.out.println("u : " + u);
+		System.out.println("s : " + bytArrayToHex(seed));
+		System.out.println("f1 : " + decryptionFactors.getAt(0));
+		System.out.println("f2 : " + decryptionFactors.getAt(1));
+		System.out.println("yp_"+j+" : "+ yltag);
+		System.out.println("v : "+bytArrayToHex(v.toByteArray()));
+		System.out.println("k_x_1 : "+decrFactReplies.getAt(0));
+		System.out.println("k_x_2 : "+decrFactReplies.getAt(1));
+		System.out.println("A : "+A);
+		
+		
+
 		/*
 		 * if j==0 then compute B = PI((PI(fli)^ei) and accept if
 		 * PI(yl)^v*PI(yltag) == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
@@ -139,6 +153,9 @@ public class ProveDec extends Prover {
 			for (int i = 1; i < decryptionFactors.getAt(j).getSize(); i++) {
 				Bj = Bj.mult((decryptionFactors.getAt(j).getAt(i)).power(e[i]));
 			}
+			
+			//TODO printouts
+			System.out.println("B_"+j+" : "+Bj);
 
 			/*
 			 * verify yj^v*ytagj == g^kjx
@@ -163,7 +180,7 @@ public class ProveDec extends Prover {
 		/* All equalities exist. */
 		logger.sendLog("Shuffle of commitments proof succeeded",
 				Logger.Severity.NORMAL);
-		
+
 		return true;
 	}
 
@@ -218,7 +235,7 @@ public class ProveDec extends Prover {
 		for (int i = 1; i < N; i++) {
 			left = left.mult(u.getAt(i).power(e[i]));
 		}
-		ProductGroupElement A = new ProductGroupElement(left, null);
+		ProductGroupElement A = new ProductGroupElement(left, u.getAt(0));
 		return A;
 	}
 
@@ -274,6 +291,9 @@ public class ProveDec extends Prover {
 					.getAt(1);
 			BtagArr.add(Bltag);
 		}
+		
+		//TODO printouts
+		System.out.println("B : "+B);
 
 		// compute piYltag
 		IGroupElement piYltag = Gq.one();
@@ -308,7 +328,14 @@ public class ProveDec extends Prover {
 			secondEq = false;
 		}
 
-				
 		return (firstEq && secondEq);
+	}
+
+	// TODO printout method - delete?
+	static String bytArrayToHex(byte[] a) {
+		StringBuilder sb = new StringBuilder();
+		for (byte b : a)
+			sb.append(String.format("%02x", b & 0xff));
+		return sb.toString();
 	}
 }
