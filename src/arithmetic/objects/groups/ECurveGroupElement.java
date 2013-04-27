@@ -178,48 +178,62 @@ public class ECurveGroupElement implements IGroupElement {
 	/**
 	 * 
 	 * @param b
-	 *            a large integer which is the exponent.
-	 * precondition: b is not negative.
+	 *            a large integer which is the exponent. precondition: b is not
+	 *            negative.
 	 * @return our element in the b'th power.
 	 * 
-	 * Some of the logic for this code was taken from bouncy castle open source code.
+	 *         Some of the logic for this code was taken from bouncy castle open
+	 *         source code.
 	 */
 	@Override
 	public ECurveGroupElement power(LargeInteger b) {
-		
+
+		if (element.getX().getElement()
+				.equals(group.one().getElement().getX().getElement())
+				&& element.getY().getElement()
+						.equals(group.one().getElement().getY().getElement()))
+			return this;
+
+		if (b.signum() == 0)
+			return group.one();
+
 		ECMultiplier multiplier = new FpNafMultiplier();
 		BigInteger B = new BigInteger(b.toString());
-		
-		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(), getElement().getX().getElement());
-		ECFieldElement Y = new Fp(getElement().getY().getField().getOrder(), getElement().getY().getElement());
+
+		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(),
+				getElement().getX().getElement());
+		ECFieldElement Y = new Fp(getElement().getY().getField().getOrder(),
+				getElement().getY().getElement());
 		ECPoint point = new Fp1(null, X, Y);
 		ECPoint result = multiplier.multiply(point, B, null);
-		return new ECurveGroupElement(new Point(new IntegerFieldElement(new LargeInteger(result.getX().toBigInteger().toString()), getElement().getX().getField()), new IntegerFieldElement(new LargeInteger(result.getY().toBigInteger().toString()), getElement().getY().getField())), getGroup());
-		
-		/*if (element.getX().getElement().equals(group.one().getElement().getX().getElement()) && 
-				element.getY().getElement().equals(group.one().getElement().getY().getElement()))
-			return this;
-		
-		if (b.signum()==0) return group.one();
-		
-		
+		return new ECurveGroupElement(new Point(new IntegerFieldElement(
+				new LargeInteger(result.getX().toBigInteger().toString()),
+				getElement().getX().getField()), new IntegerFieldElement(
+				new LargeInteger(result.getY().toBigInteger().toString()),
+				getElement().getY().getField())), getGroup());
 
-
-		LargeInteger h = b.multiply(new LargeInteger("3"));
-		ECurveGroupElement inv = this.inverse();
-		ECurveGroupElement p = this;
-		ECurveGroupElement R = this;
-		for (int i = h.bitLength() - 2; i > 0; i--) {
-			R = R.square();
-			boolean hBit = h.testBit(i);
-			boolean bBit = b.testBit(i);
-
-			if (hBit != bBit) {
-				R = R.mult(hBit ? p : inv);
-			}
-		}
-
-		return R; */
+		/*
+		 * if
+		 * (element.getX().getElement().equals(group.one().getElement().getX()
+		 * .getElement()) &&
+		 * element.getY().getElement().equals(group.one().getElement
+		 * ().getY().getElement())) return this;
+		 * 
+		 * if (b.signum()==0) return group.one();
+		 * 
+		 * 
+		 * 
+		 * 
+		 * LargeInteger h = b.multiply(new LargeInteger("3"));
+		 * ECurveGroupElement inv = this.inverse(); ECurveGroupElement p = this;
+		 * ECurveGroupElement R = this; for (int i = h.bitLength() - 2; i > 0;
+		 * i--) { R = R.square(); boolean hBit = h.testBit(i); boolean bBit =
+		 * b.testBit(i);
+		 * 
+		 * if (hBit != bBit) { R = R.mult(hBit ? p : inv); } }
+		 * 
+		 * return R;
+		 */
 	}
 
 	/**
