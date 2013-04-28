@@ -178,13 +178,13 @@ public class ECurveGroupElement implements IGroupElement {
 		IntegerFieldElement a = new IntegerFieldElement(new LargeInteger(getGroup()
 				.getXCoefficient()), field);
 
-		IntegerFieldElement gamma = (x1.mult(x1)).mult(THREE).add(a).divide(y1.mult(TWO));
+		IntegerFieldElement z = (x1.mult(x1)).mult(THREE).add(a).divide(y1.mult(TWO));
 		
       
-		LargeInteger x3 = (gamma.getElement().power(2)).subtract(x1.getElement().multiply(new LargeInteger("2")));
+		LargeInteger x3 = (z.getElement().power(2)).subtract(x1.getElement().multiply(new LargeInteger("2")));
 		IntegerFieldElement X3 = new IntegerFieldElement(x3.mod(group.getFieldOrder()), field);
 		
-		LargeInteger y3 = gamma.getElement().multiply(x1.getElement().subtract(x3)).subtract(y1.getElement());
+		LargeInteger y3 = z.getElement().multiply(x1.getElement().subtract(x3)).subtract(y1.getElement());
 		IntegerFieldElement Y3 = new IntegerFieldElement(y3.mod(group.getFieldOrder()), field);
 		
 		Point p = new Point(X3, Y3);
