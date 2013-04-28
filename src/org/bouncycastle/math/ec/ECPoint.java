@@ -295,7 +295,9 @@ public abstract class ECPoint
             ECFieldElement TWO = this.curve.fromBigInteger(BigInteger.valueOf(2));
             ECFieldElement THREE = this.curve.fromBigInteger(BigInteger.valueOf(3));
             ECFieldElement gamma = this.x.square().multiply(THREE).add(curve.a).divide(y.multiply(TWO));
-
+            System.out.println(gamma.toBigInteger());
+            
+            
             ECFieldElement x3 = gamma.square().subtract(this.x.multiply(TWO));
             ECFieldElement y3 = gamma.multiply(this.x.subtract(x3)).subtract(this.y);
                 

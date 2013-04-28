@@ -207,16 +207,20 @@ public class ECurveGroupElementTests {
 				eCurveGroup192);
 		Assert.assertTrue(eCurveElement1.equals(eCurveElement1
 				.power(new LargeInteger("5"))));
-		
-		//REMOVE
+
+		// REMOVE
 		Point point2 = new Point(new IntegerFieldElement(
 				new LargeInteger("27"), f192), new IntegerFieldElement(
 				new LargeInteger("15"), f192));
 		ECurveGroupElement eCurveElement2 = new ECurveGroupElement(point2,
 				eCurveGroup192);
-		ECurveGroupElement res = eCurveElement2.power(new LargeInteger("25"));
-		System.out.println(res.getElement().getX().getElement());
-		System.out.println(res.getElement().getY().getElement());
+
+				
+		System.out.println(eCurveElement2.power(new LargeInteger("25"))
+				.getElement().getX().getElement());
+		System.out.println(eCurveElement2.power(new LargeInteger("25"))
+				.getElement().getY().getElement());
+				
 	}
 
 	@Test

@@ -1,6 +1,6 @@
 package arithmetic.objects.groups;
 
-import java.math.BigInteger;
+
 
 import org.bouncycastle.math.ec.ECCurve;
 import org.bouncycastle.math.ec.ECFieldElement;
@@ -153,6 +153,10 @@ public class ECurveGroupElement implements IGroupElement {
 		return mult(b.inverse());
 	}
 
+	/**
+	 * 
+	 * @return the result of the multiplication of our element with itself.
+	 */
 	public ECurveGroupElement square() {
 		if (element.getX().getElement()
 				.equals(group.one().getElement().getX().getElement())
@@ -162,40 +166,59 @@ public class ECurveGroupElement implements IGroupElement {
 
 		if (getElement().getY().getElement().signum() == 0)
 			return group.one();
-
-		LargeInteger x1 = this.getElement().getX().getElement();
-		LargeInteger y1 = this.getElement().getY().getElement();
-		LargeInteger TWO = new LargeInteger("2");
-		LargeInteger THREE = new LargeInteger("3");
-
+		
 		IField<IntegerFieldElement> field = new PrimeOrderField(getGroup()
 				.getFieldOrder());
+		
+		IntegerFieldElement x1 = this.getElement().getX();
+		IntegerFieldElement y1 = this.getElement().getY();
+		IntegerFieldElement TWO = new IntegerFieldElement(new LargeInteger("2"), field);
+		IntegerFieldElement THREE = new IntegerFieldElement(new LargeInteger("3"), field);
+		
+		IntegerFieldElement a = new IntegerFieldElement(new LargeInteger(getGroup()
+				.getXCoefficient()), field);
 
-		LargeInteger gamma = (((x1.power(2)).multiply(THREE)).add(getGroup()
-				.getXCoefficient())).divide(y1.multiply(TWO));
-
-		LargeInteger x3 = (gamma.power(2)).subtract(x1.multiply(TWO));
-		IntegerFieldElement X3 = new IntegerFieldElement(x3, field);
-
-		LargeInteger y3 = gamma.multiply(x1.subtract(x3)).subtract(y1);
-		IntegerFieldElement Y3 = new IntegerFieldElement(y3, field);
-
+		IntegerFieldElement gamma = (x1.mult(x1)).mult(THREE).add(a).divide(y1.mult(TWO));
+		
+      
+		LargeInteger x3 = (gamma.getElement().power(2)).subtract(x1.getElement().multiply(new LargeInteger("2")));
+		IntegerFieldElement X3 = new IntegerFieldElement(x3.mod(group.getFieldOrder()), field);
+		
+		LargeInteger y3 = gamma.getElement().multiply(x1.getElement().subtract(x3)).subtract(y1.getElement());
+		IntegerFieldElement Y3 = new IntegerFieldElement(y3.mod(group.getFieldOrder()), field);
+		
 		Point p = new Point(X3, Y3);
 		return new ECurveGroupElement(p, getGroup());
 	}
+	
+	/*public ECurveGroupElement square2() {
+		if (element.getX().getElement()
+				.equals(group.one().getElement().getX().getElement())
+				&& element.getY().getElement()
+						.equals(group.one().getElement().getY().getElement()))
+			return this;
 
-	/**
-	 * 
-	 * @param b
-	 *            a large integer which is the exponent. precondition: b is not
-	 *            negative.
-	 * @return our element in the b'th power.
-	 * 
-	 *         Some of the logic for this code was taken from bouncy castle open
-	 *         source code.
-	 */
-	@Override
-	public ECurveGroupElement power(LargeInteger b) {
+		if (getElement().getY().getElement().signum() == 0)
+			return group.one();
+		
+		ECCurve curve = new Fp2(group.getFieldOrder(), group.getXCoefficient(),
+				group.getB());
+		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(),
+				getElement().getX().getElement());
+		ECFieldElement Y = new Fp(getElement().getY().getField().getOrder(),
+				getElement().getY().getElement());
+		ECPoint point = new Fp1(curve, X, Y);
+		ECPoint result = point.twice();
+		return new ECurveGroupElement(new Point(new IntegerFieldElement(
+				new LargeInteger(result.getX().toBigInteger().toByteArray()),
+				getElement().getX().getField()), new IntegerFieldElement(
+				new LargeInteger(result.getY().toBigInteger().toByteArray()),
+				getElement().getY().getField())), getGroup());
+		
+	}*/
+
+
+	/*public ECurveGroupElement power2(LargeInteger b) {
 
 		if (element.getX().getElement()
 				.equals(group.one().getElement().getX().getElement())
@@ -222,25 +245,46 @@ public class ECurveGroupElement implements IGroupElement {
 				getElement().getX().getField()), new IntegerFieldElement(
 				new LargeInteger(result.getY().toBigInteger().toByteArray()),
 				getElement().getY().getField())), getGroup());
+	}*/
+	
+	/**
+	 * 
+	 * @param b
+	 *            a large non-negative integer which is the exponent. precondition: b is not
+	 *            negative(may be zero).
+	 * @return our element in the b'th power.
+	 * 
+	 *         Some of the logic for this method was taken from bouncy castle open
+	 *         source code.
+	 */
+	@Override
+	public ECurveGroupElement power(LargeInteger b) {
 
-		/*
-		 * if (element.getX().getElement()
-		 * .equals(group.one().getElement().getX().getElement()) &&
-		 * element.getY().getElement()
-		 * .equals(group.one().getElement().getY().getElement())) return this;
-		 * 
-		 * if (b.signum() == 0) return group.one();
-		 * 
-		 * LargeInteger e = b; LargeInteger h = e.multiply(new
-		 * LargeInteger("3")); ECurveGroupElement inv = this.inverse();
-		 * ECurveGroupElement R = this; for (int i = h.bitLength() - 2; i > 0;
-		 * --i) { R = R.square(); boolean hBit = h.testBit(i); boolean eBit =
-		 * e.testBit(i);
-		 * 
-		 * if (hBit != eBit) { R = R.mult(hBit ? this : inv); } }
-		 * 
-		 * return R;
-		 */
+		if (element.getX().getElement()
+				.equals(group.one().getElement().getX().getElement())
+				&& element.getY().getElement()
+						.equals(group.one().getElement().getY().getElement()))
+			return this;
+
+		if (b.signum() == 0)
+			return group.one();
+
+		LargeInteger e = b;
+		LargeInteger h = e.multiply(new LargeInteger("3"));
+		ECurveGroupElement inv = this.inverse();
+		ECurveGroupElement R = this;
+		for (int i = h.bitLength() - 2; i > 0; --i) {
+			R = R.square();
+			boolean hBit = h.testBit(i);
+			boolean eBit = e.testBit(i);
+
+			if (hBit != eBit) {
+				R = R.mult(hBit ? this : inv);
+			}
+		}
+
+		return R;
+
 	}
 
 	/**
