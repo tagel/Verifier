@@ -478,6 +478,12 @@ public class MainVerifier {
 		//Add L_lambda at Arr[lambda]
 		Arr.add(ShuffledCiphertexts);
 		params.setArrOfCiphertexts(Arr);
+		
+		//TODO pintouts
+		System.out.println("b(L0)"+bytArrayToHex(params.getArrOfCiphertexts().getAt(0).toByteArray()));
+		System.out.println("b(L1)"+bytArrayToHex(params.getArrOfCiphertexts().getAt(1).toByteArray()));
+		System.out.println("b(L2)"+bytArrayToHex(params.getArrOfCiphertexts().getAt(2).toByteArray()));
+		
 		return true;
 
 	}
@@ -508,6 +514,8 @@ public class MainVerifier {
 	private static String getNumStringForFileName(int i) {
 		return (i < 10 ? "0" : EMPTY_STRING) + i;
 	}
+	
+	
 
 
 }

@@ -128,6 +128,8 @@ public class ProveDec extends Prover {
 		ProductGroupElement A = computeDecA(N, e, u);
 
 		// TODO printouts
+		System.out.println("w : "+wInput);
+		System.out.println("b(w) : "+bytArrayToHex(wInput.toByteArray()));
 		System.out.println("u : " + u);
 		System.out.println("s : " + bytArrayToHex(seed));
 		System.out.println("f1 : " + decryptionFactors.getAt(0));
@@ -137,6 +139,7 @@ public class ProveDec extends Prover {
 		System.out.println("k_x_1 : "+decrFactReplies.getAt(0));
 		System.out.println("k_x_2 : "+decrFactReplies.getAt(1));
 		System.out.println("A : "+A);
+		System.out.println("ro : "+bytArrayToHex(ro));
 		
 		
 
@@ -205,7 +208,9 @@ public class ProveDec extends Prover {
 			ArrayOfElements<IGroupElement> y,
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors) {
+		
 
+				
 		// creating node(g,w)
 		Node leftNode = new Node();
 		leftNode.add(g);
@@ -217,11 +222,16 @@ public class ProveDec extends Prover {
 		Node b = new Node(decryptionFactors.toByteArray());
 		rightNode.add(a);
 		rightNode.add(b);
-
+		
 		// creating node(node(g,w),node(a,b))
 		Node nodeForSeed = new Node();
 		nodeForSeed.add(leftNode);
 		nodeForSeed.add(rightNode);
+		
+		//TODO printouts
+		System.out.println("a : "+bytArrayToHex(a.toByteArray()));
+		System.out.println("b : "+bytArrayToHex(b.toByteArray()));
+		System.out.println("nodeForSeed : "+bytArrayToHex(nodeForSeed.toByteArray()));
 		return nodeForSeed;
 	}
 
