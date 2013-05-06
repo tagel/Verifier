@@ -140,6 +140,7 @@ public class ProveDec extends Prover {
 		System.out.println("k_x_2 : "+decrFactReplies.getAt(1));
 		System.out.println("A : "+A);
 		System.out.println("ro : "+bytArrayToHex(ro));
+		System.out.println("B'1 : "+Btag.toByteArray());
 		
 		
 
