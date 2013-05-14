@@ -84,7 +84,7 @@ public class EllipticTests {
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
 				.getResource("exportDec/protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("exportDec/default").getFile(),
-				Type.MIXING, "default", 1, false, false, true));
+				Type.DECRYPTION, "default", 1, false, false, true));
 	}
 
 	

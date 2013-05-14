@@ -86,6 +86,7 @@ public class VerDec {
 					|| !readDecrFactReply(lambda, directory, Zq, i))
 				return false;
 		}
+		
 
 		// extract g from the public key to send to the verifier:
 		IGroupElement g = pk.getElements().getAt(0);
@@ -116,6 +117,10 @@ public class VerDec {
 		// ********Step 4 in the algorithm**********
 		// verify Plaintexts:
 		ArrayOfElements<ProductGroupElement> f = multiplyArrays(DecryptionFactors);
+		//TODO
+		System.out.println("m : "+m);
+		System.out.println("L : "+Prover.TDecrypt(L, f));
+		
 		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
 		}
@@ -172,6 +177,7 @@ public class VerDec {
 			logger.sendLog("DecrFact commitment file not found.", Logger.Severity.ERROR);
 			return false;
 		}
+		
 
 		// interpret the DecrFactCommitment as a Node with two children:
 		Node DecrFactCommitment = new Node(bDecrFactCommitment);
@@ -225,4 +231,12 @@ public class VerDec {
 		DecryptionFactors.add(factor);
 		return true;
 	}
+	
+	// TODO printout method - delete?
+		static String bytArrayToHex(byte[] a) {
+			StringBuilder sb = new StringBuilder();
+			for (byte b : a)
+				sb.append(String.format("%02x", b & 0xff));
+			return sb.toString();
+		}
 }
