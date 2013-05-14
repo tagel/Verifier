@@ -23,30 +23,29 @@ public abstract class Prover {
 
 	/**
 	 * 
-	 * @param pk=(g,y)
+	 * @param pk
+	 *            =(g,y)
 	 * @param width
 	 * @return the expanded pk = ((g,...,g),(y,...,y))
 	 */
 	public static ProductGroupElement expandPk(ProductGroupElement pk, int width) {
-		
+
 		ArrayOfElements<IGroupElement> left = new ArrayOfElements<IGroupElement>();
 		ArrayOfElements<IGroupElement> right = new ArrayOfElements<IGroupElement>();
 
 		IGroupElement y = pk.getElements().getAt(1);
 		IGroupElement g = pk.getElements().getAt(0);
-		
-		for (int i=0; i<width; i++) {
+
+		for (int i = 0; i < width; i++) {
 			left.add(g);
 			right.add(y);
 		}
-		
+
 		ProductGroupElement expandedPk = new ProductGroupElement(
 				new ProductGroupElement(left), new ProductGroupElement(right));
 		return expandedPk;
 	}
 
-	
-	
 	/**
 	 * This function decrypts a given ciphertext back to its decryption factor
 	 * 
@@ -255,6 +254,7 @@ public abstract class Prover {
 		LargeInteger v = byteArrayToPosLargeInteger(challenge);
 		LargeInteger twoNv = new LargeInteger("2").power(Nv);
 		v = v.mod(twoNv);
+
 		return v;
 	}
 
@@ -457,7 +457,7 @@ public abstract class Prover {
 			tempH = tempH.power(e);
 		}
 
-		//TODO printouts
+		// TODO printouts
 		System.out.println("h0^pi(e) : " + tempH);
 
 		IGroupElement D = B.getAt(N - 1).divide(tempH);

@@ -86,6 +86,7 @@ public class VerDec {
 					|| !readDecrFactReply(lambda, directory, Zq, i))
 				return false;
 		}
+		
 
 		// extract g from the public key to send to the verifier:
 		IGroupElement g = pk.getElements().getAt(0);

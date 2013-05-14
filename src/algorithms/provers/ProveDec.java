@@ -113,7 +113,7 @@ public class ProveDec extends Prover {
 		ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
 
 		/* creating node(T1Dec,...,TlambdaDec) */
-		Node decCommitmentsNode = new Node(decCommitment.toByteArray());
+		Node decCommitmentsNode = new Node(decrFactCommitments.toByteArray());
 
 		byte[] challenge = computeChallenge(ROChallenge, ro,
 				decCommitmentsNode, leaf);
@@ -128,6 +128,11 @@ public class ProveDec extends Prover {
 		ProductGroupElement A = computeDecA(N, e, u);
 
 		// TODO printouts
+		
+		Node decCommitment2 = decrFactCommitments.getAt(1);
+		IGroupElement yltag2 = (IGroupElement) decCommitment2.getAt(0);
+		ProductGroupElement Btag2 = (ProductGroupElement) decCommitment2.getAt(1);
+		
 		System.out.println("w : "+wInput);
 		System.out.println("b(w) : "+bytArrayToHex(wInput.toByteArray()));
 		System.out.println("u : " + u);
@@ -135,12 +140,18 @@ public class ProveDec extends Prover {
 		System.out.println("f1 : " + decryptionFactors.getAt(0));
 		System.out.println("f2 : " + decryptionFactors.getAt(1));
 		System.out.println("yp_"+j+" : "+ yltag);
+		
+		System.out.println("yp_2 : "+ yltag2);
+		System.out.println("B'2 : "+bytArrayToHex(Btag2.toByteArray()));
+		
 		System.out.println("v : "+bytArrayToHex(v.toByteArray()));
 		System.out.println("k_x_1 : "+decrFactReplies.getAt(0));
 		System.out.println("k_x_2 : "+decrFactReplies.getAt(1));
 		System.out.println("A : "+A);
 		System.out.println("ro : "+bytArrayToHex(ro));
-		System.out.println("B'1 : "+Btag.toByteArray());
+		System.out.println("B'1 : "+bytArrayToHex(Btag.toByteArray()));
+		System.out.println("node(t1,...,tlambda) : "+bytArrayToHex(decrFactCommitments.toByteArray()));
+		
 		
 		
 
