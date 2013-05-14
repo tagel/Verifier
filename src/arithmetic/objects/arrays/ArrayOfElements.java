@@ -78,12 +78,25 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 * @return true if and only if b contains the same element as our element in
 	 *         each and every index of the array.
 	 */
-	public boolean equals(ArrayOfElements<E> b) {
-		if (elements.size() != b.getSize())
+	@Override
+	public boolean equals(Object arr) {
+		if (!(arr instanceof ArrayOfElements)) {
 			return false;
-		for (int i = 0; i < elements.size(); i++)
-			if (!((elements.get(i)).equals(b.getAt(i))))
+		}
+
+		@SuppressWarnings("unchecked")
+		ArrayOfElements<E> b = (ArrayOfElements<E>) arr;
+
+		if (elements.size() != b.getSize()) {
+			return false;
+		}
+
+		for (int i = 0; i < elements.size(); i++) {
+			if (!(elements.get(i).equals(b.getAt(i)))) {
 				return false;
+			}
+		}
+
 		return true;
 	}
 

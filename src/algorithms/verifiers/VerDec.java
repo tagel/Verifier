@@ -117,6 +117,10 @@ public class VerDec {
 		// ********Step 4 in the algorithm**********
 		// verify Plaintexts:
 		ArrayOfElements<ProductGroupElement> f = multiplyArrays(DecryptionFactors);
+		//TODO
+		System.out.println("m : "+m);
+		System.out.println("L : "+Prover.TDecrypt(L, f));
+		
 		if (!m.equals(Prover.TDecrypt(L, f))) {
 			return false;
 		}

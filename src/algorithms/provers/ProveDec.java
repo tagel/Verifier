@@ -2,7 +2,6 @@ package algorithms.provers;
 
 import main.Logger;
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
@@ -125,7 +124,7 @@ public class ProveDec extends Prover {
 		 */
 
 		ArrayOfElements<ProductGroupElement> u = computeU(wInput);
-		ProductGroupElement A = computeDecA(N, e, u);
+		ProductGroupElement A = computeDecA(N, e, u, Gq.one());
 
 		// TODO printouts
 		
@@ -153,8 +152,6 @@ public class ProveDec extends Prover {
 		System.out.println("node(t1,...,tlambda) : "+bytArrayToHex(decrFactCommitments.toByteArray()));
 		
 		
-		
-
 		/*
 		 * if j==0 then compute B = PI((PI(fli)^ei) and accept if
 		 * PI(yl)^v*PI(yltag) == g^SIGMA(klx) and B^v*PI(Bltag) == PDec(A)
@@ -169,9 +166,7 @@ public class ProveDec extends Prover {
 				Bj = Bj.mult((decryptionFactors.getAt(j).getAt(i)).power(e[i]));
 			}
 			
-			//TODO printouts
-			System.out.println("B_"+j+" : "+Bj);
-
+			
 			/*
 			 * verify yj^v*ytagj == g^kjx
 			 */
@@ -209,7 +204,7 @@ public class ProveDec extends Prover {
 
 		for (int i = 0; i < N; i++) {
 			ByteArrToBigInt = prg.getNextPRGOutput(length);
-			t = ElementsExtractor.leafToInt(ByteArrToBigInt);
+			t = byteArrayToPosLargeInteger(ByteArrToBigInt);
 			e[i] = t.mod(new LargeInteger("2").power(Ne));
 		}
 		return e;
@@ -252,12 +247,17 @@ public class ProveDec extends Prover {
 	 * isn't used in the computation thus null.
 	 */
 	private static ProductGroupElement computeDecA(int N, LargeInteger[] e,
-			ArrayOfElements<ProductGroupElement> u) {
+			ArrayOfElements<ProductGroupElement> u, IGroupElement one) {
+		
 		ProductGroupElement left = u.getAt(0).power(e[0]);
 		for (int i = 1; i < N; i++) {
 			left = left.mult(u.getAt(i).power(e[i]));
 		}
-		ProductGroupElement A = new ProductGroupElement(left, u.getAt(0));
+		
+		ArrayOfElements<IGroupElement> temp = new ArrayOfElements<IGroupElement>();
+		temp.add(one);
+		ProductGroupElement right = new ProductGroupElement(temp);
+		ProductGroupElement A = new ProductGroupElement(left, right);
 		return A;
 	}
 
@@ -338,7 +338,7 @@ public class ProveDec extends Prover {
 		 * verify PI(yl)^v * PI(yl') = g^(SUM(klx))
 		 */
 		boolean firstEq = true;
-		if (!(piYl.power(v)).mult(piYltag).equals(g.power(sumklx.getElement()))) {
+		if (!((piYl.power(v)).inverse()).mult(piYltag).equals(g.power(sumklx.getElement()))) {
 			firstEq = false;
 		}
 
@@ -346,6 +346,8 @@ public class ProveDec extends Prover {
 		 * verify B^v * PI(Bltag) = PDEC(SUM(klx),A)
 		 */
 		boolean secondEq = true;
+		
+		
 		if (!(B.power(v)).mult(piBltag).equals(PDecrypt(sumklx, A))) {
 			secondEq = false;
 		}
