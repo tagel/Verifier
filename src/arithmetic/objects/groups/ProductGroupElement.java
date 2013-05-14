@@ -150,7 +150,7 @@ public class ProductGroupElement implements ByteTree {
 	 * 
 	 * @param b
 	 *            another product group element
-	 * @return true if and only if our element and b are equal. That means, all
+	 * @return true if and only if our element and b are equal. That is, all
 	 *         their coordinates are equal.
 	 */
 	public boolean equals(ProductGroupElement b) {
