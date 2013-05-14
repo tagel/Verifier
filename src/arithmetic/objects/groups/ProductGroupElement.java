@@ -153,7 +153,14 @@ public class ProductGroupElement implements ByteTree {
 	 * @return true if and only if our element and b are equal. That means, all
 	 *         their coordinates are equal.
 	 */
-	public boolean equals(ProductGroupElement b) {
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof ProductGroupElement)) {
+			return false;
+		}
+				
+		ProductGroupElement b = (ProductGroupElement) o;
+		
 		if (arr != null) {
 			ArrayOfElements<IGroupElement> a = arr;
 			for (int i = 0; i < arr.getSize(); i++)
