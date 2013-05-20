@@ -60,6 +60,17 @@ public class EllipticTests {
 				Type.MIXING, "default", 3, true, true, false));
 	}
 	
+	@Test
+	public void VerifyShuffleEcurveTestTypeDec() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(
+				new MainVerifierTests.MockedLogger());
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("exportDec/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportDec/default").getFile(),
+				Type.DECRYPTION, "default", 1, true, true, false));
+	}
+	
 	
 	//******************DECRYPTION*******************
 
