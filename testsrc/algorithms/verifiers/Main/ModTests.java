@@ -133,4 +133,17 @@ public class ModTests {
 		}
 
 	}
+	
+	//******************CCPOS*******************
+	
+	@Test
+	public void VerifyCcposModGroup_W3Test() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("exportCcpos/mod1023_max5_n3_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportCcpos/mod1023_max5_n3_w1/default").getFile(),
+				Type.MIXING, "default", 1, false, true, false));
+	}
+
 }

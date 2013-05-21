@@ -1,0 +1,177 @@
+
+<!-- ATTENTION! WE STRONGLY ADVICE AGAINST EDITING THIS FILE!
+     
+     This is a protocol information file. It contains all the 
+     parameters of a protocol session as agreed by all parties.
+     
+     Each party must hold an identical copy of this file. WE 
+     RECOMMEND YOU TO NOT EDIT THIS FILE UNLESS YOU KNOW EXACTLY 
+     WHAT YOU ARE DOING. -->
+
+<protocol>
+
+   <!-- Protocol version for which this protocol info is intended. -->
+   <version></version>
+
+   <!-- Session identifier of this protocol execution. This must be 
+        globally unique for all executions of all protocols. -->
+   <sid>MyDemo</sid>
+
+   <!-- Name of this protocol execution. This is a short descriptive 
+        name that is NOT necessarily unique. -->
+   <name>Swedish Election</name>
+
+   <!-- Description of this protocol execution. This is merely a 
+        longer description than the name of the protocol execution. -->
+   <descr></descr>
+
+   <!-- Number of parties taking part in the protocol execution. -->
+   <nopart>3</nopart>
+
+   <!-- Statistical distance from uniform of objects sampled in 
+        protocols or in proofs of security. -->
+   <statdist>100</statdist>
+
+   <!-- Name of bulletin board implementation used. -->
+   <bullboard>verificatum.protocol.com.BullBoardBasicHTTPW</bullboard>
+
+   <!-- Threshold number of parties needed to violate privacy, i.e., 
+        this is the number of parties needed to decrypt. -->
+   <thres>2</thres>
+
+   <!-- Group over which the protocol is executed. An instance of a 
+        subclass of verificatum.arithm.PGroup. -->
+   <pgroup>ModPGroup(safe-prime modulus=2*order+1. order bit-length = 1023)::0000000002010000001c766572696669636174756d2e61726974686d2e4d6f645047726f75700000000004010000008100f036fd1235aabf5623a56c5c3926e1d2ec9aa47a251370f4b0be3653db2aa52fff82c999bc97763f9b65152c6fe2ba62533ad2fbe1a23363ae4876049f8788fe91726f52651b226e765d69f89b96fea7a403ebae2edcbe1af44bdd31d104ac25f46cb593ff56ed9cd0663fc869c8e11c4d78c01afe33a046e5486a91649119cb0100000080781b7e891ad55fab11d2b62e1c9370e9764d523d1289b87a585f1b29ed955297ffc164ccde4bbb1fcdb28a9637f15d31299d697df0d119b1d7243b024fc3c47f48b937a9328d91373b2eb4fc4dcb7f53d201f5d7176e5f0d7a25ee98e8825612fa365ac9ffab76ce68331fe434e4708e26bc600d7f19d02372a43548b2488ce5010000008100183aac76a4cce9d3e7e4331cdf520cafd6784900f32a70d5b5c6fa134ac6e0c14abbb08e5cf73343112a1410bdb5a616adc5e62c5fadbcb5ca1d4636fe0391de3f97aad69a91df4980db9267bbf845b191a4011943e2356b70ee84181e5106a12211790b8eac7452766eba54e9fd95dc9fe683655f36eb47ac2bd8649ef0c010010000000400000001</pgroup>
+
+   <!-- Bit length of challenges in interactive proofs. -->
+   <cbitlen>128</cbitlen>
+
+   <!-- Bit length of challenges in non-interactive random-oracle 
+        proofs. -->
+   <cbitlenro>256</cbitlenro>
+
+   <!-- Bit length of each component in random vectors used for 
+        batching. -->
+   <vbitlen>128</vbitlen>
+
+   <!-- Bit length of each component in random vectors used for 
+        batching in non-interactive random-oracle proofs. -->
+   <vbitlenro>256</vbitlenro>
+
+   <!-- Pseudo random generator used to derive random vectors from 
+        jointly generated seeds. This can be "SHA-256", "SHA-384", or 
+        "SHA-512", in which case verificatum.crypto.PRGHeuristic is 
+        instantiated based on this hashfunction, or it can be an 
+        instance of verificatum.crypto.PRG. -->
+   <prg>SHA-256</prg>
+
+   <!-- Hashfunction used to implement random oracles. It can be one 
+        of the strings "SHA-256", "SHA-384", or "SHA-512", in which 
+        case verificatum.crypto.HashfunctionHeuristic is is 
+        instantiated, or an instance of verificatum.crypto.
+        Hashfunction. Random oracles with various output lengths are 
+        then implemented, using the given hashfunction, in verificatum.
+        crypto.RandomOracle.
+        WARNING! Do not change the default unless you know exactly 
+        what you are doing. -->
+   <rohash>SHA-256</rohash>
+
+   <!-- Determines if the proofs of correctness of an execution are 
+        interactive or non-interactive ("interactive" or 
+        "noninteractive"). -->
+   <corr>noninteractive</corr>
+
+   <!-- Default width of ciphertexts processed by the mix-net. A 
+        different width can still be forced for a given session by 
+        using the "-width" option. -->
+   <width>1</width>
+
+   <!-- Maximal number of ciphertexts for which precomputation is 
+        performed. Pre-computation can still be forced for a different 
+        number of ciphertexts for a given session using the "-maxciph" 
+        option during pre-computation. -->
+   <maxciph>5</maxciph>
+
+   <party>
+
+      <!-- Name of party. -->
+      <name>Party01</name>
+
+      <!-- Sorting attribute used to sort parties with respect to their 
+           roles in the protocol. This is used to assign roles in 
+           protocols where different parties play different roles. -->
+      <srtbyrole>anyrole</srtbyrole>
+
+      <!-- Description of this party. This is merely a longer 
+           description than the name of the protocol execution. -->
+      <descr></descr>
+
+      <!-- Public signature key (instance of crypto.SignaturePKey). -->
+      <pkey>SignaturePKeyHeuristic(RSA, bitlength=2048)::00000000020100000029766572696669636174756d2e63727970746f2e5369676e6174757265504b65794865757269737469630000000002010000000400000800010000012630820122300d06092a864886f70d01010105000382010f003082010a02820101008c0dc7197279ac874b606a262e0c3b39332461b5fb06d70ac5b7b46e1d0ae9ab6952e52afa30d7194b790e56111ab0ff16b328e5ad21fbf30e68e6cbc1fd6b9d7c3a72aca3561793d330bb45e09c61b903ab4fbf1fb63c75d188e03ba871c6db121dcff38cade7602a04476a08e099b1c7065d5bc8774efb5a1b26cd56a1375af15644974757d7e1df764f11df3fa0b50328f4e41a9f1bc71512b6dea635271cd5dcf0264623d107d95635ddbc52d048c2403227a185e128775144f4845d8ae0234ff20d79c553482c109ae7957f98cb027b30a9d6d512ff32da661547ee1135caaf6a54651e663cc442345f3054d6527adee038e1b840ab62e5d189687643b10203010001</pkey>
+
+      <!-- URL to the HTTP server of this party. -->
+      <http>http://localhost:8041</http>
+
+      <!-- Socket address given as <hostname>:<port> to our hint server. 
+           A hint server is a simple UDP server that reduces latency and 
+           traffic on the HTTP servers. -->
+      <hint>localhost:4041</hint>
+
+   </party>
+
+   <party>
+
+      <!-- Name of party. -->
+      <name>Party02</name>
+
+      <!-- Sorting attribute used to sort parties with respect to their 
+           roles in the protocol. This is used to assign roles in 
+           protocols where different parties play different roles. -->
+      <srtbyrole>anyrole</srtbyrole>
+
+      <!-- Description of this party. This is merely a longer 
+           description than the name of the protocol execution. -->
+      <descr></descr>
+
+      <!-- Public signature key (instance of crypto.SignaturePKey). -->
+      <pkey>SignaturePKeyHeuristic(RSA, bitlength=2048)::00000000020100000029766572696669636174756d2e63727970746f2e5369676e6174757265504b65794865757269737469630000000002010000000400000800010000012630820122300d06092a864886f70d01010105000382010f003082010a0282010100a9eeea79e55adf03a6f3f12d6430ca7c4447d0396cb284704905151d1f3d33d947325d232bb469039592e46e774b986c669c08ace4c69a30284ae1b0b2a41480b9c51b56ac57201c21e629494765291aff39a3537cc652ed669153dc317d0d7bf3aa8a1d8f1bbaf0f9f0e7264e1219689cbd3ac11cf96dd032175ca0b4d0d11236029a18ee45bfc6ae57fcc1c1adc7a9eb1484e0d67dfc13745ecc41c1dabcefbb66f71ab338ad1ffeb1bbf4d5378f92965b8bd597ee1460922d95c38839129f8c5893e386bca06dd88fa64284f26ad72b8754c5dbe969153ed967105171797662541db39cfbd7e41587a575e6e339a3685c9d2d1ee2812960fcb8c6187fbe890203010001</pkey>
+
+      <!-- URL to the HTTP server of this party. -->
+      <http>http://localhost:8042</http>
+
+      <!-- Socket address given as <hostname>:<port> to our hint server. 
+           A hint server is a simple UDP server that reduces latency and 
+           traffic on the HTTP servers. -->
+      <hint>localhost:4042</hint>
+
+   </party>
+
+   <party>
+
+      <!-- Name of party. -->
+      <name>Party03</name>
+
+      <!-- Sorting attribute used to sort parties with respect to their 
+           roles in the protocol. This is used to assign roles in 
+           protocols where different parties play different roles. -->
+      <srtbyrole>anyrole</srtbyrole>
+
+      <!-- Description of this party. This is merely a longer 
+           description than the name of the protocol execution. -->
+      <descr></descr>
+
+      <!-- Public signature key (instance of crypto.SignaturePKey). -->
+      <pkey>SignaturePKeyHeuristic(RSA, bitlength=2048)::00000000020100000029766572696669636174756d2e63727970746f2e5369676e6174757265504b65794865757269737469630000000002010000000400000800010000012630820122300d06092a864886f70d01010105000382010f003082010a0282010100802a3efcfacecdd1b17ef917dc07c031510c547d6cadd770faa6dcc625228a1e1b0acb038309951ae04a5d422bfb5c6c1179e8b1997f0c34237ba5ce7142d10e3ec3bd2f2783618ec4217f04fa01529f1d3299b84f2c4c76edaa414b8394716f8ad8bb0f45e8dabe37247879e7eaa3d3bed9e890585e8b77a430cecf403288ae174b3970e0b8790e00bb37c5f188eb0f4bf627d1f8ea94a0318f9a132dfad5085132c6ae15ea407dd8de40a73036afc36a7fb4893053c282670bd7f192a4f07d66497233f824c6886d483fefb42f210cdfeb84d4c1e792d048b0c01a6fb9ff102fab81378a71336de485846058db26a42cb72867b4ee9143ed7675d1640c4de30203010001</pkey>
+
+      <!-- URL to the HTTP server of this party. -->
+      <http>http://localhost:8043</http>
+
+      <!-- Socket address given as <hostname>:<port> to our hint server. 
+           A hint server is a simple UDP server that reduces latency and 
+           traffic on the HTTP servers. -->
+      <hint>localhost:4043</hint>
+
+   </party>
+
+</protocol>
+
