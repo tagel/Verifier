@@ -109,7 +109,7 @@ public class MainVerifier {
 		// *******Section 6 in the Algorithm*********
 		if (!ReadLists()) {
 			return false;
-			
+
 		}
 
 		// create random array to send to the verifiers
@@ -183,11 +183,12 @@ public class MainVerifier {
 				params.getDirectory(), params.getPrefixToRO(),
 				params.getThreshold(), params.getN(), params.getNe(),
 				params.getNr(), params.getNe(), params.getPrg(),
-				params.getGq(), params.getFullPublicKey(),
-				//params.getCiphertexts(), params.getShuffledCiphertexts(),
-				params.getArrOfCiphertexts(),
-				params.isPosc(), params.isCcpos(), params.getZq(),
-				params.getW(), params.getRandArray(), logger);
+				params.getGq(),
+				params.getFullPublicKey(),
+				// params.getCiphertexts(), params.getShuffledCiphertexts(),
+				params.getArrOfCiphertexts(), params.isPosc(),
+				params.isCcpos(), params.getZq(), params.getW(),
+				params.getRandArray(), logger);
 	}
 
 	private boolean checkFilledParams() {
@@ -399,9 +400,9 @@ public class MainVerifier {
 	}
 
 	private boolean readArrayOfCiphertexts() {
-		
+
 		ArrayOfElements<ArrayOfElements<ProductGroupElement>> Arr = new ArrayOfElements<ArrayOfElements<ProductGroupElement>>();
-		
+
 		// section 6a of the Algorithm
 		byte[] file = ElementsExtractor.btFromFile(params.getDirectory(),
 				CIPHERTEXTS_FILE_NAME + BT_EXT);
@@ -413,32 +414,40 @@ public class MainVerifier {
 		ArrayOfElements<ProductGroupElement> ciphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 
-		//Puts the ciphertexts at Arr[0]
+		// Puts the ciphertexts at Arr[0]
 		Arr.add(ciphertexts);
-		//params.setCiphertexts(ciphertexts);
+		// params.setCiphertexts(ciphertexts);
 		params.setN(ciphertexts.getSize());
-		
+
 		ArrayOfElements<ProductGroupElement> Li;
-		
-		for (int i=1; i<params.getThreshold(); i++) {
-			
-			byte[] bLi = ElementsExtractor.btFromFile(params.getDirectory(), PROOFS,
-					CIPHERTEXTS_FILE_NAME + getNumStringForFileName(i) + BT_EXT);
+
+		for (int i = 1; i < params.getThreshold(); i++) {
+
+			byte[] bLi = ElementsExtractor.btFromFile(params.getDirectory(),
+					PROOFS, CIPHERTEXTS_FILE_NAME + getNumStringForFileName(i)
+							+ BT_EXT);
+			Li = null;
 			if (bLi == null) {
-				logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
-				return false;
+				if (!(params.getType().equals(Type.DECRYPTION))) {
+					logger.sendLog("Ciphertexts file not found.",
+							Logger.Severity.ERROR);
+					return false;
+				}
 			}
-			
-			Li = ArrayGenerators.createArrayOfCiphertexts(bLi, params.getGq(), params.getW());
-			if (Li.getSize() != params.getN()) {
-				return false;
+
+			if (!params.getType().equals(Type.DECRYPTION)) {
+				Li = ArrayGenerators.createArrayOfCiphertexts(bLi,
+						params.getGq(), params.getW());
+				if (Li.getSize() != params.getN()) {
+					return false;
+				}
 			}
-			
-			//put the ciphertexts at Arr[i]
+
+			// put the ciphertexts at Arr[i]
 			Arr.add(Li);
-			
+
 		}
-		
+
 		// section 6b of the Algorithm - read shuffled ciphertexts
 		// if the type == mixing, read the file Ciphertexts_threshold from
 		// Directory/proofs
@@ -475,15 +484,18 @@ public class MainVerifier {
 			return false;
 		}
 
-		//Add L_lambda at Arr[lambda]
+		// Add L_lambda at Arr[lambda]
 		Arr.add(ShuffledCiphertexts);
 		params.setArrOfCiphertexts(Arr);
-		
-		//TODO pintouts
-		System.out.println("b(L0)"+bytArrayToHex(params.getArrOfCiphertexts().getAt(0).toByteArray()));
-		System.out.println("b(L1)"+bytArrayToHex(params.getArrOfCiphertexts().getAt(1).toByteArray()));
-		System.out.println("b(L2)"+bytArrayToHex(params.getArrOfCiphertexts().getAt(2).toByteArray()));
-		
+
+		// TODO pintouts
+		/*System.out.println("b(L0)"
+				+ bytArrayToHex(params.getArrOfCiphertexts().getAt(0)
+						.toByteArray()));
+		System.out.println("b(L2)"
+				+ bytArrayToHex(params.getArrOfCiphertexts().getAt(2)
+						.toByteArray()));*/
+
 		return true;
 
 	}
@@ -504,7 +516,7 @@ public class MainVerifier {
 			sb.append(String.format("%02x", b & 0xff));
 		return sb.toString();
 	}
-	
+
 	/**
 	 * @param i
 	 *            the number to change
@@ -514,8 +526,5 @@ public class MainVerifier {
 	private static String getNumStringForFileName(int i) {
 		return (i < 10 ? "0" : EMPTY_STRING) + i;
 	}
-	
-	
-
 
 }
