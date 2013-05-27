@@ -124,6 +124,18 @@ public class EllipticTests {
 				Type.MIXING, "default", 3, false, false, true));
 	}
 	
+	@Test
+	public void VerifyDecExportDecTest4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w4EllipticDec/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("exportsDecOutputs/w4EllipticDec/default").getFile(),
+				Type.MIXING, "default", 3, false, false, true));
+	}
+	
 	public static class MockedLogger extends Logger {
 		public MockedLogger() {
 			super(false);

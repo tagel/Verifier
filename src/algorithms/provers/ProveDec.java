@@ -179,7 +179,7 @@ public class ProveDec extends Prover {
 			/*
 			 * verify Bj^v*Bj' = PDEC(kjx,A)
 			 */
-			if (!((Bj.power(v)).mult(Btag)).equals(PDecrypt(kjx, A))) {
+			if (!((Bj.power(v)).mult(Btag)).equals(PDecrypt(kjx, A).inverse())) {
 				return false;
 			}
 
