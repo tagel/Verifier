@@ -143,7 +143,17 @@ public class ModTests {
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
 				.getResource("exportCcpos/mod1023_max5_n3_w1/protInfo.xml").getFile(), getClass()
 				.getClassLoader().getResource("exportCcpos/mod1023_max5_n3_w1/default").getFile(),
-				Type.MIXING, "default", 1, false, true, false));
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void VerifyCcposModGroup_W4Test() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("exportCcpos/mod1023_max5_n3_w4/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportCcpos/mod1023_max5_n3_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
 	}
 
 }
