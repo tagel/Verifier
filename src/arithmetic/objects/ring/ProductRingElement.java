@@ -157,7 +157,13 @@ public class ProductRingElement implements ByteTree {
 	 * @return true if and only if our element and b are equal. That means, all
 	 *         their coordinates are equal.
 	 */
-	public boolean equals(ProductRingElement b) {
+	public boolean equals(Object o) {
+		if (!(o instanceof ProductRingElement)) {
+			return false;
+		}
+				
+		ProductRingElement b = (ProductRingElement) o;
+		
 		ArrayOfElements<IntegerRingElement> a = arr;
 		for (int i = 0; i < arr.getSize(); i++) {
 			if (!(a.getAt(i).equals(b.getElements().getAt(i)))) {

@@ -141,7 +141,13 @@ public class IntegerFieldElement implements ByteTree {
 	 * @return true if and only if our element and b are equal. That means,
 	 *         represent the same large integer and belong to the same field.
 	 */
-	public boolean equals(IntegerFieldElement b) {
+	public boolean equals(Object o) {
+		if (!(o instanceof IntegerFieldElement)) {
+			return false;
+		}
+				
+		IntegerFieldElement b = (IntegerFieldElement) o;
+		
 		if (this.getElement().mod(this.getField().getOrder())
 				.compareTo(b.getElement().mod(this.getField().getOrder())) == 0) {
 			return true;

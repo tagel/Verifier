@@ -112,7 +112,14 @@ public class ModGroupElement implements IGroupElement {
 	 *         represent the same number and belong to the same group.
 	 */
 	@Override
-	public boolean equals(IGroupElement b) {
+	public boolean equals(Object c) {
+		
+		if (!(c instanceof ModGroupElement)) {
+			return false;
+		}
+
+		ModGroupElement b = (ModGroupElement) c;
+		
 		if (getElement().mod(getGroup().getFieldOrder()).equals(
 				((LargeInteger) ((ModGroupElement) b).getElement())
 						.mod(((ModGroupElement) b).getGroup().getFieldOrder()))) {

@@ -2,15 +2,6 @@ package arithmetic.objects.groups;
 
 
 
-import org.bouncycastle.math.ec.ECCurve;
-import org.bouncycastle.math.ec.ECFieldElement;
-import org.bouncycastle.math.ec.ECFieldElement.Fp;
-import org.bouncycastle.math.ec.ECMultiplier;
-import org.bouncycastle.math.ec.ECPoint;
-import org.bouncycastle.math.ec.ECPoint.Fp1;
-import org.bouncycastle.math.ec.FpNafMultiplier;
-import org.bouncycastle.math.ec.ECCurve.Fp2;
-
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.basicelements.Node;
 import arithmetic.objects.field.IField;
@@ -294,7 +285,15 @@ public class ECurveGroupElement implements IGroupElement {
 	 * @return true if and only if our element and b are equal. That means,
 	 *         represent the same point and belong to the same curve.
 	 */
-	public boolean equals(IGroupElement b) {
+	@Override
+	public boolean equals(Object c) {
+		if (!(c instanceof ECurveGroupElement)) {
+			return false;
+		}
+
+		ECurveGroupElement b = (ECurveGroupElement) c;
+		
+		
 		if (getElement().getX().equals(
 				(((ECurveGroupElement) b).getElement()).getX())
 				&& (getElement()).getY().equals(
