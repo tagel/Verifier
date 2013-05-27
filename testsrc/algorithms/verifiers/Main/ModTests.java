@@ -137,7 +137,7 @@ public class ModTests {
 	//******************CCPOS*******************
 	
 	@Test
-	public void VerifyCcposModGroup_W3Test() throws Exception {
+	public void VerifyCcposModGroup_W1Test() throws Exception {
 
 		MainVerifier mainVer = new MainVerifier(logger);
 		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
