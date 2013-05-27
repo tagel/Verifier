@@ -541,7 +541,7 @@ public class VerShuffling {
 	private static int readMaxciph(String directory) {
 		Scanner text = null;
 		try {
-			text = new Scanner(new File(directory, MAXCIPH));
+			text = new Scanner(new File (new File(directory, PROOFS), MAXCIPH));
 		} catch (FileNotFoundException e) {
 			return -1;
 		}
