@@ -54,5 +54,5 @@ public interface IGroupElement extends ByteTree {
 	 * @return true if and only if our element and b are equal. That means,
 	 *         represent the same number or point and belong to the same group.
 	 */
-	public abstract boolean equals(IGroupElement b);
+	public abstract boolean equals(Object c);
 }

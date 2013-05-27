@@ -102,7 +102,12 @@ public class IntegerRingElement implements ByteTree {
 	 * @return true if and only if our element and b are equal. That means,
 	 *         represent the same large integer and belong to the same ring.
 	 */
-	public boolean equals(IntegerRingElement b) {
+	public boolean equals(Object o) {
+		if (!(o instanceof IntegerRingElement)) {
+			return false;
+		}
+				
+		IntegerRingElement b = (IntegerRingElement) o;
 		if (this.getElement().mod(getRing().getOrder())
 				.equals(b.getElement().mod(getRing().getOrder()))) {
 			return true;
