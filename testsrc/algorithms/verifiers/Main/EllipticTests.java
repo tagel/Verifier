@@ -133,7 +133,7 @@ public class EllipticTests {
 						.getResource("exportsDecOutputs/w4EllipticDec/protInfo.xml").getFile(),
 				getClass().getClassLoader()
 						.getResource("exportsDecOutputs/w4EllipticDec/default").getFile(),
-				Type.MIXING, "default", 3, false, false, true));
+				Type.MIXING, "default", 4, false, false, true));
 	}
 	
 	public static class MockedLogger extends Logger {
