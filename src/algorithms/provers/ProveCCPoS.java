@@ -86,7 +86,7 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 1(b) - interpret Tpos as Node(A',B')
 		 */
-		ProductGroupElement Btag = (ProductGroupElement) PoSCommitment.getAt(5);
+		ProductGroupElement Btag = (ProductGroupElement) PoSCommitment.getAt(1);
 		IGroupElement Atag = (IGroupElement) PoSCommitment.getAt(0);
 
 		/*
@@ -131,6 +131,8 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 5 - Compute B and verify equalities
 		 */
+		
+		//TODO Compute B? Not F?
 		ProductGroupElement B = computeF(N, Ne, seed, prg, wInput);
 
 		/*
