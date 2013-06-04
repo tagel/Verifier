@@ -14,6 +14,7 @@ import arithmetic.objects.arrays.ArrayGenerators;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BooleanArrayElement;
 import arithmetic.objects.basicelements.Node;
+import arithmetic.objects.basicelements.StringLeaf;
 import arithmetic.objects.groups.IGroup;
 import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
@@ -31,6 +32,7 @@ import cryptographic.primitives.RandomOracle;
 
 public class VerShuffling {
 
+	private static final String GENERATORS = "generators";
 	private static final String POSC_COMMITMENT = "PoSCCommitment";
 	private static final String EMPTY_STRING = "";
 	private static final String PERMUTATION_COMMITMENT = "PermutationCommitment";
@@ -133,18 +135,25 @@ public class VerShuffling {
 			if (N > maxciph) {
 				return false;
 			}
-
+			
+			//h should be of size N0
+			ArrayOfElements<IGroupElement> hBig = createRandomArray(maxciph, nr, ROSeed, prefixToRO, Gq, prg);
+			
+			//TODO:
+			System.out.println("h(0)==hBig(0)? : "+h.getAt(0).equals(hBig.getAt(0)));
+			System.out.println("h(1)==hBig(1)? : "+h.getAt(1).equals(hBig.getAt(1)));
+			System.out.println("h(2)==hBig(2)? : "+h.getAt(2).equals(hBig.getAt(2)));
+			
 			for (int i = 1; i <= lambda; i++) {
 				// Step 1 in the algorithm
 				retValue = true; // initialize
-				//TODO h should be of size N0
-				if (!readFilesPoSC(i, directory, Gq, Zq, N, width)
-						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO, N,
+				if (!readFilesPoSC(i, directory, Gq, Zq, maxciph, width)
+						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO, maxciph,
 								ne, nr, nv, prg, Gq, PermutationCommitment,
-								PoSCCommitment, PoSCCommitment, h, logger))) {
+								PoSCCommitment, PoSCReply, hBig, logger))) {
 					// if the algorithm rejects or reading failed set
 					// permutation commitment to be h
-					PermutationCommitment = h;
+					PermutationCommitment = hBig;
 				}
 
 				// Step 2: potential early abort
@@ -177,7 +186,7 @@ public class VerShuffling {
 						&& ProveCCPoS.prove(ROSeed, ROChallenge,
 								prefixToRO, N, ne, nr, nv, prg, Gq, pk,
 								L.getAt(i-1), L.getAt(i), width, PermutationCommitment,
-								PoSCommitment, PoSReply, h, logger);
+								CCPoSCommitment, CCPoSReply, h, logger);
 
 				// If !retValue, it means that reading the elements
 				// failed or the prover rejected
@@ -197,6 +206,18 @@ public class VerShuffling {
 	}
 
 	
+	private static ArrayOfElements<IGroupElement> createRandomArray(int N, int nr, RandomOracle rOSeed, byte[] prefixToRO, IGroup gq, PseudoRandomGenerator prg) {
+		StringLeaf stringLeaf = new StringLeaf(GENERATORS);
+		byte[] independentSeed = rOSeed.getRandomOracleOutput(
+				ArrayGenerators.concatArrays(prefixToRO,
+						stringLeaf.toByteArray()));
+		ArrayOfElements<IGroupElement> hBig = gq
+				.createRandomArray(N, prg,
+						independentSeed, nr);
+		return hBig;
+	}
+
+
 	private static ArrayOfElements<IGroupElement> shrinkPrmutatuonCommitment(
 			int maxciph) {
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
@@ -238,7 +259,7 @@ public class VerShuffling {
 	 * @return true if the reading and extraction of variables succeeded
 	 */
 	private static boolean readFilesPoSC(int i, String directory, IGroup Gq,
-			IRing<IntegerRingElement> Zq, int N, int width) {
+			IRing<IntegerRingElement> Zq, int N0, int width) {
 
 		byte[] bPoSCCommitment = ElementsExtractor.btFromFile(directory,
 				PROOFS, POSC_COMMITMENT + getNumStringForFileName(i)
@@ -288,14 +309,14 @@ public class VerShuffling {
 		ArrayOfElements<IGroupElement> tempB = ArrayGenerators
 				.createGroupElementArray(PoSCCommitment.getAt(0).toByteArray(),
 						Gq);
-		if (tempB.getSize() != N) {
+		if (tempB.getSize() != N0) {
 			return false;
 		}
 		PoSCCommitment.setAt(0, tempB); // B
 
 		tempB = ArrayGenerators.createGroupElementArray(PoSCCommitment.getAt(2)
 				.toByteArray(), Gq);
-		if (tempB.getSize() != N) {
+		if (tempB.getSize() != N0) {
 			return false;
 		}
 		PoSCCommitment.setAt(2, tempB); // B'
@@ -320,14 +341,14 @@ public class VerShuffling {
 		// Read Kb and Ke as arrays of Ring Elements, and verify they size == N
 		ArrayOfElements<IntegerRingElement> tempK = ArrayGenerators
 				.createRingElementArray(PoSCReply.getAt(1).toByteArray(), Zq);
-		if (tempK.getSize() != N) {
+		if (tempK.getSize() != N0) {
 			return false;
 		}
 		PoSCReply.setAt(1, tempK); // Kb
 
 		tempK = ArrayGenerators.createRingElementArray(PoSCReply.getAt(4)
 				.toByteArray(), Zq);
-		if (tempK.getSize() != N) {
+		if (tempK.getSize() != N0) {
 			return false;
 		}
 		PoSCReply.setAt(4, tempK); // Ke

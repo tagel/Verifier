@@ -86,7 +86,7 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 1(b) - interpret Tpos as Node(A',B')
 		 */
-		ProductGroupElement Btag = (ProductGroupElement) PoSCommitment.getAt(5);
+		ProductGroupElement Btag = (ProductGroupElement) PoSCommitment.getAt(1);
 		IGroupElement Atag = (IGroupElement) PoSCommitment.getAt(0);
 
 		/*
@@ -122,7 +122,8 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 4 - Computation of the challenge
 		 */
-		ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
+//		ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
+		ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
 		byte[] challenge = computeChallenge(ROChallenge, ro, PoSCommitment,
 				leaf);
 
@@ -131,7 +132,28 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 5 - Compute B and verify equalities
 		 */
+		
+		//TODO Compute B? Not F?
 		ProductGroupElement B = computeF(N, Ne, seed, prg, wInput);
+		
+		//TODO: printouts
+		
+				System.out.println("A' : "+Atag);
+				System.out.println("B' : "+Btag);
+				System.out.println("Ka : "+Ka);
+				System.out.println("Kb : "+Kb);
+				System.out.println("Ke : "+Ke);
+				System.out.println("h : "+h);
+				System.out.println("bt(h) : "+bytArrayToHex(h.toByteArray()));
+				System.out.println("u : "+u);
+				System.out.println("bt(u) : "+bytArrayToHex(u.toByteArray()));
+				System.out.println("pk : "+pkSeed);
+				System.out.println("node(g,h,u,pk,w,w') : "+bytArrayToHex(nodeForSeed.toByteArray()));
+				System.out.println("ro : "+bytArrayToHex(ro));
+				System.out.println("seed : "+bytArrayToHex(seed));
+				System.out.println("A : "+A);
+				System.out.println("v "+v);
+				System.out.println("B : " + B);
 
 		/*
 		 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
@@ -165,6 +187,20 @@ public class ProveCCPoS extends Prover {
 		nodeForSeed.add(pk);
 		nodeForSeed.add(wInput);
 		nodeForSeed.add(wOutput);
+		//TODO
+		System.out.println("g :"+Gq.getGenerator());
+		System.out.println("bt(g) : "+bytArrayToHex(Gq.getGenerator().toByteArray()));
+		
 		return nodeForSeed;
 	}
+	
+	
+	// TODO printout method - delete?
+			static String bytArrayToHex(byte[] a) {
+				StringBuilder sb = new StringBuilder();
+				for (byte b : a)
+					sb.append(String.format("%02x", b & 0xff));
+				return sb.toString();
+			}
+			
 }
