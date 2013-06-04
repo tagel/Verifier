@@ -135,7 +135,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 			b[0] = 0;
 
 			if (productsSize == 2
-					&& ((ProductGroupElement) getAt(0)).getLeft().getSize() == 1) {
+					&& ((ProductGroupElement) getAt(0)).getLeft()!=null && ((ProductGroupElement) getAt(0)).getLeft().getSize() == 1) {
 				for (int i = 0; i < productsSize; i++) {
 					ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
 					for (int j = 0; j < getSize(); j++) {
