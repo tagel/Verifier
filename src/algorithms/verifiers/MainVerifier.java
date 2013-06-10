@@ -246,7 +246,7 @@ public class MainVerifier {
 		}
 
 		// create the Ring
-		params.setZq(new Ring(params.getGq().getFieldOrder()));
+		params.setZq(new Ring(params.getGq().getOrder()));
 
 		// set the Hashfunction and the pseudo random generator
 		H = new SHA2HashFunction(params.getSh()); // TODO Daniel - try and catch

@@ -79,9 +79,7 @@ public class ECurveRandArray {
 		ArrayOfElements<IGroupElement> RandArray = new ArrayOfElements<IGroupElement>();
 		int nq = this.q.bitLength();
 
-		//TODO check
 		int length = 8 * ((int) Math.ceil((double) ((nq + nr) / 8.0)));
-		//int length = 7 + nr + nq;
 		prg.setSeed(seed);
 
 		// We run until q (this is the maximum, but we break when we have N
@@ -101,15 +99,7 @@ public class ECurveRandArray {
 			LargeInteger zValue = f(xValue);
 			if (Legendre(zValue) == 1) {
 				// find the smallest root
-				// TODO check if our ressol gives the same result
 				LargeInteger yValue = shanksTonelli(zValue);
-			//try {
-//				LargeInteger yValue = new LargeInteger(IntegerFunctions.ressol(
-//						zValue, q));
-//				LargeInteger yValueRoot = q.subtract(yValue);
-//				if (yValueRoot.compareTo(yValue) < 0)
-//					yValue = yValueRoot;
-				
 				// Create coordinates
 				IntegerFieldElement xi = new IntegerFieldElement(xValue, field);
 				IntegerFieldElement yi = new IntegerFieldElement(yValue, field);
@@ -124,8 +114,6 @@ public class ECurveRandArray {
 					break;
 
 				i = i.add(LargeInteger.ONE);
-//			} catch (Exception e) {
-//				continue;
 			}
 			Rand = RandArray;
 		}
@@ -153,8 +141,6 @@ public class ECurveRandArray {
 	 * @return zValue = f(xi) = y^2 = x^3 + ax +b
 	 */
 	public LargeInteger f(LargeInteger xi) {
-		//LargeInteger result = (LargeInteger.power(xi, new LargeInteger("3")))
-				//.mod(q);
 		LargeInteger result = (xi.power(3)).mod(q);
 		result = (result.add(a.multiply(xi))).mod(q);
 		result = result.add(b.mod(q));
