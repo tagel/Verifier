@@ -314,9 +314,6 @@ public class ProveDec extends Prover {
 			BtagArr.add(Bltag);
 		}
 		
-		//TODO printouts
-		System.out.println("B : "+B);
-
 		// compute piYltag
 		IGroupElement piYltag = Gq.one();
 		for (int i = 0; i < yltagArr.getSize(); i++) {
@@ -333,6 +330,16 @@ public class ProveDec extends Prover {
 		for (int i = 1; i < BtagArr.getSize(); i++) {
 			piBltag = piBltag.mult(BtagArr.getAt(i));
 		}
+		
+		//TODO printouts
+		System.out.println("B : "+B);
+		System.out.println("piYlTag : "+piYltag);
+		System.out.println("piYl : "+piYl);
+		System.out.println("piYl ^ (-v) : "+piYl.power(v).inverse());
+		System.out.println("sumKlx : "+sumklx);
+		System.out.println("g^sumklx : "+g.power(sumklx.getElement()));
+		System.out.println("left :"+((piYl.power(v)).inverse()).mult(piYltag));
+		System.out.println("right : "+(g.power(sumklx.getElement())));
 
 		/*
 		 * verify PI(yl)^v * PI(yl') = g^(SUM(klx))
