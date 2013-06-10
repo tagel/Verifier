@@ -324,8 +324,8 @@ public class ProveDec extends Prover {
 		}
 
 		// compute g^SUM(klx)
-		IntegerRingElement sumklx = klx.getAt(0).getRing().zero();
-		for (int i = 0; i < klx.getSize(); i++) {
+		IntegerRingElement sumklx = klx.getAt(0);
+		for (int i = 1; i < klx.getSize(); i++) {
 			sumklx = sumklx.add(klx.getAt(i));
 		}
 
