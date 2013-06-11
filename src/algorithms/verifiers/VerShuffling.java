@@ -122,9 +122,8 @@ public class VerShuffling {
 					if (!compareCiphertextsArrays(L.getAt(i-1), L.getAt(i)))
 						return false;
 				}
+				
 				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
-				//TODO remove printout
-				System.out.println("Proof of shuffling of party " + i +" succeeded");
 			}
 			return true;
 

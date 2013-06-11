@@ -9,7 +9,7 @@ import java.util.List;
  * This class provides the functionality of a message digest algorithm from the
  * "SHA-2" family, using the java.security.MessageDigest class.
  * 
- * @author Daniel 
+ * @author Daniel
  */
 public class SHA2HashFunction implements HashFunction {
 
@@ -29,13 +29,13 @@ public class SHA2HashFunction implements HashFunction {
 			if (SHA2_FAMILY_ALGORITHMS.contains(algorithm)) {
 				this.md = MessageDigest.getInstance(algorithm);
 			} else {
-				throw new IllegalArgumentException(); // TODO Daniel - fix throw ex must catch
+				throw new IllegalArgumentException();
 			}
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalArgumentException();
 		}
 	}
-	
+
 	@Override
 	public byte[] digest(byte[] input) {
 		return md.digest(input);

@@ -247,7 +247,6 @@ public class ECurveRandArrayTest {
 		Assert.assertEquals(
 				"[(1ced80e81adf679bb53a8937ff457f8d3d3f4fbd256c124551a0492731085fd3):(4af6a11bf749f19a8ba5d73d05ad0eeb091f29d05453f2b85b3667d2bea471b9),(f076ee161ee3ceb09308673f342c61997337ef3f54d895fbbcf9ffc65aabd398):(22fe7f47bd4e8bf29caad965837ff90c95193a436ff7b013b71e6d47c3a3b6ca),]",
 				h.toString());
-
 	}
 
 	private boolean f(LargeInteger xValue, LargeInteger yValue) {
