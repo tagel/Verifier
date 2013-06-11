@@ -72,9 +72,11 @@ public class ProveCCPoS extends Prover {
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ProductGroupElement> wOutput, int width,
 			ArrayOfElements<IGroupElement> permutationCommitment,
-			Node PoSCommitment, Node PoSReply, ArrayOfElements<IGroupElement> h, Logger logger) {
-		
-		logger.sendLog("Starting to prove the commitment consistent shuffling",Logger.Severity.NORMAL);
+			Node PoSCommitment, Node PoSReply,
+			ArrayOfElements<IGroupElement> h, Logger logger) {
+
+		logger.sendLog("Starting to prove the commitment consistent shuffling",
+				Logger.Severity.NORMAL);
 
 		/*
 		 * 1(a) - interpret permutationCommitment (miu) as an array of Pedersen
@@ -100,16 +102,16 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 2 - computing the seed
 		 */
-		
+
 		ProductGroupElement pkSeed;
-		//Here we check if width > 1 -> if so, 
-		//we interpret pk as pk = ((g,...,g),(y,...,y))
-		if (width>1) {
+		// Here we check if width > 1 -> if so,
+		// we interpret pk as pk = ((g,...,g),(y,...,y))
+		if (width > 1) {
 			pkSeed = Prover.expandPk(pk, width);
 		} else {
 			pkSeed = pk;
 		}
-		
+
 		Node nodeForSeed = computeNodeForSeed(Gq, pkSeed, wInput, wOutput, h, u);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
 
@@ -121,7 +123,7 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 4 - Computation of the challenge
 		 */
-//		ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
+		// ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
 		ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
 		byte[] challenge = computeChallenge(ROChallenge, ro, PoSCommitment,
 				leaf);
@@ -131,8 +133,8 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 5 - Compute B and verify equalities
 		 */
-		
-		//TODO Compute B? Not F?
+
+		// TODO Compute B? Not F?
 		ProductGroupElement B = computeF(N, Ne, seed, prg, wInput);
 
 		/*
@@ -145,14 +147,16 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * Equation 2: B^v*Btag = Enc(1,-Kb) * PI(wOutput[i]^Ke[i])
 		 */
-		if (!verifyFFtag(N, Gq, pk, wOutput, width, Btag, Kb, Ke, B, v)) { // TODO maybe bug?
+		if (!verifyFFtag(N, Gq, pk, wOutput, width, Btag, Kb, Ke, B, v)) { // TODO
+																			// maybe
+																			// bug?
 			return false;
 		}
 
 		/* All equalities exist. */
 		logger.sendLog("Comitment consistent proof of a shuffle succeeded",
 				Logger.Severity.NORMAL);
-		
+
 		return true;
 	}
 
@@ -167,17 +171,15 @@ public class ProveCCPoS extends Prover {
 		nodeForSeed.add(pk);
 		nodeForSeed.add(wInput);
 		nodeForSeed.add(wOutput);
-		
+
 		return nodeForSeed;
 	}
-	
-	
+
 	// TODO printout method - delete?
-			static String bytArrayToHex(byte[] a) {
-				StringBuilder sb = new StringBuilder();
-				for (byte b : a)
-					sb.append(String.format("%02x", b & 0xff));
-				return sb.toString();
-			}
-			
+	static String bytArrayToHex(byte[] a) {
+		StringBuilder sb = new StringBuilder();
+		for (byte b : a)
+			sb.append(String.format("%02x", b & 0xff));
+		return sb.toString();
+	}
 }

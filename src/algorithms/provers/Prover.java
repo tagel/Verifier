@@ -557,9 +557,6 @@ public abstract class Prover {
 		IGroupElement left = (C.power(v)).mult(Ctag);
 		IGroupElement right = g.power(Kc.getElement());
 
-		// TODO printout
-		System.out.println("C^v : " + C.power(v));
-		System.out.println("C^v C' : " + left);
 		if (!left.equals(right)) {
 			return false;
 		}

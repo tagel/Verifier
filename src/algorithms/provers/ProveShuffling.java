@@ -112,14 +112,14 @@ public class ProveShuffling extends Prover {
 		ProductRingElement Kf = (ProductRingElement) PoSReply.getAt(5);
 
 		ProductGroupElement pkSeed;
-		//Here we check if width > 1 -> if so, 
-		//we interpret pk as pk = ((g,...,g),(y,...,y))
-		if (width>1) {
+		// Here we check if width > 1 -> if so,
+		// we interpret pk as pk = ((g,...,g),(y,...,y))
+		if (width > 1) {
 			pkSeed = Prover.expandPk(pk, width);
 		} else {
 			pkSeed = pk;
 		}
-		
+
 		/*
 		 * 2 - computing the seed s=ROseed(...)
 		 */
@@ -134,7 +134,7 @@ public class ProveShuffling extends Prover {
 		input[5] = wOutput;
 		Node nodeForSeed = new Node(input);
 		byte[] seed = ComputeSeed(ROSeed, nodeForSeed, ro);
-	
+
 		/*
 		 * 3 - Computation of A and F
 		 */
@@ -154,48 +154,47 @@ public class ProveShuffling extends Prover {
 		 */
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
-		
-		 /*
+
+		/*
 		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
 		 * B[-1] = h[0]
 		 */
-		 if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
-			 return false;
-		 }
-		
-		 /*
+		if (!verifyBvBtag(B, Btag, Kb, Ke, g, v, h, N)) {
+			return false;
+		}
+
+		/*
 		 * Equation 2: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 		 */
-		 if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
-			 return false;
-		 }
-		
-		 /*
+		if (!verifyAvAtag(A, Atag, v, Ke, g, N, h, Ka)) {
+			return false;
+		}
+
+		/*
 		 * Equation 3: F^v*Ftag = Enc(1,-Kf) * PI(wOutput[i]^Ke[i])
 		 */
-		 if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
-			 return false;
-		 }
-		
-		 /*
+		if (!verifyFFtag(N, Gq, pk, wOutput, width, Ftag, Kf, Ke, F, v)) {
+			return false;
+		}
+
+		/*
 		 * Equation 4: (C^v)*Ctag = g^Kc
 		 */
-		 if (!verifyCvCtag(C, Ctag, v, Kc, g)) {
-			 return false;
-		 }
-		
-		 /*
+		if (!verifyCvCtag(C, Ctag, v, Kc, g)) {
+			return false;
+		}
+
+		/*
 		 * Equation 5: (D^v)*Dtag = g^Kd
 		 */
-		 if (!verifyDvDtag(D, Dtag, v, Kd, g)) {
-		 return false;
-		 }
+		if (!verifyDvDtag(D, Dtag, v, Kd, g)) {
+			return false;
+		}
 
 		/* All equalities exist. */
 		return true;
 	}
-	
-	
+
 	// TODO printout method - delete?
 	static String bytArrayToHex(byte[] a) {
 		StringBuilder sb = new StringBuilder();
@@ -203,5 +202,4 @@ public class ProveShuffling extends Prover {
 			sb.append(String.format("%02x", b & 0xff));
 		return sb.toString();
 	}
-
 }
