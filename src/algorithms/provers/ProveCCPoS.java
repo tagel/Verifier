@@ -2,7 +2,6 @@ package algorithms.provers;
 
 import main.Logger;
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;
@@ -135,25 +134,6 @@ public class ProveCCPoS extends Prover {
 		
 		//TODO Compute B? Not F?
 		ProductGroupElement B = computeF(N, Ne, seed, prg, wInput);
-		
-		//TODO: printouts
-		
-				System.out.println("A' : "+Atag);
-				System.out.println("B' : "+Btag);
-				System.out.println("Ka : "+Ka);
-				System.out.println("Kb : "+Kb);
-				System.out.println("Ke : "+Ke);
-				System.out.println("h : "+h);
-				System.out.println("bt(h) : "+bytArrayToHex(h.toByteArray()));
-				System.out.println("u : "+u);
-				System.out.println("bt(u) : "+bytArrayToHex(u.toByteArray()));
-				System.out.println("pk : "+pkSeed);
-				System.out.println("node(g,h,u,pk,w,w') : "+bytArrayToHex(nodeForSeed.toByteArray()));
-				System.out.println("ro : "+bytArrayToHex(ro));
-				System.out.println("seed : "+bytArrayToHex(seed));
-				System.out.println("A : "+A);
-				System.out.println("v "+v);
-				System.out.println("B : " + B);
 
 		/*
 		 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])

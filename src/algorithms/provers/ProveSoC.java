@@ -130,33 +130,6 @@ public class ProveSoC extends Prover {
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
 		
-		//TODO: printouts
-		
-		System.out.println("B : "+B);
-		System.out.println("A' : "+Atag);
-		System.out.println("B' : "+Btag);
-		System.out.println("C': "+Ctag);
-		System.out.println("D' : "+Dtag);
-		System.out.println("Ka : "+Ka);
-		System.out.println("Kb : "+Kb);
-		System.out.println("Kc : "+Kc);
-		System.out.println("Kd : "+Kd);
-		System.out.println("Ke : "+Ke);
-		System.out.println("g : "+g);
-		System.out.println("bt(g) : "+bytArrayToHex(g.toByteArray()));
-		System.out.println("h : "+h);
-		System.out.println("bt(h) : "+bytArrayToHex(h.toByteArray()));
-		System.out.println("u : "+u);
-		System.out.println("bt(u) : "+bytArrayToHex(u.toByteArray()));
-		System.out.println("node(g,h,u) : "+bytArrayToHex(nodeForSeed.toByteArray()));
-		System.out.println("ro : "+bytArrayToHex(ro));
-		System.out.println("seed : "+bytArrayToHex(seed));
-		System.out.println("A : "+A);
-		System.out.println("v "+v);
-		System.out.println("C : " + C);
-		System.out.println("D : " + D);
-		
-
 		/*
 		 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
 		 */
