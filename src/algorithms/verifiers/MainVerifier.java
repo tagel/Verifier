@@ -249,7 +249,7 @@ public class MainVerifier {
 		params.setZq(new Ring(params.getGq().getOrder()));
 
 		// set the Hashfunction and the pseudo random generator
-		H = new SHA2HashFunction(params.getSh()); // TODO Daniel - try and catch
+		H = new SHA2HashFunction(params.getSh());
 		params.setPrg(new HashFuncPRG(new SHA2HashFunction(params.getsPRG())));
 
 		return true;
@@ -487,17 +487,8 @@ public class MainVerifier {
 		// Add L_lambda at Arr[lambda]
 		Arr.add(ShuffledCiphertexts);
 		params.setArrOfCiphertexts(Arr);
-
-		// TODO pintouts
-		/*System.out.println("b(L0)"
-				+ bytArrayToHex(params.getArrOfCiphertexts().getAt(0)
-						.toByteArray()));
-		System.out.println("b(L2)"
-				+ bytArrayToHex(params.getArrOfCiphertexts().getAt(2)
-						.toByteArray()));*/
-
+		
 		return true;
-
 	}
 
 	/**

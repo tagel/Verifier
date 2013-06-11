@@ -208,11 +208,7 @@ public abstract class Prover {
 		}
 
 		ProductGroupElement ones = new ProductGroupElement(arrOfOnes);
-
 		ProductGroupElement rigthF = encrypt(ones, Kf, pk, Gq, true);
-
-		// TODO remove
-		System.out.println("enc(1, -kf) = " + rigthF);
 
 		if (!leftF.equals(rigthF.mult(W))) {
 			return false;
@@ -349,9 +345,6 @@ public abstract class Prover {
 			LargeInteger a = t.mod(pow);
 			E = E.multiply(a);
 		}
-
-		// TODO
-		System.out.println("E :" + E);
 
 		return E;
 	}
@@ -490,9 +483,6 @@ public abstract class Prover {
 			hPi = hPi.mult(h.getAt(i).power(Ke.getAt(i).getElement()));
 		}
 		IGroupElement right = (g.power(Ka.getElement())).mult(hPi);
-		// TODO
-		System.out.println("A^v : " + A.power(v));
-		System.out.println("A^v A' : " + left);
 
 		if (!left.equals(right)) {
 			return false;

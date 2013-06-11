@@ -138,12 +138,7 @@ public class VerShuffling {
 			
 			//h should be of size N0
 			ArrayOfElements<IGroupElement> hBig = createRandomArray(maxciph, nr, ROSeed, prefixToRO, Gq, prg);
-			
-			//TODO:
-			System.out.println("h(0)==hBig(0)? : "+h.getAt(0).equals(hBig.getAt(0)));
-			System.out.println("h(1)==hBig(1)? : "+h.getAt(1).equals(hBig.getAt(1)));
-			System.out.println("h(2)==hBig(2)? : "+h.getAt(2).equals(hBig.getAt(2)));
-			
+				
 			for (int i = 1; i <= lambda; i++) {
 				// Step 1 in the algorithm
 				retValue = true; // initialize
@@ -194,9 +189,8 @@ public class VerShuffling {
 					if (!compareCiphertextsArrays(L.getAt(i-1), L.getAt(i)))
 						return false;
 				}
+				
 				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
-				//TODO remove printout
-				System.out.println("Proof of shuffling of party " + i +" succeeded");
 			}
 		}
 		logger.sendLog(

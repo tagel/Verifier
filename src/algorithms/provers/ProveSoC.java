@@ -2,7 +2,6 @@ package algorithms.provers;
 
 import main.Logger;
 import arithmetic.objects.ByteTree;
-import arithmetic.objects.ElementsExtractor;
 import arithmetic.objects.LargeInteger;
 import arithmetic.objects.arrays.ArrayOfElements;
 import arithmetic.objects.basicelements.BigIntLeaf;

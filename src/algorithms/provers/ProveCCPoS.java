@@ -167,9 +167,6 @@ public class ProveCCPoS extends Prover {
 		nodeForSeed.add(pk);
 		nodeForSeed.add(wInput);
 		nodeForSeed.add(wOutput);
-		//TODO
-		System.out.println("g :"+Gq.getGenerator());
-		System.out.println("bt(g) : "+bytArrayToHex(Gq.getGenerator().toByteArray()));
 		
 		return nodeForSeed;
 	}
