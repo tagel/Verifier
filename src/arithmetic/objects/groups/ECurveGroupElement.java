@@ -182,61 +182,6 @@ public class ECurveGroupElement implements IGroupElement {
 		return new ECurveGroupElement(p, getGroup());
 	}
 	
-	/*public ECurveGroupElement square2() {
-		if (element.getX().getElement()
-				.equals(group.one().getElement().getX().getElement())
-				&& element.getY().getElement()
-						.equals(group.one().getElement().getY().getElement()))
-			return this;
-
-		if (getElement().getY().getElement().signum() == 0)
-			return group.one();
-		
-		ECCurve curve = new Fp2(group.getFieldOrder(), group.getXCoefficient(),
-				group.getB());
-		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(),
-				getElement().getX().getElement());
-		ECFieldElement Y = new Fp(getElement().getY().getField().getOrder(),
-				getElement().getY().getElement());
-		ECPoint point = new Fp1(curve, X, Y);
-		ECPoint result = point.twice();
-		return new ECurveGroupElement(new Point(new IntegerFieldElement(
-				new LargeInteger(result.getX().toBigInteger().toByteArray()),
-				getElement().getX().getField()), new IntegerFieldElement(
-				new LargeInteger(result.getY().toBigInteger().toByteArray()),
-				getElement().getY().getField())), getGroup());
-		
-	}*/
-
-
-	/*public ECurveGroupElement power2(LargeInteger b) {
-
-		if (element.getX().getElement()
-				.equals(group.one().getElement().getX().getElement())
-				&& element.getY().getElement()
-						.equals(group.one().getElement().getY().getElement()))
-			return this;
-
-		if (b.signum() == 0)
-			return group.one();
-
-		ECCurve curve = new Fp2(group.getFieldOrder(), group.getXCoefficient(),
-				group.getB());
-		ECMultiplier multiplier = new FpNafMultiplier();
-		BigInteger B = new BigInteger(b.toByteArray());
-
-		ECFieldElement X = new Fp(getElement().getX().getField().getOrder(),
-				getElement().getX().getElement());
-		ECFieldElement Y = new Fp(getElement().getY().getField().getOrder(),
-				getElement().getY().getElement());
-		ECPoint point = new Fp1(curve, X, Y);
-		ECPoint result = multiplier.multiply(point, B, null);
-		return new ECurveGroupElement(new Point(new IntegerFieldElement(
-				new LargeInteger(result.getX().toBigInteger().toByteArray()),
-				getElement().getX().getField()), new IntegerFieldElement(
-				new LargeInteger(result.getY().toBigInteger().toByteArray()),
-				getElement().getY().getField())), getGroup());
-	}*/
 	
 	/**
 	 * 
