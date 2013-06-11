@@ -194,9 +194,6 @@ public abstract class Prover {
 
 		ProductGroupElement leftF = (F.power(v)).mult(Ftag);
 
-		// TODO remove
-		System.out.println("F'Fv = " + leftF);
-
 		ProductGroupElement W = wOutput.getAt(0)
 				.power(Ke.getAt(0).getElement());
 
@@ -457,11 +454,7 @@ public abstract class Prover {
 			tempH = tempH.power(e);
 		}
 
-		// TODO printouts
-		System.out.println("h0^pi(e) : " + tempH);
-
-		IGroupElement D = B.getAt(N - 1).divide(tempH);
-		return D;
+		return B.getAt(N - 1).divide(tempH);
 	}
 
 	/**

@@ -215,8 +215,6 @@ public class ProveDec extends Prover {
 			ArrayOfElements<IGroupElement> y,
 			ArrayOfElements<ProductGroupElement> wInput,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> decryptionFactors) {
-		
-
 				
 		// creating node(g,w)
 		Node leftNode = new Node();
@@ -235,10 +233,6 @@ public class ProveDec extends Prover {
 		nodeForSeed.add(leftNode);
 		nodeForSeed.add(rightNode);
 		
-		//TODO printouts
-		System.out.println("a : "+bytArrayToHex(a.toByteArray()));
-		System.out.println("b : "+bytArrayToHex(b.toByteArray()));
-		System.out.println("nodeForSeed : "+bytArrayToHex(nodeForSeed.toByteArray()));
 		return nodeForSeed;
 	}
 
@@ -331,16 +325,6 @@ public class ProveDec extends Prover {
 			piBltag = piBltag.mult(BtagArr.getAt(i));
 		}
 		
-		//TODO printouts
-		System.out.println("B : "+B);
-		System.out.println("piYlTag : "+piYltag);
-		System.out.println("piYl : "+piYl);
-		System.out.println("piYl ^ (-v) : "+piYl.power(v).inverse());
-		System.out.println("sumKlx : "+sumklx);
-		System.out.println("g^sumklx : "+g.power(sumklx.getElement()));
-		System.out.println("left :"+((piYl.power(v)).inverse()).mult(piYltag));
-		System.out.println("right : "+(g.power(sumklx.getElement())));
-
 		/*
 		 * verify PI(yl)^v * PI(yl') = g^(SUM(klx))
 		 */

@@ -178,16 +178,7 @@ public class ProveShuffling extends Prover {
 		 */
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
-
-		// TODO printouts
-		System.out.println("A : " + A);
-		System.out.println("F : " + F);
-		System.out.println("v : " + v);
-		System.out.println("C : " + C);
-		System.out.println("D : " + D);
 		
-		System.out.println("C^v : "+(C.power(v)).mult(Ctag));
-
 		 /*
 		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
 		 * B[-1] = h[0]
