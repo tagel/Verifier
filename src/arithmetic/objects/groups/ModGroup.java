@@ -118,9 +118,8 @@ public class ModGroup implements IGroup {
 			PseudoRandomGenerator prg, byte[] seed, int Nr) {
 		ArrayOfElements<IGroupElement> h = new ArrayOfElements<IGroupElement>();
 		int Np = this.p.bitLength();
-		//TODO check if this works for every mod group we have
-		//int length = 8 * ((int) Math.ceil((double) ((Np + Nr) / 8.0)));
-		int length = 7 + Nr + Np;
+		int length = 8 * ((int) Math.ceil((double) ((Np + Nr) / 8.0)));
+
 		prg.setSeed(seed);
 
 		for (int i = 0; i < N; i++) {
