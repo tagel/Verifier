@@ -229,11 +229,4 @@ public class VerDec {
 		return true;
 	}
 	
-	// TODO printout method - delete?
-		static String bytArrayToHex(byte[] a) {
-			StringBuilder sb = new StringBuilder();
-			for (byte b : a)
-				sb.append(String.format("%02x", b & 0xff));
-			return sb.toString();
-		}
 }
