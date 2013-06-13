@@ -108,6 +108,8 @@ public class CommandLineParser {
 		} else if (argv[0].equals("-decrypt")) {
 			setFalgNopos();
 			type = Type.DECRYPTION;
+		} else {
+			printCommandLineUsage();
 		}
 	}
 
@@ -170,13 +172,13 @@ public class CommandLineParser {
 	// outputs a space separated list of all versions of Verificatum for
 	// which the verifier is compatible.
 	private void printCompat() {
-		System.out.println("1.1.0");
+		System.out.println("Compatible versions of Verificatum: 1.1.0");
 	}
 
 	// use when command line entered couldn't be parsed
 	private void printCommandLineUsage() {
 		System.out
-				.println("---------------------------------------------------------------------------------");
+				.println("------------------------------------------------------------------------------");
 		System.out
 				.println("Wrong usage! please follow the usage instructions:");
 		System.out
@@ -188,7 +190,7 @@ public class CommandLineParser {
 				.println("Linux users - instead of 'verifier' use 'verifier.sh'");
 		System.out.println();
 		System.out
-				.println("1. verifier -compat                         : list of all the compatible versions");
+				.println("1. verifier -compat                         : list of compatible versions");
 		System.out
 				.println("2. verifier -mix protInfo.xml directory     : verify proof of mixing ");
 		System.out
@@ -198,7 +200,8 @@ public class CommandLineParser {
 		System.out.println();
 		System.out
 				.println("Commands 2-4 can be used with the following optional flags:");
-		System.out.println("[ -auxsid, -width, -nopos, -noposc, -noccpos, -nodec ]");
+		System.out
+				.println("[ -auxsid, -width, -nopos, -noposc, -noccpos, -nodec ]");
 		System.out.println();
 		System.out
 				.println("protInfo - Path to protocol info file manufactured by Verificatum.");
@@ -207,7 +210,7 @@ public class CommandLineParser {
 		System.out
 				.println("for all commands, you can use the '-v' option to turn on verbose output.");
 		System.out
-				.println("---------------------------------------------------------------------------------");
+				.println("------------------------------------------------------------------------------");
 	}
 
 	/**

@@ -40,7 +40,7 @@ public class Logger {
 	 */
 	public void sendLog(String message, Severity severity) {
 		if (severity.equals(Severity.ERROR)) {
-			System.err.println(ERROR_STRING + getDate() + SPACE_STRING
+			System.out.println(ERROR_STRING + getDate() + SPACE_STRING
 					+ message);
 		} else if (verbose) {
 			System.out.println(getDate() + SPACE_STRING + message);
