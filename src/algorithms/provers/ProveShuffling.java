@@ -139,7 +139,7 @@ public class ProveShuffling extends Prover {
 		 * 3 - Computation of A and F
 		 */
 		IGroupElement A = computeA(N, Ne, seed, prg, u, Gq);
-		ProductGroupElement F = computeF(N, Ne, seed, prg, wInput);
+		ProductGroupElement F = computeFOrB(N, Ne, seed, prg, wInput);
 
 		/*
 		 * 4 - Computation of the challenge

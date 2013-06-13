@@ -365,7 +365,7 @@ public abstract class Prover {
 	 *            Array of input ciphertexts
 	 * @return F, the multiplication of WInput^ei N times
 	 */
-	protected static ProductGroupElement computeF(int N, int Ne, byte[] seed,
+	protected static ProductGroupElement computeFOrB(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg,
 			ArrayOfElements<ProductGroupElement> wInput) {
 

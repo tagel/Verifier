@@ -134,8 +134,7 @@ public class ProveCCPoS extends Prover {
 		 * 5 - Compute B and verify equalities
 		 */
 
-		// TODO Compute B? Not F?
-		ProductGroupElement B = computeF(N, Ne, seed, prg, wInput);
+		ProductGroupElement B = computeFOrB(N, Ne, seed, prg, wInput);
 
 		/*
 		 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
