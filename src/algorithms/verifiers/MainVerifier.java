@@ -216,7 +216,7 @@ public class MainVerifier {
 		}
 
 		if (!(params.getType().equals(params.getTypeExpected()))) {
-			logger.sendLog("Verification failed - types don't match",
+			logger.sendLog("Verification failed - Types don't match",
 					Logger.Severity.ERROR);
 			return false;
 		}
