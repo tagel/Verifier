@@ -139,7 +139,7 @@ public class ProveShuffling extends Prover {
 		 * 3 - Computation of A and F
 		 */
 		IGroupElement A = computeA(N, Ne, seed, prg, u, Gq);
-		ProductGroupElement F = computeF(N, Ne, seed, prg, wInput);
+		ProductGroupElement F = computeFOrB(N, Ne, seed, prg, wInput);
 
 		/*
 		 * 4 - Computation of the challenge
@@ -193,13 +193,5 @@ public class ProveShuffling extends Prover {
 
 		/* All equalities exist. */
 		return true;
-	}
-
-	// TODO printout method - delete?
-	static String bytArrayToHex(byte[] a) {
-		StringBuilder sb = new StringBuilder();
-		for (byte b : a)
-			sb.append(String.format("%02x", b & 0xff));
-		return sb.toString();
 	}
 }

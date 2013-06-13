@@ -134,8 +134,7 @@ public class ProveCCPoS extends Prover {
 		 * 5 - Compute B and verify equalities
 		 */
 
-		// TODO Compute B? Not F?
-		ProductGroupElement B = computeF(N, Ne, seed, prg, wInput);
+		ProductGroupElement B = computeFOrB(N, Ne, seed, prg, wInput);
 
 		/*
 		 * Equation 1: A^v * Atag = (g^ka) * PI(h[i]^ke[i])
@@ -147,9 +146,7 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * Equation 2: B^v*Btag = Enc(1,-Kb) * PI(wOutput[i]^Ke[i])
 		 */
-		if (!verifyFFtag(N, Gq, pk, wOutput, width, Btag, Kb, Ke, B, v)) { // TODO
-																			// maybe
-																			// bug?
+		if (!verifyFFtag(N, Gq, pk, wOutput, width, Btag, Kb, Ke, B, v)) { 
 			return false;
 		}
 
@@ -173,13 +170,5 @@ public class ProveCCPoS extends Prover {
 		nodeForSeed.add(wOutput);
 
 		return nodeForSeed;
-	}
-
-	// TODO printout method - delete?
-	static String bytArrayToHex(byte[] a) {
-		StringBuilder sb = new StringBuilder();
-		for (byte b : a)
-			sb.append(String.format("%02x", b & 0xff));
-		return sb.toString();
 	}
 }
