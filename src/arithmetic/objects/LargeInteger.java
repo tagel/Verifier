@@ -107,8 +107,7 @@ public class LargeInteger extends BigInteger {
 	
 	@Override
 	public String toString(){
-		//TODO hexa
+
 		return String.format("%x", this);
-		//return super.toString();
 		}
 }
