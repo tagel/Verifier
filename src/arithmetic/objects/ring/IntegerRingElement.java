@@ -47,10 +47,10 @@ public class IntegerRingElement implements ByteTree {
 	 * @return The additive inverse of our element
 	 */
 	public IntegerRingElement neg() {
-		return new IntegerRingElement(getRing().getOrder().subtract(
-				this.getElement().mod(getRing().getOrder())), this.getRing());
+		//return new IntegerRingElement(getRing().getOrder().subtract(
+			//	this.getElement().mod(getRing().getOrder())), this.getRing());
 		//TODO fix bug??
-		//return new IntegerRingElement(this.getElement().negate().mod(getRing().getOrder()), this.getRing());
+		return new IntegerRingElement(this.getElement().negate().mod(getRing().getOrder()), this.getRing());
 	}
 
 	/**
