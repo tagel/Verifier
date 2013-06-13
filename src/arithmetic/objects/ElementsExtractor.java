@@ -140,7 +140,6 @@ public class ElementsExtractor {
 		if (Gq instanceof ECurveGroup)
 			return new ECurveGroupElement(nodeToPoint(b, Gq), (ECurveGroup) Gq);
 		else {
-			System.out.println("ERROR: instance is not a group element");
 			return null;
 		}
 	}
