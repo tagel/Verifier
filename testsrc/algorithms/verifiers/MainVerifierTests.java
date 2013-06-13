@@ -89,7 +89,6 @@ public class MainVerifierTests {
 		Assert.assertTrue(mainVer.ReadKeys());
 		Assert.assertNotNull(params.getMixPublicKey());
 		Assert.assertEquals(2, params.getMixPublicKey().getSize());
-		// TODO - test case secret key does exits
 		Assert.assertNull(params.getMixSecretKey().getAt(0));
 		Assert.assertTrue(params.getProtVersion().equals(params.getVersion()));
 		Assert.assertEquals(params.getwDefault(), params.getW());
@@ -97,11 +96,6 @@ public class MainVerifierTests {
 
 	@Test
 	public void readListsTest() throws IOException {
-		//Elliptc curve
-		/*Parameters params = new Parameters(getClass().getClassLoader()
-				.getResource("protInfo.xml").getFile(), getClass()
-				.getClassLoader().getResource("export/default").getFile(),
-				Type.MIXING, "auxsid", 1, false, false, false, logger);*/
 		
 		//Mod group
 		Parameters params = new Parameters(getClass().getClassLoader()
