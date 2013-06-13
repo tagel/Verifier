@@ -125,7 +125,6 @@ public class ProveSoC extends Prover {
 		/*
 		 * 5 - Compute C,D and verify equalities
 		 */
-		// TODO : LargeInteger E = computeE(N, Ne, seed, prg);
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
 		
@@ -162,13 +161,5 @@ public class ProveSoC extends Prover {
 		logger.sendLog("Shuffle of commitments proof succeeded",
 				Logger.Severity.NORMAL);
 		return true;
-	}
-	
-	// TODO printout method - delete?
-	static String bytArrayToHex(byte[] a) {
-		StringBuilder sb = new StringBuilder();
-		for (byte b : a)
-			sb.append(String.format("%02x", b & 0xff));
-		return sb.toString();
 	}
 }

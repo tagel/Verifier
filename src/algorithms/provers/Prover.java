@@ -295,9 +295,7 @@ public abstract class Prover {
 	protected static IGroupElement computeA(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg, ArrayOfElements<IGroupElement> u,
 			IGroup Gq) {
-		// TODO check this
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8.0)));
-		// int length = Ne + 7;
 		prg.setSeed(seed);
 
 		byte[] byteArrToBigInt;
@@ -330,8 +328,7 @@ public abstract class Prover {
 	 */
 	protected static LargeInteger computeE(int N, int Ne, byte[] seed,
 			PseudoRandomGenerator prg) {
-		// TODO check this
-		// int length = Ne + 7;
+
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8.0)));
 		prg.setSeed(seed);
 		byte[] byteArrToBigInt;
@@ -369,9 +366,7 @@ public abstract class Prover {
 			PseudoRandomGenerator prg,
 			ArrayOfElements<ProductGroupElement> wInput) {
 
-		// TODO check this
 		int length = 8 * ((int) Math.ceil((double) (Ne / 8.0)));
-		// int length = Ne + 7;
 
 		prg.setSeed(seed);
 		byte[] ByteArrToBigInt = prg.getNextPRGOutput(length);
