@@ -91,8 +91,12 @@ public class MainVerifier {
 		// *******Section 3 in the Algorithm*********
 		// derive the objects: IGroup Gq, Ring Zq, Hashfunction H, and PRG.
 		if (!deriveSetsAndObjects()) {
+			logger.sendLog("Deriving objects failed.",
+					Logger.Severity.ERROR);
 			return false;
 		}
+		logger.sendLog("Deriving objects succeeded.",
+				Logger.Severity.NORMAL);
 
 		// *******Section 4 in the Algorithm*********
 		// create the random oracles used in the provers using prg and
@@ -101,6 +105,8 @@ public class MainVerifier {
 
 		// *******Section 5 in the Algorithm*********
 		if (!ReadKeys()) {
+			logger.sendLog("Verification of keys failed.",
+					Logger.Severity.ERROR);
 			return false;
 		}
 		logger.sendLog("Verification of keys succeeded.",
@@ -108,9 +114,13 @@ public class MainVerifier {
 
 		// *******Section 6 in the Algorithm*********
 		if (!ReadLists()) {
+			logger.sendLog("Reading Lists failed.",
+					Logger.Severity.ERROR);
 			return false;
 
 		}
+		logger.sendLog("Reading Lists succeeded.",
+				Logger.Severity.NORMAL);
 
 		// create random array to send to the verifiers
 		createRandomArray();
@@ -123,6 +133,8 @@ public class MainVerifier {
 				&& (params.isPosc() || params.isCcpos())) {
 
 			if (!runVerShuffling()) {
+				logger.sendLog("Verification of Shuffling failed.",
+						Logger.Severity.ERROR);
 				return false;
 			}
 		}
@@ -132,11 +144,15 @@ public class MainVerifier {
 		if (params.isDec()) {
 			if (Type.MIXING.equals(params.getType())) {
 				if (!runVerDec(Type.MIXING)) {
+					logger.sendLog("Types doesn't match - verification failed.",
+							Logger.Severity.ERROR);
 					return false;
 				}
 			}
 			if (Type.DECRYPTION.equals(params.getType())) {
 				if (!runVerDec(Type.DECRYPTION)) {
+					logger.sendLog("Verification of Decryption failed.",
+							Logger.Severity.ERROR);
 					return false;
 				}
 			}
@@ -149,6 +165,7 @@ public class MainVerifier {
 	}
 
 	private void createRandomArray() {
+		logger.sendLog("Creating random Array", Logger.Severity.NORMAL);
 		StringLeaf stringLeaf = new StringLeaf(GENERATORS);
 		byte[] independentSeed = params.getROseed().getRandomOracleOutput(
 				ArrayGenerators.concatArrays(params.getPrefixToRO(),
@@ -193,24 +210,34 @@ public class MainVerifier {
 
 	private boolean checkFilledParams() {
 		if (!params.getProtVersion().equals(params.getVersion())) {
+			logger.sendLog("Verification failed - Versions don't match",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
 		if (!(params.getType().equals(params.getTypeExpected()))) {
+			logger.sendLog("Verification failed - types don't match",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
 		if (!params.getAuxsid().equals(params.getAuxidExp())) {
+			logger.sendLog("Verification failed - Auxid's don't match",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
 		if ((params.getWidthExp() == 0)
 				&& (params.getW() != params.getwDefault())) {
+			logger.sendLog("Verification failed - wrong width",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
 		if ((params.getWidthExp() != 0)
 				&& (params.getW() != params.getWidthExp())) {
+			logger.sendLog("Verification failed - wrong width",
+					Logger.Severity.ERROR);
 			return false;
 		}
 
@@ -360,8 +387,6 @@ public class MainVerifier {
 			yi = params.getMixPublicKey().getAt(i);
 
 			if ((xi != null) && !(yi.equals(g.power(xi.getElement())))) {
-				logger.sendLog("Verification of keys failed.",
-						Logger.Severity.ERROR);
 				return false;
 			}
 		}

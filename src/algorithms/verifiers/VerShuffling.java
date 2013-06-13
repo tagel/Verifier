@@ -83,20 +83,22 @@ public class VerShuffling {
 	 */
 	static public boolean verify(RandomOracle ROSeed, RandomOracle ROChallenge,
 			String directory, byte[] prefixToRO, int lambda, int N, int ne,
-			int nr, int nv, PseudoRandomGenerator prg, IGroup Gq,
-			ProductGroupElement pk, 
-			//ArrayOfElements<ProductGroupElement> L0,
-			//ArrayOfElements<ProductGroupElement> Llambda, 
+			int nr,
+			int nv,
+			PseudoRandomGenerator prg,
+			IGroup Gq,
+			ProductGroupElement pk,
+			// ArrayOfElements<ProductGroupElement> L0,
+			// ArrayOfElements<ProductGroupElement> Llambda,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> L,
-			boolean posc,
-			boolean ccpos, IRing<IntegerRingElement> Zq, int width,
-			ArrayOfElements<IGroupElement> h, Logger logger1) {
+			boolean posc, boolean ccpos, IRing<IntegerRingElement> Zq,
+			int width, ArrayOfElements<IGroupElement> h, Logger logger1) {
 
 		logger = logger1;
 
 		// set maxciph (indicates if there was pre-computation)
 		int maxciph = readMaxciph(directory);
-		
+
 		// If maxciph == -1, we use the whole permutation commitment array
 		// (otherwise, we use only the relevant ones).
 		if (maxciph == -1) {
@@ -107,23 +109,35 @@ public class VerShuffling {
 				retValue = true; // initialize
 
 				if (!readFilesPoS(i, directory, Gq, Zq, N, width)) {
+					logger.sendLog(
+							"Reading shuffling files failed",
+							Logger.Severity.ERROR);
 					retValue = false;
-				}
+				} else {
 
 				retValue = retValue
 						&& ProveShuffling.prove(ROSeed, ROChallenge,
 								prefixToRO, N, ne, nr, nv, prg, Gq, pk,
-								L.getAt(i-1), L.getAt(i), width, PermutationCommitment,
-								PoSCommitment, PoSReply, h, logger);
-
+								L.getAt(i - 1), L.getAt(i), width,
+								PermutationCommitment, PoSCommitment, PoSReply,
+								h, logger);
+				}
+				
 				// If !retValue, it means that reading the elements
 				// failed or the prover rejected
 				if (!retValue) {
-					if (!compareCiphertextsArrays(L.getAt(i-1), L.getAt(i)))
+					logger.sendLog(
+							"Prove of shuffling failed - comparing arrays.",
+							Logger.Severity.ERROR);
+					if (!compareCiphertextsArrays(L.getAt(i - 1), L.getAt(i))) {
+						logger.sendLog("Comparing arrays failed",
+								Logger.Severity.ERROR);
 						return false;
+					}
 				}
-				
-				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
+
+				logger.sendLog("Proof of shuffling of party " + i
+						+ " succeeded", Logger.Severity.NORMAL);
 			}
 			return true;
 
@@ -134,17 +148,21 @@ public class VerShuffling {
 			if (N > maxciph) {
 				return false;
 			}
-			
-			//h should be of size N0
-			ArrayOfElements<IGroupElement> hBig = createRandomArray(maxciph, nr, ROSeed, prefixToRO, Gq, prg);
-				
+
+			// h should be of size N0
+			ArrayOfElements<IGroupElement> hBig = createRandomArray(maxciph,
+					nr, ROSeed, prefixToRO, Gq, prg);
+
 			for (int i = 1; i <= lambda; i++) {
 				// Step 1 in the algorithm
 				retValue = true; // initialize
 				if (!readFilesPoSC(i, directory, Gq, Zq, maxciph, width)
-						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO, maxciph,
-								ne, nr, nv, prg, Gq, PermutationCommitment,
-								PoSCCommitment, PoSCReply, hBig, logger))) {
+						|| (!ProveSoC.prove(ROSeed, ROChallenge, prefixToRO,
+								maxciph, ne, nr, nv, prg, Gq,
+								PermutationCommitment, PoSCCommitment,
+								PoSCReply, hBig, logger))) {
+					logger.sendLog("Prove of shuffling commitment failed",
+							Logger.Severity.ERROR);
 					// if the algorithm rejects or reading failed set
 					// permutation commitment to be h
 					PermutationCommitment = hBig;
@@ -174,45 +192,50 @@ public class VerShuffling {
 				// Step 4 and 5 of the algorithm
 				if (!readFilesCCPos(i, directory, Gq, Zq, N, width)) {
 					retValue = false;
-				}
+				} else {
 
 				retValue = retValue
-						&& ProveCCPoS.prove(ROSeed, ROChallenge,
-								prefixToRO, N, ne, nr, nv, prg, Gq, pk,
-								L.getAt(i-1), L.getAt(i), width, PermutationCommitment,
+						&& ProveCCPoS.prove(ROSeed, ROChallenge, prefixToRO, N,
+								ne, nr, nv, prg, Gq, pk, L.getAt(i - 1),
+								L.getAt(i), width, PermutationCommitment,
 								CCPoSCommitment, CCPoSReply, h, logger);
-
+				}
 				// If !retValue, it means that reading the elements
 				// failed or the prover rejected
 				if (!retValue) {
-					if (!compareCiphertextsArrays(L.getAt(i-1), L.getAt(i)))
+					logger.sendLog(
+							"Prove of shuffling failed - comparing arrays.",
+							Logger.Severity.ERROR);
+					if (!compareCiphertextsArrays(L.getAt(i - 1), L.getAt(i))) {
+						logger.sendLog("Comparing arrays failed",
+								Logger.Severity.ERROR);
 						return false;
+					}
 				}
-				
-				logger.sendLog("Proof of shuffling of party " + i +" succeeded", Logger.Severity.NORMAL);
+
+				logger.sendLog("Proof of shuffling of party " + i
+						+ " succeeded", Logger.Severity.NORMAL);
 			}
 		}
-		logger.sendLog(
-				"Finished verifying shuffling",
-				Logger.Severity.NORMAL);
+		logger.sendLog("Finished verifying shuffling", Logger.Severity.NORMAL);
 		return true;
 	}
 
-	
-	private static ArrayOfElements<IGroupElement> createRandomArray(int N, int nr, RandomOracle rOSeed, byte[] prefixToRO, IGroup gq, PseudoRandomGenerator prg) {
+	private static ArrayOfElements<IGroupElement> createRandomArray(int N,
+			int nr, RandomOracle rOSeed, byte[] prefixToRO, IGroup gq,
+			PseudoRandomGenerator prg) {
 		StringLeaf stringLeaf = new StringLeaf(GENERATORS);
-		byte[] independentSeed = rOSeed.getRandomOracleOutput(
-				ArrayGenerators.concatArrays(prefixToRO,
-						stringLeaf.toByteArray()));
-		ArrayOfElements<IGroupElement> hBig = gq
-				.createRandomArray(N, prg,
-						independentSeed, nr);
+		byte[] independentSeed = rOSeed.getRandomOracleOutput(ArrayGenerators
+				.concatArrays(prefixToRO, stringLeaf.toByteArray()));
+		ArrayOfElements<IGroupElement> hBig = gq.createRandomArray(N, prg,
+				independentSeed, nr);
 		return hBig;
 	}
 
-
 	private static ArrayOfElements<IGroupElement> shrinkPrmutatuonCommitment(
 			int maxciph) {
+		
+		logger.sendLog("Shrinking Permutation Commitment", Logger.Severity.NORMAL);
 		ArrayOfElements<IGroupElement> ret = new ArrayOfElements<IGroupElement>();
 
 		for (int j = 0; j < maxciph; j++) {
@@ -349,7 +372,6 @@ public class VerShuffling {
 		return true;
 	}
 
-	
 	/**
 	 * This method reads the relevant files for the i'th mix server. It sets the
 	 * global fields, and the main function will send them to the Shuffling of
@@ -556,7 +578,7 @@ public class VerShuffling {
 	private static int readMaxciph(String directory) {
 		Scanner text = null;
 		try {
-			text = new Scanner(new File (new File(directory, PROOFS), MAXCIPH));
+			text = new Scanner(new File(new File(directory, PROOFS), MAXCIPH));
 		} catch (FileNotFoundException e) {
 			return -1;
 		}
@@ -576,15 +598,15 @@ public class VerShuffling {
 
 		return true;
 	}
-		
-		/**
-		 * @param i
-		 *            the number to change
-		 * @return the number as string, if i < 10, add "0" to the begining of the
-		 *         string
-		 */
-		private static String getNumStringForFileName(int i) {
-			return (i < 10 ? "0" : EMPTY_STRING) + i;
-		}
+
+	/**
+	 * @param i
+	 *            the number to change
+	 * @return the number as string, if i < 10, add "0" to the begining of the
+	 *         string
+	 */
+	private static String getNumStringForFileName(int i) {
+		return (i < 10 ? "0" : EMPTY_STRING) + i;
+	}
 
 }

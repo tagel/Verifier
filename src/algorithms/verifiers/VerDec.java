@@ -83,8 +83,12 @@ public class VerDec {
 			// create the arrays of the different factors
 			if (!readDecriptionFactors(lambda, directory, Gq, i, N, width)
 					|| !readDecrFactCommitment(lambda, directory, Gq, i, width)
-					|| !readDecrFactReply(lambda, directory, Zq, i))
+					|| !readDecrFactReply(lambda, directory, Zq, i)) {
+				logger.sendLog("Reading Decryption Factors failed.",
+						Logger.Severity.ERROR);
 				return false;
+			}
+				
 		}
 		
 
@@ -96,6 +100,9 @@ public class VerDec {
 		if (!ProveDec.prove(ROSeed, ROChallenge, 0, prefixToRO, N, ne, nr, nv,
 				prg, Gq, g, publicKeys, L, DecryptionFactors,
 				DecrFactCommitments, DecrFactReplies, logger)) {
+			
+			logger.sendLog("Combined Proof of Decryption failed - starting proof by parties",
+					Logger.Severity.ERROR);
 
 			// ********Step 3 in the algorithm**********
 			for (int i = 1; i <= lambda; i++) {
@@ -119,6 +126,8 @@ public class VerDec {
 		ArrayOfElements<ProductGroupElement> f = multiplyArrays(DecryptionFactors);
 		
 		if (!m.equals(Prover.TDecrypt(L, f))) {
+			logger.sendLog("Verification of plaintexts failed",
+					Logger.Severity.ERROR);
 			return false;
 		}
 		return true;
