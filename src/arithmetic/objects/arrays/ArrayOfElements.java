@@ -15,7 +15,7 @@ import arithmetic.objects.ring.ProductRingElement;
  * This generic class represents an array of elements. the elements in the array
  * are all of the same type, but this type has to be a type which implements the
  * ByteTree interface (field, ring, or group elements, product elements, arrays
- * of elements, etc...
+ * of elements, etc...)
  * 
  * @author Itay
  */
@@ -101,7 +101,10 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	}
 
 	/**
-	 * returns the byte array representation (as a byte tree) of the array.
+	 * returns the byte array representation (as a byte tree) of the array. in
+	 * case this array contains product elements, its representation is a bit
+	 * different (as explained in the document) and therefore there are two
+	 * helper functions for that case right under this function.
 	 */
 	@Override
 	public byte[] toByteArray() {
@@ -123,7 +126,10 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		return b;
 
 	}
-
+/**
+ * 
+ * @return the byte array representation of an array of product group elements.
+ */
 	public byte[] ProductGroupArrayToByteArray() {
 		Node node = new Node();
 		int productsSize = ((ProductGroupElement) getAt(0)).getSize();
@@ -135,7 +141,8 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 			b[0] = 0;
 
 			if (productsSize == 2
-					&& ((ProductGroupElement) getAt(0)).getLeft()!=null && ((ProductGroupElement) getAt(0)).getLeft().getSize() == 1) {
+					&& ((ProductGroupElement) getAt(0)).getLeft() != null
+					&& ((ProductGroupElement) getAt(0)).getLeft().getSize() == 1) {
 				for (int i = 0; i < productsSize; i++) {
 					ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
 					for (int j = 0; j < getSize(); j++) {
@@ -176,7 +183,10 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		}
 		return node.toByteArray();
 	}
-
+/**
+ * 
+ * @return the byte array representation of an array of product ring elements.
+ */
 	public byte[] ProductRingArrayToByteArray() {
 		int productsSize = ((ProductRingElement) getAt(0)).getSize();
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)

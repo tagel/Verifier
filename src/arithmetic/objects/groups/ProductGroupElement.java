@@ -9,7 +9,7 @@ import arithmetic.objects.arrays.ArrayOfElements;
 /**
  * This class represents a product group element. In our project, our verifiers
  * and provers only use two kinds of product group elements: a "simple" product
- * element, where all of his coordinates are group elements (meaning it's not
+ * element, where all of its coordinates are group elements (meaning it's not
  * recursive), and a product group element that has only two coordinates which
  * are both product group elements themselves, and have an equal number of group
  * elements as coordinates.
