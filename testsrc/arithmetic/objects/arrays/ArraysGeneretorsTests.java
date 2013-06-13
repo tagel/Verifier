@@ -54,7 +54,6 @@ public class ArraysGeneretorsTests {
 		Assert.assertEquals(CryptoUtils.bytesToHexString(arr.toByteArray()),
 				"00000000020100000002000001000000020001");
 
-		// TODO: implement test for elliptic curve!
 	}
 
 	@Test

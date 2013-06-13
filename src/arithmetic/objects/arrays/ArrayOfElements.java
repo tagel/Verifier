@@ -207,7 +207,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		return node.toByteArray();
 	}
 
-	// TODO DELETE PRINTOUTS
+	
 	@Override
 	public String toString() {
 		String temp = "[";
