@@ -175,11 +175,39 @@ public class CommandLineParser {
 
 	// use when command line entered couldn't be parsed
 	private void printCommandLineUsage() {
-		System.out.println("wrong  usage");
-		// System.out.println("verifier usage: verifier [-command] [xml-file-path] [dir-path]");
-		// System.out.println("verifier commands:");
-		// System.out.println("	-");
-		// TODO Daniel - print how to use the command line
+		System.out
+				.println("---------------------------------------------------------------------------------");
+		System.out
+				.println("Wrong usage! please follow the usage instructions:");
+		System.out
+				.println("__________________________________________________");
+		System.out.println();
+		System.out
+				.println("Windows users - instead of 'verifier' use 'verifier.bat'");
+		System.out
+				.println("Linux users - instead of 'verifier' use 'verifier.sh'");
+		System.out.println();
+		System.out
+				.println("1. verifier -compat                         : list of all the compatible versions");
+		System.out
+				.println("2. verifier -mix protInfo.xml directory     : verify proof of mixing ");
+		System.out
+				.println("3. verifier -shuffle protInfo.xml directory : verify proof of shuffling");
+		System.out
+				.println("4. verifier -decrypt protInfo.xml directory : verify proof of decryption");
+		System.out.println();
+		System.out
+				.println("Commands 2-4 can be used with the following optional flags:");
+		System.out.println("[ -auxsid, -width, -nopos, -noposc, -noccpos, -nodec ]");
+		System.out.println();
+		System.out
+				.println("protInfo - Path to protocol info file manufactured by Verificatum.");
+		System.out
+				.println("directory- Path to default directory which contains needed information.");
+		System.out
+				.println("for all commands, you can use the '-v' option to turn on verbose output.");
+		System.out
+				.println("---------------------------------------------------------------------------------");
 	}
 
 	/**
