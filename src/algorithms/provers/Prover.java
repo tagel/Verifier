@@ -586,12 +586,17 @@ public abstract class Prover {
 		return true;
 	}
 
+	/**
+	 * This function recives a byte-array number and turns it into a positive largeInteger
+	 * @param bytes
+	 * 				represents a number
+	 * @return LargeInteger which is the positive form of the number
+	 */
 	public static LargeInteger byteArrayToPosLargeInteger(byte[] bytes) {
+
 		byte[] byteArrToBigIntPos = new byte[bytes.length + 1];
 		byteArrToBigIntPos[0] = 0x00;
 		System.arraycopy(bytes, 0, byteArrToBigIntPos, 1, bytes.length);
-
 		return new LargeInteger(byteArrToBigIntPos);
 	}
-
 }
