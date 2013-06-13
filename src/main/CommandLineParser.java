@@ -170,8 +170,7 @@ public class CommandLineParser {
 	// outputs a space separated list of all versions of Verificatum for
 	// which the verifier is compatible.
 	private void printCompat() {
-		System.out.println("compat");
-		// TODO Daniel - print the verificatum version
+		System.out.println("1.1.0");
 	}
 
 	// use when command line entered couldn't be parsed
