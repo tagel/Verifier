@@ -22,7 +22,7 @@ public class Main {
 			if (!callMainVerifier(parser, logger)) {				
 				logger.sendLog("Exiting", Logger.Severity.NORMAL);
 			} else {
-				logger.sendLog("Finished verifing successfully", Logger.Severity.NORMAL);
+				logger.sendLog("Finished verifing successfully", Logger.Severity.HIGH);
 			}
 		}
 	}

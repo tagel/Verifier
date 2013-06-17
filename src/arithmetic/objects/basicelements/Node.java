@@ -116,6 +116,9 @@ public class Node implements ByteTree {
 	 * @return the node's child in the appropriate index.
 	 */
 	public ByteTree getAt(int index) {
+		if (children == null) {
+			return null;
+		}
 		return children.get(index);
 	}
 
@@ -127,6 +130,9 @@ public class Node implements ByteTree {
 	 *            the new children we want to put in that index
 	 */
 	public void setAt(int index, ByteTree newValue) {
+		if (children == null) {
+			return;
+		}
 		children.set(index, newValue);
 	}
 
@@ -136,6 +142,9 @@ public class Node implements ByteTree {
 	 *            an element we want to add to the children list
 	 */
 	public void add(ByteTree element) {
+		if (children == null) {
+			return;
+		}
 		children.add(element);
 	}
 
@@ -144,6 +153,9 @@ public class Node implements ByteTree {
 	 * @return the number of children this node has.
 	 */
 	public int getChildrenSize() {
+		if (children == null) {
+			return 0;
+		}
 		return children.size();
 	}
 
@@ -152,11 +164,11 @@ public class Node implements ByteTree {
 	 */
 	public byte[] toByteArray() {
 		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
-				.putInt(children.size()).array();
+				.putInt(getChildrenSize()).array();
 		byte[] b = new byte[a.length + 1];
 		System.arraycopy(a, 0, b, 1, a.length);
 		b[0] = 0;
-		for (int i = 0; i < children.size(); i++) {
+		for (int i = 0; i < getChildrenSize(); i++) {
 			byte[] c = children.get(i).toByteArray();
 			b = ArrayGenerators.concatArrays(b, c);
 		}

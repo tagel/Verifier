@@ -55,7 +55,10 @@ public class CommandLineParser {
 		}
 
 		// case there are 4 or more words in the command line;
-		parseVerifier(argv);
+		if (!parseVerifier(argv)) {
+			return;
+		}
+		
 		if (!parseFlags(argv)) {
 			// if there were unfamiliar flags - print command line usage
 			printCommandLineUsage();
@@ -99,17 +102,21 @@ public class CommandLineParser {
 	}
 
 	// parse type of prove to verify
-	private void parseVerifier(String[] argv) {
+	private boolean parseVerifier(String[] argv) {
 		if (argv[0].equals("-mix")) {
 			type = Type.MIXING;
+			return true;
 		} else if (argv[0].equals("-shuffle")) {
 			setFalgNodec();
 			type = Type.SHUFFLING;
+			return true;
 		} else if (argv[0].equals("-decrypt")) {
 			setFalgNopos();
 			type = Type.DECRYPTION;
+			return true;
 		} else {
 			printCommandLineUsage();
+			return false;
 		}
 	}
 

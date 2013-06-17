@@ -79,7 +79,7 @@ public class ProveDec extends Prover {
 			ArrayOfElements<Node> decrFactCommitments,
 			ArrayOfElements<IntegerRingElement> decrFactReplies, Logger logger) {
 
-		logger.sendLog("Starting to prove the dectiption",
+		logger.sendLog("Starting to prove the decryption",
 				Logger.Severity.NORMAL);
 
 		/*

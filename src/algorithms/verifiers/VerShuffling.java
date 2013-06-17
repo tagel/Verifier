@@ -88,8 +88,6 @@ public class VerShuffling {
 			PseudoRandomGenerator prg,
 			IGroup Gq,
 			ProductGroupElement pk,
-			// ArrayOfElements<ProductGroupElement> L0,
-			// ArrayOfElements<ProductGroupElement> Llambda,
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> L,
 			boolean posc, boolean ccpos, IRing<IntegerRingElement> Zq,
 			int width, ArrayOfElements<IGroupElement> h, Logger logger1) {

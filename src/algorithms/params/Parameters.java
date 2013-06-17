@@ -222,7 +222,13 @@ public class Parameters {
 					Logger.Severity.ERROR);
 			return false;
 		}
+		
 		type = stringToType(text.next().trim());
+		if (type == null) {
+			logger.sendLog("Wrong type in directory",
+					Logger.Severity.ERROR);
+			return false;
+		}
 
 		try {
 			text = new Scanner(new File(directory, WIDTH_FILE_NAME));

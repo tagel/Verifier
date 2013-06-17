@@ -22,7 +22,7 @@ public class Logger {
 	private boolean verbose = false;
 
 	public enum Severity {
-		ERROR, NORMAL;
+		ERROR, NORMAL, HIGH;
 	}
 
 	public Logger(boolean verbose) {
@@ -42,7 +42,9 @@ public class Logger {
 		if (severity.equals(Severity.ERROR)) {
 			System.out.println(ERROR_STRING + getDate() + SPACE_STRING
 					+ message);
-		} else if (verbose) {
+		} else if (severity.equals(Severity.HIGH)) {
+			System.out.println(getDate() + SPACE_STRING + message);
+		} else if (severity.equals(Severity.NORMAL) && verbose) {
 			System.out.println(getDate() + SPACE_STRING + message);
 		}
 	}

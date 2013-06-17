@@ -1,6 +1,9 @@
 package algorithms.verifiers;
 
+import java.io.File;
+
 import main.Logger;
+import main.Logger.Severity;
 import algorithms.params.Parameters;
 import algorithms.params.Parameters.Type;
 import arithmetic.objects.ByteTree;
@@ -68,6 +71,18 @@ public class MainVerifier {
 	public boolean verify(String protInfo, String directory, Type type,
 			String auxid, int w, boolean posc, boolean ccpos, boolean dec) {
 
+		File dirLocation = new File(directory);
+		if (!dirLocation.exists()) {
+			logger.sendLog("Directory entered does not exists", Severity.ERROR);
+			return false;
+		}
+		
+		params = new Parameters(protInfo, directory, type, auxid, w, posc,
+				ccpos, dec, logger);
+		if (!fillParamsFromXmlAndDir(params)) {
+			return false;
+		}
+		
 		logger.sendLog("Start verifing prove of " + type + " with:",
 				Logger.Severity.NORMAL);
 		logger.sendLog("	Proof of shuffling commitment: " + getOnOrOff(posc),
@@ -80,11 +95,10 @@ public class MainVerifier {
 		// *****Section 1 and 2 in the algorithm*****
 		// create the Parameters object using the command line parameters and
 		// fill parameters from xml and directory
-		logger.sendLog("Getting parameters from xml and directory",
+		logger.sendLog("Checking parameters from xml and directory",
 				Logger.Severity.NORMAL);
-		params = new Parameters(protInfo, directory, type, auxid, w, posc,
-				ccpos, dec, logger);
-		if (!fillParamsFromXmlAndDir(params) || !checkFilledParams()) {
+		
+		if (!checkFilledParams()) {
 			return false;
 		}
 
