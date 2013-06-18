@@ -437,12 +437,21 @@ public class MainVerifier {
 						Logger.Severity.ERROR);
 				return false;
 			}
+			
+			ArrayOfElements<ProductGroupElement> plaintexts;
+			try {
 
-			ArrayOfElements<ProductGroupElement> plaintexts = ArrayGenerators
+			plaintexts = ArrayGenerators
 					.createArrayOfPlaintexts(file, params.getGq(),
 							params.getW());
 			if (plaintexts.getSize() != params.getN()) {
 				logger.sendLog("Plaintexts array is in the wrong size.",
+						Logger.Severity.ERROR);
+				return false;
+			}
+			
+			} catch (Exception e) {
+				logger.sendLog("Problem with parsing plaintext array.",
 						Logger.Severity.ERROR);
 				return false;
 			}
