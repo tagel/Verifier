@@ -300,6 +300,7 @@ public class VerShuffling {
 			return false;
 		}
 
+		try {
 		// create the objects from the byte[] and set the global fields, that
 		// will be sent to the provers.
 		PermutationCommitment = ArrayGenerators.createGroupElementArray(
@@ -366,6 +367,12 @@ public class VerShuffling {
 			return false;
 		}
 		PoSCReply.setAt(4, tempK); // Ke
+		
+		} catch (Exception e) {
+			logger.sendLog("Problem with parsing files for proof of shuffle of commitments",
+					Logger.Severity.ERROR);
+			return false;
+		}
 
 		return true;
 	}
@@ -405,6 +412,8 @@ public class VerShuffling {
 			logger.sendLog("ccPOS reply file not found.", Logger.Severity.ERROR);
 			return false;
 		}
+		
+		try {
 
 		// create the objects from the byte[] and set the global fields
 
@@ -440,6 +449,12 @@ public class VerShuffling {
 			return false;
 		}
 		CCPoSReply.setAt(2, tempK);
+		
+		} catch (Exception e) {
+			logger.sendLog("Problem with parsing files for commitment consistent proof of shuffle",
+					Logger.Severity.ERROR);
+			return false;
+		}
 
 		return true;
 	}
@@ -484,6 +499,8 @@ public class VerShuffling {
 					Logger.Severity.ERROR);
 			return false;
 		}
+		
+		try {
 
 		/*
 		 * The following steps create the objects from the byte[] and set the
@@ -563,6 +580,12 @@ public class VerShuffling {
 			return false;
 		}
 		PoSReply.setAt(4, tempK); // Ke
+		
+		} catch (Exception e) {
+			logger.sendLog("Problem with parsing files for proof of shuffle",
+					Logger.Severity.ERROR);
+			return false;
+		}
 
 		return true;
 	}
