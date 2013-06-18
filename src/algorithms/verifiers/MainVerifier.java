@@ -342,22 +342,28 @@ public class MainVerifier {
 					Logger.Severity.ERROR);
 			return false;
 		}
-
-		pk = ElementsExtractor.createSimplePGE(bpk, params.getGq(), 2);
-
-		// extract y and g from the public key
-		IGroupElement y = pk.getElements().getAt(1);
-		IGroupElement g = pk.getElements().getAt(0);
-
-		params.setFullPublicKey(pk);
-
+		
+		IGroupElement res;
+		IGroupElement y;
+		IGroupElement g;
 		IGroupElement yi;
 		IntegerRingElement xi;
 		int i;
+		
+		try {
+
+		pk = ElementsExtractor.createSimplePGE(bpk, params.getGq(), 2);
+		
+		// extract y and g from the public key
+		y = pk.getElements().getAt(1);
+		g = pk.getElements().getAt(0);
+		
+		params.setFullPublicKey(pk);
 
 		// get the Identity element and multiply all of the yi's
-		IGroupElement res = params.getGq().one();
-
+		res = params.getGq().one();
+		
+		
 		for (i = 0; i < params.getThreshold(); i++) {
 			// assume that the file exists
 			byte[] byi = ElementsExtractor.btFromFile(params.getDirectory(),
@@ -371,9 +377,16 @@ public class MainVerifier {
 			}
 
 			yi = ElementsExtractor.createGroupElement(byi, params.getGq());
-
+			
 			params.getMixPublicKey().add(yi);
 			res = res.mult(yi);
+		}
+		
+		} catch (Exception e) {
+			logger.sendLog("Problem while Parsing Public Key",
+					Logger.Severity.ERROR);
+			return false;
+			
 		}
 
 		if (!res.equals(y)) {
