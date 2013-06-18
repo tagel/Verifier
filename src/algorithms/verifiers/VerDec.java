@@ -184,7 +184,7 @@ public class VerDec {
 			return false;
 		}
 		
-
+		try {
 		// interpret the DecrFactCommitment as a Node with two children:
 		Node DecrFactCommitment = new Node(bDecrFactCommitment);
 
@@ -196,6 +196,12 @@ public class VerDec {
 		DecrFactCommitment.setAt(1, ElementsExtractor.createSimplePGE(
 				DecrFactCommitment.getAt(1).toByteArray(), Gq, width));
 		DecrFactCommitments.add(DecrFactCommitment);
+		
+		} catch (Exception e) {
+			logger.sendLog("Problem with parsing Decryption Factors Commitment",
+					Logger.Severity.ERROR);
+			return false;
+		}
 
 		return true;
 	}
@@ -211,8 +217,15 @@ public class VerDec {
 			return false;
 		}
 
+		try {
 		DecrFactReplies.add(new IntegerRingElement(ElementsExtractor
 				.leafToInt(bDecrFactReply), Zq));
+		
+		} catch (Exception e) {
+			logger.sendLog("Problem with parsing Dacryption Factors Reply",
+					Logger.Severity.ERROR);
+			return false;
+		}
 		return true;
 	}
 
@@ -227,6 +240,7 @@ public class VerDec {
 			return false;
 		}
 
+		try {
 		ArrayOfElements<ProductGroupElement> factor = ArrayGenerators
 				.createArrayOfPlaintexts(bDecrFact, Gq, width);
 
@@ -235,6 +249,11 @@ public class VerDec {
 		}
 
 		DecryptionFactors.add(factor);
+		} catch (Exception e) {
+			logger.sendLog("Problem with parsing Decryption Factors",
+					Logger.Severity.ERROR);
+			return false;
+		}
 		return true;
 	}
 	
