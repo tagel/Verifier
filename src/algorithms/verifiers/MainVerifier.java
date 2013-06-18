@@ -462,8 +462,13 @@ public class MainVerifier {
 			logger.sendLog("Ciphertexts file not found.", Logger.Severity.ERROR);
 			return false;
 		}
+		
+		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts;
+		ArrayOfElements<ProductGroupElement> ciphertexts;
 
-		ArrayOfElements<ProductGroupElement> ciphertexts = ArrayGenerators
+		try {
+		
+		ciphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 
 		// Puts the ciphertexts at Arr[0]
@@ -528,10 +533,16 @@ public class MainVerifier {
 			}
 		}
 
-		ArrayOfElements<ProductGroupElement> ShuffledCiphertexts = ArrayGenerators
+		ShuffledCiphertexts = ArrayGenerators
 				.createArrayOfCiphertexts(file, params.getGq(), params.getW());
 		if (ShuffledCiphertexts.getSize() != params.getN()) {
 			logger.sendLog("Shuffled ciphertexts array is in the wrong size.",
+					Logger.Severity.ERROR);
+			return false;
+		}
+		
+		} catch (Exception e) {
+			logger.sendLog("Problem with parsing ciphertexts array.",
 					Logger.Severity.ERROR);
 			return false;
 		}
