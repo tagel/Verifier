@@ -17,6 +17,17 @@ public class EllipticTests {
 	//****************SHUFFLE*******************
 	
 	@Test
+	public void VerifyShuffleECurve() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("exportShuffle/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("exportShuffle/default").getFile(),
+				Type.SHUFFLING, "default", 1, true, true, false));
+	}
+	
+	
+	@Test
 	public void VerifyShuffleECurveSmallTest() throws Exception {
 
 		MainVerifier mainVer = new MainVerifier(logger);
