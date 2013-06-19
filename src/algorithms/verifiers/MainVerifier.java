@@ -216,7 +216,6 @@ public class MainVerifier {
 				params.getNr(), params.getNe(), params.getPrg(),
 				params.getGq(),
 				params.getFullPublicKey(),
-				// params.getCiphertexts(), params.getShuffledCiphertexts(),
 				params.getArrOfCiphertexts(), params.isPosc(),
 				params.isCcpos(), params.getZq(), params.getW(),
 				params.getRandArray(), logger);
@@ -482,7 +481,6 @@ public class MainVerifier {
 
 		// Puts the ciphertexts at Arr[0]
 		Arr.add(ciphertexts);
-		// params.setCiphertexts(ciphertexts);
 		params.setN(ciphertexts.getSize());
 
 		ArrayOfElements<ProductGroupElement> Li;
