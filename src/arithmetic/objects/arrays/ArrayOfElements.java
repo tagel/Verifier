@@ -158,42 +158,15 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 					&& ((ProductGroupElement) getAt(0)).getLeft() != null
 					&& ((ProductGroupElement) getAt(0)).getLeft().getSize() == 1) {
 
-				for (int i = 0; i < productsSize; i++) {
-					ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
-					for (int j = 0; j < getSize(); j++) {
-						if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 0)
-							arr.add(((ProductGroupElement) getAt(j)).getLeft()
-									.getElements().getAt(0));
-						else if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 1)
-							arr.add(((ProductGroupElement) getAt(j)).getRight()
-									.getElements().getAt(0));
-					}
-					node.add(arr);
-				}
+				handleProductSizeEq2(node, productsSize);
 			}
 
 			// product size != 2 or the left PGE is null or its size > 1
 			else {
-				for (int i = 0; i < productsSize; i++) {
-					ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
-					for (int j = 0; j < getSize(); j++) {
-						if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 0)
-							arr.add(((ProductGroupElement) getAt(j)).getLeft());
-						else if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 1)
-							arr.add(((ProductGroupElement) getAt(j)).getRight());
-						else
-							arr.add(((ProductGroupElement) getAt(j))
-									.getElements().getAt(i));
-					}
-					node.add(arr);
-				}
+				handleProductSizeNE2(node, productsSize);
 			}
 
-		// product size ==
+		// product size == 1
 		} else {
 
 			for (int k = 0; k < getSize(); k++)
@@ -202,6 +175,41 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		}
 
 		return node.toByteArray();
+	}
+
+	private void handleProductSizeNE2(Node node, int productsSize) {
+		for (int i = 0; i < productsSize; i++) {
+			ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
+			for (int j = 0; j < getSize(); j++) {
+				if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 0)
+					arr.add(((ProductGroupElement) getAt(j)).getLeft());
+				else if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 1)
+					arr.add(((ProductGroupElement) getAt(j)).getRight());
+				else
+					arr.add(((ProductGroupElement) getAt(j))
+							.getElements().getAt(i));
+			}
+			node.add(arr);
+		}
+	}
+
+	private void handleProductSizeEq2(Node node, int productsSize) {
+		for (int i = 0; i < productsSize; i++) {
+			ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
+			for (int j = 0; j < getSize(); j++) {
+				if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 0)
+					arr.add(((ProductGroupElement) getAt(j)).getLeft()
+							.getElements().getAt(0));
+				else if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 1)
+					arr.add(((ProductGroupElement) getAt(j)).getRight()
+							.getElements().getAt(0));
+			}
+			node.add(arr);
+		}
 	}
 
 	/** 

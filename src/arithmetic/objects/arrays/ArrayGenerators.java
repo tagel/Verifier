@@ -102,40 +102,46 @@ public class ArrayGenerators {
 
 			// else - width > 1
 		} else {
-			arraySize = (new Node(new Node(node.getAt(0).toByteArray())
-					.getAt(0).toByteArray())).getChildrenSize();
-			Node node1 = new Node(node.getAt(0).toByteArray());
-			Node node2 = new Node(node.getAt(1).toByteArray());
-
-			for (int i = 0; i < arraySize; i++) {
-
-				// create the left simple Product Group Element
-				ArrayOfElements<IGroupElement> arrLeft = new ArrayOfElements<IGroupElement>();
-				for (int j = 0; j < w; j++) {
-					Node helperNode = new Node(node1.getAt(j).toByteArray());
-					arrLeft.add(ElementsExtractor.createGroupElement(helperNode
-							.getAt(i).toByteArray(), group));
-				}
-				ProductGroupElement simplePGEleft = new ProductGroupElement(
-						arrLeft);
-
-				// create the right simple Product Group Element
-				ArrayOfElements<IGroupElement> arrRight = new ArrayOfElements<IGroupElement>();
-				for (int j = 0; j < w; j++) {
-					Node helperNode = new Node(node2.getAt(j).toByteArray());
-					arrRight.add(ElementsExtractor.createGroupElement(
-							helperNode.getAt(i).toByteArray(), group));
-				}
-				ProductGroupElement simplePGEright = new ProductGroupElement(
-						arrRight);
-
-				// create ciphertext using the new Product Group Elements
-				ProductGroupElement ciphertext = new ProductGroupElement(
-						simplePGEleft, simplePGEright);
-				ret.add(ciphertext);
-			}
+			createCiphertextWGreaterThan1(group, w, ret, node);
 		}
 		return ret;
+	}
+
+	private static void createCiphertextWGreaterThan1(IGroup group, int w,
+			ArrayOfElements<ProductGroupElement> ret, Node node) {
+		int arraySize;
+		arraySize = (new Node(new Node(node.getAt(0).toByteArray())
+				.getAt(0).toByteArray())).getChildrenSize();
+		Node node1 = new Node(node.getAt(0).toByteArray());
+		Node node2 = new Node(node.getAt(1).toByteArray());
+
+		for (int i = 0; i < arraySize; i++) {
+
+			// create the left simple Product Group Element
+			ArrayOfElements<IGroupElement> arrLeft = new ArrayOfElements<IGroupElement>();
+			for (int j = 0; j < w; j++) {
+				Node helperNode = new Node(node1.getAt(j).toByteArray());
+				arrLeft.add(ElementsExtractor.createGroupElement(helperNode
+						.getAt(i).toByteArray(), group));
+			}
+			ProductGroupElement simplePGEleft = new ProductGroupElement(
+					arrLeft);
+
+			// create the right simple Product Group Element
+			ArrayOfElements<IGroupElement> arrRight = new ArrayOfElements<IGroupElement>();
+			for (int j = 0; j < w; j++) {
+				Node helperNode = new Node(node2.getAt(j).toByteArray());
+				arrRight.add(ElementsExtractor.createGroupElement(
+						helperNode.getAt(i).toByteArray(), group));
+			}
+			ProductGroupElement simplePGEright = new ProductGroupElement(
+					arrRight);
+
+			// create ciphertext using the new Product Group Elements
+			ProductGroupElement ciphertext = new ProductGroupElement(
+					simplePGEleft, simplePGEright);
+			ret.add(ciphertext);
+		}
 	}
 
 	/**
