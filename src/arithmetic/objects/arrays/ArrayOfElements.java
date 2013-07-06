@@ -174,7 +174,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 				}
 			}
 
-			// the product size != 2 or the left PGE is null or its size > 1
+			// product size != 2 or the left PGE is null or its size > 1
 			else {
 				for (int i = 0; i < productsSize; i++) {
 					ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
@@ -192,6 +192,8 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 					node.add(arr);
 				}
 			}
+
+		// product size ==
 		} else {
 
 			for (int k = 0; k < getSize(); k++)
