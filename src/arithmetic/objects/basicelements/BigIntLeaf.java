@@ -24,15 +24,18 @@ public class BigIntLeaf implements ByteTree {
 	 *            the large integer this leaf represents
 	 */
 	public BigIntLeaf(LargeInteger num) {
+		
 		this.num = num;
 	}
 
 	public BigIntLeaf(LargeInteger num, int numOfBytes) {
+		
 		this.num = num;
 		this.numOfBytes = numOfBytes;
 	}
 
 	public LargeInteger getNum() {
+		
 		return num;
 	}
 
@@ -41,6 +44,7 @@ public class BigIntLeaf implements ByteTree {
 	 * number.
 	 */
 	public byte[] toByteArray() {
+		
 		byte[] numArr = num.toByteArray();
 		if (numOfBytes==-1)
 			numOfBytes = numArr.length;

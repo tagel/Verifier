@@ -11,6 +11,7 @@ public interface ByteTree {
 
 	public static final int FROM_INDEX = 5;
 	public static final int CAPACITY = 4;
+	public static final int TWO = 2;
 	/**
 	 * 
 	 * @return the byte array representation (as a byte tree) of the object.

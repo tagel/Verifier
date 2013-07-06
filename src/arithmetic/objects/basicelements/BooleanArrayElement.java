@@ -25,6 +25,7 @@ public class BooleanArrayElement implements ByteTree {
 	 *            the array of booleans we wish to represent.
 	 */
 	public BooleanArrayElement(boolean[] arr) {
+		
 		this.arr = arr;
 	}
 
@@ -36,6 +37,7 @@ public class BooleanArrayElement implements ByteTree {
 	 *            boolean array we wish to represent.
 	 */
 	public BooleanArrayElement(byte[] arr) {
+		
 		arr = Arrays.copyOfRange(arr, FROM_INDEX, arr.length);
 		boolean[] helperArr = new boolean[arr.length];
 
@@ -50,6 +52,7 @@ public class BooleanArrayElement implements ByteTree {
 	}
 
 	public boolean[] getBooleanArray() {
+		
 		return arr;
 	}
 
@@ -60,6 +63,7 @@ public class BooleanArrayElement implements ByteTree {
 	 * @return the boolean value in the i'th index in the array.
 	 */
 	public boolean getAt(int i) {
+		
 		return arr[i];
 	}
 

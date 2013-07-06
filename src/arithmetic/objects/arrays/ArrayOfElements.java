@@ -38,6 +38,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 * @return the element in the appropriate index in the array.
 	 */
 	public E getAt(int index) {
+		
 		return elements.get(index);
 	}
 
@@ -50,6 +51,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 *            the array.
 	 */
 	public void setAt(int index, E newValue) {
+		
 		elements.set(index, newValue);
 	}
 
@@ -60,6 +62,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 *            added to the end of the array.
 	 */
 	public void add(E element) {
+		
 		elements.add(element);
 	}
 
@@ -68,6 +71,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 * @return the size of the array.
 	 */
 	public int getSize() {
+		
 		return elements.size();
 	}
 
@@ -80,6 +84,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 */
 	@Override
 	public boolean equals(Object arr) {
+		
 		if (!(arr instanceof ArrayOfElements)) {
 			return false;
 		}
@@ -108,6 +113,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		
 		if (getSize() == 1)
 			return getAt(0).toByteArray();
 
@@ -117,7 +123,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		if (getAt(0) instanceof ProductGroupElement)
 			return ProductGroupArrayToByteArray();
 
-		byte[] helperArr1 = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+		byte[] helperArr1 = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(elements.size()).array();
 		byte[] byteArrToRet = new byte[helperArr1.length + 1];
 		System.arraycopy(helperArr1, 0, byteArrToRet, 1, helperArr1.length);
@@ -137,11 +143,12 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 *         elements.
 	 */
 	public byte[] ProductGroupArrayToByteArray() {
+		
 		Node node = new Node();
 		int productsSize = ((ProductGroupElement) getAt(0)).getSize();
 
 		if (productsSize != 1) {
-			byte[] helperArr1 = ByteBuffer.allocate(4)
+			byte[] helperArr1 = ByteBuffer.allocate(CAPACITY)
 					.order(ByteOrder.BIG_ENDIAN).putInt(productsSize).array();
 			byte[] helperArr2 = new byte[helperArr1.length + 1];
 			System.arraycopy(helperArr1, 0, helperArr2, 1, helperArr1.length);
@@ -200,8 +207,9 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 *         elements.
 	 */
 	public byte[] ProductRingArrayToByteArray() {
+		
 		int productsSize = ((ProductRingElement) getAt(0)).getSize();
-		byte[] helperArr1 = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+		byte[] helperArr1 = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(productsSize).array();
 		byte[] helperArr2 = new byte[helperArr1.length + 1];
 		System.arraycopy(helperArr1, 0, helperArr2, 1, helperArr1.length);
@@ -226,6 +234,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 */
 	@Override
 	public String toString() {
+		
 		String temp = "[";
 		for (E elem : elements)
 			temp = temp + elem.toString() + ",";

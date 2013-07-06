@@ -91,7 +91,7 @@ public class ProductGroupElement implements ByteTree {
 	 */
 	public int getSize() {
 		if (arr == null) {
-			return 2;
+			return TWO;
 		}
 		return arr.getSize();
 	}

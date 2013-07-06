@@ -40,10 +40,11 @@ public class ProductRingElement implements ByteTree {
 	 * 
 	 */
 	public ProductRingElement(byte[] bt, IRing<IntegerRingElement> ring, int w) {
+		
 		if (w == 1) {
-			ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
-			a.add(new IntegerRingElement(ElementsExtractor.leafToInt(bt), ring));
-			arr = a;
+			ArrayOfElements<IntegerRingElement> ireArr = new ArrayOfElements<IntegerRingElement>();
+			ireArr.add(new IntegerRingElement(ElementsExtractor.leafToInt(bt), ring));
+			arr = ireArr;
 		} else {
 			arr = ArrayGenerators.createRingElementArray(bt, ring);
 		}
@@ -56,11 +57,12 @@ public class ProductRingElement implements ByteTree {
 	 *            an array of all the coordinates of the product element.
 	 */
 	public ProductRingElement(ArrayOfElements<IntegerRingElement> arr) {
-		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
+		
+		ArrayOfElements<IntegerRingElement> ireArr = new ArrayOfElements<IntegerRingElement>();
 		for (int i = 0; i < arr.getSize(); i++) {
-			a.add(arr.getAt(i));
+			ireArr.add(arr.getAt(i));
 		}
-		this.arr = a;
+		this.arr = ireArr;
 	}
 
 	/**
@@ -68,6 +70,7 @@ public class ProductRingElement implements ByteTree {
 	 * @return an array of the product element coordinates.
 	 */
 	public ArrayOfElements<IntegerRingElement> getElements() {
+		
 		return arr;
 	}
 
@@ -76,6 +79,7 @@ public class ProductRingElement implements ByteTree {
 	 * @return the number of coordinates in the product element.
 	 */
 	public int getSize() {
+		
 		return arr.getSize();
 	}
 
@@ -86,53 +90,57 @@ public class ProductRingElement implements ByteTree {
 	 *            the element to add
 	 */
 	public void addElement(IntegerRingElement element) {
+		
 		arr.add(element);
 	}
 
 	/**
-	 * @param b
+	 * @param pre
 	 *            another product ring element
 	 * @return the result of the addition of the 2 product elements. That is, a
 	 *         new product ring element composed of the addition of the
 	 *         coordinates of our two addition parameters.
 	 */
-	public ProductRingElement add(ProductRingElement b) {
-		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
+	public ProductRingElement add(ProductRingElement pre) {
+		
+		ArrayOfElements<IntegerRingElement> ireArr = new ArrayOfElements<IntegerRingElement>();
 		for (int i = 0; i < arr.getSize(); i++) {
-			a.add(arr.getAt(i).add(b.getElements().getAt(i)));
+			ireArr.add(arr.getAt(i).add(pre.getElements().getAt(i)));
 		}
-		return new ProductRingElement(a);
+		return new ProductRingElement(ireArr);
 	}
 
 	/**
-	 * @param b
+	 * @param pre
 	 *            another product ring element
 	 * @return the result of the multiplication of the 2 product elements.That
 	 *         is, a new product ring element composed of the multiplication of
 	 *         the coordinates of our two multiplication parameters.
 	 */
-	public ProductRingElement mult(ProductRingElement b) {
-		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
+	public ProductRingElement mult(ProductRingElement pre) {
+		
+		ArrayOfElements<IntegerRingElement> ireArr = new ArrayOfElements<IntegerRingElement>();
 		for (int i = 0; i < arr.getSize(); i++) {
-			a.add(arr.getAt(i).mult(b.getElements().getAt(i)));
+			ireArr.add(arr.getAt(i).mult(pre.getElements().getAt(i)));
 		}
-		return new ProductRingElement(a);
+		return new ProductRingElement(ireArr);
 	}
 
 	/**
-	 * @param b
+	 * @param exp
 	 *            a large integer representing the exponent.
-	 * @return the result of product element in the b'th power. That is, a new
+	 * @return the result of product element in the exp'th power. That is, a new
 	 *         product ring element composed of the coordinates of the original
 	 *         element, each one to the b'th power.
 	 */
-	public ProductRingElement power(LargeInteger b) {
-		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
+	public ProductRingElement power(LargeInteger exp) {
+		
+		ArrayOfElements<IntegerRingElement> ireArr = new ArrayOfElements<IntegerRingElement>();
 
 		for (int i = 0; i < arr.getSize(); i++) {
-			a.add(arr.getAt(i).power(b));
+			ireArr.add(arr.getAt(i).power(exp));
 		}
-		return new ProductRingElement(a);
+		return new ProductRingElement(ireArr);
 	}
 
 	/**
@@ -142,31 +150,33 @@ public class ProductRingElement implements ByteTree {
 	 *         element.
 	 */
 	public ProductRingElement neg() {
-		ArrayOfElements<IntegerRingElement> a = new ArrayOfElements<IntegerRingElement>();
+		
+		ArrayOfElements<IntegerRingElement> ireArr = new ArrayOfElements<IntegerRingElement>();
 
 		for (int i = 0; i < arr.getSize(); i++) {
-			a.add(arr.getAt(i).neg());
+			ireArr.add(arr.getAt(i).neg());
 		}
-		return new ProductRingElement(a);
+		return new ProductRingElement(ireArr);
 	}
 
 	/**
 	 * 
-	 * @param b
+	 * @param pre
 	 *            another product ring element
 	 * @return true if and only if our element and b are equal. That means, all
 	 *         their coordinates are equal.
 	 */
 	public boolean equals(Object o) {
+		
 		if (!(o instanceof ProductRingElement)) {
 			return false;
 		}
 				
-		ProductRingElement b = (ProductRingElement) o;
+		ProductRingElement pre = (ProductRingElement) o;
 		
 		ArrayOfElements<IntegerRingElement> a = arr;
 		for (int i = 0; i < arr.getSize(); i++) {
-			if (!(a.getAt(i).equals(b.getElements().getAt(i)))) {
+			if (!(a.getAt(i).equals(pre.getElements().getAt(i)))) {
 				return false;
 			}
 		}
@@ -179,11 +189,13 @@ public class ProductRingElement implements ByteTree {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		
 		return arr.toByteArray();
 	}
 
 	@Override
 	public String toString() {
+		
 		String temp = "";
 		for (int i = 0; i < arr.getSize(); i++) {
 			temp = temp + "(" + arr.getAt(i).toString() + ")";

@@ -14,6 +14,8 @@ import cryptographic.primitives.PseudoRandomGenerator;
  */
 public interface IGroup extends ByteTree {
 
+	public static final int THREE = 3;
+	public static final int FOUR = 4;
 	/**
 	 * 
 	 * @return the order of the underlying field Z*p

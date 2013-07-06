@@ -30,15 +30,18 @@ public class IntegerRingElement implements ByteTree {
 	 */
 	public IntegerRingElement(LargeInteger element,
 			IRing<IntegerRingElement> ring) {
+		
 		this.element = element;
 		this.ring = ring;
 	}
 
 	public LargeInteger getElement() {
+		
 		return element.mod(getRing().getOrder());
 	}
 
 	public IRing<IntegerRingElement> getRing() {
+		
 		return ring;
 	}
 
@@ -76,15 +79,16 @@ public class IntegerRingElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b
+	 * @param exp
 	 *            a large integer which is the exponent.
-	 * @return our element in the b'th power.
+	 * @return our element in the exp'th power.
 	 */
-	public IntegerRingElement power(LargeInteger b) {
+	public IntegerRingElement power(LargeInteger exp) {
+		
 		IntegerRingElement base = this;
 		IntegerRingElement result = this.getRing().one();
 
-		String str = b.toString(2);
+		String str = exp.toString(TWO);
 
 		for (int i = str.length() - 1; i > -1; i--) {
 			if (str.charAt(i) == '1')
@@ -96,19 +100,20 @@ public class IntegerRingElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b
+	 * @param ire
 	 *            another integer ring element
-	 * @return true if and only if our element and b are equal. That means,
+	 * @return true if and only if our element and ire are equal. That means,
 	 *         represent the same large integer and belong to the same ring.
 	 */
 	public boolean equals(Object o) {
+		
 		if (!(o instanceof IntegerRingElement)) {
 			return false;
 		}
 
-		IntegerRingElement b = (IntegerRingElement) o;
+		IntegerRingElement ire = (IntegerRingElement) o;
 		if (this.getElement().mod(getRing().getOrder())
-				.equals(b.getElement().mod(getRing().getOrder()))) {
+				.equals(ire.getElement().mod(getRing().getOrder()))) {
 			return true;
 		}
 		return false;
@@ -120,27 +125,30 @@ public class IntegerRingElement implements ByteTree {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		
 		int numOfOrderBytes = getRing().getOrder().toByteArray().length;
-		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+		byte[] helperArr1 = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(numOfOrderBytes).array();
-		byte[] b = element.toByteArray();
-		while (b.length < numOfOrderBytes) {
-			byte[] d = new byte[b.length + 1];
-			System.arraycopy(b, 0, d, 1, b.length);
+		byte[] elemArr = element.toByteArray();
+		while (elemArr.length < numOfOrderBytes) {
+			byte[] d = new byte[elemArr.length + 1];
+			System.arraycopy(elemArr, 0, d, 1, elemArr.length);
 			d[0] = 0;
-			b = d;
+			elemArr = d;
 		}
-		byte[] c = new byte[a.length + b.length];
-		System.arraycopy(a, 0, c, 0, a.length);
-		System.arraycopy(b, 0, c, a.length, b.length);
-		byte[] ret = new byte[c.length + 1];
-		System.arraycopy(c, 0, ret, 1, c.length);
+		byte[] helperArr2 = new byte[helperArr1.length + elemArr.length];
+		System.arraycopy(helperArr1, 0, helperArr2, 0, helperArr1.length);
+		System.arraycopy(elemArr, 0, helperArr2, helperArr1.length, elemArr.length);
+		byte[] ret = new byte[helperArr2.length + 1];
+		System.arraycopy(helperArr2, 0, ret, 1, helperArr2.length);
 		ret[0] = 1;
+		
 		return ret;
 	}
 
 	@Override
 	public String toString() {
+		
 		return element.toString();
 	}
 }

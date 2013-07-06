@@ -64,6 +64,7 @@ public class ECurveGroup implements IGroup {
 	 *            parameters.
 	 */
 	public ECurveGroup(String s) {
+		
 		ECurveParams params = new ECurveParams(s);
 		name = s;
 		p = params.getP();
@@ -81,6 +82,7 @@ public class ECurveGroup implements IGroup {
 	 * @return the order of the underlying field Z*p
 	 */
 	public LargeInteger getFieldOrder() {
+		
 		return p;
 	}
 
@@ -89,6 +91,7 @@ public class ECurveGroup implements IGroup {
 	 */
 	@Override
 	public LargeInteger getOrder() {
+		
 		return q;
 	}
 
@@ -97,6 +100,7 @@ public class ECurveGroup implements IGroup {
 	 * @return the coefficient of x. (a).
 	 */
 	public LargeInteger getXCoefficient() {
+		
 		return a;
 	}
 
@@ -105,6 +109,7 @@ public class ECurveGroup implements IGroup {
 	 * @return b
 	 */
 	public LargeInteger getB() {
+		
 		return b;
 	}
 
@@ -114,6 +119,7 @@ public class ECurveGroup implements IGroup {
 	 */
 	@Override
 	public ECurveGroupElement getGenerator() {
+		
 		return new ECurveGroupElement(g, this);
 	}
 
@@ -123,6 +129,7 @@ public class ECurveGroup implements IGroup {
 	 */
 	@Override
 	public ECurveGroupElement one() {
+		
 		IField<IntegerFieldElement> f = new PrimeOrderField(p);
 		IntegerFieldElement minusOne = new IntegerFieldElement(
 				new LargeInteger("-1"), f);
@@ -136,6 +143,7 @@ public class ECurveGroup implements IGroup {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		
 		return new StringLeaf(name).toByteArray();
 	}
 
@@ -154,6 +162,7 @@ public class ECurveGroup implements IGroup {
 	@Override
 	public ArrayOfElements<IGroupElement> createRandomArray(int N,
 			PseudoRandomGenerator prg, byte[] seed, int nr) {
+		
 		ECurveRandArray arr = new ECurveRandArray(N, prg, seed, nr, a,
 				b, this);
 		return arr.getRand();

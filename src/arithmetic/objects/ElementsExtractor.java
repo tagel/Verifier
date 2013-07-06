@@ -33,14 +33,18 @@ import cryptographic.primitives.CryptoUtils;
  * @author Itay
  */
 public class ElementsExtractor {
+	private static final int TWO = 2;
+	private static final int FROM_INDEX = 5;
+	private static final int TEN = 10;
 
 	/**
 	 * @param byte array arr that represents a leaf of an integer
 	 * @return the integer that the byte array represents.
 	 */
 	public static LargeInteger leafToInt(byte[] arr) {
-		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
-		return new LargeInteger(a);
+
+		byte[] helperArr = Arrays.copyOfRange(arr, FROM_INDEX, arr.length);
+		return new LargeInteger(helperArr);
 	}
 
 	/**
@@ -49,9 +53,10 @@ public class ElementsExtractor {
 	 * 
 	 */
 	public static String leafToString(byte[] arr) {
-		byte[] a = Arrays.copyOfRange(arr, 5, arr.length);
+
+		byte[] helperArr = Arrays.copyOfRange(arr, FROM_INDEX, arr.length);
 		try {
-			return new String(a, "ASCII");
+			return new String(helperArr, "ASCII");
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
@@ -64,10 +69,11 @@ public class ElementsExtractor {
 	 * @return the point that arr represents.
 	 */
 	public static Point nodeToPoint(byte[] arr, IGroup group) {
-		byte[] arrX = Arrays.copyOfRange(arr, 5, 10 + group.getFieldOrder()
-				.toByteArray().length);
-		byte[] arrY = Arrays.copyOfRange(arr, 10 + group.getFieldOrder()
-				.toByteArray().length, arr.length);
+
+		byte[] arrX = Arrays.copyOfRange(arr, FROM_INDEX, TEN
+				+ group.getFieldOrder().toByteArray().length);
+		byte[] arrY = Arrays.copyOfRange(arr, TEN
+				+ group.getFieldOrder().toByteArray().length, arr.length);
 		IField<IntegerFieldElement> field = new PrimeOrderField(
 				group.getFieldOrder());
 		IntegerFieldElement x = new IntegerFieldElement(leafToInt(arrX), field);
@@ -85,6 +91,7 @@ public class ElementsExtractor {
 	 *         returns null.
 	 */
 	public static byte[] btFromFile(String path, String filename) {
+
 		try {
 			File file = new File(path, filename);
 			InputStream stream = new FileInputStream(file);
@@ -105,6 +112,7 @@ public class ElementsExtractor {
 	 * subpath.
 	 */
 	public static byte[] btFromFile(String path, String subpath, String filename) {
+
 		try {
 			File f1 = new File(path, subpath);
 			File file = new File(f1, filename);
@@ -122,7 +130,7 @@ public class ElementsExtractor {
 
 	/**
 	 * 
-	 * @param b
+	 * @param groupElem
 	 *            a byte array representing a group element
 	 * @param Gq
 	 *            the group which the element belongs to.
@@ -134,11 +142,13 @@ public class ElementsExtractor {
 	 *         for that reason this function checks which kind of group element
 	 *         needs to be created and creates it appropriately.
 	 */
-	public static IGroupElement createGroupElement(byte[] b, IGroup Gq) {
+	public static IGroupElement createGroupElement(byte[] groupElem, IGroup Gq) {
+
 		if (Gq instanceof ModGroup)
-			return new ModGroupElement(leafToInt(b), (ModGroup) Gq);
+			return new ModGroupElement(leafToInt(groupElem), (ModGroup) Gq);
 		if (Gq instanceof ECurveGroup)
-			return new ECurveGroupElement(nodeToPoint(b, Gq), (ECurveGroup) Gq);
+			return new ECurveGroupElement(nodeToPoint(groupElem, Gq),
+					(ECurveGroup) Gq);
 		else {
 			return null;
 		}
@@ -160,13 +170,15 @@ public class ElementsExtractor {
 	 *            element. we need this parameter only to check whether it is 1,
 	 *            because then its byte array representation is different than
 	 *            the representation specified in the document. it does not
-	 *            start with 0 0 0 0 1 to state that it has one coordinate, but rather
-	 *            begins straight with the presentation of its coordinate.
+	 *            start with 0 0 0 0 1 to state that it has one coordinate, but
+	 *            rather begins straight with the presentation of its
+	 *            coordinate.
 	 * @return the product group element which bt represents.
 	 * 
 	 */
 	public static ProductGroupElement createSimplePGE(byte[] bt, IGroup group,
 			int w) {
+
 		if (w == 1) {
 			IGroupElement e = createGroupElement(bt, group);
 			ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
@@ -200,6 +212,7 @@ public class ElementsExtractor {
 
 	public static ProductGroupElement createCiphertext(byte[] bt, IGroup group,
 			int w) {
+
 		Node node = new Node(bt);
 		if (w == 1) {
 			ArrayOfElements<IGroupElement> leftArr = new ArrayOfElements<IGroupElement>();
@@ -208,7 +221,9 @@ public class ElementsExtractor {
 			rightArr.add(createGroupElement(node.getAt(1).toByteArray(), group));
 			return new ProductGroupElement(new ProductGroupElement(leftArr),
 					new ProductGroupElement(rightArr));
-		} else {
+		}
+		// width > 1
+		else {
 			ProductGroupElement left = createSimplePGE(node.getAt(0)
 					.toByteArray(), group, w);
 			ProductGroupElement right = createSimplePGE(node.getAt(1)
@@ -229,8 +244,9 @@ public class ElementsExtractor {
 	 * 
 	 */
 	public static IGroup unmarshal(String s) {
+		
 		int i = s.indexOf(":");
-		s = s.substring(i + 2, s.length());
+		s = s.substring(i + TWO, s.length());
 		byte[] b = CryptoUtils.hexStringToBytes(s);
 		Node node = new Node(b);
 		String type = leafToString(node.getAt(0).toByteArray());
