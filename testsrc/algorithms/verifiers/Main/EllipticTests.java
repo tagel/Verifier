@@ -14,7 +14,147 @@ public class EllipticTests {
 	private final Logger logger = new MockedLogger();
 	
 	
+	//**************************TOMERS TESTS***********************************
+	
+	@Test
+	public void elc192v1_n1_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elc192v1_n1_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elc192v1_n1_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void elc192v1_n1_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elc192v1_n1_w4/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elc192v1_n1_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	@Test
+	public void elc192v1_n3_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elc192v1_n3_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elc192v1_n3_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void elcbrainpoolp192r1_n1_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcbrainpoolp192r1_n1_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcbrainpoolp192r1_n1_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void elcbrainpoolp192r1_n1_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcbrainpoolp192r1_n1_w4/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcbrainpoolp192r1_n1_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	@Test
+	public void elcbrainpoolp192r1_n3_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcbrainpoolp192r1_n3_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcbrainpoolp192r1_n3_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	
+	@Test
+	public void elcbrainpoolp192r1_n3_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcbrainpoolp192r1_n3_w4/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcbrainpoolp192r1_n3_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	
+	@Test
+	public void elcp192_n3_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcp192_n3_w4/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcp192_n3_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	@Test
+	public void elcp256_n100_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcp256_n100_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcp256_n100_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void elcp256_n2_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcp256_n2_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcp256_n2_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void elcp256_n4_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcp256_n4_w1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcp256_n4_w1/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	
+	@Test
+	public void elcp256_n4_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/elcp256_n4_w4/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/elcp256_n4_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	
+	@Test
+	public void export_decrypt() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/export_decrypt/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/export_decrypt/default").getFile(),
+				Type.DECRYPTION, "default", 1, true, true, false));
+	}
+	
+	
+	
+	
 	//****************SHUFFLE*******************
+	
 	
 	@Test
 	public void VerifyShuffleECurve() throws Exception {
