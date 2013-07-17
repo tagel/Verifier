@@ -25,6 +25,7 @@ public class BooleanArrayElement implements ByteTree {
 	 *            the array of booleans we wish to represent.
 	 */
 	public BooleanArrayElement(boolean[] arr) {
+		
 		this.arr = arr;
 	}
 
@@ -36,20 +37,22 @@ public class BooleanArrayElement implements ByteTree {
 	 *            boolean array we wish to represent.
 	 */
 	public BooleanArrayElement(byte[] arr) {
-		arr = Arrays.copyOfRange(arr, 5, arr.length);
-		boolean[] b = new boolean[arr.length];
+		
+		arr = Arrays.copyOfRange(arr, FROM_INDEX, arr.length);
+		boolean[] helperArr = new boolean[arr.length];
 
-		for (int i = 0; i < b.length; i++) {
+		for (int i = 0; i < helperArr.length; i++) {
 			if (arr[i] == 1) {
-				b[i] = true;
+				helperArr[i] = true;
 			} else {
-				b[i] = false;
+				helperArr[i] = false;
 			}
 		}
-		this.arr = b;
+		this.arr = helperArr;
 	}
 
 	public boolean[] getBooleanArray() {
+		
 		return arr;
 	}
 
@@ -60,6 +63,7 @@ public class BooleanArrayElement implements ByteTree {
 	 * @return the boolean value in the i'th index in the array.
 	 */
 	public boolean getAt(int i) {
+		
 		return arr[i];
 	}
 
@@ -70,21 +74,22 @@ public class BooleanArrayElement implements ByteTree {
 	@Override
 	public byte[] toByteArray() {
 
-		byte[] b = new byte[arr.length + 5];
-		b[0] = 1;
-		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+		byte[] byteArrToRet = new byte[arr.length + FROM_INDEX];
+		byteArrToRet[0] = 1;
+		
+		byte[] helperArr = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(arr.length).array();
 
-		for (int i = 0; i < 4; i++) {
-			b[i + 1] = a[i];
+		for (int i = 0; i < CAPACITY; i++) {
+			byteArrToRet[i + 1] = helperArr[i];
 		}
 		for (int i = 0; i < arr.length; i++) {
 			if (arr[i] == true) {
-				b[i + 5] = 1;
+				byteArrToRet[i + FROM_INDEX] = 1;
 			} else {
-				b[i + 5] = 0;
+				byteArrToRet[i + FROM_INDEX] = 0;
 			}
 		}
-		return b;
+		return byteArrToRet;
 	}
 }

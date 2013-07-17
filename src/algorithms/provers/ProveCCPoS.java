@@ -123,7 +123,6 @@ public class ProveCCPoS extends Prover {
 		/*
 		 * 4 - Computation of the challenge
 		 */
-		// ByteTree leaf = new BigIntLeaf(ElementsExtractor.leafToInt(seed));
 		ByteTree leaf = new BigIntLeaf(new LargeInteger(seed));
 		byte[] challenge = computeChallenge(ROChallenge, ro, PoSCommitment,
 				leaf);

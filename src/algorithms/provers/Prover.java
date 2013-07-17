@@ -22,7 +22,6 @@ import cryptographic.primitives.RandomOracle;
 public abstract class Prover {
 
 	/**
-	 * 
 	 * @param pk
 	 *            =(g,y)
 	 * @param width
@@ -430,7 +429,6 @@ public abstract class Prover {
 		prg.setSeed(seed);
 		byte[] byteArrToBigInt;
 		LargeInteger t;
-		// LargeInteger E = LargeInteger.ONE;
 		LargeInteger e;
 		IGroupElement tempH = h.getAt(0);
 

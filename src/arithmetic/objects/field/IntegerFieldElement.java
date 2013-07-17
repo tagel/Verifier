@@ -29,15 +29,18 @@ public class IntegerFieldElement implements ByteTree {
 	 */
 	public IntegerFieldElement(LargeInteger element,
 			IField<IntegerFieldElement> f) {
+		
 		this.field = f;
 		this.element = element.mod(field.getOrder());
 	}
 
 	public LargeInteger getElement() {
+		
 		return element;
 	}
 
 	public IField<IntegerFieldElement> getField() {
+		
 		return field;
 	}
 
@@ -46,6 +49,7 @@ public class IntegerFieldElement implements ByteTree {
 	 * @return The additive inverse of our element
 	 */
 	public IntegerFieldElement neg() {
+		
 		return new IntegerFieldElement(this.getField().getOrder()
 				.subtract(this.getElement().mod(this.getField().getOrder())),
 				this.getField());
@@ -59,6 +63,7 @@ public class IntegerFieldElement implements ByteTree {
 	 */
 
 	public IntegerFieldElement add(IntegerFieldElement b) {
+		
 		return new IntegerFieldElement(
 				(this.getElement().add(b.getElement())).mod(this.getField()
 						.getOrder()), this.getField());
@@ -66,40 +71,42 @@ public class IntegerFieldElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b
+	 * @param ife
 	 *            another integer field element
 	 * @return The result of the addition of our element and the negative of b.
 	 */
 
-	public IntegerFieldElement subtract(IntegerFieldElement b) {
+	public IntegerFieldElement subtract(IntegerFieldElement ife) {
+		
 		return new IntegerFieldElement((this.getElement().subtract(
-				(b.getElement())).mod(this.getField().getOrder())),
+				(ife.getElement())).mod(this.getField().getOrder())),
 				this.getField());
 	}
 
 	/**
-	 * @param b
+	 * @param ife
 	 *            another integer field element
 	 * @return The result of the multiplication of our element and b.
 	 */
 
-	public IntegerFieldElement mult(IntegerFieldElement b) {
+	public IntegerFieldElement mult(IntegerFieldElement ife) {
+		
 		return new IntegerFieldElement(
-				(this.getElement().multiply(b.getElement())).mod(this
+				(this.getElement().multiply(ife.getElement())).mod(this
 						.getField().getOrder()), this.getField());
 	}
 
 	/**
 	 * 
-	 * @param b
+	 * @param largeInt
 	 *            a large integer which is the exponent.
 	 * @return our element in the b'th power.
 	 */
-	public IntegerFieldElement power(LargeInteger b) {
+	public IntegerFieldElement power(LargeInteger largeInt) {
 		
 		IntegerFieldElement base = this;
 		IntegerFieldElement result = this.getField().one();
-		String str = b.toString(2);
+		String str = largeInt.toString(TWO);
 
 		for (int i = str.length() - 1; i > -1; i--) {
 			if (str.charAt(i) == '1') {
@@ -113,14 +120,15 @@ public class IntegerFieldElement implements ByteTree {
 
 	/**
 	 * 
-	 * @param b
+	 * @param ife
 	 *            another integer field element
 	 * @return the result of the multiplication of our element with the inverse
 	 *         of b (division).
 	 */
-	public IntegerFieldElement divide(IntegerFieldElement b) {
+	public IntegerFieldElement divide(IntegerFieldElement ife) {
+		
 		return new IntegerFieldElement(
-				(this.getElement().multiply(b.getElement().modInverse(
+				(this.getElement().multiply(ife.getElement().modInverse(
 						this.getField().getOrder()))).mod(this.getField()
 						.getOrder()), this.getField());
 	}
@@ -130,26 +138,28 @@ public class IntegerFieldElement implements ByteTree {
 	 * @return the multiplicative inverse of our element.
 	 */
 	public IntegerFieldElement inverse() {
+		
 		return new IntegerFieldElement(this.getElement()
 				.modInverse(this.getField().getOrder()), this.getField());
 	}
 
 	/**
 	 * 
-	 * @param b
+	 * @param ife
 	 *            another integer field element
 	 * @return true if and only if our element and b are equal. That means,
 	 *         represent the same large integer and belong to the same field.
 	 */
 	public boolean equals(Object o) {
+		
 		if (!(o instanceof IntegerFieldElement)) {
 			return false;
 		}
 				
-		IntegerFieldElement b = (IntegerFieldElement) o;
+		IntegerFieldElement ife = (IntegerFieldElement) o;
 		
 		if (this.getElement().mod(this.getField().getOrder())
-				.compareTo(b.getElement().mod(this.getField().getOrder())) == 0) {
+				.compareTo(ife.getElement().mod(this.getField().getOrder())) == 0) {
 			return true;
 		} else {
 			return false;
@@ -161,21 +171,22 @@ public class IntegerFieldElement implements ByteTree {
 	 * returns the byte array representation (as a byte tree) of the integer field element.
 	 */
 	public byte[] toByteArray() {
-		int numOfOrderBytes = field.getOrder().toByteArray().length;
-		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
-				.putInt(numOfOrderBytes).array();
-		byte[] b = element.toByteArray();
 		
-		while (b.length < numOfOrderBytes) {
-			byte[] d = new byte[b.length + 1];
-			System.arraycopy(b, 0, d, 1, b.length);
+		int numOfOrderBytes = field.getOrder().toByteArray().length;
+		byte[] helperArr = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+				.putInt(numOfOrderBytes).array();
+		byte[] elementByteArr = element.toByteArray();
+		
+		while (elementByteArr.length < numOfOrderBytes) {
+			byte[] d = new byte[elementByteArr.length + 1];
+			System.arraycopy(elementByteArr, 0, d, 1, elementByteArr.length);
 			d[0] = 0;
-			b = d;
+			elementByteArr = d;
 		}
 		
-		byte[] c = new byte[a.length + b.length];
-		System.arraycopy(a, 0, c, 0, a.length);
-		System.arraycopy(b, 0, c, a.length, b.length);
+		byte[] c = new byte[helperArr.length + elementByteArr.length];
+		System.arraycopy(helperArr, 0, c, 0, helperArr.length);
+		System.arraycopy(elementByteArr, 0, c, helperArr.length, elementByteArr.length);
 		byte[] ret = new byte[c.length + 1];
 		System.arraycopy(c, 0, ret, 1, c.length);
 		ret[0] = 1;

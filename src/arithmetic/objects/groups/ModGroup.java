@@ -41,7 +41,7 @@ public class ModGroup implements IGroup {
 
 	public ModGroup(byte[] arr) {
 		Node node = new Node(arr);
-		if (node.getChildrenSize() != 3 && node.getChildrenSize() != 4)
+		if (node.getChildrenSize() != THREE && node.getChildrenSize() != FOUR)
 			System.out
 					.println("Error: byte array is not of a correct modular group structure");
 		else {

@@ -50,23 +50,23 @@ public class ECurveGroupElement implements IGroupElement {
 	}
 
 	/**
-	 * @param b
+	 * @param ecElem
 	 *            another elliptic curve element
-	 * @return The result of the multiplication of our element and b.
+	 * @return The result of the multiplication of our element andecElem.
 	 */
 	@Override
-	public ECurveGroupElement mult(IGroupElement b) {
+	public ECurveGroupElement mult(IGroupElement ecElem) {
 
-		if (b.equals(group.one())) {
+		if (ecElem.equals(group.one())) {
 			return this;
 		}
 		if (this.equals(group.one())) {
-			return (ECurveGroupElement) b;
+			return (ECurveGroupElement) ecElem;
 		}
 		IntegerFieldElement xp = this.getElement().getX();
-		IntegerFieldElement xq = ((ECurveGroupElement) b).getElement().getX();
+		IntegerFieldElement xq = ((ECurveGroupElement) ecElem).getElement().getX();
 		IntegerFieldElement yp = this.getElement().getY();
-		IntegerFieldElement yq = ((ECurveGroupElement) b).getElement().getY();
+		IntegerFieldElement yq = ((ECurveGroupElement) ecElem).getElement().getY();
 
 		IField<IntegerFieldElement> field = new PrimeOrderField(this.getGroup()
 				.getFieldOrder());
@@ -117,6 +117,7 @@ public class ECurveGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ECurveGroupElement inverse() {
+		
 		if (element.equals(group.one())) {
 			return this;
 		}
@@ -134,14 +135,15 @@ public class ECurveGroupElement implements IGroupElement {
 
 	/**
 	 * 
-	 * @param b
+	 * @param ecElem
 	 *            another elliptic curve element
 	 * @return the result of the multiplication of our element with the inverse
-	 *         of b (division).
+	 *         of ecElem (division).
 	 */
 	@Override
-	public ECurveGroupElement divide(IGroupElement b) {
-		return mult(b.inverse());
+	public ECurveGroupElement divide(IGroupElement ecElem) {
+		
+		return mult(ecElem.inverse());
 	}
 
 	/**
@@ -149,6 +151,7 @@ public class ECurveGroupElement implements IGroupElement {
 	 * @return the result of the multiplication of our element with itself.
 	 */
 	public ECurveGroupElement square() {
+		
 		if (element.getX().getElement()
 				.equals(group.one().getElement().getX().getElement())
 				&& element.getY().getElement()
@@ -163,16 +166,16 @@ public class ECurveGroupElement implements IGroupElement {
 		
 		IntegerFieldElement x1 = this.getElement().getX();
 		IntegerFieldElement y1 = this.getElement().getY();
-		IntegerFieldElement TWO = new IntegerFieldElement(new LargeInteger("2"), field);
-		IntegerFieldElement THREE = new IntegerFieldElement(new LargeInteger("3"), field);
+		IntegerFieldElement ifeTwo = new IntegerFieldElement(new LargeInteger("2"), field);
+		IntegerFieldElement ifeThree = new IntegerFieldElement(new LargeInteger("3"), field);
 		
 		IntegerFieldElement a = new IntegerFieldElement(new LargeInteger(getGroup()
 				.getXCoefficient()), field);
 
-		IntegerFieldElement z = (x1.mult(x1)).mult(THREE).add(a).divide(y1.mult(TWO));
+		IntegerFieldElement z = (x1.mult(x1)).mult(ifeThree).add(a).divide(y1.mult(ifeTwo));
 		
       
-		LargeInteger x3 = (z.getElement().power(2)).subtract(x1.getElement().multiply(new LargeInteger("2")));
+		LargeInteger x3 = (z.getElement().power(TWO)).subtract(x1.getElement().multiply(new LargeInteger("2")));
 		IntegerFieldElement X3 = new IntegerFieldElement(x3.mod(group.getFieldOrder()), field);
 		
 		LargeInteger y3 = z.getElement().multiply(x1.getElement().subtract(x3)).subtract(y1.getElement());
@@ -185,16 +188,16 @@ public class ECurveGroupElement implements IGroupElement {
 	
 	/**
 	 * 
-	 * @param b
-	 *            a large non-negative integer which is the exponent. precondition: b is not
+	 * @param exponent
+	 *            a large non-negative integer which is the exponent. precondition: exponent is not
 	 *            negative(may be zero).
-	 * @return our element in the b'th power.
+	 * @return our element in the exponent'th power.
 	 * 
 	 *         Some of the logic for this method was taken from bouncy castle open
 	 *         source code.
 	 */
 	@Override
-	public ECurveGroupElement power(LargeInteger b) {
+	public ECurveGroupElement power(LargeInteger exponent) {
 
 		if (element.getX().getElement()
 				.equals(group.one().getElement().getX().getElement())
@@ -202,10 +205,10 @@ public class ECurveGroupElement implements IGroupElement {
 						.equals(group.one().getElement().getY().getElement()))
 			return this;
 
-		if (b.signum() == 0)
+		if (exponent.signum() == 0)
 			return group.one();
 
-		LargeInteger e = b;
+		LargeInteger e = exponent;
 		LargeInteger h = e.multiply(new LargeInteger("3"));
 		ECurveGroupElement inv = this.inverse();
 		ECurveGroupElement R = this;
@@ -225,24 +228,25 @@ public class ECurveGroupElement implements IGroupElement {
 
 	/**
 	 * 
-	 * @param b
+	 * @param ecElem
 	 *            another elliptic curve element
-	 * @return true if and only if our element and b are equal. That means,
+	 * @return true if and only if our element and ecElem are equal. That means,
 	 *         represent the same point and belong to the same curve.
 	 */
 	@Override
 	public boolean equals(Object c) {
+		
 		if (!(c instanceof ECurveGroupElement)) {
 			return false;
 		}
 
-		ECurveGroupElement b = (ECurveGroupElement) c;
+		ECurveGroupElement ecElem = (ECurveGroupElement) c;
 		
 		
 		if (getElement().getX().equals(
-				(((ECurveGroupElement) b).getElement()).getX())
+				(((ECurveGroupElement) ecElem).getElement()).getX())
 				&& (getElement()).getY().equals(
-						(((ECurveGroupElement) b).getElement()).getY())) {
+						(((ECurveGroupElement) ecElem).getElement()).getY())) {
 			return true;
 		}
 		return false;
@@ -254,6 +258,7 @@ public class ECurveGroupElement implements IGroupElement {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		
 		Node pointNode = new Node();
 		pointNode.add(element.getX());
 		pointNode.add(element.getY());
@@ -262,6 +267,7 @@ public class ECurveGroupElement implements IGroupElement {
 
 	@Override
 	public String toString() {
+		
 		return element.toString();
 	}
 }

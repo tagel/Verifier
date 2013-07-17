@@ -28,6 +28,7 @@ public class ModGroupElement implements IGroupElement {
 	 *            - the group which the large integer belongs to.
 	 */
 	public ModGroupElement(LargeInteger element, ModGroup group) {
+		
 		this.element = element.mod(group.getFieldOrder());
 		this.group = group;
 	}
@@ -37,6 +38,7 @@ public class ModGroupElement implements IGroupElement {
 	 * @return the large integer.
 	 */
 	public LargeInteger getElement() {
+		
 		return element;
 	}
 
@@ -45,18 +47,20 @@ public class ModGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ModGroup getGroup() {
+		
 		return group;
 	}
 
 	/**
-	 * @param b
+	 * @param groupElem
 	 *            another group element
-	 * @return The result of the multiplication of our element and b.
+	 * @return The result of the multiplication of our element and groupElem.
 	 */
 	@Override
-	public ModGroupElement mult(IGroupElement b) {
+	public ModGroupElement mult(IGroupElement groupElem) {
+		
 		return new ModGroupElement(
-				(this.getElement().multiply((LargeInteger) ((ModGroupElement) b)
+				(this.getElement().multiply((LargeInteger) ((ModGroupElement) groupElem)
 						.getElement())).mod(this.getGroup().getFieldOrder()),
 				getGroup());
 	}
@@ -67,34 +71,36 @@ public class ModGroupElement implements IGroupElement {
 	 */
 	@Override
 	public ModGroupElement inverse() {
+		
 		return new ModGroupElement(getElement().modInverse(
 				getGroup().getFieldOrder()), getGroup());
 	}
 
 	/**
 	 * 
-	 * @param b
+	 * @param groupElem
 	 *            another group element
 	 * @return the result of the multiplication of our element with the inverse
-	 *         of b (division).
+	 *         of groupElem (division).
 	 */
 	@Override
-	public ModGroupElement divide(IGroupElement b) {
-		return mult(b.inverse());
+	public ModGroupElement divide(IGroupElement groupElem) {
+		
+		return mult(groupElem.inverse());
 	}
 
 	/**
 	 * 
-	 * @param b
+	 * @param largeInt
 	 *            a large integer which is the exponent.
-	 * @return our element in the b'th power.
+	 * @return our element in the largeInt'th power.
 	 */
 	@Override
-	public ModGroupElement power(LargeInteger b) {
+	public ModGroupElement power(LargeInteger largeInt) {
 		ModGroupElement base = this;
 		ModGroupElement result = this.getGroup().one();
 
-		String str = b.toString(2);
+		String str = largeInt.toString(TWO);
 
 		for (int i = str.length() - 1; i > -1; i--) {
 			if (str.charAt(i) == '1')
@@ -134,8 +140,9 @@ public class ModGroupElement implements IGroupElement {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		
 		int numOfOrderBytes = group.getFieldOrder().toByteArray().length;
-		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+		byte[] a = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(numOfOrderBytes).array();
 		byte[] b = element.toByteArray();
 		while (b.length < numOfOrderBytes) {
@@ -155,6 +162,7 @@ public class ModGroupElement implements IGroupElement {
 	
 	@Override
 	public String toString(){
+		
 		return element.toString();
 		}
 }

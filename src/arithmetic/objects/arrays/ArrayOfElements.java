@@ -38,6 +38,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 * @return the element in the appropriate index in the array.
 	 */
 	public E getAt(int index) {
+		
 		return elements.get(index);
 	}
 
@@ -50,6 +51,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 *            the array.
 	 */
 	public void setAt(int index, E newValue) {
+		
 		elements.set(index, newValue);
 	}
 
@@ -60,6 +62,7 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 *            added to the end of the array.
 	 */
 	public void add(E element) {
+		
 		elements.add(element);
 	}
 
@@ -68,31 +71,33 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 * @return the size of the array.
 	 */
 	public int getSize() {
+		
 		return elements.size();
 	}
 
 	/**
 	 * 
-	 * @param b
+	 * @param byteArr
 	 *            an array we want to compare to our array.
 	 * @return true if and only if b contains the same element as our element in
 	 *         each and every index of the array.
 	 */
 	@Override
 	public boolean equals(Object arr) {
+		
 		if (!(arr instanceof ArrayOfElements)) {
 			return false;
 		}
 
 		@SuppressWarnings("unchecked")
-		ArrayOfElements<E> b = (ArrayOfElements<E>) arr;
+		ArrayOfElements<E> byteArr = (ArrayOfElements<E>) arr;
 
-		if (elements.size() != b.getSize()) {
+		if (elements.size() != byteArr.getSize()) {
 			return false;
 		}
 
 		for (int i = 0; i < elements.size(); i++) {
-			if (!(elements.get(i).equals(b.getAt(i)))) {
+			if (!(elements.get(i).equals(byteArr.getAt(i)))) {
 				return false;
 			}
 		}
@@ -108,92 +113,117 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	 */
 	@Override
 	public byte[] toByteArray() {
+		
 		if (getSize() == 1)
 			return getAt(0).toByteArray();
+
 		if (getAt(0) instanceof ProductRingElement)
 			return ProductRingArrayToByteArray();
+
 		if (getAt(0) instanceof ProductGroupElement)
 			return ProductGroupArrayToByteArray();
-		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+
+		byte[] helperArr1 = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(elements.size()).array();
-		byte[] b = new byte[a.length + 1];
-		System.arraycopy(a, 0, b, 1, a.length);
-		b[0] = 0;
+		byte[] byteArrToRet = new byte[helperArr1.length + 1];
+		System.arraycopy(helperArr1, 0, byteArrToRet, 1, helperArr1.length);
+		byteArrToRet[0] = 0;
+
 		for (int i = 0; i < elements.size(); i++) {
-			byte[] c = (elements.get(i)).toByteArray();
-			b = ArrayGenerators.concatArrays(b, c);
+			byte[] helperArr2 = (elements.get(i)).toByteArray();
+			byteArrToRet = ArrayGenerators.concatArrays(byteArrToRet,
+					helperArr2);
 		}
-		return b;
+		return byteArrToRet;
 
 	}
-/**
- * 
- * @return the byte array representation of an array of product group elements.
- */
+
+	/**
+	 * @return the byte array representation of an array of product group
+	 *         elements.
+	 */
 	public byte[] ProductGroupArrayToByteArray() {
+		
 		Node node = new Node();
 		int productsSize = ((ProductGroupElement) getAt(0)).getSize();
+
 		if (productsSize != 1) {
-			byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
-					.putInt(productsSize).array();
-			byte[] b = new byte[a.length + 1];
-			System.arraycopy(a, 0, b, 1, a.length);
-			b[0] = 0;
+			byte[] helperArr1 = ByteBuffer.allocate(CAPACITY)
+					.order(ByteOrder.BIG_ENDIAN).putInt(productsSize).array();
+			byte[] helperArr2 = new byte[helperArr1.length + 1];
+			System.arraycopy(helperArr1, 0, helperArr2, 1, helperArr1.length);
+			helperArr2[0] = 0;
 
 			if (productsSize == 2
 					&& ((ProductGroupElement) getAt(0)).getLeft() != null
 					&& ((ProductGroupElement) getAt(0)).getLeft().getSize() == 1) {
-				for (int i = 0; i < productsSize; i++) {
-					ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
-					for (int j = 0; j < getSize(); j++) {
-						if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 0)
-							arr.add(((ProductGroupElement) getAt(j)).getLeft()
-									.getElements().getAt(0));
-						else if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 1)
-							arr.add(((ProductGroupElement) getAt(j)).getRight()
-									.getElements().getAt(0));
-					}
-					node.add(arr);
-				}
+
+				handleProductSizeEq2(node, productsSize);
 			}
 
+			// product size != 2 or the left PGE is null or its size > 1
 			else {
-				for (int i = 0; i < productsSize; i++) {
-					ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
-					for (int j = 0; j < getSize(); j++) {
-						if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 0)
-							arr.add(((ProductGroupElement) getAt(j)).getLeft());
-						else if (((ProductGroupElement) getAt(j)).getElements() == null
-								&& i == 1)
-							arr.add(((ProductGroupElement) getAt(j)).getRight());
-						else
-							arr.add(((ProductGroupElement) getAt(j))
-									.getElements().getAt(i));
-					}
-					node.add(arr);
-				}
+				handleProductSizeNE2(node, productsSize);
 			}
+
+		// product size == 1
 		} else {
+
 			for (int k = 0; k < getSize(); k++)
 				node.add(((ProductGroupElement) getAt(k)).getElements()
 						.getAt(0));
 		}
+
 		return node.toByteArray();
 	}
-/**
- * 
- * @return the byte array representation of an array of product ring elements.
- */
+
+	private void handleProductSizeNE2(Node node, int productsSize) {
+		for (int i = 0; i < productsSize; i++) {
+			ArrayOfElements<ByteTree> arr = new ArrayOfElements<ByteTree>();
+			for (int j = 0; j < getSize(); j++) {
+				if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 0)
+					arr.add(((ProductGroupElement) getAt(j)).getLeft());
+				else if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 1)
+					arr.add(((ProductGroupElement) getAt(j)).getRight());
+				else
+					arr.add(((ProductGroupElement) getAt(j))
+							.getElements().getAt(i));
+			}
+			node.add(arr);
+		}
+	}
+
+	private void handleProductSizeEq2(Node node, int productsSize) {
+		for (int i = 0; i < productsSize; i++) {
+			ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();
+			for (int j = 0; j < getSize(); j++) {
+				if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 0)
+					arr.add(((ProductGroupElement) getAt(j)).getLeft()
+							.getElements().getAt(0));
+				else if (((ProductGroupElement) getAt(j)).getElements() == null
+						&& i == 1)
+					arr.add(((ProductGroupElement) getAt(j)).getRight()
+							.getElements().getAt(0));
+			}
+			node.add(arr);
+		}
+	}
+
+	/** 
+	 * @return the byte array representation of an array of product ring
+	 *         elements.
+	 */
 	public byte[] ProductRingArrayToByteArray() {
+		
 		int productsSize = ((ProductRingElement) getAt(0)).getSize();
-		byte[] a = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN)
+		byte[] helperArr1 = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(productsSize).array();
-		byte[] b = new byte[a.length + 1];
-		System.arraycopy(a, 0, b, 1, a.length);
-		b[0] = 0;
+		byte[] helperArr2 = new byte[helperArr1.length + 1];
+		System.arraycopy(helperArr1, 0, helperArr2, 1, helperArr1.length);
+		helperArr2[0] = 0;
 
 		Node node = new Node();
 		for (int i = 0; i < productsSize; i++) {
@@ -207,14 +237,18 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		return node.toByteArray();
 	}
 
-	
+	/**
+	 * overriding the toString Java's method
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
+		
 		String temp = "[";
 		for (E elem : elements)
 			temp = temp + elem.toString() + ",";
 
 		return temp + "]";
 	}
-
 }
