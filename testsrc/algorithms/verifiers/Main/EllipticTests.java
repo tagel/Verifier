@@ -12,7 +12,7 @@ import algorithms.verifiers.MainVerifierTests;
 public class EllipticTests {
 	
 	private final Logger logger = new MockedLogger();
-	
+	 
 	
 	//**************************TOMERS TESTS***********************************
 	
