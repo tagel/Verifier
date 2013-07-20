@@ -178,7 +178,6 @@ public class ElementsExtractor {
 	 */
 	public static ProductGroupElement createSimplePGE(byte[] bt, IGroup group,
 			int w) {
-
 		if (w == 1) {
 			IGroupElement e = createGroupElement(bt, group);
 			ArrayOfElements<IGroupElement> arr = new ArrayOfElements<IGroupElement>();

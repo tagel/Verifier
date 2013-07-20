@@ -83,6 +83,80 @@ public class ModTests {
 				Type.MIXING, "default", 3, true, true, false));
 	}
 	
+	@Test
+	public void mod1023_max5_n3_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_max5_n3_w1/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_max5_n3_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void mod1023_max5_n3_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_max5_n3_w4/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_max5_n3_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	@Test
+	public void mod1023_n100_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_n100_w1/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_n100_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void mod1023_n3_w1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_n3_w1/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_n3_w1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void mod1023_n3_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_n3_w4/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod1023_n3_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	@Test
+	public void mod256_n3_w4() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod256_n3_w4/protInfo.xml").getFile(),
+				getClass().getClassLoader()
+						.getResource("Input_Examples/mod256_n3_w4/default").getFile(),
+				Type.MIXING, "default", 4, true, true, false));
+	}
+	
+	
+	
 	
 	//******************DECRYPTION*******************
 

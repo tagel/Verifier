@@ -150,7 +150,47 @@ public class EllipticTests {
 				Type.DECRYPTION, "default", 1, true, true, false));
 	}
 	
+	@Test
+	public void P_256_w_1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/export_P-256_width_1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/export_P-256_width_1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
 	
+	@Test
+	public void P_256_w_3() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/export_P-256_width_3/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/export_P-256_width_3/default").getFile(),
+				Type.MIXING, "default", 3, true, true, false));
+	}
+	
+	@Test
+	public void export_width_1() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/export_width_1/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/export_width_1/default").getFile(),
+				Type.MIXING, "default", 1, true, true, false));
+	}
+	
+	@Test
+	public void export_width_3() throws Exception {
+
+		MainVerifier mainVer = new MainVerifier(logger);
+		Assert.assertTrue(mainVer.verify(getClass().getClassLoader()
+				.getResource("Input_Examples/export_width_3/protInfo.xml").getFile(), getClass()
+				.getClassLoader().getResource("Input_Examples/export_width_3/default").getFile(),
+				Type.MIXING, "default", 3, true, true, false));
+	}
+	
+		
 	
 	
 	//****************SHUFFLE*******************

@@ -36,9 +36,11 @@ public class ProductGroupElement implements ByteTree {
 	 *            an array containing the group elements coordinates.
 	 */
 	public ProductGroupElement(ArrayOfElements<IGroupElement> arr) {
+
 		this.arr = arr;
 		left = null;
 		right = null;
+
 	}
 
 	/**
@@ -158,9 +160,9 @@ public class ProductGroupElement implements ByteTree {
 		if (!(o instanceof ProductGroupElement)) {
 			return false;
 		}
-				
+
 		ProductGroupElement b = (ProductGroupElement) o;
-		
+
 		if (arr != null) {
 			ArrayOfElements<IGroupElement> a = arr;
 			for (int i = 0; i < arr.getSize(); i++)
@@ -177,9 +179,14 @@ public class ProductGroupElement implements ByteTree {
 	 */
 	@Override
 	public byte[] toByteArray() {
-		if (arr != null)
-			return arr.toByteArray();
-		else {
+		if (arr != null) {
+			if (arr.getSize() == 1) {
+				return arr.getAt(0).toByteArray();
+			} else {
+				return arr.toByteArray();
+			}
+
+		} else {
 			byte[] b = new byte[5];
 			b[0] = 0;
 			b[1] = 0;
@@ -190,17 +197,17 @@ public class ProductGroupElement implements ByteTree {
 			return ArrayGenerators.concatArrays(b, right.toByteArray());
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		String temp = "";
 		if (arr != null) {
-			for (int i=0; i<arr.getSize(); i++) {
-					temp = temp + "("+arr.getAt(i).toString()+")";
-					}
+			for (int i = 0; i < arr.getSize(); i++) {
+				temp = temp + "(" + arr.getAt(i).toString() + ")";
+			}
 			return temp;
 		} else {
-			return left.toString()+right.toString();
+			return left.toString() + right.toString();
 		}
 	}
 }

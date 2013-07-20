@@ -114,9 +114,6 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 	@Override
 	public byte[] toByteArray() {
 		
-		if (getSize() == 1)
-			return getAt(0).toByteArray();
-
 		if (getAt(0) instanceof ProductRingElement) {
 			return ProductRingArrayToByteArray();
 		}
