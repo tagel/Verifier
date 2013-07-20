@@ -1,5 +1,6 @@
 package algorithms.provers;
 
+
 import main.Logger;
 import arithmetic.objects.ByteTree;
 import arithmetic.objects.LargeInteger;
@@ -11,6 +12,7 @@ import arithmetic.objects.groups.IGroupElement;
 import arithmetic.objects.groups.ProductGroupElement;
 import arithmetic.objects.ring.IntegerRingElement;
 import arithmetic.objects.ring.ProductRingElement;
+import cryptographic.primitives.CryptoUtils;
 import cryptographic.primitives.PseudoRandomGenerator;
 import cryptographic.primitives.RandomOracle;
 
@@ -155,6 +157,49 @@ public class ProveShuffling extends Prover {
 		IGroupElement C = computeC(u, h, N);
 		IGroupElement D = computeD(B, h, N, Ne, seed, prg);
 
+		// TODO printouts
+		/*
+		 * node(version, sid.auxsid, nr, ne, nv, Sprg, Sgq, Sh) roh bt(l0)
+		 * bt(llambda) B A' B' C' D' Ka Kb Kc Kd Ke g bt(g) h bt(h) u bt(u)
+		 * node(g, h, u) roh | node(g, h, u) seed t A v c d A^v * A' g^ka *
+		 * h_mul bt(l1)
+		 */
+
+		System.out.println("roh: "+CryptoUtils.bytesToHexString(ro));
+		System.out.println("B: " + B);
+		System.out.println("Btag: "+Btag);
+		System.out.println("C': "+Ctag);
+		System.out.println("D': "+Dtag);
+		System.out.println("F': "+Ftag);
+		System.out.println("Ka: "+Ka);
+		System.out.println("Kb: "+Kb);
+		System.out.println("Kc: "+Kc);
+		System.out.println("Kd: "+Kd);
+		System.out.println("Ke: "+Ke);
+		System.out.println("Kf: "+Kf);
+		System.out.println("g: "+g);
+		System.out.println("bt(g): "+CryptoUtils.bytesToHexString(g.toByteArray()));
+		System.out.println("h: "+h);
+		System.out.println("bt(h): "+CryptoUtils.bytesToHexString(h.toByteArray()));
+		System.out.println("u: "+u);
+		System.out.println("bt(u): "+CryptoUtils.bytesToHexString(u.toByteArray()));
+		System.out.println("A: "+A);
+		System.out.println("v: "+v);
+		System.out.println("F: "+F);
+		System.out.println("C: "+C);
+		System.out.println("D: "+D);
+		System.out.println("node(g,h,u,w,w'): "+CryptoUtils.bytesToHexString(nodeForSeed.toByteArray()));
+		System.out.println("seed: "+CryptoUtils.bytesToHexString(seed));
+		System.out.println("w: "+wInput);
+		System.out.println("bt(w): "+CryptoUtils.bytesToHexString(wInput.toByteArray()));
+		System.out.println("w': "+wOutput);
+		System.out.println("bt(w): "+CryptoUtils.bytesToHexString(wOutput.toByteArray()));
+		System.out.println("pk: "+pkSeed);
+		System.out.println("bt(pk) :"+CryptoUtils.bytesToHexString(pkSeed.toByteArray()));
+		
+		
+		
+		
 		/*
 		 * Equation 1: (B[i]^v) * Btag[i] = (g^Kb[i]) * (B[i-1]^Ke[i]), where
 		 * B[-1] = h[0]

@@ -117,11 +117,13 @@ public class ArrayOfElements<E extends ByteTree> implements ByteTree {
 		if (getSize() == 1)
 			return getAt(0).toByteArray();
 
-		if (getAt(0) instanceof ProductRingElement)
+		if (getAt(0) instanceof ProductRingElement) {
 			return ProductRingArrayToByteArray();
+		}
 
-		if (getAt(0) instanceof ProductGroupElement)
+		if (getAt(0) instanceof ProductGroupElement) {
 			return ProductGroupArrayToByteArray();
+		}
 
 		byte[] helperArr1 = ByteBuffer.allocate(CAPACITY).order(ByteOrder.BIG_ENDIAN)
 				.putInt(elements.size()).array();

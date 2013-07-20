@@ -91,7 +91,8 @@ public class VerShuffling {
 			ArrayOfElements<ArrayOfElements<ProductGroupElement>> L,
 			boolean posc, boolean ccpos, IRing<IntegerRingElement> Zq,
 			int width, ArrayOfElements<IGroupElement> h, Logger logger1) {
-
+		
+		
 		logger = logger1;
 
 		// set maxciph (indicates if there was pre-computation)
