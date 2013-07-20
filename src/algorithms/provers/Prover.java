@@ -269,7 +269,6 @@ public abstract class Prover {
 		inputChallenge[0] = leaf;
 		inputChallenge[1] = node;
 		Node nodeForChallenge = new Node(inputChallenge);
-		//TODO printouts
 		
 		byte[] challenge = ROChallenge.getRandomOracleOutput(ArrayGenerators
 				.concatArrays(ro, nodeForChallenge.toByteArray()));
